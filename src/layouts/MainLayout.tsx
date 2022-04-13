@@ -6,5 +6,5 @@ interface MainLayoutProps {
 }
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
-  return <Box>{children}</Box>;
+  return <Box h="100vh">{children}</Box>;
 };

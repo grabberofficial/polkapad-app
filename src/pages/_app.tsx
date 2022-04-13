@@ -1,13 +1,18 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
-// import { CustomAppProps } from 'types';
-// import { withCsp } from 'utils/withCsp';
 import Providers from '@/shared/providers';
+import { MainLayout } from '@/layouts';
+import { Header } from '@/components';
 
 const App = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props;
 
-  return <Component {...pageProps} />;
+  return (
+    <MainLayout>
+      <Header />
+      <Component {...pageProps} />
+    </MainLayout>
+  );
 };
 
 const MemoApp = memo(App);
