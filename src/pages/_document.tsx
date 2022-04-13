@@ -10,7 +10,7 @@ class MyDocument extends Document {
             rel="stylesheet"
           />
         </Head>
-        <body style={{height: '100vh', width: '100%'}}>
+        <body style={{ height: '100vh', width: '100%' }}>
           <Main />
           <NextScript />
         </body>

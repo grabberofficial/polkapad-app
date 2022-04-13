@@ -16,6 +16,6 @@ export const HeaderItemStyled = styled(Tab)`
 
   &[aria-selected='true'] {
     color: #303030;
-    border-bottom: 3px solid #49C7DA;
+    border-bottom: 3px solid #49c7da;
   }
 `;

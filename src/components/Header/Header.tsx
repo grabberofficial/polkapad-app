@@ -1,17 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { Button, Flex, Tabs } from '@chakra-ui/react';
+import { Flex, Tabs } from '@chakra-ui/react';
 import { Image } from '@chakra-ui/react';
 import { TabList } from './components/HeaderItems/HeaderItems.style';
 import { useRouter } from 'next/router';
-import { AccountButtonIcon } from './components/AccountButton/components/AccountButtonIcon/AccountButtonIcon';
 import { RightContainer } from './Header.style';
 
-export const Header: React.FC<{ right?: Array<() => Element> }> = (props) => {
-  console.log({
-    right: props.right,
-  });
-
+export const Header: React.FC<{ right?: Array<() => JSX.Element> }> = (
+  props,
+) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
 
