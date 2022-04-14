@@ -6,9 +6,7 @@ import { TabList } from './components/HeaderItems/HeaderItems.style';
 import { useRouter } from 'next/router';
 import { RightContainer } from './Header.style';
 
-export const Header: React.FC<{ right?: Array<() => JSX.Element> }> = (
-  props,
-) => {
+export const Header: React.FC<{ right?: React.FC[] }> = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
 
@@ -31,12 +29,18 @@ export const Header: React.FC<{ right?: Array<() => JSX.Element> }> = (
       wrap="wrap"
       padding={'0 78px 0 70px'}
       bg="#F7F5F5"
+      position="sticky"
+      top={0}
     >
       <Image src="images/logo_header.png" alt="Polkapad" padding={'24px 0'} />
       <Tabs height={'100%'} index={selectedTab}>
         <TabList>{props.children}</TabList>
       </Tabs>
-      <RightContainer>{props?.right?.map((elem) => elem())}</RightContainer>
+      <RightContainer>
+        {props?.right?.map((Elem, i) => (
+          <Elem key={i} />
+        ))}
+      </RightContainer>
     </Flex>
   );
 };

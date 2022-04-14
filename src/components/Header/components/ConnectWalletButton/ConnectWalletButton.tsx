@@ -1,18 +1,16 @@
 import { Button } from '@chakra-ui/react';
-import { AccountButtonIcon } from './components/AccountButtonIcon/AccountButtonIcon';
 
-export const AccountButton: React.FC = () => {
+export const ConnectWalletButton: React.FC = () => {
   return (
     <Button
-      leftIcon={<AccountButtonIcon />}
       backgroundColor="#FFFFFF"
       fontSize={14}
       fontWeight={600}
       fontFamily="Poppins"
       lineHeight={21}
-      paddingRight={8}
+      padding={'0 21px 0 22px'}
     >
-      Account
+      Connect Wallet
     </Button>
   );
 };
