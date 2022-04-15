@@ -1,15 +1,13 @@
 # This is a basic workflow to help you get started with Actions
 
-name: DOCKER
+name: Deploy
 
 on:
   push:
     branches:
-      - master
       - main
   pull_request:
     branches:
-      - master
       - main
   workflow_dispatch:
 
@@ -50,7 +48,9 @@ jobs:
 
       - name: ECR login
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $ECR
+        if: ${{ github.event_name == 'push' }}
 
       - name: Push image
         run: docker push $TAG
+        if: ${{ github.event_name == 'push' }}
 
