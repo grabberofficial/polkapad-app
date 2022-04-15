@@ -15,7 +15,7 @@ on:
 
 env:
   ECR: 636334651895.dkr.ecr.eu-central-1.amazonaws.com
-  IMAGE: backend
+  IMAGE: frontend
 
 jobs:
   docker:
@@ -44,15 +44,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Unit tests
-        run: npm run test
-
-      - name: E2e tests
-        run: npm run test:e2e
-
-      - name: Coverage test
-        run: npm run test:cov
 
       - name: Docker build
         run: docker build -t $TAG -f .github/workflows/Dockerfile .
