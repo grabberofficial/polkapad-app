@@ -1,11 +1,18 @@
-import { TabList as TabListChakra, Tab } from '@chakra-ui/react';
+import {
+  TabList as TabListChakra,
+  Tab,
+  ComponentWithAs,
+  TabProps,
+} from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 export const TabList = styled(TabListChakra)({
   borderBottom: 'none',
 });
 
-export const HeaderItemStyled = styled(Tab)`
+export const HeaderItemStyled = styled<
+  { isSelected?: boolean } & ComponentWithAs<'button', TabProps>
+>(Tab)`
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;

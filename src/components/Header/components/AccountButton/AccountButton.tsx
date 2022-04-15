@@ -11,6 +11,9 @@ export const AccountButton: React.FC = () => {
       fontFamily="Poppins"
       lineHeight={21}
       paddingRight={8}
+      _hover={{
+        color: '#49c7da',
+      }}
     >
       Account
     </Button>

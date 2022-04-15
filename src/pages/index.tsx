@@ -30,7 +30,21 @@ const IndexPage = () => {
           </Text>
           <Image src="images/staking_bg.png" />
         </Flex>
-        <Flex basis={'50%'}>asdfasdf</Flex>
+        <Flex
+          basis={'54%'}
+          flexDirection={'column'}
+          backgroundColor={'white'}
+          padding={'82px 81px 145px 95px'}
+        >
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+          <Text>Total Value Locked $79.34M XAVA Price $4.74</Text>
+        </Flex>
       </Flex>
     </>
   );

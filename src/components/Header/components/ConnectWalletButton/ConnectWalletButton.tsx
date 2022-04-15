@@ -9,6 +9,9 @@ export const ConnectWalletButton: React.FC = () => {
       fontFamily="Poppins"
       lineHeight={21}
       padding={'0 21px 0 22px'}
+      _hover={{
+        color: '#49c7da',
+      }}
     >
       Connect Wallet
     </Button>
