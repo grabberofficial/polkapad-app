@@ -32,9 +32,13 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
+      - name: Expose git commit data
+        uses: rlespinasse/git-commit-data-action@v1
+        if: ${{ github.event_name == 'push' }}
+
       - name: Set env
         run: |
-          echo "TAG=${ECR}/${IMAGE}:latest" >> $GITHUB_ENV
+          echo "TAG=${ECR}/${IMAGE}:${{ env.GIT_COMMIT_SHORT_SHA }}" >> $GITHUB_ENV
 
       - uses: actions/setup-node@v3
         with:
@@ -61,10 +65,6 @@ jobs:
           ref: 'main'
           ssh-key: ${{ secrets.ARGOCD_REPO_SSH }}
           path: 'argo'
-        if: ${{ github.event_name == 'push' }}
-
-      - name: Expose git commit data
-        uses: rlespinasse/git-commit-data-action@v1
         if: ${{ github.event_name == 'push' }}
 
       - name: Write TAG to argo
