@@ -54,3 +54,26 @@ jobs:
         run: docker push $TAG
         if: ${{ github.event_name == 'push' }}
 
+      - name: Clone Argo repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'polkapad/argocd'
+          ref: 'main'
+          ssh-key: ${{ secrets.ARGOCD_REPO_SSH }}
+          path: 'argo'
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Expose git commit data
+        uses: rlespinasse/git-commit-data-action@v1
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Write TAG to argo
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          cd argo
+          mkdir -p versions/${{github.repository_owner}}
+          echo "{ image: \"$TAG\" }" > versions/${{github.repository}}.libsonnet
+          git config user.email "${{ env.GIT_COMMIT_AUTHOR_EMAIL }}"
+          git config user.name "${{ env.GIT_COMMIT_AUTHOR_NAME }}"
+          git add versions/${{github.repository}}.libsonnet && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
+
