@@ -1,0 +1,79 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  ECR: 636334651895.dkr.ecr.eu-central-1.amazonaws.com
+  IMAGE: frontend
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: AWS cli install action
+        uses: chrislennon/action-aws-cli@1.1
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Expose git commit data
+        uses: rlespinasse/git-commit-data-action@v1
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Set env
+        run: |
+          echo "TAG=${ECR}/${IMAGE}:${{ env.GIT_COMMIT_SHORT_SHA }}" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Docker build
+        run: docker build -t $TAG -f .github/workflows/Dockerfile .
+
+      - name: ECR login
+        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $ECR
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Push image
+        run: docker push $TAG
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Clone Argo repo
+        uses: actions/checkout@v3
+        with:
+          repository: 'polkapad/argocd'
+          ref: 'main'
+          ssh-key: ${{ secrets.ARGOCD_REPO_SSH }}
+          path: 'argo'
+        if: ${{ github.event_name == 'push' }}
+
+      - name: Write TAG to argo
+        if: ${{ github.event_name == 'push' }}
+        run: |
+          cd argo
+          mkdir -p versions/${{github.repository_owner}}
+          echo "{ image: \"$TAG\" }" > versions/${{github.repository}}.libsonnet
+          git config user.email "${{ env.GIT_COMMIT_AUTHOR_EMAIL }}"
+          git config user.name "${{ env.GIT_COMMIT_AUTHOR_NAME }}"
+          git add versions/${{github.repository}}.libsonnet && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
+
