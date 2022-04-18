@@ -1,9 +1,9 @@
 import { Divider, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
-import { ButtonWithArrow } from '@/components/ButtonWithArrow/ButtonWithArrow';
 import { Input } from '@/components/Input/Input';
 import { InfoIcon } from '@/components/icons/Info';
 import { Spacer } from '@/modules/index/Spacer';
+import { Button } from '@/components/Button';
 
 const IndexPage = () => {
   return (
@@ -150,9 +150,9 @@ const IndexPage = () => {
             </GridItem>
             <GridItem rowSpan={1} colSpan={1}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
-                <ButtonWithArrow variant="primary" iconPlacement="right">
+                <Button withArrow variant="primary" iconPlacement="right">
                   Deposit XAVA
-                </ButtonWithArrow>
+                </Button>
               </Flex>
             </GridItem>
           </Grid>
@@ -231,9 +231,9 @@ const IndexPage = () => {
             </GridItem>
             <GridItem rowSpan={1} colSpan={1}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
-                <ButtonWithArrow variant="primary">
+                <Button withArrow variant="primary">
                   Withdraw XAVA
-                </ButtonWithArrow>
+                </Button>
               </Flex>
             </GridItem>
           </Grid>
@@ -351,20 +351,22 @@ const IndexPage = () => {
             </Flex>
 
             <Flex gap="11px" marginTop="26px">
-              <ButtonWithArrow
+              <Button
+                withArrow
                 variant="secondary"
                 iconPlacement="right"
                 icon={<InfoIcon />}
               >
                 COMPOUND XAVA
-              </ButtonWithArrow>
-              <ButtonWithArrow
+              </Button>
+              <Button
+                withArrow
                 variant="secondary"
                 iconPlacement="right"
                 icon={<InfoIcon />}
               >
                 HARVEST XAVA
-              </ButtonWithArrow>
+              </Button>
             </Flex>
           </Flex>
         </Flex>
