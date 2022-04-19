@@ -7,9 +7,9 @@ export const Heading: React.FC<{ withUnderline?: boolean } & HeadingProps> = ({
 }) => {
   return (
     <HeadingChakra
-      lineHeight={'52px'}
-      fontWeight={600}
-      fontSize={52}
+      lineHeight="62px"
+      fontWeight="600"
+      fontSize="50px"
       style={{ position: 'relative' }}
       _after={
         withUnderline

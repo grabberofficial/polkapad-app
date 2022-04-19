@@ -8,7 +8,7 @@ import { Button } from '@/components/Button';
 const IndexPage = () => {
   return (
     <>
-      <Flex height={'100%'} alignItems={'flex-start'}>
+      <Flex height="869px" alignItems={'flex-start'}>
         <Flex
           basis={'46%'}
           bg="#E5E5E5"
@@ -34,7 +34,7 @@ const IndexPage = () => {
           basis={'54%'}
           flexDirection={'column'}
           backgroundColor={'white'}
-          padding={'82px 81px 145px 95px'}
+          padding={'82px 81px 133px 95px'}
         >
           <Flex justifyContent={'space-between'}>
             <Text
@@ -368,6 +368,211 @@ const IndexPage = () => {
                 HARVEST XAVA
               </Button>
             </Flex>
+          </Flex>
+        </Flex>
+      </Flex>
+      <Flex
+        backgroundImage="images/staking/bg.svg"
+        height="447px"
+        backgroundColor="#025B63"
+        backgroundSize="cover"
+        backgroundRepeat="no-repeat"
+        flexDirection="column"
+        padding="113px 64px 0 113px"
+      >
+        <Flex>
+          <Flex flexBasis="calc(100% - 377px)">
+            <Heading marginBottom={77} withUnderline color="white">
+              XAVA Tokens Staked
+              <br />
+              Over Time
+            </Heading>
+          </Flex>
+          <Flex flexDirection="column" gap="29px" flexBasis="377px">
+            {/* TODO: extract to component */}
+            <Flex gap="20px" alignItems="center">
+              <Flex
+                width="48px"
+                height="48px"
+                backgroundColor="#F6F5F5"
+                borderRadius="3px"
+              />
+              <Flex flexDirection="column">
+                <Text
+                  color="#FFFFFF"
+                  textTransform="uppercase"
+                  lineHeight="34px"
+                  fontSize="23px"
+                  fontWeight="700"
+                >
+                  $79.34M
+                </Text>
+                <Text
+                  color="#FFFFFF"
+                  lineHeight="21px"
+                  fontSize="14px"
+                  fontWeight="400"
+                >
+                  Total Value Locked
+                </Text>
+              </Flex>
+            </Flex>
+            <Flex gap="20px" alignItems="center">
+              <Flex
+                width="48px"
+                height="48px"
+                backgroundColor="#F6F5F5"
+                borderRadius="3px"
+              />
+              <Flex flexDirection="column">
+                <Text
+                  color="#FFFFFF"
+                  textTransform="uppercase"
+                  lineHeight="34px"
+                  fontSize="23px"
+                  fontWeight="700"
+                >
+                  $79.34M
+                </Text>
+                <Text
+                  color="#FFFFFF"
+                  lineHeight="21px"
+                  fontSize="14px"
+                  fontWeight="400"
+                >
+                  Total Value Locked
+                </Text>
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
+        <Flex gap="39px" alignItems="center">
+          {/* TODO: extract to component */}
+          <Flex
+            flexDirection="column"
+            gap="11px"
+            padding="52px 30px 59px"
+            backgroundColor="#F6F5F5"
+            borderRadius="4px"
+            flexBasis="33%"
+          >
+            <Text
+              display="flex"
+              alignItems="center"
+              gap="7px"
+              as="span"
+              fontWeight="700"
+              fontSize="14px"
+              lineHeight="21px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              Total XAVA Staked <InfoIcon />
+            </Text>
+            <Text
+              as="span"
+              fontWeight="700"
+              fontSize="38px"
+              lineHeight="57px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              16,585,120.73
+            </Text>
+            <Text
+              as="span"
+              fontSize="14px"
+              fontWeight="600"
+              lineHeight="21px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              ~$79,442,728.29
+            </Text>
+          </Flex>
+          <Flex
+            flexDirection="column"
+            gap="11px"
+            padding="52px 30px 59px"
+            backgroundColor="#F6F5F5"
+            borderRadius="4px"
+            flexBasis="33%"
+          >
+            <Text
+              display="flex"
+              alignItems="center"
+              gap="7px"
+              as="span"
+              fontWeight="700"
+              fontSize="14px"
+              lineHeight="21px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              Total Rewards Redistributed <InfoIcon />
+            </Text>
+            <Text
+              as="span"
+              fontWeight="700"
+              fontSize="38px"
+              lineHeight="57px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              1,109,045.79
+            </Text>
+            <Text
+              as="span"
+              fontSize="14px"
+              fontWeight="600"
+              lineHeight="21px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              ~$5,312,329.32
+            </Text>
+          </Flex>
+          <Flex
+            flexDirection="column"
+            gap="11px"
+            padding="52px 30px 59px"
+            backgroundColor="#F6F5F5"
+            borderRadius="4px"
+            flexBasis="33%"
+          >
+            <Text
+              display="flex"
+              alignItems="center"
+              gap="7px"
+              as="span"
+              fontWeight="700"
+              fontSize="14px"
+              lineHeight="21px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              Reward Unlock Rate <InfoIcon />
+            </Text>
+            <Text
+              as="span"
+              fontWeight="700"
+              fontSize="38px"
+              lineHeight="57px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              0.01 XAVA / Sec
+            </Text>
+            <Text
+              as="span"
+              fontSize="14px"
+              fontWeight="600"
+              lineHeight="21px"
+              textTransform="uppercase"
+              color="#303030"
+            >
+              ~$0.03
+            </Text>
           </Flex>
         </Flex>
       </Flex>
