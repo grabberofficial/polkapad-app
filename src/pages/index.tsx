@@ -14,6 +14,11 @@ const IndexPage = () => {
           bg="#E5E5E5"
           flexDirection={'column'}
           padding={'76px 130px 0 115px'}
+          height="100%"
+          backgroundImage="url(http://localhost:3000/images/staking_bg.png)"
+          backgroundRepeat="no-repeat"
+          backgroundPosition="bottom"
+          // backgroundPositionY="bottom"
         >
           <Heading marginBottom={75} withUnderline>
             Allocation
@@ -28,13 +33,12 @@ const IndexPage = () => {
           <Text maxWidth={383} marginBottom={23}>
             Unstaking before the predefined period was reached will Unstake
           </Text>
-          <Image src="images/staking_bg.png" />
         </Flex>
         <Flex
           basis={'54%'}
           flexDirection={'column'}
           backgroundColor={'white'}
-          padding={'82px 81px 133px 95px'}
+          padding={'82px 81px 113px 95px'}
         >
           <Flex justifyContent={'space-between'}>
             <Text

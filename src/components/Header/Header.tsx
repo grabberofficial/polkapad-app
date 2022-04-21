@@ -31,6 +31,7 @@ export const Header: React.FC<{ right?: React.FC[] }> = (props) => {
       bg="#F7F5F5"
       position="sticky"
       top={0}
+      zIndex="2"
     >
       <Image src="images/logo_header.png" alt="Polkapad" padding={'24px 0'} />
       <Tabs height={'100%'} index={selectedTab}>
