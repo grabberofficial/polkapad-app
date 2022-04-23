@@ -1,9 +1,22 @@
-import { Divider, Flex, Grid, GridItem, Image, Text } from '@chakra-ui/react';
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  Text,
+} from '@chakra-ui/react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Input } from '@/components/Input/Input';
 import { InfoIcon } from '@/components/icons/Info';
 import { Spacer } from '@/modules/index/Spacer';
 import { Button } from '@/components/Button';
+import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 
 const IndexPage = () => {
   return (
@@ -375,6 +388,7 @@ const IndexPage = () => {
           </Flex>
         </Flex>
       </Flex>
+
       <Flex
         backgroundImage="images/staking/bg.svg"
         height="447px"
@@ -578,6 +592,268 @@ const IndexPage = () => {
               ~$0.03
             </Text>
           </Flex>
+        </Flex>
+      </Flex>
+
+      <Flex
+        marginTop="250px"
+        padding="89px 79px 113px 115px"
+        flexDirection="column"
+      >
+        {/* Heading FAQ */}
+        <Flex flexBasis="100%">
+          <Heading marginBottom={75} withUnderline>
+            FAQ
+          </Heading>
+        </Flex>
+        <Flex width="100%" margin="0 -13px">
+          <Accordion
+            defaultIndex={[0]}
+            allowMultiple
+            width="100%"
+            display="flex"
+            flexWrap="wrap"
+          >
+            <AccordionItem
+              margin="13px"
+              flexBasis="48%"
+              border="none"
+              backgroundColor="#F6F5F5"
+            >
+              {({ isExpanded }) => (
+                <>
+                  <h2>
+                    <AccordionButton
+                      padding="20px 25px"
+                      color="#303030"
+                      _expanded={{ bg: '#303030', color: 'white' }}
+                    >
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        fontWeight="600"
+                        fontSize="14px"
+                        lineHeight="21px"
+                        // color="#303030"
+                      >
+                        Section 1 title
+                      </Box>
+                      {isExpanded ? (
+                        <MinusIcon fontSize="20px" color="#32BBCF" />
+                      ) : (
+                        <AddIcon fontSize="20px" color="#32BBCF" />
+                      )}
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel
+                    padding="0px 155px 19px 25px"
+                    background="#303030"
+                    color="#F6F5F5"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </AccordionPanel>
+                </>
+              )}
+            </AccordionItem>
+
+            <AccordionItem
+              margin="13px"
+              flexBasis="48%"
+              border="none"
+              backgroundColor="#F6F5F5"
+            >
+              {({ isExpanded }) => (
+                <>
+                  <h2>
+                    <AccordionButton
+                      padding="20px 25px"
+                      color="#303030"
+                      _expanded={{ bg: '#303030', color: 'white' }}
+                    >
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        fontWeight="600"
+                        fontSize="14px"
+                        lineHeight="21px"
+                        // color="#303030"
+                      >
+                        Section 1 title
+                      </Box>
+                      {isExpanded ? (
+                        <MinusIcon fontSize="20px" color="#32BBCF" />
+                      ) : (
+                        <AddIcon fontSize="20px" color="#32BBCF" />
+                      )}
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel
+                    padding="0px 155px 19px 25px"
+                    background="#303030"
+                    color="#F6F5F5"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </AccordionPanel>
+                </>
+              )}
+            </AccordionItem>
+
+            <AccordionItem
+              margin="13px"
+              flexBasis="48%"
+              border="none"
+              backgroundColor="#F6F5F5"
+            >
+              {({ isExpanded }) => (
+                <>
+                  <h2>
+                    <AccordionButton
+                      padding="20px 25px"
+                      color="#303030"
+                      _expanded={{ bg: '#303030', color: 'white' }}
+                    >
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        fontWeight="600"
+                        fontSize="14px"
+                        lineHeight="21px"
+                        // color="#303030"
+                      >
+                        Section 1 title
+                      </Box>
+                      {isExpanded ? (
+                        <MinusIcon fontSize="20px" color="#32BBCF" />
+                      ) : (
+                        <AddIcon fontSize="20px" color="#32BBCF" />
+                      )}
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel
+                    padding="0px 155px 19px 25px"
+                    background="#303030"
+                    color="#F6F5F5"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </AccordionPanel>
+                </>
+              )}
+            </AccordionItem>
+
+            <AccordionItem
+              margin="13px"
+              flexBasis="48%"
+              border="none"
+              backgroundColor="#F6F5F5"
+            >
+              {({ isExpanded }) => (
+                <>
+                  <h2>
+                    <AccordionButton
+                      padding="20px 25px"
+                      color="#303030"
+                      _expanded={{ bg: '#303030', color: 'white' }}
+                    >
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        fontWeight="600"
+                        fontSize="14px"
+                        lineHeight="21px"
+                        // color="#303030"
+                      >
+                        Section 1 title
+                      </Box>
+                      {isExpanded ? (
+                        <MinusIcon fontSize="20px" color="#32BBCF" />
+                      ) : (
+                        <AddIcon fontSize="20px" color="#32BBCF" />
+                      )}
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel
+                    padding="0px 155px 19px 25px"
+                    background="#303030"
+                    color="#F6F5F5"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </AccordionPanel>
+                </>
+              )}
+            </AccordionItem>
+
+            <AccordionItem
+              margin="13px"
+              flexBasis="48%"
+              border="none"
+              backgroundColor="#F6F5F5"
+            >
+              {({ isExpanded }) => (
+                <>
+                  <h2>
+                    <AccordionButton
+                      padding="20px 25px"
+                      color="#303030"
+                      _expanded={{ bg: '#303030', color: 'white' }}
+                    >
+                      <Box
+                        flex="1"
+                        textAlign="left"
+                        fontWeight="600"
+                        fontSize="14px"
+                        lineHeight="21px"
+                        // color="#303030"
+                      >
+                        Section 1 title
+                      </Box>
+                      {isExpanded ? (
+                        <MinusIcon fontSize="20px" color="#32BBCF" />
+                      ) : (
+                        <AddIcon fontSize="20px" color="#32BBCF" />
+                      )}
+                    </AccordionButton>
+                  </h2>
+                  <AccordionPanel
+                    padding="0px 155px 19px 25px"
+                    background="#303030"
+                    color="#F6F5F5"
+                    fontWeight="400"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed
+                    do eiusmod tempor incididunt ut labore et dolore magna
+                    aliqua. Ut enim ad minim veniam, quis nostrud exercitation
+                    ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                  </AccordionPanel>
+                </>
+              )}
+            </AccordionItem>
+          </Accordion>
         </Flex>
       </Flex>
     </>
