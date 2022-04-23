@@ -1,7 +1,6 @@
 import {
   Accordion,
   AccordionButton,
-  AccordionIcon,
   AccordionItem,
   AccordionPanel,
   Box,
@@ -47,6 +46,7 @@ const IndexPage = () => {
             Unstaking before the predefined period was reached will Unstake
           </Text>
         </Flex>
+        {/* TODO: Extract to block */}
         <Flex
           basis={'54%'}
           flexDirection={'column'}
@@ -92,6 +92,7 @@ const IndexPage = () => {
             </Text>
           </Flex>
           <Divider margin={'20px 0 40px 0'} border={'1px solid #E0E0E0'} />
+          {/* TODO: Extract to component, make form out of it */}
           <Grid
             height="87px"
             templateRows="21px 48px"
@@ -389,6 +390,7 @@ const IndexPage = () => {
         </Flex>
       </Flex>
 
+      {/* TODO: Extract to block */}
       <Flex
         backgroundImage="images/staking/bg.svg"
         height="447px"
@@ -464,6 +466,7 @@ const IndexPage = () => {
             </Flex>
           </Flex>
         </Flex>
+        {/* TODO: Extract to block */}
         <Flex gap="39px" alignItems="center">
           {/* TODO: extract to component */}
           <Flex
@@ -595,6 +598,7 @@ const IndexPage = () => {
         </Flex>
       </Flex>
 
+      {/* TODO: Extract to block */}
       <Flex
         marginTop="250px"
         padding="89px 79px 113px 115px"
@@ -607,6 +611,7 @@ const IndexPage = () => {
           </Heading>
         </Flex>
         <Flex width="100%" margin="0 -13px">
+          {/* TODO: Extract to component */}
           <Accordion
             defaultIndex={[0]}
             allowMultiple
@@ -614,6 +619,7 @@ const IndexPage = () => {
             display="flex"
             flexWrap="wrap"
           >
+            {/* TODO: Extract to component */}
             <AccordionItem
               margin="13px"
               flexBasis="48%"
