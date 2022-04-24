@@ -24,6 +24,11 @@ const RegisterPage = () => {
       margin="73px auto 0"
       flexDirection="column"
       justifyContent="center"
+      borderBottom="1px solid #ECEBEB"
+      borderLeft="1px solid #ECEBEB"
+      borderRight="1px solid #ECEBEB"
+      borderRadius="4px"
+      paddingBottom="25px"
     >
       <Text
         fontWeight="600"
@@ -106,7 +111,14 @@ const RegisterPage = () => {
               type="email"
             />
           </InputGroup>
-          <FormErrorMessage>Email invalid</FormErrorMessage>
+          <FormErrorMessage
+            fontWeight="400"
+            fontSize="12px"
+            lineHeight="18px"
+            color="#EC305D"
+          >
+            Email invalid
+          </FormErrorMessage>
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="password">Password</FormLabel>
