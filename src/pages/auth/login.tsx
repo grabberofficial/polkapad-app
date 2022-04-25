@@ -14,7 +14,6 @@ import {
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
-import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 
