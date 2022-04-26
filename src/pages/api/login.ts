@@ -3,11 +3,12 @@
 // import { Octokit } from 'octokit';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
-import { NextApiRequest, NextApiResponse } from 'next';
+// import { NextApiRequest, NextApiResponse } from 'next';
 // const octokit = new Octokit();
 
-const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
-  const { username } = await req.body;
+// req: NextApiRequest, res: NextApiResponse
+const loginRoute = async () => {
+  // const { _username } = await req.body;
 
   try {
     // const {

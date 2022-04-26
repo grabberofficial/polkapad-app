@@ -5,7 +5,6 @@ import {
   FormErrorMessage,
   FormLabel,
   Grid,
-  Input,
   InputGroup,
   InputLeftElement,
   Text,
@@ -21,7 +20,7 @@ import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { object, ref, string } from 'yup';
-import fetchJson from '@/lib/fetchJson';
+// import fetchJson from '@/lib/fetchJson';
 
 interface IFormInput {
   name: string;
@@ -55,17 +54,14 @@ const RegisterPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
     console.log(data);
     try {
-      const res = await fetch(
-        'https://app.polkapadapis.codes/auth/password/register',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            name: data.name,
-            password: data.password,
-            email: data.email,
-          }),
-        },
-      );
+      const res = await fetch('http://localhost:3000/auth/password/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          name: data.name,
+          password: data.password,
+          email: data.email,
+        }),
+      });
       console.log({ res });
     } catch (err) {
       console.error(err);
