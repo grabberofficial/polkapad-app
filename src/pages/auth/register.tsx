@@ -1,4 +1,5 @@
 import { Button } from '@/components/Button';
+import { FormInput } from '@/components/FormInput/FormInput';
 import {
   FormControl,
   FormErrorMessage,
@@ -12,12 +13,65 @@ import {
   Flex,
 } from '@chakra-ui/react';
 import Link from 'next/link';
+import { useCallback } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
+import { object, ref, string } from 'yup';
+import fetchJson from '@/lib/fetchJson';
+
+interface IFormInput {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+const schema = object()
+  .shape({
+    name: string().required('Name is required'),
+    email: string().required('Email is required').email('Email is invalid'),
+    password: string()
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters'),
+    confirmPassword: string()
+      .oneOf([ref('password'), null], 'Passwords must match')
+      .required('Confirm password is required'),
+  })
+  .required();
 
 const RegisterPage = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
+    console.log(data);
+    try {
+      const res = await fetch(
+        'https://app.polkapadapis.codes/auth/password/register',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            name: data.name,
+            password: data.password,
+            email: data.email,
+          }),
+        },
+      );
+      console.log({ res });
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
   return (
     <Grid
       maxWidth="700px"
@@ -57,8 +111,9 @@ const RegisterPage = () => {
           justifyContent: 'center',
           gap: '22px',
         }}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <FormControl>
+        <FormControl isInvalid={!!errors.name}>
           <FormLabel htmlFor="name">Your Name</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
@@ -69,22 +124,32 @@ const RegisterPage = () => {
                 alignItems="center"
                 borderRight="1px solid #E0E0E0"
               >
-                <Icon as={FaUser} height="21px" width="21px" color="#49C7DA" />
+                <Icon
+                  as={FaUser}
+                  height="21px"
+                  width="21px"
+                  color={errors.name ? '#EC305D' : '#49C7DA'}
+                />
               </Flex>
             </InputLeftElement>
-            <Input
-              height="48px"
-              paddingLeft="72px"
-              fontWeight="600"
-              fontSize="14px"
-              lineHeight="21px"
-              borderRadius="4px"
-              id="name"
-              type="text"
+            <FormInput
+              fieldName="name"
+              control={control}
+              hasError={!!errors.name}
             />
           </InputGroup>
+          {errors.name && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="#EC305D"
+            >
+              {errors.name.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
-        <FormControl isInvalid={true}>
+        <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
@@ -95,32 +160,32 @@ const RegisterPage = () => {
                 alignItems="center"
                 borderRight="1px solid #E0E0E0"
               >
-                <Icon as={MdEmail} height="21px" width="21px" color="#EC305D" />
+                <Icon
+                  as={MdEmail}
+                  height="21px"
+                  width="21px"
+                  color={errors.email ? '#EC305D' : '#49C7DA'}
+                />
               </Flex>
             </InputLeftElement>
-            <Input
-              height="48px"
-              paddingLeft="72px"
-              fontWeight="600"
-              fontSize="14px"
-              lineHeight="21px"
-              borderRadius="4px"
-              errorBorderColor="#EC305D"
-              color="#EC305D"
-              id="email"
-              type="email"
+            <FormInput
+              fieldName="email"
+              control={control}
+              hasError={!!errors.email}
             />
           </InputGroup>
-          <FormErrorMessage
-            fontWeight="400"
-            fontSize="12px"
-            lineHeight="18px"
-            color="#EC305D"
-          >
-            Email invalid
-          </FormErrorMessage>
+          {errors.email && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="#EC305D"
+            >
+              {errors.email.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
-        <FormControl>
+        <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
@@ -135,23 +200,29 @@ const RegisterPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color="#49C7DA"
+                  color={errors.password ? '#EC305D' : '#49C7DA'}
                 />
               </Flex>
             </InputLeftElement>
-            <Input
-              height="48px"
-              paddingLeft="72px"
-              fontWeight="600"
-              fontSize="14px"
-              lineHeight="21px"
-              borderRadius="4px"
-              id="password"
-              type="password"
+            <FormInput
+              fieldName="password"
+              fieldType="password"
+              control={control}
+              hasError={!!errors.password}
             />
           </InputGroup>
+          {errors.password && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="#EC305D"
+            >
+              {errors.password.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
-        <FormControl>
+        <FormControl isInvalid={!!errors.confirmPassword}>
           <FormLabel htmlFor="password-confirm">Confirm Password</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
@@ -166,23 +237,35 @@ const RegisterPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color="#49C7DA"
+                  color={errors.confirmPassword ? '#EC305D' : '#49C7DA'}
                 />
               </Flex>
             </InputLeftElement>
-            <Input
-              height="48px"
-              paddingLeft="72px"
-              fontWeight="600"
-              fontSize="14px"
-              lineHeight="21px"
-              borderRadius="4px"
-              id="password-confirm"
-              type="password"
+            <FormInput
+              fieldName="confirmPassword"
+              fieldType="password"
+              control={control}
+              hasError={!!errors.confirmPassword}
             />
           </InputGroup>
+          {errors.confirmPassword && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="#EC305D"
+            >
+              {errors.confirmPassword.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
-        <Button variant="primary">Create account</Button>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={Object.keys(errors).length > 0}
+        >
+          Create account
+        </Button>
       </form>
       <Text
         fontWeight="600"

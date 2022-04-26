@@ -11,7 +11,9 @@ interface ButtonProps {
   withIconDivider?: boolean;
 }
 
-export const Button: React.FC<ButtonProps> = ({
+export const Button: React.FC<
+  ButtonProps & React.HTMLProps<HTMLButtonElement>
+> = ({
   iconPlacement,
   variant,
   children,
@@ -19,6 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   fixedWidth,
   icon,
   withIconDivider,
+  ...rest
 }) => {
   const hoverStyle =
     variant === 'primary'
@@ -57,6 +60,7 @@ export const Button: React.FC<ButtonProps> = ({
       align-items="center"
       border={variant === 'primary' ? undefined : '1px solid #E5E4E4'}
       maxWidth={fixedWidth ? `${fixedWidth}px` : '100%'}
+      {...rest}
     >
       <Flex
         justifyContent="center"
