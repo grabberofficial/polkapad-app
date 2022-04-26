@@ -16,6 +16,7 @@ import { InfoIcon } from '@/components/icons/Info';
 import { Spacer } from '@/modules/index/Spacer';
 import { Button } from '@/components/Button';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
+import { css, Global } from '@emotion/react';
 
 const faq = [
   {
@@ -58,7 +59,23 @@ const faq = [
 const IndexPage = () => {
   return (
     <>
-      <Flex height="869px" alignItems={'flex-start'}>
+      <Global
+        styles={css`
+          @media screen and (max-width: 1100px) {
+            .main-block {
+              flex-wrap: wrap;
+              height: auto !important;
+              align-items: center;
+              justify-content: center;
+
+              & > div {
+                min-width: 100% !important;
+              }
+            }
+          }
+        `}
+      />
+      <Flex height="869px" alignItems={'flex-start'} className="main-block">
         <Flex
           basis={'46%'}
           bg="#E5E5E5"

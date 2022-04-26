@@ -26,7 +26,6 @@ export const Header: React.FC<{ right?: React.FC[] }> = (props) => {
       as="nav"
       align="center"
       justify="space-between"
-      wrap="wrap"
       padding={'0 78px 0 70px'}
       bg="#F7F5F5"
       position="sticky"

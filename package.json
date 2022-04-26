@@ -5,7 +5,7 @@
   "private": true,
   "author": "Ilya Sayapin (comeonandroid@gmail.com)",
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 8080",
     "build": "next build",
     "start": "NODE_OPTIONS='-r next-logger' next start",
     "type-check": "tsc",
