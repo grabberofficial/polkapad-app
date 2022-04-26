@@ -20,7 +20,8 @@ import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { object, ref, string } from 'yup';
-// import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
+import { useRouter } from 'next/router';
 
 interface IFormInput {
   name: string;
@@ -50,21 +51,25 @@ const RegisterPage = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
+  const { push } = useRouter();
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
-    console.log(data);
     try {
-      const res = await fetch('http://localhost:3000/auth/password/register', {
+      await fetchJson('http://localhost:3000/auth/password/register', {
         method: 'POST',
         body: JSON.stringify({
           name: data.name,
           password: data.password,
           email: data.email,
         }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-      console.log({ res });
+      push('/auth/login');
     } catch (err) {
-      console.error(err);
+      // const { message } = err as FetchError;
+      // TODO: backend error handling
     }
   }, []);
 
@@ -109,6 +114,7 @@ const RegisterPage = () => {
         }}
         onSubmit={handleSubmit(onSubmit)}
       >
+        {/* TODO: extract FormControl to component if there is any other usage */}
         <FormControl isInvalid={!!errors.name}>
           <FormLabel htmlFor="name">Your Name</FormLabel>
           <InputGroup>
