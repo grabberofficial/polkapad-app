@@ -11,9 +11,7 @@ interface ButtonProps {
   withIconDivider?: boolean;
 }
 
-export const Button: React.FC<
-  ButtonProps & React.HTMLProps<HTMLButtonElement>
-> = ({
+export const Button: React.FC<ButtonProps & any> = ({
   iconPlacement,
   variant,
   children,
