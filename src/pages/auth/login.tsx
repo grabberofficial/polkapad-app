@@ -1,23 +1,80 @@
 import { Button } from '@/components/Button';
+import { FormInput } from '@/components/FormInput/FormInput';
+// , { FetchError }
+import fetchJson from '@/lib/fetchJson';
+import useUser from '@/lib/hooks/useUser';
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
   Grid,
-  Input,
   InputGroup,
   InputLeftElement,
   Text,
   Icon,
   Flex,
-  FormHelperText,
 } from '@chakra-ui/react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import Link from 'next/link';
+// import { useRouter } from 'next/router';
+import { useCallback } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
+import { object, string } from 'yup';
+
+// TODO: server-side redirect from login page if user is already logged in
+
+interface IFormInput {
+  email: string;
+  password: string;
+}
+
+const schema = object()
+  .shape({
+    email: string().required('Email is required').email('Email is invalid'),
+    password: string().required('Password is required'),
+  })
+  .required();
 
 const LoginPage = () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(schema),
+  });
+  const { mutateUser } = useUser({
+    redirectTo: '/',
+    redirectIfFound: true,
+  });
+  // const { push } = useRouter();
+
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(
+    async (data) => {
+      try {
+        mutateUser(
+          await fetchJson('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...data, authType: 'password' }),
+          }),
+        );
+      } catch (error) {
+        // TODO: error handling
+        // if (error instanceof FetchError) {
+        //   setErrorMsg(error.data.message)
+        // } else {
+        //   console.error('An unexpected error happened:', error)
+        // }
+        console.error({ error });
+      }
+    },
+    [mutateUser],
+  );
+
   return (
     <Grid
       maxWidth="700px"
@@ -60,8 +117,9 @@ const LoginPage = () => {
           justifyContent: 'center',
           gap: '22px',
         }}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        <FormControl>
+        <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
@@ -72,30 +130,32 @@ const LoginPage = () => {
                 alignItems="center"
                 borderRight="1px solid #E0E0E0"
               >
-                <Icon as={MdEmail} height="21px" width="21px" color="#49C7DA" />
+                <Icon
+                  as={MdEmail}
+                  height="21px"
+                  width="21px"
+                  color={errors.email ? '#EC305D' : '#49C7DA'}
+                />
               </Flex>
             </InputLeftElement>
-            <Input
-              height="48px"
-              paddingLeft="72px"
-              fontWeight="600"
-              fontSize="14px"
-              lineHeight="21px"
-              borderRadius="4px"
-              id="email"
-              type="email"
+            <FormInput
+              fieldName="email"
+              control={control}
+              hasError={!!errors.email}
             />
           </InputGroup>
-          <FormHelperText
-            color="#49C7DA"
-            fontWeight="400"
-            fontSize="12px"
-            lineHeight="18px"
-          >
-            {'Great email name ;)'}
-          </FormHelperText>
+          {errors.email && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="#EC305D"
+            >
+              {errors.email.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
-        <FormControl isInvalid={true}>
+        <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
@@ -110,34 +170,36 @@ const LoginPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color="#EC305D"
+                  color={errors.password ? '#EC305D' : '#49C7DA'}
                 />
               </Flex>
             </InputLeftElement>
-            <Input
-              height="48px"
-              paddingLeft="72px"
-              fontWeight="600"
-              fontSize="14px"
-              lineHeight="21px"
-              borderRadius="4px"
-              errorBorderColor="#EC305D"
-              color="#EC305D"
-              id="password"
-              type="password"
+            <FormInput
+              fieldName="password"
+              control={control}
+              hasError={!!errors.password}
+              fieldType="password"
             />
           </InputGroup>
-          <FormErrorMessage
-            fontWeight="400"
-            fontSize="12px"
-            lineHeight="18px"
-            color="#EC305D"
-          >
-            Password must be at least 8 characters
-          </FormErrorMessage>
+          {errors.password && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="#EC305D"
+            >
+              {errors.password.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
 
-        <Button variant="primary">Login</Button>
+        <Button
+          variant="primary"
+          type="submit"
+          disabled={Object.keys(errors).length > 0}
+        >
+          Login
+        </Button>
       </form>
       <Text
         fontWeight="600"
@@ -149,7 +211,7 @@ const LoginPage = () => {
         justifyContent="space-between"
         display="flex"
       >
-        <Link href="/auth/link">Send magic link</Link>
+        <Link href="/auth/send-link">Send magic link</Link>
         <Link href="/auth/forgotPassword">Forgot password?</Link>
         <Link href="/auth/register">
           <Text as="a" href="/auth/register" color="#49C7DA">

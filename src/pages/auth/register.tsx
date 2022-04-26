@@ -20,7 +20,8 @@ import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { object, ref, string } from 'yup';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
+import fetchJson from '@/lib/fetchJson';
+// , { FetchError }
 import { useRouter } from 'next/router';
 
 interface IFormInput {

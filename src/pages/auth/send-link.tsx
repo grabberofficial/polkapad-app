@@ -17,7 +17,7 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 
 const isSent = true;
 
-const LoginPage = () => {
+const LinkSendPage = () => {
   return (
     <Grid
       maxWidth="700px"
@@ -140,4 +140,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LinkSendPage;

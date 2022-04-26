@@ -1,25 +1,38 @@
 // import type { User } from './user';
 
-// import { Octokit } from 'octokit';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
-// import { NextApiRequest, NextApiResponse } from 'next';
-// const octokit = new Octokit();
+import fetchJson from '@/lib/fetchJson';
+import { NextApiRequest, NextApiResponse } from 'next';
 
-// req: NextApiRequest, res: NextApiResponse
-const loginRoute = async () => {
-  // const { _username } = await req.body;
+const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
+  // TODO: expand to email code auth
+  const { email, password } = await req.body;
 
   try {
-    // const {
-    //   data: { login, avatar_url },
-    // } = await octokit.rest.users.getByUsername({ username });
-    // const user = { isLoggedIn: true, login, avatarUrl: avatar_url } as User;
-    // req.session.user = user;
-    // await req.session.save();
-    // res.json(user);
+    const tokenRes = await fetchJson(
+      'http://localhost:3000/auth/password/login',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          password: password,
+          email: email,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log({
+      tokenRes,
+      res,
+    });
+    const user = { isLoggedIn: true, email };
+    req.session.user = user;
+    await req.session.save();
+    res.json(user);
   } catch (error) {
-    // res.status(500).json({ message: (error as Error).message });
+    res.status(500).json({ message: (error as Error).message });
   }
 };
 

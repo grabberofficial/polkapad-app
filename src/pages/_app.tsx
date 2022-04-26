@@ -3,15 +3,26 @@ import { AppProps } from 'next/app';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
 import { Header } from '@/components';
+import { SWRConfig } from 'swr';
+import fetchJson from '@/lib/fetchJson';
 
 const App = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props;
 
   return (
-    <MainLayout>
-      <Header />
-      <Component {...pageProps} />
-    </MainLayout>
+    <SWRConfig
+      value={{
+        fetcher: fetchJson,
+        onError: (err) => {
+          console.error(err);
+        },
+      }}
+    >
+      <MainLayout>
+        <Header />
+        <Component {...pageProps} />
+      </MainLayout>
+    </SWRConfig>
   );
 };
 
