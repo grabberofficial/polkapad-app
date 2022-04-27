@@ -3,21 +3,73 @@ import {
   FormControl,
   FormLabel,
   Grid,
-  Input,
   InputGroup,
   InputLeftElement,
   Text,
   Icon,
   Flex,
+  FormErrorMessage,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
 import { MdEmail } from 'react-icons/md';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
+import { object, string } from 'yup';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import fetchJson from '@/lib/fetchJson';
+import { useCallback, useState } from 'react';
+import { FormInput } from '@/components/FormInput/FormInput';
 
-const isSent = true;
+interface IFormInput {
+  email: string;
+}
 
-const LinkSendPage = () => {
+const schema = object()
+  .shape({
+    email: string().required('Email is required').email('Email is invalid'),
+  })
+  .required();
+
+const CodeSendPage = () => {
+  const [isSent, setIsSent] = useState(false);
+  const [code, setCode] = useState('');
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormInput>({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
+    try {
+      const res: { code: string; message: string } = await fetchJson(
+        'http://localhost:3000/auth/code/send',
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        },
+      );
+      console.log({
+        res,
+      });
+      setCode(res.code);
+      // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
+      // Это для дебага или так и надо? Отображать ли этот код
+      res.message === 'ok' && setIsSent(true);
+    } catch (error) {
+      // TODO: error handling
+      // if (error instanceof FetchError) {
+      //   setErrorMsg(error.data.message)
+      // } else {
+      //   console.error('An unexpected error happened:', error)
+      // }
+      console.error({ error });
+    }
+  }, []);
+
   return (
     <Grid
       maxWidth="700px"
@@ -67,7 +119,7 @@ const LinkSendPage = () => {
             maxWidth="215px"
             textAlign="center"
           >
-            Your login link for Avalaunch sending to your email
+            Your code is {code}
           </Text>
         </Flex>
       ) : (
@@ -80,8 +132,9 @@ const LinkSendPage = () => {
               justifyContent: 'center',
               gap: '22px',
             }}
+            onSubmit={handleSubmit(onSubmit)}
           >
-            <FormControl>
+            <FormControl isInvalid={!!errors.email}>
               <FormLabel htmlFor="email">Email</FormLabel>
               <InputGroup>
                 <InputLeftElement
@@ -100,24 +153,31 @@ const LinkSendPage = () => {
                       as={MdEmail}
                       height="21px"
                       width="21px"
-                      color="#49C7DA"
+                      color={errors.email ? '#EC305D' : '#49C7DA'}
                     />
                   </Flex>
                 </InputLeftElement>
-                <Input
-                  height="48px"
-                  paddingLeft="72px"
-                  fontWeight="600"
-                  fontSize="14px"
-                  lineHeight="21px"
-                  borderRadius="4px"
-                  id="email"
-                  type="email"
+                <FormInput
+                  fieldName="email"
+                  control={control}
+                  hasError={!!errors.email}
                 />
               </InputGroup>
+              {errors.email && (
+                <FormErrorMessage
+                  fontWeight="400"
+                  fontSize="12px"
+                  lineHeight="18px"
+                  color="#EC305D"
+                >
+                  {errors.email.message}
+                </FormErrorMessage>
+              )}
             </FormControl>
 
-            <Button variant="primary">Send Magic Link</Button>
+            <Button variant="primary" type="submit">
+              Send Magic Link
+            </Button>
           </form>
           <Text
             fontWeight="600"
@@ -128,9 +188,9 @@ const LinkSendPage = () => {
             textAlign="center"
           >
             {'Back to '}
-            <Link href="/auth/login">
+            <Link href="/auth/login-code">
               <Text as="a" href="/auth/login" color="#49C7DA">
-                Login
+                Login via code
               </Text>
             </Link>
           </Text>
@@ -140,4 +200,4 @@ const LinkSendPage = () => {
   );
 };
 
-export default LinkSendPage;
+export default CodeSendPage;

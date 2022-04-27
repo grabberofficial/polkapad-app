@@ -28,17 +28,17 @@ import { object, string } from 'yup';
 
 interface IFormInput {
   email: string;
-  password: string;
+  code: string;
 }
 
 const schema = object()
   .shape({
     email: string().required('Email is required').email('Email is invalid'),
-    password: string().required('Password is required'),
+    code: string().required('Code is required'),
   })
   .required();
 
-const LoginPage = () => {
+const LoginCodePage = () => {
   const {
     control,
     handleSubmit,
@@ -59,7 +59,7 @@ const LoginPage = () => {
           await fetchJson('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...data, authType: 'password' }),
+            body: JSON.stringify({ ...data, authType: 'code' }),
           }),
         );
       } catch (error) {
@@ -155,8 +155,8 @@ const LoginPage = () => {
             </FormErrorMessage>
           )}
         </FormControl>
-        <FormControl isInvalid={!!errors.password}>
-          <FormLabel htmlFor="password">Password</FormLabel>
+        <FormControl isInvalid={!!errors.code}>
+          <FormLabel htmlFor="code">Code</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
               <Flex
@@ -170,25 +170,25 @@ const LoginPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color={errors.password ? '#EC305D' : '#49C7DA'}
+                  color={errors.code ? '#EC305D' : '#49C7DA'}
                 />
               </Flex>
             </InputLeftElement>
             <FormInput
-              fieldName="password"
+              fieldName="code"
               control={control}
-              hasError={!!errors.password}
-              fieldType="password"
+              hasError={!!errors.code}
+              fieldType="text"
             />
           </InputGroup>
-          {errors.password && (
+          {errors.code && (
             <FormErrorMessage
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
               color="#EC305D"
             >
-              {errors.password.message}
+              {errors.code.message}
             </FormErrorMessage>
           )}
         </FormControl>
@@ -223,4 +223,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default LoginCodePage;
