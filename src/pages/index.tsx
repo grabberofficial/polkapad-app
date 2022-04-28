@@ -82,7 +82,7 @@ const IndexPage = () => {
           flexDirection={'column'}
           padding={'76px 130px 0 115px'}
           height="100%"
-          backgroundImage="url(http://localhost:3000/images/staking_bg.png)"
+          backgroundImage="url(http://localhost:8080/images/staking_bg.png)"
           backgroundRepeat="no-repeat"
           backgroundPosition="bottom"
           // backgroundPositionY="bottom"

@@ -56,7 +56,7 @@ const RegisterPage = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
     try {
-      await fetchJson('http://localhost:3000/auth/password/register', {
+      await fetchJson('https://app.polkapadapis.codes/auth/password/register', {
         method: 'POST',
         body: JSON.stringify({
           name: data.name,

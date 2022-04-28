@@ -12,7 +12,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       const tokenRes = await fetchJson(
-        'http://localhost:3000/auth/password/login',
+        'https://app.polkapadapis.codes/auth/password/login',
         {
           method: 'POST',
           body: JSON.stringify({
@@ -40,7 +40,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       const tokenRes = await fetchJson(
-        'http://localhost:3000/auth/code/login',
+        'https://app.polkapadapis.codes/auth/code/login',
         {
           method: 'POST',
           body: JSON.stringify({

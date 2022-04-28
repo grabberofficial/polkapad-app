@@ -45,7 +45,7 @@ const CodeSendPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
     try {
       const res: { code: string; message: string } = await fetchJson(
-        'http://localhost:3000/auth/code/send',
+        'https://app.polkapadapis.codes/auth/code/send',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
