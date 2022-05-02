@@ -5,6 +5,7 @@ import { Image } from '@chakra-ui/react';
 import { TabList } from './components/HeaderItems/HeaderItems.style';
 import { useRouter } from 'next/router';
 import { RightContainer } from './Header.style';
+import Link from 'next/link';
 
 export const Header: React.FC<{ right?: React.FC[] }> = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -32,7 +33,14 @@ export const Header: React.FC<{ right?: React.FC[] }> = (props) => {
       top={0}
       zIndex="2"
     >
-      <Image src="/images/logo_header.png" alt="Polkapad" padding={'24px 0'} />
+      <Link href="/">
+        <Image
+          src="/images/logo_header.png"
+          alt="Polkapad"
+          padding={'24px 0'}
+          cursor="pointer"
+        />
+      </Link>
       <Tabs height={'100%'} index={selectedTab}>
         <TabList>{props.children}</TabList>
       </Tabs>

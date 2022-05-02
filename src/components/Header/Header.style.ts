@@ -5,4 +5,5 @@ export const RightContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   gap: 19px;
+  position: relative;
 `;
