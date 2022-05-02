@@ -45,17 +45,6 @@ const AccountButton: React.FC = () => {
   }, [mutateUser, router]);
 
   return (
-    // <Button
-    //   variant="secondary"
-    //   iconPlacement="left"
-    //   icon={
-    //     <Icon as={FaUserAlt} height="21px" width="21px" color="#49C7DA" />
-    //   }
-    //   fixedWidth={152}
-    //   withIconDivider
-    // >
-    //   Account
-    // </Button>
     <Menu gutter={30}>
       <MenuButton
         as={Button}
@@ -105,11 +94,6 @@ const Header = () => {
   const { user } = useUser();
 
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
-
-  console.log({
-    isLoggedIn,
-    user,
-  });
 
   const headerButtons = useMemo(
     () => [ConnectWalletButton, isLoggedIn ? AccountButton : LoginButton],
