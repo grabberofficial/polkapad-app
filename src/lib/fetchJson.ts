@@ -1,8 +1,21 @@
 export default async function fetchJson<JSON = unknown>(
   input: RequestInfo,
   init?: RequestInit,
+  token?: string,
 ): Promise<JSON> {
-  const response = await fetch(input, init);
+  const headers = token
+    ? new Headers({
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      })
+    : new Headers({
+        'Content-Type': 'application/json',
+      });
+
+  const response = await fetch(input, {
+    ...init,
+    headers: headers,
+  });
 
   // if the server replies, there's always some data in json
   // if there's a network error, it will throw at the previous line
