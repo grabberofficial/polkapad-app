@@ -60,6 +60,7 @@ const AccountButton: React.FC = () => {
           color="#5B5B5B"
           _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
           paddingLeft="20px"
+          onClick={() => router.push('/profile')}
         >
           Account stats
         </MenuItem>
@@ -92,6 +93,10 @@ const AccountButton: React.FC = () => {
 
 const Header = () => {
   const { user } = useUser();
+
+  console.log({
+    user,
+  });
 
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
 
