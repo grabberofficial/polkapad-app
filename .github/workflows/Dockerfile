@@ -3,6 +3,6 @@ RUN apk add tini
 ENTRYPOINT ["tini", "--"]
 WORKDIR /usr/src/app
 COPY . .
-ARG SECRET_COOKIE_PASSWORD
+COPY .env.production.sample .env.production
 RUN npm run-script build
 CMD ["npm", "run-script", "start"]
