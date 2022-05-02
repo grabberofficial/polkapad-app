@@ -3,6 +3,6 @@ RUN apk add tini
 ENTRYPOINT ["tini", "--"]
 WORKDIR /usr/src/app
 COPY . .
-COPY .env.production.sample .env.production
+COPY example.env .env
 RUN npm run-script build
 CMD ["npm", "run-script", "start"]
