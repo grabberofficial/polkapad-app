@@ -47,7 +47,7 @@ jobs:
         run: npm ci
 
       - name: Docker build
-        run: docker build -t $TAG -f .github/workflows/Dockerfile .
+        run: docker build -t $TAG --build-arg node_env="development" -f .github/workflows/Dockerfile .
 
       - name: ECR login
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $ECR
