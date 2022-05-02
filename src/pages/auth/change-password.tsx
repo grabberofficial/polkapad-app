@@ -327,7 +327,7 @@ const ChangePasswordPage = () => {
           >
             {'Back to '}
             <Link href="/auth/login-code">
-              <Text as="a" href="/auth/login" color="#49C7DA">
+              <Text as="a" href="/auth/login-code" color="#49C7DA">
                 Login
               </Text>
             </Link>

@@ -212,7 +212,7 @@ const LoginCodePage = () => {
         display="flex"
       >
         <Link href="/auth/send-code">Send magic link</Link>
-        <Link href="/auth/forgotPassword">Forgot password?</Link>
+        <Link href="/auth/restore-password">Forgot password?</Link>
         <Link href="/auth/register">
           <Text as="a" href="/auth/register" color="#49C7DA">
             Create an account
