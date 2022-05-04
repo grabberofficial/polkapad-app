@@ -21,7 +21,6 @@ import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { object, ref, string } from 'yup';
 import fetchJson from '@/lib/fetchJson';
-// , { FetchError }
 import { useRouter } from 'next/router';
 
 interface IFormInput {
@@ -54,25 +53,31 @@ const RegisterPage = () => {
   });
   const { push } = useRouter();
 
-  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
-    try {
-      await fetchJson('https://app.polkapadapis.codes/auth/password/register', {
-        method: 'POST',
-        body: JSON.stringify({
-          name: data.name,
-          password: data.password,
-          email: data.email,
-        }),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      push('/auth/login');
-    } catch (err) {
-      // const { message } = err as FetchError;
-      // TODO: backend error handling
-    }
-  }, []);
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(
+    async (data) => {
+      try {
+        await fetchJson(
+          'https://app.polkapadapis.codes/auth/password/register',
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              name: data.name,
+              password: data.password,
+              email: data.email,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        push('/auth/login');
+      } catch (err) {
+        // const { message } = err as FetchError;
+        // TODO: backend error handling
+      }
+    },
+    [push],
+  );
 
   return (
     <Grid
