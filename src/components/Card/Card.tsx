@@ -31,13 +31,13 @@ const socials = [
   <Image src={github} color="#49C7DA" key="github" />,
 ];
 
-export const Card: React.FC = ({ children, ...props }) => {
+export const Card: React.FC<{ dark?: boolean }> = ({ children, ...props }) => {
   const { dark } = props;
   return (
     <Box
       bg={dark ? '#303030' : '#F6F5F5'}
       width="400px"
-      color={dark && 'white'}
+      color={dark ? 'white' : undefined}
     >
       <Flex
         width="400px"

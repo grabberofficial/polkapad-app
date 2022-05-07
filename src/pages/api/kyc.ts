@@ -3,7 +3,7 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export type KYC = {
-  iframeUrl: any;
+  iframeUrl: string;
 };
 
 const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
