@@ -17,6 +17,10 @@ export default async function fetchJson<JSON = unknown>(
     headers: headers,
   });
 
+  console.log({
+    response,
+  });
+
   // if the server replies, there's always some data in json
   // if there's a network error, it will throw at the previous line
   const data = await response.json();

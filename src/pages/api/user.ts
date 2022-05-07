@@ -21,6 +21,14 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
       undefined,
       req.session.user.token,
     );
+
+    req.session.user = {
+      ...req.session.user,
+      name: user.name,
+      id: user.id,
+      isLoggedIn: true,
+    };
+    await req.session.save();
     // in a real world application you might read the user id from the session and then do a database request
     // to get more information on the user if needed
     res.json({
