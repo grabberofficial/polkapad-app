@@ -1,4 +1,5 @@
 import useUser from '@/lib/hooks/useUser';
+import { useEthers } from '@usedapp/core';
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
@@ -11,8 +12,27 @@ import { Header as HeaderComponent } from './Header';
 import { FaUserAlt } from 'react-icons/fa';
 
 const ConnectWalletButton: React.FC = () => {
+  const { activateBrowserWallet, account, chainId, active, library } =
+    useEthers();
+  const connected = !!chainId;
+  console.log(
+    'chainId =',
+    chainId,
+    'account =',
+    account,
+    'active =',
+    active,
+    'library =',
+    library,
+  );
   return (
-    <Button variant="secondary" fixedWidth={150}>
+    <Button
+      onClick={() => {
+        activateBrowserWallet();
+      }}
+      variant="secondary"
+      fixedWidth={150}
+    >
       Connect Wallet
     </Button>
   );
