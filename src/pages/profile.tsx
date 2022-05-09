@@ -80,9 +80,7 @@ const ProfilePage = () => {
   }, [user, reset]);
 
   const fetchKYC = useCallback(async () => {
-    const kyc = await fetch('http://localhost:8080/api/kyc').then((data) =>
-      data.json(),
-    );
+    const kyc = await fetch('/api/kyc').then((data) => data.json());
     setKYCUrl(kyc.iframeUrl);
     console.log({
       kyc: kyc.iframeUrl,
