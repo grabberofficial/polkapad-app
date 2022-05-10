@@ -1,12 +1,16 @@
 import { ReactNode } from 'react';
+
 import ThemeProvider from './theme';
+import DAppProvider from './dApp';
 
 interface ProviderProps {
   children: ReactNode;
 }
 
 export const Providers = ({ children }: ProviderProps) => (
-  <ThemeProvider>{children}</ThemeProvider>
+  <ThemeProvider>
+    <DAppProvider>{children}</DAppProvider>
+  </ThemeProvider>
 );
 
 export default Providers;
