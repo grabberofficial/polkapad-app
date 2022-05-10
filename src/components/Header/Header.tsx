@@ -41,7 +41,7 @@ export const Header: React.FC<{ right?: React.FC[] }> = (props) => {
           cursor="pointer"
         />
       </Link>
-      <Tabs height={'100%'} index={selectedTab}>
+      <Tabs height={'100%'} index={selectedTab} position="absolute" left="32%">
         <TabList>{props.children}</TabList>
       </Tabs>
       <RightContainer>
