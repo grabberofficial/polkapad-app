@@ -59,6 +59,9 @@ const CodeSendPage = () => {
       // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
       // Это для дебага или так и надо? Отображать ли этот код
       res.message === 'ok' && setIsSent(true);
+      console.log({
+        code,
+      });
     } catch (error) {
       // TODO: error handling
       // if (error instanceof FetchError) {
@@ -119,7 +122,7 @@ const CodeSendPage = () => {
             maxWidth="215px"
             textAlign="center"
           >
-            Your code is {code}
+            Your link is sent to your email
           </Text>
         </Flex>
       ) : (
