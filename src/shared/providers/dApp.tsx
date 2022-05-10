@@ -9,7 +9,7 @@ const config = {
   networks: [Mainnet, Ropsten],
   readOnlyChainId: ChainId.Ropsten,
   readOnlyUrls: {
-    // [ChainId.Mainnet]: `https://mainnet.infura.io/v3/${'62687d1a985d4508b2b7a24827551934'}`,
+    [ChainId.Mainnet]: `https://eth-mainnet.alchemyapi.io/v2/${'ylE0wN4_2ALWd8ZK7hgvDMi4eRCfskQY'}`,
     [ChainId.Ropsten]: `https://eth-ropsten.alchemyapi.io/v2/${'ylE0wN4_2ALWd8ZK7hgvDMi4eRCfskQY'}`,
   },
 };

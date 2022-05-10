@@ -1,6 +1,6 @@
 import useUser from '@/lib/hooks/useUser';
 import { useEthers, useEtherBalance, shortenIfAddress } from '@usedapp/core';
-// import { formatEther } from '@ethersproject/units';
+import { formatEther } from '@ethersproject/units';
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
@@ -13,9 +13,15 @@ import { Header as HeaderComponent } from './Header';
 import { FaUserAlt } from 'react-icons/fa';
 
 const ConnectWalletButton: React.FC = () => {
-  const { activateBrowserWallet, account, chainId, active, library } =
-    useEthers();
-  const etherBalance = useEtherBalance(account);
+  const {
+    activateBrowserWallet,
+    account,
+    chainId,
+    active,
+    library,
+    deactivate,
+  } = useEthers();
+  const etherBalance = useEtherBalance(account, { chainId });
   console.log('etherBalance', etherBalance);
   const connected = !!chainId;
   console.log(
@@ -28,27 +34,26 @@ const ConnectWalletButton: React.FC = () => {
     'library =',
     library,
   );
-  // {shortenIfAddress(account)}
+
   return (
     <>
       {connected && account && (
         <Button
-          onClick={() => {
-            activateBrowserWallet();
-          }}
+          onClick={deactivate}
           variant="secondary"
-          fixedWidth={150}
+          fixedWidth={220}
+          padding={'0px 32px'}
         >
+          {etherBalance &&
+            parseFloat(formatEther(etherBalance)).toFixed(3) + ' ETH' + ' | '}
           {shortenIfAddress(account)}
         </Button>
       )}
       {!account && (
         <Button
-          onClick={() => {
-            activateBrowserWallet();
-          }}
+          onClick={activateBrowserWallet}
           variant="secondary"
-          fixedWidth={150}
+          fixedWidth={220}
         >
           Connect Wallet
         </Button>
