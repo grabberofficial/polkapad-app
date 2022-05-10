@@ -49,39 +49,42 @@ const ChangePasswordPage = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
-    const { emal, code } = router.query;
-    if (!emal || !code) return;
-    try {
-      const res: { code: string; message: string } = await fetchJson(
-        'https://app.polkapadapis.codes/auth/password/change',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: emal,
-            password: data.newPassword,
-            code: code,
-          }),
-        },
-      );
-      console.log({
-        res,
-      });
-      // setCode(res.code);
-      // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
-      // Это для дебага или так и надо? Отображать ли этот код
-      res.message === 'ok' && setIsSent(true);
-    } catch (error) {
-      // TODO: error handling
-      // if (error instanceof FetchError) {
-      //   setErrorMsg(error.data.message)
-      // } else {
-      //   console.error('An unexpected error happened:', error)
-      // }
-      console.error({ error });
-    }
-  }, []);
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(
+    async (data) => {
+      const { emal, code } = router.query;
+      if (!emal || !code) return;
+      try {
+        const res: { code: string; message: string } = await fetchJson(
+          'https://app.polkapadapis.codes/auth/password/change',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: emal,
+              password: data.newPassword,
+              code: code,
+            }),
+          },
+        );
+        console.log({
+          res,
+        });
+        // setCode(res.code);
+        // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
+        // Это для дебага или так и надо? Отображать ли этот код
+        res.message === 'ok' && setIsSent(true);
+      } catch (error) {
+        // TODO: error handling
+        // if (error instanceof FetchError) {
+        //   setErrorMsg(error.data.message)
+        // } else {
+        //   console.error('An unexpected error happened:', error)
+        // }
+        console.error({ error });
+      }
+    },
+    [router],
+  );
 
   return (
     <Grid

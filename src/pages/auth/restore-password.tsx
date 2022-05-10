@@ -33,7 +33,6 @@ const schema = object()
 
 const RestorePasswordPage = () => {
   const [isSent, setIsSent] = useState(false);
-  const [code, setCode] = useState('');
   const {
     control,
     handleSubmit,
@@ -52,13 +51,12 @@ const RestorePasswordPage = () => {
           body: JSON.stringify(data),
         },
       );
-      console.log({
-        res,
-      });
-      setCode(res.code);
       // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
       // Это для дебага или так и надо? Отображать ли этот код
       res.message === 'ok' && setIsSent(true);
+      console.log({
+        res,
+      });
     } catch (error) {
       // TODO: error handling
       // if (error instanceof FetchError) {
@@ -119,7 +117,7 @@ const RestorePasswordPage = () => {
             maxWidth="215px"
             textAlign="center"
           >
-            Your code is {code}
+            Link to password restore has been sent to your email.
           </Text>
         </Flex>
       ) : (
