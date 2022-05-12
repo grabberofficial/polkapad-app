@@ -44,15 +44,13 @@ const RestorePasswordPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
     try {
       const res: { code: string; message: string } = await fetchJson(
-        'https://app.polkapadapis.codes/auth/password/restore',
+        'https://app.polkapadapis.codes/auth/password/reset',
         {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         },
       );
-      // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
-      // Это для дебага или так и надо? Отображать ли этот код
       res.message === 'ok' && setIsSent(true);
       console.log({
         res,

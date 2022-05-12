@@ -1,6 +1,6 @@
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 interface TokenRes {
@@ -43,7 +43,12 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       await req.session.save();
       res.json(user);
     } catch (error) {
-      res.status(500).json({ message: (error as Error).message });
+      console.log({
+        error: error as FetchError,
+      });
+      res
+        .status((error as FetchError).data.code ?? 500)
+        .json((error as FetchError).data);
     }
   } else if (authType === 'code') {
     const { email, code } = await req.body;
@@ -77,7 +82,9 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       await req.session.save();
       res.json(user);
     } catch (error) {
-      res.status(500).json({ message: (error as Error).message });
+      res
+        .status((error as FetchError).data.code ?? 500)
+        .json((error as FetchError).data);
     }
   } else {
     res.status(500).json({ message: 'No auth type provided' });

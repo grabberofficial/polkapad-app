@@ -20,7 +20,7 @@ import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { object, ref, string } from 'yup';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 
 interface IFormInput {
@@ -48,6 +48,7 @@ const RegisterPage = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
@@ -72,11 +73,21 @@ const RegisterPage = () => {
         );
         push('/auth/login');
       } catch (err) {
-        // const { message } = err as FetchError;
-        // TODO: backend error handling
+        if (err instanceof FetchError) {
+          switch (err.data.type) {
+            case 'EmailAlreadyUsed':
+              setError('email', {
+                type: 'validate',
+                message: 'Email is already used',
+              });
+              break;
+            // TODO: other errors handling
+            // case '':
+          }
+        }
       }
     },
-    [push],
+    [push, setError],
   );
 
   return (

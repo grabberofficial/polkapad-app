@@ -1,7 +1,7 @@
 import { Button } from '@/components/Button';
 import { FormInput } from '@/components/FormInput/FormInput';
 // , { FetchError }
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import useUser from '@/lib/hooks/useUser';
 import {
   FormControl,
@@ -43,6 +43,7 @@ const LoginPage = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
@@ -63,16 +64,26 @@ const LoginPage = () => {
           }),
         );
       } catch (error) {
-        // TODO: error handling
-        // if (error instanceof FetchError) {
-        //   setErrorMsg(error.data.message)
-        // } else {
-        //   console.error('An unexpected error happened:', error)
-        // }
-        console.error({ error });
+        if (error instanceof FetchError) {
+          switch (error.data.type) {
+            case 'IncorrectEmailOrPassword':
+              setError('email', {
+                type: 'custom',
+              });
+              setError('password', {
+                message: 'Incorrect email or password',
+                type: 'validate',
+              });
+              break;
+            // TODO: other errors handling
+            // case '':
+          }
+        }
+
+        console.log({ error });
       }
     },
-    [mutateUser],
+    [mutateUser, setError],
   );
 
   return (

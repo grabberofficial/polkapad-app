@@ -42,6 +42,8 @@ export class FetchError extends Error {
   response: Response;
   data: {
     message: string;
+    code: number;
+    type: string;
   };
   constructor({
     message,
@@ -52,6 +54,8 @@ export class FetchError extends Error {
     response: Response;
     data: {
       message: string;
+      code: number;
+      type: string;
     };
   }) {
     // Pass remaining arguments (including vendor specific ones) to parent constructor

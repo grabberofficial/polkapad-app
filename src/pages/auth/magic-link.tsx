@@ -1,4 +1,4 @@
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import useUser from '@/lib/hooks/useUser';
 import { Grid, Text, Icon, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
@@ -26,24 +26,28 @@ const MagicLinkPage = () => {
           }),
         );
       } catch (error) {
-        // TODO: error handling
-        // if (error instanceof FetchError) {
-        //   setErrorMsg(error.data.message)
-        // } else {
-        //   console.error('An unexpected error happened:', error)
-        // }
-        console.error({ error });
+        if (error instanceof FetchError) {
+          switch (error.data.type) {
+            case 'NotFound':
+              setText('Invalid code');
+              break;
+            // TODO: other errors handling
+            // case '':
+          }
+        }
+
+        console.log({ error });
       }
     },
     [mutateUser],
   );
 
   useEffect(() => {
-    const { emal, code } = router.query;
-    if (!emal || !code) {
+    const { email, code } = router.query;
+    if (!email || !code) {
       setText('Link is invalid, auth failed');
     } else {
-      authorize(emal, code);
+      authorize(email, code);
     }
   }, [router, authorize]);
 

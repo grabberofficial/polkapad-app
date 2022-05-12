@@ -17,7 +17,7 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { object, string } from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
 
@@ -33,45 +33,48 @@ const schema = object()
 
 const CodeSendPage = () => {
   const [isSent, setIsSent] = useState(false);
-  const [code, setCode] = useState('');
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
-    try {
-      const res: { code: string; message: string } = await fetchJson(
-        'https://app.polkapadapis.codes/auth/code/send',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        },
-      );
-      console.log({
-        res,
-      });
-      setCode(res.code);
-      // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
-      // Это для дебага или так и надо? Отображать ли этот код
-      res.message === 'ok' && setIsSent(true);
-      console.log({
-        code,
-      });
-    } catch (error) {
-      // TODO: error handling
-      // if (error instanceof FetchError) {
-      //   setErrorMsg(error.data.message)
-      // } else {
-      //   console.error('An unexpected error happened:', error)
-      // }
-      console.error({ error });
-    }
-  }, []);
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(
+    async (data) => {
+      try {
+        const res: { code: string; message: string } = await fetchJson(
+          'https://app.polkapadapis.codes/auth/code/send',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          },
+        );
+        console.log({
+          res,
+        });
+        res.message === 'ok' && setIsSent(true);
+      } catch (error) {
+        if (error instanceof FetchError) {
+          // switch (error.data.type) {
+          //   case 'NotFound':
+          //       setError('email', {
+          //         type: 'validate',
+          //         message: 'Link is expired',
+          //       });
+          //       break;
+          //   // TODO: other errors handling
+          //   // case '':
+          // }
+        }
+        console.error({ error });
+      }
+    },
+    [setError],
+  );
 
   return (
     <Grid
