@@ -20,6 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
+import { ExceptionTypeEnum } from '@/lib/constants';
 
 interface IFormInput {
   email: string;
@@ -59,16 +60,16 @@ const CodeSendPage = () => {
         res.message === 'ok' && setIsSent(true);
       } catch (error) {
         if (error instanceof FetchError) {
-          // switch (error.data.type) {
-          //   case 'NotFound':
-          //       setError('email', {
-          //         type: 'validate',
-          //         message: 'Link is expired',
-          //       });
-          //       break;
-          //   // TODO: other errors handling
-          //   // case '':
-          // }
+          switch (error.data.type) {
+            case ExceptionTypeEnum.NotFound:
+              setError('email', {
+                type: 'validate',
+                message: 'Email not found',
+              });
+              break;
+            // TODO: other errors handling
+            // case '':
+          }
         }
         console.error({ error });
       }
@@ -195,7 +196,7 @@ const CodeSendPage = () => {
           >
             {'Back to '}
             <Link href="/auth/login-code">
-              <Text as="a" href="/auth/login-code" color="#49C7DA">
+              <Text as="a" href="/auth/send-code" color="#49C7DA">
                 Login via code
               </Text>
             </Link>

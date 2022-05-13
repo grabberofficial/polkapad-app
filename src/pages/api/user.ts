@@ -12,6 +12,10 @@ export type User = {
 };
 
 const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
+  console.log('userApi', {
+    user: req.session.user,
+    session: req.session,
+  });
   if (req.session.user) {
     const user: {
       id: string;

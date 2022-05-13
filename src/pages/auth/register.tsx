@@ -22,6 +22,7 @@ import { RiLock2Fill } from 'react-icons/ri';
 import { object, ref, string } from 'yup';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
+import { ExceptionTypeEnum } from '@/lib/constants';
 
 interface IFormInput {
   name: string;
@@ -75,7 +76,7 @@ const RegisterPage = () => {
       } catch (err) {
         if (err instanceof FetchError) {
           switch (err.data.type) {
-            case 'EmailAlreadyUsed':
+            case ExceptionTypeEnum.EmailAlreadyUsed:
               setError('email', {
                 type: 'validate',
                 message: 'Email is already used',

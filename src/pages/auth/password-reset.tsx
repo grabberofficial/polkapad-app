@@ -21,6 +21,7 @@ import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { RiLock2Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
+import { ExceptionTypeEnum } from '@/lib/constants';
 
 interface IFormInput {
   newPassword: string;
@@ -74,7 +75,7 @@ const ChangePasswordPage = () => {
       } catch (error) {
         if (error instanceof FetchError) {
           switch (error.data.type) {
-            case 'NotFound':
+            case ExceptionTypeEnum.NotFound:
               setError('newPassword', {
                 type: 'validate',
               });

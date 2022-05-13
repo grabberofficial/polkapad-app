@@ -1,5 +1,6 @@
 import { Button } from '@/components/Button';
 import { FormInput } from '@/components/FormInput/FormInput';
+import { ExceptionTypeEnum } from '@/lib/constants';
 // , { FetchError }
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import useUser from '@/lib/hooks/useUser';
@@ -66,7 +67,7 @@ const LoginPage = () => {
       } catch (error) {
         if (error instanceof FetchError) {
           switch (error.data.type) {
-            case 'IncorrectEmailOrPassword':
+            case ExceptionTypeEnum.IncorrectEmailOrPassword:
               setError('email', {
                 type: 'custom',
               });

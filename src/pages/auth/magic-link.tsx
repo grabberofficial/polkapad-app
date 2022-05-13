@@ -1,3 +1,4 @@
+import { ExceptionTypeEnum } from '@/lib/constants';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import useUser from '@/lib/hooks/useUser';
 import { Grid, Text, Icon, Flex } from '@chakra-ui/react';
@@ -28,7 +29,7 @@ const MagicLinkPage = () => {
       } catch (error) {
         if (error instanceof FetchError) {
           switch (error.data.type) {
-            case 'NotFound':
+            case ExceptionTypeEnum.NotFound:
               setText('Invalid code');
               break;
             // TODO: other errors handling
