@@ -7,7 +7,7 @@ export default async function fetchJson<JSON = unknown>(
 ): Promise<JSON> {
   const headers = token
     ? new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
         'Content-Type': 'application/json',
       })
     : new Headers({
