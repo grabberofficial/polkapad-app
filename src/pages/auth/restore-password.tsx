@@ -17,9 +17,10 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { object, string } from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
+import { ExceptionTypeEnum } from '@/lib/constants';
 
 interface IFormInput {
   email: string;
@@ -37,36 +38,44 @@ const RestorePasswordPage = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<IFormInput> = useCallback(async (data) => {
-    try {
-      const res: { code: string; message: string } = await fetchJson(
-        'https://app.polkapadapis.codes/auth/password/restore',
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        },
-      );
-      // TODO: спросить Илью на тему того, почему в респонсе приходит код, а не сыпется на почту
-      // Это для дебага или так и надо? Отображать ли этот код
-      res.message === 'ok' && setIsSent(true);
-      console.log({
-        res,
-      });
-    } catch (error) {
-      // TODO: error handling
-      // if (error instanceof FetchError) {
-      //   setErrorMsg(error.data.message)
-      // } else {
-      //   console.error('An unexpected error happened:', error)
-      // }
-      console.error({ error });
-    }
-  }, []);
+  const onSubmit: SubmitHandler<IFormInput> = useCallback(
+    async (data) => {
+      try {
+        const res: { code: string; message: string } = await fetchJson(
+          'https://app.polkapadapis.codes/auth/password/reset',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data),
+          },
+        );
+        res.message === 'ok' && setIsSent(true);
+        console.log({
+          res,
+        });
+      } catch (error) {
+        if (error instanceof FetchError) {
+          switch (error.data.type) {
+            case ExceptionTypeEnum.NotFound:
+              setError('email', {
+                type: 'validate',
+                message: 'Email not found',
+              });
+              break;
+            // TODO: other errors handling
+            // case '':
+          }
+        }
+        console.error({ error });
+      }
+    },
+    [setError],
+  );
 
   return (
     <Grid

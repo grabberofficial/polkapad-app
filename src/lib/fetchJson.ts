@@ -1,3 +1,5 @@
+import { ExceptionTypeEnum } from './constants';
+
 export default async function fetchJson<JSON = unknown>(
   input: RequestInfo,
   init?: RequestInit,
@@ -5,12 +7,16 @@ export default async function fetchJson<JSON = unknown>(
 ): Promise<JSON> {
   const headers = token
     ? new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
         'Content-Type': 'application/json',
       })
     : new Headers({
         'Content-Type': 'application/json',
       });
+
+  console.log({
+    headers,
+  });
 
   const response = await fetch(input, {
     ...init,
@@ -42,6 +48,8 @@ export class FetchError extends Error {
   response: Response;
   data: {
     message: string;
+    code: number;
+    type: ExceptionTypeEnum;
   };
   constructor({
     message,
@@ -52,6 +60,8 @@ export class FetchError extends Error {
     response: Response;
     data: {
       message: string;
+      code: number;
+      type: ExceptionTypeEnum;
     };
   }) {
     // Pass remaining arguments (including vendor specific ones) to parent constructor

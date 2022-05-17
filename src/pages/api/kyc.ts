@@ -8,13 +8,19 @@ export type KYC = {
 
 const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
   const payload = {
+    // вот он уникальный айди кус, который надо хранить
     reference: `SP_REQUEST_${Math.random()}`,
+    // сюда сыпется весь кус который мы получим от куса
     callback_url: 'https://yourdomain.com/profile/sp-notify-callback',
+    // сюда редиректнет пользователя после прохождения
     redirect_url: 'https://yourdomain.com/site/sp-redirect',
-    country: 'GB',
-    language: 'EN',
+    country: 'any',
+    language: 'any',
     verification_mode: 'any',
     ttl: 60,
+    face: {
+      proof: '',
+    },
     document: {
       proof: '',
       additional_proof: '',
@@ -30,7 +36,7 @@ const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
       gender: '',
     },
   };
-  //BASIC AUTH TOKEN
+  //Это мы берем из админки кус, чтоб авторизоваться
   const token = Buffer.from(
     '2d10fb59c246949c72f39e0bce6e6892c7d84c0fbe8182f722e21319d514f4ea:KymJQ6AIwKXqt7jiMtT4NoR6Ih5Drgrl',
   ).toString('base64');
@@ -43,7 +49,10 @@ const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
       Authorization: 'Basic ' + token, // if access token then replace "Basic" with "Bearer"
     },
     body: JSON.stringify(payload),
-  }).then((res) => res.json());
+  })
+    .then((res) => res.json())
+    // Вот этот урл нужно сплюнуть во фронтенд, чтобы открылся iframe
+    .then((kyc) => kyc.verification_url);
 
   console.log({
     kycResponse,
