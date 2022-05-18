@@ -1,5 +1,11 @@
 import useUser from '@/lib/hooks/useUser';
-import { useEthers, useEtherBalance, shortenIfAddress } from '@usedapp/core';
+import {
+  useEthers,
+  useEtherBalance,
+  shortenIfAddress,
+  BSC,
+  // useConfig,
+} from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
@@ -17,23 +23,67 @@ const ConnectWalletButton: React.FC = () => {
     activateBrowserWallet,
     account,
     chainId,
-    active,
-    library,
+    // active,
+    // library,
     deactivate,
+    switchNetwork,
   } = useEthers();
+  // const config = useConfig();
   const etherBalance = useEtherBalance(account, { chainId });
-  console.log('etherBalance', etherBalance);
+  // console.log('etherBalance', etherBalance);
   const connected = !!chainId;
-  console.log(
-    'chainId =',
-    chainId,
-    'account =',
-    account,
-    'active =',
-    active,
-    'library =',
-    library,
-  );
+  // console.log(
+  //   'chainId =',
+  //   chainId,
+  //   'account =',
+  //   account,
+  //   'active =',
+  //   active,
+  //   'library =',
+  //   library,
+  // );
+
+  const connenctToBSC = useCallback(async () => {
+    await activateBrowserWallet();
+
+    console.log({
+      chainId,
+      BSCChainId: BSC.chainId,
+    });
+    if (chainId !== BSC.chainId) {
+      await window.ethereum.request({
+        method: 'wallet_addEthereumChain',
+        params: [
+          {
+            chainId: `0x${Number(56).toString(16)}`,
+            chainName: 'Binance Smart Chain Mainnet',
+            nativeCurrency: {
+              name: 'Binance Chain Native Token',
+              symbol: 'BNB',
+              decimals: 18,
+            },
+            rpcUrls: [
+              'https://bsc-dataseed1.binance.org',
+              'https://bsc-dataseed2.binance.org',
+              'https://bsc-dataseed3.binance.org',
+              'https://bsc-dataseed4.binance.org',
+              'https://bsc-dataseed1.defibit.io',
+              'https://bsc-dataseed2.defibit.io',
+              'https://bsc-dataseed3.defibit.io',
+              'https://bsc-dataseed4.defibit.io',
+              'https://bsc-dataseed1.ninicoin.io',
+              'https://bsc-dataseed2.ninicoin.io',
+              'https://bsc-dataseed3.ninicoin.io',
+              'https://bsc-dataseed4.ninicoin.io',
+              'wss://bsc-ws-node.nariox.org',
+            ],
+            blockExplorerUrls: ['https://bscscan.com'],
+          },
+        ],
+      });
+    }
+    switchNetwork(BSC.chainId);
+  }, [activateBrowserWallet, switchNetwork, chainId]);
 
   return (
     <>
@@ -45,16 +95,12 @@ const ConnectWalletButton: React.FC = () => {
           padding={'0px 32px'}
         >
           {etherBalance &&
-            parseFloat(formatEther(etherBalance)).toFixed(3) + ' ETH' + ' | '}
+            parseFloat(formatEther(etherBalance)).toFixed(3) + ' BNB' + ' | '}
           {shortenIfAddress(account)}
         </Button>
       )}
       {!account && (
-        <Button
-          onClick={activateBrowserWallet}
-          variant="secondary"
-          fixedWidth={220}
-        >
+        <Button onClick={connenctToBSC} variant="secondary" fixedWidth={220}>
           Connect Wallet
         </Button>
       )}
@@ -145,7 +191,11 @@ const Header = () => {
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
 
   const headerButtons = useMemo(
-    () => [ConnectWalletButton, isLoggedIn ? AccountButton : LoginButton],
+    () => [
+      ConnectWalletButton,
+      // ConnectBSCWalletButton,
+      isLoggedIn ? AccountButton : LoginButton,
+    ],
     [isLoggedIn],
   );
 
