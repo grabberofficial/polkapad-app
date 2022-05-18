@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import ThemeProvider from './theme';
 import DAppProvider from './dApp';
 
-const SubstrateContextProvider = dynamic(() => import('./SubstrateContext'), {
+const SubstrateContextProvider = dynamic(() => import('./substrate'), {
   ssr: false,
 });
 

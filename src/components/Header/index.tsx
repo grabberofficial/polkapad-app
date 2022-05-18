@@ -1,7 +1,7 @@
 import useUser from '@/lib/hooks/useUser';
 import { useEthers, useEtherBalance, shortenIfAddress } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
-import { useSubstrate } from '@/shared/providers/SubstrateContext';
+import { useSubstrate } from '@/shared/providers/substrate';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
