@@ -97,6 +97,7 @@ const loadAccounts = (state, dispatch) => {
         meta: { ...meta, name: `${meta.name} (${meta.source})` },
       }));
       keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
+      console.log('allAccounts', allAccounts);
       dispatch({ type: 'SET_KEYRING', payload: keyring });
     } catch (e) {
       console.error(e);
