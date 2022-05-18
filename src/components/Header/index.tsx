@@ -65,7 +65,7 @@ import { FaUserAlt } from 'react-icons/fa';
 // };
 
 const ConnectWalletButton: React.FC = () => {
-  const { keyring, state } = useSubstrate();
+  const { api, keyring } = useSubstrate();
 
   const getExtensionAddress = async () => {
     const keyringOptions = keyring.getPairs().map((account: any) => ({
@@ -75,7 +75,14 @@ const ConnectWalletButton: React.FC = () => {
       icon: 'user',
     }));
 
-    console.log('state', state, keyringOptions);
+    const {
+      data: { free: previousFree },
+      nonce: previousNonce,
+    } = await api.query.system.account(keyringOptions[0].value);
+
+    console.log('api', api);
+    console.log('keyringOptions', keyringOptions);
+    console.log('previousFree', previousFree, previousNonce);
   };
 
   return (
