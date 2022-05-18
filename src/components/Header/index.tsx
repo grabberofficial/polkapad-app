@@ -65,10 +65,17 @@ import { FaUserAlt } from 'react-icons/fa';
 // };
 
 const ConnectWalletButton: React.FC = () => {
-  const { api, keyring } = useSubstrate();
+  const { keyring, state } = useSubstrate();
 
   const getExtensionAddress = async () => {
-    console.log('api, keyring', api, keyring);
+    const keyringOptions = keyring.getPairs().map((account: any) => ({
+      key: account.address,
+      value: account.address,
+      text: account.meta.name.toUpperCase(),
+      icon: 'user',
+    }));
+
+    console.log('state', state, keyringOptions);
   };
 
   return (

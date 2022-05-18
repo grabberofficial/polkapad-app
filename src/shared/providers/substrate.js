@@ -8,7 +8,7 @@ import keyring from '@polkadot/ui-keyring';
 const connectedSocket = 'wss://kusama-rpc.polkadot.io';
 const RPC = {};
 const CUSTOM_TYPES = {};
-const DEVELOPMENT_KEYRING = true;
+const DEVELOPMENT_KEYRING = false;
 const APP_NAME = 'Polkapad';
 
 console.log(`Connected socket: ${connectedSocket}`);
