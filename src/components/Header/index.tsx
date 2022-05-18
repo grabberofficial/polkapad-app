@@ -1,6 +1,7 @@
 import useUser from '@/lib/hooks/useUser';
 import { useEthers, useEtherBalance, shortenIfAddress } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
+import { useSubstrate } from '@/shared/providers/SubstrateContext';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
@@ -64,19 +65,10 @@ import { FaUserAlt } from 'react-icons/fa';
 // };
 
 const ConnectWalletButton: React.FC = () => {
+  const { api, keyring } = useSubstrate();
+
   const getExtensionAddress = async () => {
-    const polkadotExtensionDapp = await import('@polkadot/extension-dapp');
-    const extensions = await polkadotExtensionDapp.web3Enable('Polkapad');
-    if (extensions.length > 0) {
-      const allAccounts = await polkadotExtensionDapp.web3Accounts();
-      if (allAccounts.length > 0) {
-        console.log('allAccounts', allAccounts);
-      } else {
-        console.log('Please create account in Polka extension first.');
-      }
-    } else {
-      console.log('Please install Polka Chrome extension first.');
-    }
+    console.log('api, keyring', api, keyring);
   };
 
   return (

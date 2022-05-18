@@ -1813,6 +1813,31 @@
     "@polkadot/util-crypto" "^9.2.1"
     rxjs "^7.5.5"
 
+"@polkadot/ui-keyring@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/ui-keyring/-/ui-keyring-2.2.1.tgz#d4b438a067cda8d20541faf9e39fcf737a130768"
+  integrity sha512-l/OGRow0VHiVSK8RhMG8i2NxTzaQO/0fQuTx0vBYrrGLBjHP+LbxJD1cPckGa4vctJfjHQmO3thfFrcwbE7C7g==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@polkadot/keyring" "^9.2.1"
+    "@polkadot/ui-settings" "2.2.1"
+    "@polkadot/util" "^9.2.1"
+    "@polkadot/util-crypto" "^9.2.1"
+    mkdirp "^1.0.4"
+    rxjs "^7.5.5"
+    store "^2.0.12"
+
+"@polkadot/ui-settings@2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@polkadot/ui-settings/-/ui-settings-2.2.1.tgz#2fec5eecf299e264d026f6e350d6fb402020379b"
+  integrity sha512-RF/ovZkNoNrNODtjXykczoQ3BpGZuEbVQ6f8l/xbSpT5puPaC/H1EnMYioL3BIasrfQmNqETT1/h2Vhw8sv0KQ==
+  dependencies:
+    "@babel/runtime" "^7.17.9"
+    "@polkadot/networks" "^9.2.1"
+    "@polkadot/util" "^9.2.1"
+    eventemitter3 "^4.0.7"
+    store "^2.0.12"
+
 "@polkadot/util-crypto@9.2.1", "@polkadot/util-crypto@^9.2.1":
   version "9.2.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util-crypto/-/util-crypto-9.2.1.tgz#933f64cf203ac1d17ef28e91a58cc306d9784608"
@@ -4764,6 +4789,11 @@ minimist@^1.2.0, minimist@^1.2.6:
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.6.tgz#8637a5b759ea0d6e98702cfb3a9283323c93af44"
   integrity sha512-Jsjnk4bw3YJqYzbdyBiNsPWHPfO++UGG749Cxs6peCu5Xg4nrena6OVxOYxrQTqww0Jmwt+Ref8rggumkTLz9Q==
 
+mkdirp@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
+  integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
 mock-socket@^9.1.3:
   version "9.1.3"
   resolved "https://registry.yarnpkg.com/mock-socket/-/mock-socket-9.1.3.tgz#bcb106c6b345001fa7619466fcf2f8f5a156b10f"
@@ -5688,6 +5718,11 @@ split2@^4.0.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/split2/-/split2-4.1.0.tgz#101907a24370f85bb782f08adaabe4e281ecf809"
   integrity sha512-VBiJxFkxiXRlUIeyMQi8s4hgvKCSjtknJv/LVYbrgALPwf5zSKmEwV9Lst25AkvMDnvxODugjdl6KZgwKM1WYQ==
+
+store@^2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/store/-/store-2.0.12.tgz#8c534e2a0b831f72b75fc5f1119857c44ef5d593"
+  integrity sha1-jFNOKguDH3K3X8XxEZhXxE711ZM=
 
 stream-shift@^1.0.0:
   version "1.0.1"

@@ -1,7 +1,12 @@
 import { ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 
 import ThemeProvider from './theme';
 import DAppProvider from './dApp';
+
+const SubstrateContextProvider = dynamic(() => import('./SubstrateContext'), {
+  ssr: false,
+});
 
 interface ProviderProps {
   children: ReactNode;
@@ -9,7 +14,9 @@ interface ProviderProps {
 
 export const Providers = ({ children }: ProviderProps) => (
   <ThemeProvider>
-    <DAppProvider>{children}</DAppProvider>
+    <DAppProvider>
+      <SubstrateContextProvider>{children}</SubstrateContextProvider>
+    </DAppProvider>
   </ThemeProvider>
 );
 
