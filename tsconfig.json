@@ -33,6 +33,7 @@
   ],
   "include": [
     "next-env.d.ts",
+    "ethereum.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ]
