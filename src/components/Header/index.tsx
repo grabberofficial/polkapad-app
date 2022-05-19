@@ -7,6 +7,8 @@ import {
   // useConfig,
 } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
+import { useSubstrate } from '@/shared/providers/substrate';
+
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback, useMemo } from 'react';
@@ -101,9 +103,43 @@ const ConnectWalletButton: React.FC = () => {
       )}
       {!account && (
         <Button onClick={connenctToBSC} variant="secondary" fixedWidth={220}>
-          Connect Wallet
+          Connect BSC
         </Button>
       )}
+    </>
+  );
+};
+
+const PolkaConnentBtn = () => {
+  const { api, keyring } = useSubstrate();
+
+  const getExtensionAddress = async () => {
+    const keyringOptions = keyring.getPairs().map((account: any) => ({
+      key: account.address,
+      value: account.address,
+      text: account.meta.name.toUpperCase(),
+      icon: 'user',
+    }));
+
+    const {
+      data: { free: previousFree },
+      nonce: previousNonce,
+    } = await api.query.system.account(keyringOptions[0].value);
+
+    console.log('api', api);
+    console.log('keyringOptions', keyringOptions);
+    console.log('previousFree', previousFree, previousNonce);
+  };
+
+  return (
+    <>
+      <Button
+        onClick={getExtensionAddress}
+        variant="secondary"
+        fixedWidth={220}
+      >
+        Connect Polkadot
+      </Button>
     </>
   );
 };
@@ -193,7 +229,7 @@ const Header = () => {
   const headerButtons = useMemo(
     () => [
       ConnectWalletButton,
-      // ConnectBSCWalletButton,
+      PolkaConnentBtn,
       isLoggedIn ? AccountButton : LoginButton,
     ],
     [isLoggedIn],
