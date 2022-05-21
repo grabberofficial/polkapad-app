@@ -11,7 +11,7 @@ import { useSubstrate } from '@/shared/providers/substrate';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { Button } from '../Button';
 import fetchJson from '@/lib/fetchJson';
@@ -19,6 +19,7 @@ import { HeaderItem } from './components/HeaderItems/HeaderItem';
 import { Header as HeaderComponent } from './Header';
 
 import { FaUserAlt } from 'react-icons/fa';
+import { shortenPolkaAddress } from '@/lib/utils';
 
 const ConnectWalletButton: React.FC = () => {
   const {
@@ -30,20 +31,8 @@ const ConnectWalletButton: React.FC = () => {
     deactivate,
     switchNetwork,
   } = useEthers();
-  // const config = useConfig();
   const etherBalance = useEtherBalance(account, { chainId });
-  // console.log('etherBalance', etherBalance);
   const connected = !!chainId;
-  // console.log(
-  //   'chainId =',
-  //   chainId,
-  //   'account =',
-  //   account,
-  //   'active =',
-  //   active,
-  //   'library =',
-  //   library,
-  // );
 
   const connenctToBSC = useCallback(async () => {
     await activateBrowserWallet();
@@ -113,6 +102,9 @@ const ConnectWalletButton: React.FC = () => {
 const PolkaConnentBtn = () => {
   const { api, keyring } = useSubstrate();
 
+  const [balance, setBalance] = useState<string | null>(null);
+  const [account, setAccount] = useState<string | null>(null);
+
   const getExtensionAddress = async () => {
     const keyringOptions = keyring.getPairs().map((account: any) => ({
       key: account.address,
@@ -120,26 +112,32 @@ const PolkaConnentBtn = () => {
       text: account.meta.name.toUpperCase(),
       icon: 'user',
     }));
+    setAccount(keyringOptions[0].value);
 
     const {
-      data: { free: previousFree },
-      nonce: previousNonce,
+      data: { free: polkaBalance },
     } = await api.query.system.account(keyringOptions[0].value);
-
-    console.log('api', api);
-    console.log('keyringOptions', keyringOptions);
-    console.log('previousFree', previousFree, previousNonce);
+    setBalance(polkaBalance.toString());
   };
 
   return (
     <>
-      <Button
-        onClick={getExtensionAddress}
-        variant="secondary"
-        fixedWidth={220}
-      >
-        Connect Polkadot
-      </Button>
+      {balance && account && (
+        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
+          {balance &&
+            parseFloat(formatEther(balance)).toFixed(3) + ' DOT' + ' | '}
+          {shortenPolkaAddress(account)}
+        </Button>
+      )}
+      {!account && (
+        <Button
+          onClick={getExtensionAddress}
+          variant="secondary"
+          fixedWidth={220}
+        >
+          Connect Polkadot
+        </Button>
+      )}
     </>
   );
 };
