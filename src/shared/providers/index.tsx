@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import ThemeProvider from './theme';
 import DAppProvider from './dApp';
+import SubstrateContextProvider from './substrate';
 
 interface ProviderProps {
   children: ReactNode;
@@ -9,7 +10,9 @@ interface ProviderProps {
 
 export const Providers = ({ children }: ProviderProps) => (
   <ThemeProvider>
-    <DAppProvider>{children}</DAppProvider>
+    <DAppProvider>
+      <SubstrateContextProvider>{children}</SubstrateContextProvider>
+    </DAppProvider>
   </ThemeProvider>
 );
 
