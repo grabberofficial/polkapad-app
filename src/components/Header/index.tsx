@@ -235,12 +235,11 @@ const Header = () => {
 
   return (
     <HeaderComponent right={headerButtons}>
-      <HeaderItem url="/">Home</HeaderItem>
       <HeaderItem url="/launchpad">Launchpad</HeaderItem>
-      <HeaderItem url="/about">About</HeaderItem>
+      <HeaderItem url="/locker">Locker</HeaderItem>
+      <HeaderItem url="/staking">Staking</HeaderItem>
       <HeaderItem url="/docs">Docs</HeaderItem>
       <HeaderItem url="/blog">Blog</HeaderItem>
-      <HeaderItem url="/community">Community</HeaderItem>
     </HeaderComponent>
   );
 };
