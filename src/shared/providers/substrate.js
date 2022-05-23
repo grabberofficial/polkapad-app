@@ -129,8 +129,10 @@ const SubstrateContextProvider = (props) => {
 
   const [state, dispatch] = useReducer(reducer, initState);
 
-  connect(state, dispatch);
-  loadAccounts(state, dispatch);
+  if (!!window) {
+    connect(state, dispatch);
+    loadAccounts(state, dispatch);
+  }
 
   return (
     <SubstrateContext.Provider value={state}>
