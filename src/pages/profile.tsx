@@ -81,10 +81,8 @@ const ProfilePage = () => {
 
   const fetchKYC = useCallback(async () => {
     const kyc = await fetch('/api/kyc').then((data) => data.json());
+
     setKYCUrl(kyc.iframeUrl);
-    console.log({
-      kyc: kyc.iframeUrl,
-    });
   }, []);
 
   useEffect(() => {
