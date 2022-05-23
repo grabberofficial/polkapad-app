@@ -8,13 +8,20 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export const Providers = ({ children }: ProviderProps) => (
-  <ThemeProvider>
-    <DAppProvider>
-      <SubstrateContextProvider>{children}</SubstrateContextProvider>
-    </DAppProvider>
-  </ThemeProvider>
-);
+export const Providers = ({ children }: ProviderProps) => {
+  const isSSR = typeof window === 'undefined';
+  return (
+    <ThemeProvider>
+      <DAppProvider>
+        {isSSR ? (
+          children
+        ) : (
+          <SubstrateContextProvider>{children}</SubstrateContextProvider>
+        )}
+      </DAppProvider>
+    </ThemeProvider>
+  );
+};
 
 export default Providers;
 
