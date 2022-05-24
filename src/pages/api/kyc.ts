@@ -9,15 +9,19 @@ export type KYC = {
 
 const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
   if (req.session.user) {
-    const verificationUrl: string = await fetchJson(
-      'https://app.polkapadapis.codes/kyc/verification-url',
-      undefined,
-      req.session.user.token,
-    );
+    try {
+      const verificationUrl: string = await fetchJson(
+        'https://app.polkapadapis.codes/kyc/verification-url',
+        undefined,
+        req.session.user.token,
+      );
 
-    res.json({
-      iframeUrl: verificationUrl,
-    });
+      res.json({
+        iframeUrl: verificationUrl,
+      });
+    } catch (e) {
+      console.error(e);
+    }
   } else {
     res.json({
       iframeUrl: null,
