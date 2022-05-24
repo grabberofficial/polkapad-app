@@ -10,10 +10,8 @@ export type KYC = {
 const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
   if (req.session.user) {
     const verificationUrl: string = await fetchJson(
-      '/api/kyc/verification-url',
-      {
-        method: 'GET',
-      },
+      'https://app.polkapadapis.codes/kyc/verification-url',
+      undefined,
       req.session.user.token,
     );
 
