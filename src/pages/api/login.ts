@@ -1,6 +1,5 @@
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
-import { FetchError } from '@/lib/fetchJson';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -11,7 +10,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     const { email, password } = await req.body;
 
     try {
-      const tokenRes: string = await fetch(
+      const tokenRes = await fetch(
         'https://app.polkapadapis.codes/auth/password/login',
         {
           method: 'POST',
@@ -23,15 +22,28 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
             'Content-Type': 'application/json',
           },
         },
-      ).then((res) => res.text());
+      );
+
+      const isCreated = tokenRes.status === 201;
+
+      if (tokenRes.status !== 200 && !isCreated) {
+        console.log({
+          status: tokenRes.status,
+        });
+        const error = await tokenRes.json();
+        throw error;
+      }
+
+      const token = await tokenRes.text();
+
       console.log({
-        tokenRes,
-        res,
+        token,
       });
+
       const user = {
         isLoggedIn: true,
         email,
-        token: tokenRes,
+        token: token,
         id: '',
         name: '',
       };
@@ -39,18 +51,13 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       await req.session.save();
       res.json(user);
     } catch (error) {
-      console.log({
-        error: error as FetchError,
-      });
-      res
-        .status((error as FetchError).data.code ?? 500)
-        .json((error as FetchError).data);
+      res.status(500).json(error);
     }
   } else if (authType === 'code') {
     const { email, code } = await req.body;
 
     try {
-      const tokenRes: string = await fetch(
+      const tokenRes = await fetch(
         'https://app.polkapadapis.codes/auth/code/login',
         {
           method: 'POST',
@@ -62,15 +69,21 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
             'Content-Type': 'application/json',
           },
         },
-      ).then((res) => res.text());
-      console.log({
-        tokenRes,
-        res,
-      });
+      );
+
+      const isCreated = tokenRes.status === 201;
+
+      if (tokenRes.status !== 200 && !isCreated) {
+        const error = await tokenRes.json();
+        throw error;
+      }
+
+      const token = await tokenRes.text();
+
       const user = {
         isLoggedIn: true,
         email,
-        token: tokenRes,
+        token: token,
         id: '',
         name: '',
       };
@@ -78,9 +91,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       await req.session.save();
       res.json(user);
     } catch (error) {
-      res
-        .status((error as FetchError).data.code ?? 500)
-        .json((error as FetchError).data);
+      res.status(500).json(error);
     }
   } else {
     res.status(500).json({ message: 'No auth type provided' });
