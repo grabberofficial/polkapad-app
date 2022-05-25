@@ -62,7 +62,7 @@ const LaunchpadPage = () => {
             <Header marginBottom={'10px'}>Sign Up and KYC</Header>
             <RegularText marginBottom="30px">
               In order to participate in sales on Avalaunch, you must sign up
-              and KYC first. You can still stake and earn XAVA without
+              and KYC first. You can still stake and earn PLPD without
               registering.
             </RegularText>
             <Button variant="primary">START THE KYC PROCCESS</Button>
@@ -93,9 +93,9 @@ const LaunchpadPage = () => {
               margin={'6px 0 24px 0px'}
               cursor="pointer"
             />
-            <Header marginBottom={'10px'}>Stake XAVA</Header>
+            <Header marginBottom={'10px'}>Stake PLPD</Header>
             <RegularText marginBottom="30px">
-              By staking XAVA, you earn allocation in IDOs. If you do not want
+              By staking PLPD, you earn allocation in IDOs. If you do not want
               to participate in sales, you can still benefit from staking.
             </RegularText>
             <Button variant="primary">START THE KYC PROCCESS</Button>

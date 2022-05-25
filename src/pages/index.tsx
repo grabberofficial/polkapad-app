@@ -85,7 +85,7 @@ const IndexPage = () => {
           backgroundImage="url(http://localhost:8080/images/staking_bg.png)"
           backgroundRepeat="no-repeat"
           backgroundPosition="bottom"
-          // backgroundPositionY="bottom"
+        // backgroundPositionY="bottom"
         >
           <Heading marginBottom={75} withUnderline>
             Allocation
@@ -133,7 +133,7 @@ const IndexPage = () => {
               fontSize={'14px'}
               lineHeight={'21px'}
             >
-              XAVA Price
+              PLPD Price
               <Text
                 marginLeft={'20px'}
                 as={'span'}
@@ -219,12 +219,12 @@ const IndexPage = () => {
               alignItems="center"
               width="100%"
             >
-              <Input text="XAVA" value={0} />
+              <Input text="PLPD" value={0} />
             </GridItem>
             <GridItem rowSpan={1} colSpan={1}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
                 <Button withArrow variant="primary" iconPlacement="right">
-                  Deposit XAVA
+                  Deposit PLPD
                 </Button>
               </Flex>
             </GridItem>
@@ -300,12 +300,12 @@ const IndexPage = () => {
               alignItems="center"
               width="100%"
             >
-              <Input text="XAVA" value={0} />
+              <Input text="PLPD" value={0} />
             </GridItem>
             <GridItem rowSpan={1} colSpan={1}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
                 <Button withArrow variant="primary">
-                  Withdraw XAVA
+                  Withdraw PLPD
                 </Button>
               </Flex>
             </GridItem>
@@ -358,7 +358,7 @@ const IndexPage = () => {
               marginBottom="24px"
             >
               <Text as="span" whiteSpace="nowrap">
-                My Staked XAVA
+                My Staked PLPD
               </Text>
               <InfoIcon />
               <Spacer />
@@ -383,7 +383,7 @@ const IndexPage = () => {
                   right: 0,
                 }}
               >
-                1,883.3 XAVA
+                1,883.3 PLPD
               </Text>
             </Flex>
 
@@ -394,7 +394,7 @@ const IndexPage = () => {
               marginBottom="24px"
             >
               <Text as="span" whiteSpace="nowrap">
-                My Earned XAVA
+                My Earned PLPD
               </Text>
               <InfoIcon />
               <Spacer />
@@ -419,7 +419,7 @@ const IndexPage = () => {
                   right: 0,
                 }}
               >
-                3.42 XAVA
+                3.42 PLPD
               </Text>
             </Flex>
 
@@ -430,7 +430,7 @@ const IndexPage = () => {
                 iconPlacement="right"
                 icon={<InfoIcon />}
               >
-                COMPOUND XAVA
+                COMPOUND PLPD
               </Button>
               <Button
                 withArrow
@@ -438,7 +438,7 @@ const IndexPage = () => {
                 iconPlacement="right"
                 icon={<InfoIcon />}
               >
-                HARVEST XAVA
+                HARVEST PLPD
               </Button>
             </Flex>
           </Flex>
@@ -458,7 +458,7 @@ const IndexPage = () => {
         <Flex>
           <Flex flexBasis="calc(100% - 377px)">
             <Heading marginBottom={77} withUnderline color="white">
-              XAVA Tokens Staked
+              PLPD Tokens Staked
               <br />
               Over Time
             </Heading>
@@ -543,7 +543,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              Total XAVA Staked <InfoIcon />
+              Total PLPD Staked <InfoIcon />
             </Text>
             <Text
               as="span"
@@ -637,7 +637,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              0.01 XAVA / Sec
+              0.01 PLPD / Sec
             </Text>
             <Text
               as="span"
@@ -699,7 +699,7 @@ const IndexPage = () => {
                           fontWeight="600"
                           fontSize="14px"
                           lineHeight="21px"
-                          // color="#303030"
+                        // color="#303030"
                         >
                           {title}
                         </Box>
