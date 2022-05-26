@@ -166,7 +166,7 @@ const IndexPage = () => {
                 <Text color="#49C7DA" as="span">
                   Stake
                 </Text>{' '}
-                xava
+                PLPD
               </Text>
             </GridItem>
             <GridItem rowSpan={1} colSpan={2}>
@@ -247,7 +247,7 @@ const IndexPage = () => {
                 <Text color="#49C7DA" as="span">
                   WITHDRAW
                 </Text>{' '}
-                xava
+                PLPD
               </Text>
             </GridItem>
             <GridItem rowSpan={1} colSpan={2}>
