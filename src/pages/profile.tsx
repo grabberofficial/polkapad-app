@@ -9,15 +9,8 @@ import {
   Icon,
   InputGroup,
   InputLeftElement,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Text,
-  useDisclosure,
+  Image,
 } from '@chakra-ui/react';
 import { withIronSessionSsr } from 'iron-session/next';
 import { User } from './api/user';
@@ -36,12 +29,17 @@ import { FaUser } from 'react-icons/fa';
 import { Button } from '@/components/Button';
 import { KYCIframe } from '@/modules/profile/KYCIframe';
 
-const tabs = [
-  'Profile details',
-  'KYC Verification',
-  'Verify wallet',
-  'Register as Validator',
-];
+import successful_kyc from '../assets/successful_kyc.svg';
+import { useRouter } from 'next/router';
+
+const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
+
+enum KycStatusTypes {
+  NOT_VERIFIED = 'NOT_VERIFIED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  ACCEPTED = 'ACCEPTED',
+  DECLINED = 'DECLINED',
+}
 
 interface IFormInput {
   email: string;
@@ -59,8 +57,8 @@ const ProfilePage = () => {
   const { user } = useUser();
   const [selectedTab, setSelectedTab] = useState(0);
   const [KYCUrl, setKYCUrl] = useState('');
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isKYC, openKYC] = useState(false);
+  const router = useRouter();
 
   const selectTab = useCallback((index) => {
     setSelectedTab(index);
@@ -86,10 +84,10 @@ const ProfilePage = () => {
   }, []);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isKYC) {
       fetchKYC();
     }
-  }, [isOpen, fetchKYC]);
+  }, [isKYC, fetchKYC]);
 
   const tabContent = [
     <Flex
@@ -134,25 +132,52 @@ const ProfilePage = () => {
         </InputGroup>
       </FormControl>
     </Flex>,
-    <Flex flexBasis="356px" flexDirection="column" gap="28px" key="kyc">
-      <Button onClick={onOpen}>Start KYC</Button>
-
-      <Modal isOpen={isOpen} onClose={onClose} isCentered size="6xl">
-        <ModalOverlay />
-        <ModalContent h="80%" w="1000px">
-          <ModalHeader>KYC</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <KYCIframe iframeUrl={KYCUrl} />
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+    null,
+    <Flex
+      flexBasis={
+        user?.kycStatus === KycStatusTypes.ACCEPTED ? '404px' : '800px'
+      }
+      height="550px"
+      flexDirection="column"
+      gap="28px"
+      key="kyc"
+    >
+      {user?.kycStatus === KycStatusTypes.ACCEPTED && (
+        <>
+          <Flex alignItems="center" gap="30px">
+            <Image src={successful_kyc} color="#49C7DA" />
+            <Text color="#303030" fontWeight="700" fontSize="24px">
+              You have been successfully verified!
+            </Text>
+          </Flex>
+          <Flex flexDirection="column" marginTop="30px">
+            <Text
+              color="#303030"
+              fontWeight="400"
+              fontSize="14px"
+              marginBottom="60px"
+            >
+              Now that you have verified your identity, you can participate in
+              sales, feel free to go to the launchpad.
+            </Text>
+            <Button variant="primary" onClick={() => router.push('/locker')}>
+              Ready to Lock
             </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+          </Flex>
+        </>
+      )}
+      {!isKYC && user?.kycStatus !== KycStatusTypes.ACCEPTED && (
+        <Button
+          onClick={() => {
+            openKYC(true);
+          }}
+        >
+          Start KYC
+        </Button>
+      )}
+      {isKYC && user?.kycStatus !== KycStatusTypes.ACCEPTED && (
+        <KYCIframe iframeUrl={KYCUrl} />
+      )}
     </Flex>,
   ];
 
@@ -163,7 +188,7 @@ const ProfilePage = () => {
       </Heading>
 
       <Flex>
-        <Flex direction="column" gap="30px" flexBasis="40%">
+        <Flex direction="column" gap="30px" flexBasis="30%">
           {/* Tab */}
           {tabs.map((tab, index) => (
             <Flex
@@ -176,11 +201,17 @@ const ProfilePage = () => {
             >
               <Icon
                 as={
-                  index === selectedTab
+                  index === 0 ||
+                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
                     ? BsFillCheckCircleFill
                     : BsFillExclamationCircleFill
                 }
-                color={index === selectedTab ? '#49C7DA' : '#FFCC15'}
+                color={
+                  index === 0 ||
+                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                    ? '#49C7DA'
+                    : '#FFCC15'
+                }
               />
               <Text
                 color={index === selectedTab ? '#49C7DA' : '#303030'}

@@ -9,6 +9,7 @@ export type User = {
   id: string;
   name: string;
   token: string;
+  kycStatus: string;
 };
 
 const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
@@ -20,6 +21,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
     const user: {
       id: string;
       name: string;
+      kycStatus: string;
     } = await fetchJson(
       'https://app.polkapadapis.codes/users/currentUser',
       undefined,
@@ -31,6 +33,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
       name: user.name,
       id: user.id,
       isLoggedIn: true,
+      kycStatus: user.kycStatus,
     };
     await req.session.save();
     // in a real world application you might read the user id from the session and then do a database request
@@ -40,6 +43,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
       name: user.name,
       id: user.id,
       isLoggedIn: true,
+      kycStatus: user.kycStatus,
     });
   } else {
     res.json({
@@ -48,6 +52,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
       token: '',
       id: '',
       name: '',
+      kycStatus: '',
     });
   }
 };

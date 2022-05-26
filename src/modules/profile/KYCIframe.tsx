@@ -10,6 +10,7 @@ export const KYCIframe: React.FC<{ iframeUrl: string }> = ({ iframeUrl }) => {
         width="100%"
         height="100%"
         data-removable={true}
+        sandbox="allow-top-navigation allow-same-origin allow-scripts allow-popups allow-forms"
         style={{
           // position: 'fixed',
           top: '0',
