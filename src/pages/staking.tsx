@@ -85,7 +85,7 @@ const IndexPage = () => {
           backgroundImage="url(http://localhost:8080/images/staking_bg.png)"
           backgroundRepeat="no-repeat"
           backgroundPosition="bottom"
-        // backgroundPositionY="bottom"
+          // backgroundPositionY="bottom"
         >
           <Heading marginBottom={75} withUnderline>
             Allocation
@@ -699,7 +699,7 @@ const IndexPage = () => {
                           fontWeight="600"
                           fontSize="14px"
                           lineHeight="21px"
-                        // color="#303030"
+                          // color="#303030"
                         >
                           {title}
                         </Box>
