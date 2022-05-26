@@ -235,7 +235,7 @@ const Header = () => {
 
   return (
     <HeaderComponent right={headerButtons}>
-      <HeaderItem url="/launchpad">Launchpad</HeaderItem>
+      <HeaderItem url="/">Launchpad</HeaderItem>
       <HeaderItem url="/locker">Locker</HeaderItem>
       <HeaderItem url="/staking">Staking</HeaderItem>
       <HeaderItem url="/docs">Docs</HeaderItem>
