@@ -1,17 +1,10 @@
 import useUser from '@/lib/hooks/useUser';
-import {
-  useEthers,
-  useEtherBalance,
-  shortenIfAddress,
-  BSC,
-  // useConfig,
-} from '@usedapp/core';
+import { shortenIfAddress } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
-import { useSubstrate } from '@/shared/providers/substrate';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { Button } from '../Button';
 import fetchJson from '@/lib/fetchJson';
@@ -20,73 +13,24 @@ import { Header as HeaderComponent } from './Header';
 
 import { FaUserAlt } from 'react-icons/fa';
 import { shortenPolkaAddress } from '@/lib/utils';
+import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
 
 const ConnectWalletButton: React.FC = () => {
-  const {
-    activateBrowserWallet,
-    account,
-    chainId,
-    // active,
-    // library,
-    deactivate,
-    switchNetwork,
-  } = useEthers();
-  const etherBalance = useEtherBalance(account, { chainId });
-  const connected = !!chainId;
-
-  const connenctToBSC = useCallback(async () => {
-    await activateBrowserWallet();
-
-    console.log({
-      chainId,
-      BSCChainId: BSC.chainId,
-    });
-    if (chainId !== BSC.chainId) {
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: `0x${Number(56).toString(16)}`,
-            chainName: 'Binance Smart Chain Mainnet',
-            nativeCurrency: {
-              name: 'Binance Chain Native Token',
-              symbol: 'BNB',
-              decimals: 18,
-            },
-            rpcUrls: [
-              'https://bsc-dataseed1.binance.org',
-              'https://bsc-dataseed2.binance.org',
-              'https://bsc-dataseed3.binance.org',
-              'https://bsc-dataseed4.binance.org',
-              'https://bsc-dataseed1.defibit.io',
-              'https://bsc-dataseed2.defibit.io',
-              'https://bsc-dataseed3.defibit.io',
-              'https://bsc-dataseed4.defibit.io',
-              'https://bsc-dataseed1.ninicoin.io',
-              'https://bsc-dataseed2.ninicoin.io',
-              'https://bsc-dataseed3.ninicoin.io',
-              'https://bsc-dataseed4.ninicoin.io',
-              'wss://bsc-ws-node.nariox.org',
-            ],
-            blockExplorerUrls: ['https://bscscan.com'],
-          },
-        ],
-      });
-    }
-    switchNetwork(BSC.chainId);
-  }, [activateBrowserWallet, switchNetwork, chainId]);
+  const { disconnectFromBSC, connenctToBSC, balance, connected, account } =
+    useConnectBSC();
 
   return (
     <>
       {connected && account && (
         <Button
-          onClick={deactivate}
+          onClick={disconnectFromBSC}
           variant="secondary"
           fixedWidth={220}
           padding={'0px 32px'}
         >
-          {etherBalance &&
-            parseFloat(formatEther(etherBalance)).toFixed(3) + ' BNB' + ' | '}
+          {balance &&
+            parseFloat(formatEther(balance)).toFixed(3) + ' BNB' + ' | '}
           {shortenIfAddress(account)}
         </Button>
       )}
@@ -100,25 +44,7 @@ const ConnectWalletButton: React.FC = () => {
 };
 
 const PolkaConnentBtn = () => {
-  const { api, keyring } = useSubstrate();
-
-  const [balance, setBalance] = useState<string | null>(null);
-  const [account, setAccount] = useState<string | null>(null);
-
-  const getExtensionAddress = async () => {
-    const keyringOptions = keyring.getPairs().map((account: any) => ({
-      key: account.address,
-      value: account.address,
-      text: account.meta.name.toUpperCase(),
-      icon: 'user',
-    }));
-    setAccount(keyringOptions[0].value);
-
-    const {
-      data: { free: polkaBalance },
-    } = await api.query.system.account(keyringOptions[0].value);
-    setBalance(polkaBalance.toString());
-  };
+  const { balance, account, connectToPolka } = useConnectPolka();
 
   return (
     <>
@@ -130,11 +56,7 @@ const PolkaConnentBtn = () => {
         </Button>
       )}
       {!account && (
-        <Button
-          onClick={getExtensionAddress}
-          variant="secondary"
-          fixedWidth={220}
-        >
+        <Button onClick={connectToPolka} variant="secondary" fixedWidth={220}>
           Connect Polkadot
         </Button>
       )}
