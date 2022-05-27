@@ -6,7 +6,7 @@ import { Button } from '@/components/Button';
 
 const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
   console.log('change to enum', type);
-  const verified = false;
+  const verified = true;
 
   return (
     <Flex
@@ -47,14 +47,24 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
             alt="Polkapad"
             width="29px"
             height="29px"
-            cursor="pointer"
           />
           <WalletText>BNB Smart chain</WalletText>
         </Flex>
         <Flex>
-          <Button height="36px" variant="primary">
-            Verify
-          </Button>
+          {!verified && (
+            <Button height="36px" variant="primary">
+              Verify
+            </Button>
+          )}
+          {verified && (
+            <Image
+              marginRight="10px"
+              src="/images/icon_ok.png"
+              alt="Polkapad"
+              width="20px"
+              height="20px"
+            />
+          )}
         </Flex>
       </Flex>
 
