@@ -160,8 +160,6 @@ const Header = () => {
       <HeaderItem url="/">Launchpad</HeaderItem>
       <HeaderItem url="/locker">Locker</HeaderItem>
       <HeaderItem url="/staking">Staking</HeaderItem>
-      <HeaderItem url="/docs">Docs</HeaderItem>
-      <HeaderItem url="/blog">Blog</HeaderItem>
     </HeaderComponent>
   );
 };
