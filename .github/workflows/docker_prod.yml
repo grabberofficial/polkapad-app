@@ -11,9 +11,8 @@ on:
   workflow_dispatch:
 
 env:
-  ECR: 081239602556.dkr.ecr.eu-central-1.amazonaws.com/polkapad-frontend
-  ROLE: "arn:aws:iam::081239602556:role/github-ecr-polkapad-frontend"
-  IMAGE: polkapad-frontend
+  ECR: 081239602556.dkr.ecr.eu-central-1.amazonaws.com/polkapad-polkapad-app
+  ROLE: "arn:aws:iam::081239602556:role/github-ecr-polkapad-polkapad-app"
 
 jobs:
   docker:
@@ -33,7 +32,7 @@ jobs:
 
       - name: Set env
         run: |
-          echo "TAG=${ECR}/${IMAGE}:${{ env.GIT_COMMIT_SHORT_SHA }}" >> $GITHUB_ENV
+          echo "TAG=${ECR}:${{ env.GIT_COMMIT_SHORT_SHA }}" >> $GITHUB_ENV
 
       - uses: actions/setup-node@v3
         with:
