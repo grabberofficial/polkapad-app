@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
@@ -32,6 +32,8 @@ import { KYCIframe } from '@/modules/profile/KYCIframe';
 
 import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
+import { UserContext } from '@/shared/providers/userContext';
+import fetchJson from '@/lib/fetchJson';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -59,7 +61,9 @@ const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [KYCUrl, setKYCUrl] = useState('');
   const [isKYC, openKYC] = useState(false);
+  const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
+  const userContext = useContext(UserContext);
 
   const selectTab = useCallback((index) => {
     setSelectedTab(index);
@@ -89,6 +93,22 @@ const ProfilePage = () => {
       fetchKYC();
     }
   }, [isKYC, fetchKYC]);
+
+  const fetchWallets = useCallback(async () => {
+    const wallets: Array<{
+      name: string;
+      value: string;
+    }> = await fetchJson(
+      'https://app.polkapadapis.codes/wallets',
+      {},
+      userContext.user?.token,
+    );
+    setWallets(wallets);
+  }, [userContext]);
+
+  useEffect(() => {
+    fetchWallets();
+  }, []);
 
   const tabContent = [
     <Flex
@@ -140,8 +160,8 @@ const ProfilePage = () => {
       key="wallet"
       alignItems={'flex-end'}
     >
-      <WalletCard type="eth" />
-      <WalletCard type="polka" />
+      <WalletCard type="eth" wallets={wallets} />
+      <WalletCard type="polka" wallets={wallets} />
       <Button
         width="120px"
         marginTop="20px"
@@ -220,13 +240,17 @@ const ProfilePage = () => {
               <Icon
                 as={
                   index === 0 ||
-                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                  (index === 2 &&
+                    user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                  (index === 1 && wallets && wallets.length === 2)
                     ? BsFillCheckCircleFill
                     : BsFillExclamationCircleFill
                 }
                 color={
                   index === 0 ||
-                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                  (index === 2 &&
+                    user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                  (index === 1 && wallets && wallets.length === 2)
                     ? '#49C7DA'
                     : '#FFCC15'
                 }

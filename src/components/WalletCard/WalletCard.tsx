@@ -8,7 +8,10 @@ import fetchJson from '@/lib/fetchJson';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
 
-const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
+const Header: React.FC<{ type?: string; wallets: any[] }> = ({
+  type = 'eth',
+  wallets,
+}) => {
   const userContext = useContext(UserContext);
 
   const [verified, setVerified] = React.useState(false);
@@ -18,6 +21,14 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
   const { connectToPolka } = useConnectPolka();
 
   useEffect(() => {
+    if (wallets.length !== 0) {
+      const hasWallet =
+        wallets.find((wallet) => wallet.name === type) !== undefined;
+      setVerified(hasWallet);
+    }
+  }, [wallets, type]);
+
+  useEffect(() => {
     if (type === 'eth') {
       setWalletConnected(!!userContext.bsc?.address);
     }
@@ -25,26 +36,6 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
       setWalletConnected(!!userContext.polka?.address);
     }
   }, [type, userContext]);
-
-  const fetchWallets = useCallback(async () => {
-    const wallets: Array<{
-      name: string;
-      value: string;
-    }> = await fetchJson(
-      'https://app.polkapadapis.codes/wallets',
-      {},
-      userContext.user?.token,
-    );
-    if (wallets.length !== 0) {
-      const hasWallet =
-        wallets.find((wallet) => wallet.name === type) !== undefined;
-      setVerified(hasWallet);
-    }
-  }, [userContext, type]);
-
-  useEffect(() => {
-    fetchWallets();
-  }, []);
 
   const connectWallet = useCallback(async () => {
     if (type === 'eth') {
