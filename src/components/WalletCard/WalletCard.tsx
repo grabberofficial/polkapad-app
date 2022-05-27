@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from '@emotion/styled';
 
-import { Flex, Heading, Text, Link } from '@chakra-ui/react';
+import { Flex, Heading, Text, Link, Image } from '@chakra-ui/react';
+import { Button } from '@/components/Button';
 
 const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
   console.log('change to enum', type);
+  const verified = false;
 
   return (
     <Flex
@@ -25,6 +27,37 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
       >
         Funding wallets
       </Heading>
+
+      <Flex
+        width="100%"
+        display="flex"
+        height="48px"
+        padding={'6px'}
+        alignItems="center"
+        justifyContent="space-between"
+        flexDirection={'row'}
+        border="1px solid #E5E4E4"
+        borderColor={verified ? '#49C7DA' : '#E5E4E4'}
+        borderRadius={'4px'}
+      >
+        <Flex alignItems={'center'}>
+          <Image
+            margin="0px 14px 0px 11px"
+            src="/images/icon_bsc.png"
+            alt="Polkapad"
+            width="29px"
+            height="29px"
+            cursor="pointer"
+          />
+          <WalletText>BNB Smart chain</WalletText>
+        </Flex>
+        <Flex>
+          <Button height="36px" variant="primary">
+            Verify
+          </Button>
+        </Flex>
+      </Flex>
+
       <Text
         color="#A5A5A5"
         fontFamily="Poppins"
@@ -64,6 +97,18 @@ const Label = styled(Text)`
   font-family: Poppins;
   font-size: 14px;
   font-weight: 700;
+`;
+
+const WalletText = styled(Text)`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Poppins;
+  font-size: 14px;
+  font-weight: 700;
+  padding-left: 25px;
+  height: 20px;
+  border-left: 1px solid #e0e0e0;
 `;
 
 export default Header;
