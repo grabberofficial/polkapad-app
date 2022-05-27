@@ -6,26 +6,42 @@ import { Button } from '@/components/Button';
 
 const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
   console.log('change to enum', type);
-  const verified = true;
+  // TODO: temp just for tests
+  const verified = type === 'eth';
+
+  let numberText = '1.';
+  let walletText = 'Funding wallet';
+  let networkText = 'BNB Smart chain';
+  let commentText =
+    'Accepted: DOT or KSM from Binance Smart Chain (EVM) with the lowest fees.';
+  let walletIcon = '/images/icon_bsc.png';
+  if (type !== 'eth') {
+    numberText = '2.';
+    walletText = 'Receiving wallet';
+    networkText = 'Polkadot';
+    walletIcon = '/images/icon_polka.png';
+    commentText = 'Required to receive tokens during a give away';
+  }
 
   return (
     <Flex
+      marginBottom={'24px'}
       position={'relative'}
       flexDirection={'column'}
       width={'466px'}
-      padding={'30px 50px'}
+      padding={'26px 50px'}
       border={'1px solid #E9E9E9'}
       borderRadius="4px"
     >
-      <Label>1.</Label>
+      <Label>{numberText}</Label>
       <Heading
         color="#303030"
         fontFamily="Poppins"
         fontSize="14px"
         fontWeight="600"
-        marginBottom="10px"
+        marginBottom="12px"
       >
-        Funding wallets
+        {walletText}
       </Heading>
 
       <Flex
@@ -43,12 +59,12 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
         <Flex alignItems={'center'}>
           <Image
             margin="0px 14px 0px 11px"
-            src="/images/icon_bsc.png"
+            src={walletIcon}
             alt="Polkapad"
             width="29px"
             height="29px"
           />
-          <WalletText>BNB Smart chain</WalletText>
+          <WalletText>{networkText}</WalletText>
         </Flex>
         <Flex>
           {!verified && (
@@ -75,8 +91,7 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
         fontWeight="500"
         margin="20px 0px"
       >
-        Accepted: DOT or KSM from Binance Smart Chain (EVM) with the lowest
-        fees.
+        {commentText}
       </Text>
       <Link
         fontFamily="Poppins"

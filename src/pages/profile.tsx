@@ -133,8 +133,9 @@ const ProfilePage = () => {
         </InputGroup>
       </FormControl>
     </Flex>,
-    <Flex flexDirection="column" key="wallet">
-      <WalletCard />
+    <Flex width={'466px'} flexDirection="column" key="wallet">
+      <WalletCard type="eth" />
+      <WalletCard type="polka" />
     </Flex>,
     <Flex
       flexBasis={
