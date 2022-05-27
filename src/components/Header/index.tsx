@@ -4,7 +4,7 @@ import { formatEther } from '@ethersproject/units';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 
 import { Button } from '../Button';
 import fetchJson from '@/lib/fetchJson';
@@ -15,6 +15,7 @@ import { FaUserAlt } from 'react-icons/fa';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
+import { UserContext } from '@/shared/providers/userContext';
 
 const ConnectWalletButton: React.FC = () => {
   const { disconnectFromBSC, connenctToBSC, balance, connected, account } =
@@ -44,18 +45,22 @@ const ConnectWalletButton: React.FC = () => {
 };
 
 const PolkaConnentBtn = () => {
+  const { polka } = useContext(UserContext);
   const { balance, account, connectToPolka } = useConnectPolka();
+
+  const hasData = (balance && account) || (polka?.address && polka?.balance);
 
   return (
     <>
-      {balance && account && (
+      {hasData && (
         <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
-          {balance &&
-            parseFloat(formatEther(balance)).toFixed(3) + ' DOT' + ' | '}
-          {shortenPolkaAddress(account)}
+          {balance && parseFloat(formatEther(balance)).toFixed(3)}
+          {polka.balance && polka.balance}
+          {' DOT  | '}
+          {shortenPolkaAddress(account || polka.address)}
         </Button>
       )}
-      {!account && (
+      {!hasData && (
         <Button onClick={connectToPolka} variant="secondary" fixedWidth={220}>
           Connect Polkadot
         </Button>

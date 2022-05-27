@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
@@ -32,7 +32,6 @@ import { KYCIframe } from '@/modules/profile/KYCIframe';
 
 import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
-import { UserContext } from '@/shared/providers/userContext';
 import fetchJson from '@/lib/fetchJson';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
@@ -63,7 +62,6 @@ const ProfilePage = () => {
   const [isKYC, openKYC] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
-  const userContext = useContext(UserContext);
 
   const selectTab = useCallback((index) => {
     setSelectedTab(index);
@@ -101,14 +99,14 @@ const ProfilePage = () => {
     }> = await fetchJson(
       'https://app.polkapadapis.codes/wallets',
       {},
-      userContext.user?.token,
+      user?.token,
     );
     setWallets(wallets);
-  }, [userContext]);
+  }, [user]);
 
   useEffect(() => {
-    fetchWallets();
-  }, []);
+    if (user?.token.length && !wallets.length) fetchWallets();
+  }, [user, fetchWallets, wallets]);
 
   const tabContent = [
     <Flex

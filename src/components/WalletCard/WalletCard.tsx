@@ -7,6 +7,7 @@ import { UserContext } from '@/shared/providers/userContext';
 import fetchJson from '@/lib/fetchJson';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
+import { shortenPolkaAddress } from '@/lib/utils';
 
 const Header: React.FC<{ type?: string; wallets: any[] }> = ({
   type = 'eth',
@@ -16,24 +17,31 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
 
   const [verified, setVerified] = React.useState(false);
   const [walletConnected, setWalletConnected] = React.useState(false);
+  const [walletAddress, setWalletAddress] = React.useState('');
 
   const { connenctToBSC } = useConnectBSC();
   const { connectToPolka } = useConnectPolka();
 
   useEffect(() => {
     if (wallets.length !== 0) {
-      const hasWallet =
-        wallets.find((wallet) => wallet.name === type) !== undefined;
-      setVerified(hasWallet);
+      const wallet = wallets.find((wallet) => wallet.name === type);
+      wallet !== undefined && setWalletAddress(wallet.value);
+      setVerified(wallet !== undefined);
     }
   }, [wallets, type]);
 
   useEffect(() => {
     if (type === 'eth') {
       setWalletConnected(!!userContext.bsc?.address);
+      if (userContext.bsc?.address) {
+        setWalletAddress(userContext.bsc?.address);
+      }
     }
     if (type === 'polka') {
       setWalletConnected(!!userContext.polka?.address);
+      if (userContext.polka?.address) {
+        setWalletAddress(userContext.polka?.address);
+      }
     }
   }, [type, userContext]);
 
@@ -48,12 +56,11 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
   }, [connectToPolka, connenctToBSC, type]);
 
   const verifyWallet = useCallback(async () => {
-    let walletAddress = '';
     if (type === 'eth') {
-      walletAddress = userContext.bsc?.address;
+      setWalletAddress(userContext.bsc?.address);
     }
     if (type === 'polka') {
-      walletAddress = userContext.polka?.address;
+      setWalletAddress(userContext.polka?.address);
     }
     const createdWallet: Array<{
       name: string;
@@ -73,9 +80,7 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
       createdWallet,
     });
     setVerified(true);
-  }, [type, userContext]);
-
-  // const verified = type === 'eth';
+  }, [type, userContext, walletAddress]);
 
   let numberText = '1.';
   let walletText = 'Funding wallet';
@@ -132,7 +137,11 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
             width="29px"
             height="29px"
           />
-          <WalletText>{networkText}</WalletText>
+          <WalletText>
+            {!verified && !walletConnected
+              ? networkText
+              : shortenPolkaAddress(walletAddress)}
+          </WalletText>
         </Flex>
         <Flex>
           {!walletConnected && !verified && (
