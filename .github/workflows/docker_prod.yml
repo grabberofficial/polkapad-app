@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Docker build
-        run: docker build -t $TAG --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.DEV_SECRET_COOKIE_PASSWORD }} -f .github/workflows/Dockerfile .
+        run: docker build -t $TAG --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.PROD_SECRET_COOKIE_PASSWORD }} -f .github/workflows/Dockerfile .
 
       - name: Configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
