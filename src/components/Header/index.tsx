@@ -113,19 +113,13 @@ const AccountButton: React.FC = () => {
           paddingLeft="20px"
           onClick={() => router.push('/profile')}
         >
-          Account stats
+          My account
         </MenuItem>
         <MenuItem
           color="#5B5B5B"
           _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
           paddingLeft="20px"
-        >
-          My Allocations
-        </MenuItem>
-        <MenuItem
-          color="#5B5B5B"
-          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
-          paddingLeft="20px"
+          onClick={() => router.push('/profile?kyc=true')}
         >
           KYC Verification
         </MenuItem>
