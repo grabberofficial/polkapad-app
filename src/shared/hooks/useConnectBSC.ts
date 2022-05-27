@@ -1,11 +1,20 @@
 import { useEthers, useEtherBalance, BSC } from '@usedapp/core';
-import { useCallback } from 'react';
+import { formatEther } from 'ethers/lib/utils';
+import { useCallback, useContext, useEffect } from 'react';
+import { UserContext } from '../providers/userContext';
 
 export const useConnectBSC = () => {
-  const { activateBrowserWallet, account, chainId, deactivate, switchNetwork } =
-    useEthers();
+  const {
+    activateBrowserWallet,
+    account,
+    chainId,
+    deactivate: disconnectBSC,
+    switchNetwork,
+  } = useEthers();
   const etherBalance = useEtherBalance(account, { chainId });
   const connected = !!chainId;
+
+  const userContext = useContext(UserContext);
 
   const connenctToBSC = useCallback(async () => {
     await activateBrowserWallet();
@@ -27,18 +36,19 @@ export const useConnectBSC = () => {
               decimals: 18,
             },
             rpcUrls: [
+              'https://bsc-dataseed.binance.org',
+              'https://bsc-dataseed1.defibit.io',
+              'https://bsc-dataseed1.ninicoin.io',
+              'https://bsc-dataseed2.defibit.io',
+              'https://bsc-dataseed3.defibit.io',
+              'https://bsc-dataseed4.defibit.io',
+              'https://bsc-dataseed2.ninicoin.io',
+              'https://bsc-dataseed3.ninicoin.io',
+              'https://bsc-dataseed4.ninicoin.io',
               'https://bsc-dataseed1.binance.org',
               'https://bsc-dataseed2.binance.org',
               'https://bsc-dataseed3.binance.org',
               'https://bsc-dataseed4.binance.org',
-              'https://bsc-dataseed1.defibit.io',
-              'https://bsc-dataseed2.defibit.io',
-              'https://bsc-dataseed3.defibit.io',
-              'https://bsc-dataseed4.defibit.io',
-              'https://bsc-dataseed1.ninicoin.io',
-              'https://bsc-dataseed2.ninicoin.io',
-              'https://bsc-dataseed3.ninicoin.io',
-              'https://bsc-dataseed4.ninicoin.io',
               'wss://bsc-ws-node.nariox.org',
             ],
             blockExplorerUrls: ['https://bscscan.com'],
@@ -48,6 +58,26 @@ export const useConnectBSC = () => {
     }
     switchNetwork(BSC.chainId);
   }, [activateBrowserWallet, switchNetwork, chainId]);
+
+  useEffect(() => {
+    if (account && etherBalance && !userContext?.bsc?.address) {
+      userContext.setContext({
+        ...userContext,
+        bsc: {
+          address: account as string,
+          balance: parseFloat(formatEther(etherBalance)).toFixed(3),
+        },
+      });
+    }
+  }, [account, etherBalance, userContext]);
+
+  const deactivate = useCallback(() => {
+    userContext.setContext({
+      ...userContext,
+      bsc: {},
+    });
+    disconnectBSC();
+  }, [disconnectBSC, userContext]);
 
   return {
     disconnectFromBSC: deactivate,

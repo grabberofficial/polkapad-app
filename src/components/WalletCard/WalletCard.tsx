@@ -1,13 +1,90 @@
-import React from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 import { Flex, Heading, Text, Link, Image } from '@chakra-ui/react';
 import { Button } from '@/components/Button';
+import { UserContext } from '@/shared/providers/userContext';
+import fetchJson from '@/lib/fetchJson';
+import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
 
 const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
-  console.log('change to enum', type);
-  // TODO: temp just for tests
-  const verified = type === 'eth';
+  const userContext = useContext(UserContext);
+
+  const [verified, setVerified] = React.useState(false);
+  const [walletConnected, setWalletConnected] = React.useState(false);
+
+  const { connenctToBSC } = useConnectBSC();
+  const { connectToPolka } = useConnectPolka();
+
+  useEffect(() => {
+    if (type === 'eth') {
+      setWalletConnected(!!userContext.bsc?.address);
+    }
+    if (type === 'polka') {
+      setWalletConnected(!!userContext.polka?.address);
+    }
+  }, [type, userContext]);
+
+  const fetchWallets = useCallback(async () => {
+    const wallets: Array<{
+      name: string;
+      value: string;
+    }> = await fetchJson(
+      'https://app.polkapadapis.codes/wallets',
+      {},
+      userContext.user?.token,
+    );
+    if (wallets.length !== 0) {
+      const hasWallet =
+        wallets.find((wallet) => wallet.name === type) !== undefined;
+      setVerified(hasWallet);
+    }
+  }, [userContext, type]);
+
+  useEffect(() => {
+    fetchWallets();
+  }, []);
+
+  const connectWallet = useCallback(async () => {
+    if (type === 'eth') {
+      await connenctToBSC();
+    }
+    if (type === 'polka') {
+      await connectToPolka();
+    }
+    setWalletConnected(true);
+  }, [connectToPolka, connenctToBSC, type]);
+
+  const verifyWallet = useCallback(async () => {
+    let walletAddress = '';
+    if (type === 'eth') {
+      walletAddress = userContext.bsc?.address;
+    }
+    if (type === 'polka') {
+      walletAddress = userContext.polka?.address;
+    }
+    const createdWallet: Array<{
+      name: string;
+      value: string;
+    }> = await fetchJson(
+      'https://app.polkapadapis.codes/wallets',
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          name: type,
+          value: walletAddress,
+        }),
+      },
+      userContext.user?.token,
+    );
+    console.log({
+      createdWallet,
+    });
+    setVerified(true);
+  }, [type, userContext]);
+
+  // const verified = type === 'eth';
 
   let numberText = '1.';
   let walletText = 'Funding wallet';
@@ -67,8 +144,13 @@ const Header: React.FC<{ type?: string }> = ({ type = 'eth' }) => {
           <WalletText>{networkText}</WalletText>
         </Flex>
         <Flex>
-          {!verified && (
-            <Button height="36px" variant="primary">
+          {!walletConnected && !verified && (
+            <Button height="36px" variant="primary" onClick={connectWallet}>
+              Connect wallet
+            </Button>
+          )}
+          {!verified && walletConnected && (
+            <Button height="36px" variant="primary" onClick={verifyWallet}>
               Verify
             </Button>
           )}

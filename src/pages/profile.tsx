@@ -142,7 +142,12 @@ const ProfilePage = () => {
     >
       <WalletCard type="eth" />
       <WalletCard type="polka" />
-      <Button width="120px" marginTop="20px" variant="primary">
+      <Button
+        width="120px"
+        marginTop="20px"
+        variant="primary"
+        onClick={() => selectTab(2)}
+      >
         Start KYC
       </Button>
     </Flex>,
@@ -215,13 +220,13 @@ const ProfilePage = () => {
               <Icon
                 as={
                   index === 0 ||
-                    (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
                     ? BsFillCheckCircleFill
                     : BsFillExclamationCircleFill
                 }
                 color={
                   index === 0 ||
-                    (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
                     ? '#49C7DA'
                     : '#FFCC15'
                 }
@@ -252,11 +257,6 @@ export const getServerSideProps = withIronSessionSsr(async function ({
 }) {
   const user = req.session.user;
 
-  // console.log('profile', {
-  //   user: req.session.user,
-  //   session: req.session,
-  // });
-
   if (user === undefined) {
     res.setHeader('location', '/login');
     res.statusCode = 302;
@@ -272,4 +272,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { user: req.session.user },
   };
 },
-  sessionOptions);
+sessionOptions);
