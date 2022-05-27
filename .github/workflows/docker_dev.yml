@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Dev
 
 on:
   push:
@@ -11,25 +11,20 @@ on:
   workflow_dispatch:
 
 env:
-  ECR: 636334651895.dkr.ecr.eu-central-1.amazonaws.com
-  IMAGE: frontend
+  ECR: 636334651895.dkr.ecr.eu-central-1.amazonaws.com/polkapad-polkapad-app
+  ROLE: "arn:aws:iam::636334651895:role/github-ecr-polkapad-polkapad-app"
 
 jobs:
   docker:
     runs-on: ubuntu-latest
-
+    permissions:
+      id-token: write # required to use OIDC authentication
+      contents: read # required to checkout the code from the repo
     steps:
       - uses: actions/checkout@v3
 
       - name: AWS cli install action
         uses: chrislennon/action-aws-cli@1.1
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Expose git commit data
         uses: rlespinasse/git-commit-data-action@v1
@@ -37,7 +32,7 @@ jobs:
 
       - name: Set env
         run: |
-          echo "TAG=${ECR}/${IMAGE}:${{ env.GIT_COMMIT_SHORT_SHA }}" >> $GITHUB_ENV
+          echo "TAG=${ECR}:${{ env.GIT_COMMIT_SHORT_SHA }}" >> $GITHUB_ENV
 
       - uses: actions/setup-node@v3
         with:
@@ -48,6 +43,13 @@ jobs:
 
       - name: Docker build
         run: docker build -t $TAG --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.DEV_SECRET_COOKIE_PASSWORD }} -f .github/workflows/Dockerfile .
+
+      - name: Configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: ${{ env.ROLE }}
+          role-duration-seconds: 900 # the ttl of the session, in seconds.
+          aws-region: eu-central-1 # use your region here.
 
       - name: ECR login
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $ECR
