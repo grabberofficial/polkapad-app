@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
 import { sessionOptions } from '@/lib/session';
 import {
@@ -132,7 +133,9 @@ const ProfilePage = () => {
         </InputGroup>
       </FormControl>
     </Flex>,
-    null,
+    <Flex flexDirection="column" key="wallet">
+      <WalletCard />
+    </Flex>,
     <Flex
       flexBasis={
         user?.kycStatus === KycStatusTypes.ACCEPTED ? '404px' : '800px'
@@ -202,13 +205,13 @@ const ProfilePage = () => {
               <Icon
                 as={
                   index === 0 ||
-                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                    (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
                     ? BsFillCheckCircleFill
                     : BsFillExclamationCircleFill
                 }
                 color={
                   index === 0 ||
-                  (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
+                    (index === 2 && user?.kycStatus === KycStatusTypes.ACCEPTED)
                     ? '#49C7DA'
                     : '#FFCC15'
                 }
@@ -259,4 +262,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { user: req.session.user },
   };
 },
-sessionOptions);
+  sessionOptions);
