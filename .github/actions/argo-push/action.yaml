@@ -1,0 +1,77 @@
+name: argo-push
+description: 'Push image tag to argo repo'
+inputs:
+  aws-role:
+    description: "AWS role for push to ECR"
+    required: true
+  aws-region:
+    description: "AWS region to login"
+    required: false
+    default: eu-central-1
+  aws-role-duration-seconds:
+    description: "Role TTL"
+    required: false
+    default: "900"
+  aws-ecr-uri:
+    description: "AWS ECR uri or docker tag"
+    required: true
+  ssh-key:
+    description: 'SSH key to access to argo repo'
+    required: true
+  environment:
+    description: "dev or prod environment to push image tag"
+    required: true
+  project:
+    description: "Project name"
+    required: true
+  image:
+    description: "Image tag to push"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: AWS cli install action
+      uses: chrislennon/action-aws-cli@1.1
+
+    - name: Configure aws credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: ${{ inputs.aws-role }}
+        role-duration-seconds: ${{ inputs.aws-role-duration-seconds }} # the ttl of the session, in seconds.
+        aws-region: ${{ inputs.aws-region }}
+
+
+    - name: ECR login
+      shell: bash
+      run: aws ecr get-login-password --region ${{ inputs.aws-region }} | docker login --username AWS --password-stdin ${{ inputs.aws-ecr-uri }}
+
+    - name: Push image
+      shell: bash
+      run: docker push ${{ inputs.image }}
+
+    - name: Install jsonnet
+      shell: bash
+      run: |
+        wget https://github.com/google/go-jsonnet/releases/download/v0.18.0/jsonnet-go_0.18.0_linux_amd64.deb
+        sudo dpkg -i jsonnet-go_0.18.0_linux_amd64.deb
+
+    - name: Expose git commit data
+      uses: rlespinasse/git-commit-data-action@v1
+
+    - name: Clone Argo repo
+      uses: actions/checkout@v3
+      with:
+        repository: 'polkapad/argocd'
+        ref: main
+        ssh-key: ${{ inputs.ssh-key }}
+        path: argo
+
+    - name: Write TAG to argo
+      shell: bash
+      run: |
+        cd argo
+        foo=$(jsonnet libs/ci_image.libsonnet -A env=${{ inputs.environment }} -A project=${{ inputs.project }} -A image="${{ inputs.image }}" | tail -c +2 | head -c -2); echo "${foo@E}" > out.yaml
+        mv out.yaml env.yaml
+        git config user.email "${{ env.GIT_COMMIT_AUTHOR_EMAIL }}"
+        git config user.name "${{ env.GIT_COMMIT_AUTHOR_NAME }}"
+        git add env.yaml && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true

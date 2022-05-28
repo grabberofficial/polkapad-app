@@ -44,40 +44,14 @@ jobs:
       - name: Docker build
         run: docker build -t $TAG --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.DEV_SECRET_COOKIE_PASSWORD }} -f .github/workflows/Dockerfile .
 
-      - name: Configure aws credentials
-        uses: aws-actions/configure-aws-credentials@v1
+      - name: Push to ECR and Argo
+        uses: ./.github/actions/argo-push
         with:
-          role-to-assume: ${{ env.ROLE }}
-          role-duration-seconds: 900 # the ttl of the session, in seconds.
-          aws-region: eu-central-1 # use your region here.
-
-      - name: ECR login
-        run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $ECR
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-
-      - name: Push image
-        run: docker push $TAG
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-
-      - uses: kobtea/setup-jsonnet-action@v1
-
-      - name: Clone Argo repo
-        uses: actions/checkout@v3
-        with:
-          repository: 'polkapad/argocd'
-          ref: main
+          aws-role: ${{ env.ROLE }}
+          aws-ecr-uri: ${{ env.ECR }}
           ssh-key: ${{ secrets.ARGOCD_REPO_SSH }}
-          path: argo
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+          environment: dev
+          project: polkapad_app
+          image: ${{ env.TAG }}
 
-      - name: Write TAG to argo
-        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
-        run: |
-          cd argo
-          mkdir -p versions/${{github.repository_owner}}
-          jsonnet libs/ci_image.libsonnet -A env=dev -A project=polkapad_app -A image="${TAG}" > out.json
-          mv out.json env.json
-          git config user.email "${{ env.GIT_COMMIT_AUTHOR_EMAIL }}"
-          git config user.name "${{ env.GIT_COMMIT_AUTHOR_NAME }}"
-          git add env.json && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
 
