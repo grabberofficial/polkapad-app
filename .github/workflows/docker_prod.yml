@@ -46,11 +46,11 @@ jobs:
 
       - name: ECR login
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin $ECR
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
       - name: Push image
         run: docker push $TAG
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
       - name: Clone Argo repo
         uses: actions/checkout@v3
@@ -59,10 +59,10 @@ jobs:
           ref: prod
           ssh-key: ${{ secrets.ARGOCD_REPO_SSH }}
           path: argo
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
       - name: Write TAG to argo
-        if: ${{ github.event_name == 'push' }}
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         run: |
           cd argo
           mkdir -p versions/${{github.repository_owner}}
