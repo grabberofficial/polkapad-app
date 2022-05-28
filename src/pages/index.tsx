@@ -3,7 +3,7 @@ import { prop } from 'styled-tools';
 import styled from '@emotion/styled';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Flex, Text, Image } from '@chakra-ui/react';
-import { Footer } from './footer';
+import { Footer } from '@/components/footer';
 
 const LaunchpadPage = () => {
   return (
