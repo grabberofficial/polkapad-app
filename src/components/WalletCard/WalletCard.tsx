@@ -180,7 +180,7 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
         fontSize="14px"
         fontWeight="600"
         color="#49C7DA"
-        href="https://metamask.io/"
+        href="https://polkadot.js.org/extension/"
         target="blank"
       >
         Get wallet
