@@ -10,7 +10,7 @@ import { BsHourglassSplit } from 'react-icons/bs';
 const MagicLinkPage = () => {
   const router = useRouter();
   const { mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: '/profile',
     redirectIfFound: true,
   });
 

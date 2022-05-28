@@ -59,22 +59,25 @@ jobs:
         run: docker push $TAG
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
+      - uses: kobtea/setup-jsonnet-action@v1
+
       - name: Clone Argo repo
         uses: actions/checkout@v3
         with:
           repository: 'polkapad/argocd'
-          ref: 'main'
+          ref: main
           ssh-key: ${{ secrets.ARGOCD_REPO_SSH }}
-          path: 'argo'
-       if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
+          path: argo
+        if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
 
       - name: Write TAG to argo
         if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
         run: |
           cd argo
           mkdir -p versions/${{github.repository_owner}}
-          echo "{ image: \"$TAG\" }" > versions/${{github.repository}}.libsonnet
+          jsonnet libs/ci_image.libsonnet -A env=dev -A project=polkapad_app -A image="${TAG}" > out.json
+          mv out.json env.json
           git config user.email "${{ env.GIT_COMMIT_AUTHOR_EMAIL }}"
           git config user.name "${{ env.GIT_COMMIT_AUTHOR_NAME }}"
-          git add versions/${{github.repository}}.libsonnet && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
+          git add env.json && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
 
