@@ -49,7 +49,7 @@ const LoginPage = () => {
     resolver: yupResolver(schema),
   });
   const { mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: '/profile',
     redirectIfFound: true,
   });
   // const { push } = useRouter();
