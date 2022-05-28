@@ -139,10 +139,6 @@ const AccountButton: React.FC = () => {
 const Header = () => {
   const { user } = useUser();
 
-  console.log({
-    user,
-  });
-
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
 
   const headerButtons = useMemo(

@@ -3,7 +3,7 @@ import { prop } from 'styled-tools';
 import styled from '@emotion/styled';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Flex, Text, Image } from '@chakra-ui/react';
-import { Button } from '@/components/Button';
+import {Footer} from './footer'
 
 const LaunchpadPage = () => {
   return (
@@ -26,7 +26,7 @@ const LaunchpadPage = () => {
             Launchpad
           </Heading>
 
-          <Flex flexDirection={'column'} width={'380px'}>
+          <HeaderFlex flexDirection={'column'}>
             <RegularText marginBottom={'16px'} color="#fff" fontSize={'14px'}>
               Stakers will receive their yield rewards only at the end of their
               Staking Period when they unstake/restake their tokens.
@@ -34,7 +34,7 @@ const LaunchpadPage = () => {
             <RegularText color="#fff" fontSize={'14px'}>
               Unstaking before the predefined period was reached will Unstake
             </RegularText>
-          </Flex>
+          </HeaderFlex>
         </Flex>
       </Flex>
       <Flex
@@ -48,9 +48,10 @@ const LaunchpadPage = () => {
           margin="0 auto"
           padding="0px 40px 0px 40px"
           zIndex={2}
+          flexDirection={["column", "column", "row"]}
         >
           <Line />
-          <Card marginRight={'90px'}>
+          <Card>
             <Image
               width={'68px'}
               height={'68px'}
@@ -65,9 +66,8 @@ const LaunchpadPage = () => {
               and KYC first. You can still stake and earn PLPD without
               registering.
             </RegularText>
-            <Button variant="primary">START THE KYC PROCCESS</Button>
           </Card>
-          <Card marginRight={'90px'}>
+          <Card>
             <Image
               width={'68px'}
               height={'68px'}
@@ -82,9 +82,8 @@ const LaunchpadPage = () => {
               your wallet. This is the only wallet you will be able to use for
               sales.
             </RegularText>
-            <Button variant="primary">START THE KYC PROCCESS</Button>
           </Card>
-          <Card marginRight={'90px'}>
+          <Card>
             <Image
               width={'68px'}
               height={'68px'}
@@ -98,7 +97,6 @@ const LaunchpadPage = () => {
               By staking PLPD, you earn allocation in IDOs. If you do not want
               to participate in sales, you can still benefit from staking.
             </RegularText>
-            <Button variant="primary">START THE KYC PROCCESS</Button>
           </Card>
           <Card>
             <Image
@@ -115,15 +113,10 @@ const LaunchpadPage = () => {
               participation. Once registration closes, you will not be able to
               register.
             </RegularText>
-            <Button variant="primary">START THE KYC PROCCESS</Button>
           </Card>
         </Flex>
-        <Flex padding="90px 119px 112px 119px">
-          <Heading marginBottom={'112px'} withUnderline>
-            Ongoing Sales
-          </Heading>
-        </Flex>
       </Flex>
+      <Footer />
     </Flex>
   );
 };
@@ -143,8 +136,13 @@ const Header = styled(Text)`
 
 const Card = styled(Flex)`
   position: relative;
-  width: 228px;
+  width: 100%;
   flex-direction: column;
+  padding: 0 15px;
+
+  @media screen and (min-width: 48em) {
+    width: 25%;
+  }
 `;
 
 const Line = styled(Flex)`
@@ -157,4 +155,8 @@ const Line = styled(Flex)`
   flex-direction: column;
 `;
 
+const HeaderFlex =  styled(Flex)`
+  width: 100%;
+  max-width: 380px;
+`
 export default LaunchpadPage;

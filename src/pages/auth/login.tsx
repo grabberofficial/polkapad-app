@@ -49,7 +49,7 @@ const LoginPage = () => {
     resolver: yupResolver(schema),
   });
   const { mutateUser } = useUser({
-    redirectTo: '/',
+    redirectTo: '/profile',
     redirectIfFound: true,
   });
   // const { push } = useRouter();
@@ -57,7 +57,7 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
-        mutateUser(
+        await mutateUser(
           await fetchJson('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
