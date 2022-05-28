@@ -108,6 +108,12 @@ const ProfilePage = () => {
     if (user?.token.length && !wallets.length) fetchWallets();
   }, [user, fetchWallets, wallets]);
 
+  useEffect(() => {
+    if (router.query.kyc && router.query.kyc === 'true') {
+      setSelectedTab(2);
+    }
+  }, [router, selectedTab]);
+
   const tabContent = [
     <Flex
       flexBasis="356px"
