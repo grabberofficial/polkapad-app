@@ -3,7 +3,7 @@ import { prop } from 'styled-tools';
 import styled from '@emotion/styled';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Flex, Text, Image } from '@chakra-ui/react';
-import {Footer} from './footer'
+import { Footer } from './footer';
 
 const LaunchpadPage = () => {
   return (
@@ -48,7 +48,7 @@ const LaunchpadPage = () => {
           margin="0 auto"
           padding="0px 40px 0px 40px"
           zIndex={2}
-          flexDirection={["column", "column", "row"]}
+          flexDirection={['column', 'column', 'row']}
         >
           <Line />
           <Card>
@@ -155,8 +155,8 @@ const Line = styled(Flex)`
   flex-direction: column;
 `;
 
-const HeaderFlex =  styled(Flex)`
+const HeaderFlex = styled(Flex)`
   width: 100%;
   max-width: 380px;
-`
+`;
 export default LaunchpadPage;
