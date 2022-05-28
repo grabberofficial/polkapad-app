@@ -65,7 +65,7 @@ export const Footer = () => (
         </Stack>
         <LastStack spacing="4">
           <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
-            Join <StyledText>PolkaPad's</StyledText> mailing list
+            Join <StyledText>PolkaPad&apos;s</StyledText> mailing list
           </Text>
           <Stack
             spacing="4"
