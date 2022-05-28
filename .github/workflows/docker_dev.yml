@@ -75,9 +75,9 @@ jobs:
         run: |
           cd argo
           mkdir -p versions/${{github.repository_owner}}
-          jsonnet libs/ci_image.libsonnet -A env=dev -A project=polkapad_app -A image="${TAG}" > versions/out.json
-          cp versions/out.json versions/env.json
+          jsonnet libs/ci_image.libsonnet -A env=dev -A project=polkapad_app -A image="${TAG}" > out.json
+          mv out.json env.json
           git config user.email "${{ env.GIT_COMMIT_AUTHOR_EMAIL }}"
           git config user.name "${{ env.GIT_COMMIT_AUTHOR_NAME }}"
-          git add versions/env.json && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
+          git add env.json && git commit -m "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }} ${{ env.GIT_COMMIT_SHORT_SHA }}" && git push || true
 
