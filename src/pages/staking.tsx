@@ -9,6 +9,9 @@ import {
   Grid,
   GridItem,
   Text,
+  Alert,
+  AlertIcon,
+  AlertTitle,
 } from '@chakra-ui/react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Input } from '@/components/Input/Input';
@@ -88,17 +91,10 @@ const IndexPage = () => {
           // backgroundPositionY="bottom"
         >
           <Heading marginBottom={75} withUnderline>
-            Allocation
-            <br />
             Staking
           </Heading>
           <Text maxWidth={383}>
-            Stakers will receive their yield rewards only at the end of their
-            Staking Period when they unstake/restake their tokens.
-          </Text>
-          <br />
-          <Text maxWidth={383} marginBottom={23}>
-            Unstaking before the predefined period was reached will Unstake
+            To take a part in first sales you should have locked assets
           </Text>
         </Flex>
         {/* TODO: Extract to block */}
@@ -108,6 +104,10 @@ const IndexPage = () => {
           backgroundColor={'white'}
           padding={'82px 81px 113px 95px'}
         >
+          <Alert marginBottom={45}>
+            <AlertIcon />
+            <AlertTitle>Will be available after Polkapad mainnet.</AlertTitle>
+          </Alert>
           <Flex justifyContent={'space-between'}>
             <Text
               as={'span'}
@@ -124,7 +124,7 @@ const IndexPage = () => {
                 lineHeight={'27px'}
                 textTransform={'uppercase'}
               >
-                $79.34M
+                TBA
               </Text>
             </Text>
             <Text
@@ -142,7 +142,7 @@ const IndexPage = () => {
                 lineHeight={'27px'}
                 textTransform={'uppercase'}
               >
-                $4.74
+                TBA
               </Text>
             </Text>
           </Flex>
@@ -223,7 +223,12 @@ const IndexPage = () => {
             </GridItem>
             <GridItem rowSpan={1} colSpan={1}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
-                <Button withArrow variant="primary" iconPlacement="right">
+                <Button
+                  disabled
+                  withArrow
+                  variant="primary"
+                  iconPlacement="right"
+                >
                   Deposit PLPD
                 </Button>
               </Flex>
@@ -280,7 +285,7 @@ const IndexPage = () => {
                   display="flex"
                   alignItems="center"
                 >
-                  1.824.4{' '}
+                  0{' '}
                   <Text
                     as="span"
                     color="#A5A5A5"
@@ -288,7 +293,7 @@ const IndexPage = () => {
                     fontSize="12px"
                     fontWeight="500"
                   >
-                    ~ $20,342.3
+                    ~ $0
                   </Text>
                 </Text>
               </Flex>
@@ -304,7 +309,7 @@ const IndexPage = () => {
             </GridItem>
             <GridItem rowSpan={1} colSpan={1}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
-                <Button withArrow variant="primary">
+                <Button disabled withArrow variant="primary">
                   Withdraw PLPD
                 </Button>
               </Flex>
@@ -347,7 +352,7 @@ const IndexPage = () => {
                 color="#303030"
                 whiteSpace="nowrap"
               >
-                7.79 %
+                TBA
               </Text>
             </Flex>
 
@@ -372,18 +377,18 @@ const IndexPage = () => {
                 color="#303030"
                 whiteSpace="nowrap"
                 position="relative"
-                _after={{
-                  position: 'absolute',
-                  content: '"~ $20,342.3"',
-                  fontWeight: '500',
-                  fontSize: '12px',
-                  lineHeight: '18px',
-                  color: '#A5A5A5',
-                  bottom: '-12px',
-                  right: 0,
-                }}
+                // _after={{
+                //   position: 'absolute',
+                //   content: '"~ $20,342.3"',
+                //   fontWeight: '500',
+                //   fontSize: '12px',
+                //   lineHeight: '18px',
+                //   color: '#A5A5A5',
+                //   bottom: '-12px',
+                //   right: 0,
+                // }}
               >
-                1,883.3 PLPD
+                TBA
               </Text>
             </Flex>
 
@@ -408,23 +413,24 @@ const IndexPage = () => {
                 color="#303030"
                 whiteSpace="nowrap"
                 position="relative"
-                _after={{
-                  position: 'absolute',
-                  content: '"~ $20,342.3"',
-                  fontWeight: '500',
-                  fontSize: '12px',
-                  lineHeight: '18px',
-                  color: '#A5A5A5',
-                  bottom: '-12px',
-                  right: 0,
-                }}
+                // _after={{
+                //   position: 'absolute',
+                //   content: '"~ $20,342.3"',
+                //   fontWeight: '500',
+                //   fontSize: '12px',
+                //   lineHeight: '18px',
+                //   color: '#A5A5A5',
+                //   bottom: '-12px',
+                //   right: 0,
+                // }}
               >
-                3.42 PLPD
+                TBA
               </Text>
             </Flex>
 
             <Flex gap="11px" marginTop="26px">
               <Button
+                disabled
                 withArrow
                 variant="secondary"
                 iconPlacement="right"
@@ -433,6 +439,7 @@ const IndexPage = () => {
                 COMPOUND PLPD
               </Button>
               <Button
+                disabled
                 withArrow
                 variant="secondary"
                 iconPlacement="right"
@@ -480,7 +487,7 @@ const IndexPage = () => {
                   fontSize="23px"
                   fontWeight="700"
                 >
-                  $79.34M
+                  TBA
                 </Text>
                 <Text
                   color="#FFFFFF"
@@ -488,7 +495,7 @@ const IndexPage = () => {
                   fontSize="14px"
                   fontWeight="400"
                 >
-                  Total Value Locked
+                  PLPD Price
                 </Text>
               </Flex>
             </Flex>
@@ -507,7 +514,7 @@ const IndexPage = () => {
                   fontSize="23px"
                   fontWeight="700"
                 >
-                  $79.34M
+                  TBA
                 </Text>
                 <Text
                   color="#FFFFFF"
@@ -553,7 +560,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              16,585,120.73
+              TBA
             </Text>
             <Text
               as="span"
@@ -563,7 +570,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              ~$79,442,728.29
+              ~
             </Text>
           </Flex>
           <Flex
@@ -595,7 +602,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              1,109,045.79
+              TBA
             </Text>
             <Text
               as="span"
@@ -605,7 +612,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              ~$5,312,329.32
+              ~
             </Text>
           </Flex>
           <Flex
@@ -637,7 +644,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              0.01 PLPD / Sec
+              TBA
             </Text>
             <Text
               as="span"
@@ -647,7 +654,7 @@ const IndexPage = () => {
               textTransform="uppercase"
               color="#303030"
             >
-              ~$0.03
+              ~
             </Text>
           </Flex>
         </Flex>
@@ -655,6 +662,7 @@ const IndexPage = () => {
 
       {/* TODO: Extract to block */}
       <Flex
+        style={{ display: 'none' }}
         marginTop="250px"
         padding="89px 79px 113px 115px"
         flexDirection="column"
