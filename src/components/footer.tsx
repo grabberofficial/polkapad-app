@@ -41,10 +41,7 @@ export const Footer = () => (
               >
                 Whitepaper
               </StyledButton>
-              <StyledButton
-                variant="link"
-                href="https://github.com/polkapad/"
-              >
+              <StyledButton variant="link" href="https://github.com/polkapad/">
                 Github
               </StyledButton>
               <StyledButton
@@ -88,10 +85,7 @@ export const Footer = () => (
               >
                 Twitter
               </StyledButton>
-              <StyledButton
-                variant="link"
-                href="https://t.me/polkapadnetwork"
-              >
+              <StyledButton variant="link" href="https://t.me/polkapadnetwork">
                 Telegram
               </StyledButton>
               <StyledButton variant="link">Discord</StyledButton>
