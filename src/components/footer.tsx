@@ -35,10 +35,30 @@ export const Footer = () => (
               Resources
             </Text>
             <Stack spacing="3" shouldWrapChildren>
-              <StyledButton variant="link" href="https://polkapad.network/docs/general/whitepaper/">Whitepaper</StyledButton>
-              <StyledButton variant="link" href="https://github.com/polkapad/">Github</StyledButton>
-              <StyledButton variant="link" href="https://polkapad.network/docs/general/whitepaper/">Docs</StyledButton>
-              <StyledButton variant="link" href="https://polkapad.network/blog/">Blog</StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://polkapad.network/docs/general/whitepaper/"
+              >
+                Whitepaper
+              </StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://github.com/polkapad/"
+              >
+                Github
+              </StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://polkapad.network/docs/general/whitepaper/"
+              >
+                Docs
+              </StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://polkapad.network/blog/"
+              >
+                Blog
+              </StyledButton>
             </Stack>
           </Stack>
           <Stack spacing="4" minW="36" flex="1">
@@ -46,7 +66,12 @@ export const Footer = () => (
               General
             </Text>
             <Stack spacing="3" shouldWrapChildren>
-              <StyledButton variant="link" href="https://polkapad.network/sales/">IDO Sales</StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://polkapad.network/sales/"
+              >
+                IDO Sales
+              </StyledButton>
               <StyledButton variant="link">Apply a Project</StyledButton>
               <StyledButton variant="link">Polkapad Academy</StyledButton>
               <StyledButton variant="link">Ambassadors room</StyledButton>
@@ -57,8 +82,18 @@ export const Footer = () => (
               Community
             </Text>
             <Stack spacing="3" shouldWrapChildren>
-              <StyledButton variant="link" href="https://twitter.com/Polkapadnetwork">Twitter</StyledButton>
-              <StyledButton variant="link" href="https://t.me/polkapadnetwork">Telegram</StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://twitter.com/Polkapadnetwork"
+              >
+                Twitter
+              </StyledButton>
+              <StyledButton
+                variant="link"
+                href="https://t.me/polkapadnetwork"
+              >
+                Telegram
+              </StyledButton>
               <StyledButton variant="link">Discord</StyledButton>
             </Stack>
           </Stack>
