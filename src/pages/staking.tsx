@@ -20,7 +20,7 @@ import { Spacer } from '@/modules/index/Spacer';
 import { Button } from '@/components/Button';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { css, Global } from '@emotion/react';
-import { Footer } from "@/components/footer";
+import { Footer } from '@/components/footer';
 
 const faq = [
   {
