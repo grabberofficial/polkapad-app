@@ -28,7 +28,6 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaUser } from 'react-icons/fa';
 import { Button } from '@/components/Button';
-import { KYCIframe } from '@/modules/profile/KYCIframe';
 
 import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
@@ -60,7 +59,7 @@ const ProfilePage = () => {
   const { user } = useUser();
   const [selectedTab, setSelectedTab] = useState(0);
   const [KYCUrl, setKYCUrl] = useState('');
-  const [isKYC, openKYC] = useState(false);
+  const [isKYC] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
 
@@ -113,7 +112,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (user?.token.length && !wallets.length) fetchWallets();
-  }, [user?.token.length]);
+  }, [fetchWallets, user?.token.length, wallets.length]);
 
   useEffect(() => {
     if (router.query.kyc && router.query.kyc === 'true') {
@@ -217,11 +216,7 @@ const ProfilePage = () => {
         </>
       )}
       {!isKYC && user?.kycStatus !== KycStatusTypes.ACCEPTED && (
-        <Button
-          onClick={startKyc}
-        >
-          Start KYC
-        </Button>
+        <Button onClick={startKyc}>Start KYC</Button>
       )}
     </Flex>,
   ];
