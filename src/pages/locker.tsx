@@ -1,10 +1,7 @@
 import {
   Circle,
-  Divider,
   Flex,
   Box,
-  Grid,
-  GridItem,
   Tab,
   TabPanel,
   TabPanels,
@@ -238,8 +235,8 @@ const LockerPage = () => {
                 Minimum locked amount = 1 DOT
               </Text>
               <Flex flexDirection="column">
-                {(lockedAmount || []).map((item) => (
-                  <Flex marginBottom={'25px'}>
+                {(lockedAmount || []).map((item, index) => (
+                  <Flex key={index} marginBottom={'25px'}>
                     <Text>{item.from}</Text>
                     <Flex
                       borderBottom={'1px dashed #E0E0E0'}
@@ -270,8 +267,8 @@ const LockerPage = () => {
                 </Button>
               </Flex>
               <Flex>
-                <Text marginRight="5px">Don't see provied funds?</Text>
-                <Text color="#49C7DA" fontWeight={700}>
+                <Text marginRight={'5px'}>Don&apos;t see provided funds?</Text>
+                <Text color={'#49C7DA'} fontWeight={700}>
                   Contact support
                 </Text>
               </Flex>
