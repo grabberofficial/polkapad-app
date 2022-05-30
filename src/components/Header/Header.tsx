@@ -101,7 +101,8 @@ export const AccountButton: React.FC = () => {
 
   const logout = useCallback(async () => {
     mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
-    router.push('/');
+    // router.push('/');
+    window.location.href = '/';
   }, [mutateUser, router]);
 
   return (

@@ -1,6 +1,7 @@
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
+import fetchJson from '@/lib/fetchJson';
 
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = await req.body;
@@ -40,13 +41,21 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         token,
       });
 
+      const userRes: {
+        id: string;
+        name: string;
+        kycStatus: string;
+      } = await fetchJson(
+        'https://app.polkapadapis.codes/users/currentUser',
+        undefined,
+        token,
+      );
+
       const user = {
         isLoggedIn: true,
         email,
         token: token,
-        id: '',
-        name: '',
-        kycStatus: '',
+        ...userRes,
       };
       req.session.user = user;
       await req.session.save();
@@ -81,13 +90,21 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 
       const token = await tokenRes.text();
 
+      const userRes: {
+        id: string;
+        name: string;
+        kycStatus: string;
+      } = await fetchJson(
+        'https://app.polkapadapis.codes/users/currentUser',
+        undefined,
+        token,
+      );
+
       const user = {
         isLoggedIn: true,
         email,
         token: token,
-        id: '',
-        name: '',
-        kycStatus: '',
+        ...userRes,
       };
       req.session.user = user;
       await req.session.save();

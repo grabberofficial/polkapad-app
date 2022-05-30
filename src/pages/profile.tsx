@@ -113,7 +113,7 @@ const ProfilePage = () => {
     if (router.query.kyc && router.query.kyc === 'true') {
       setSelectedTab(2);
     }
-  }, [router, selectedTab]);
+  }, [router, setSelectedTab]);
 
   const tabContent = [
     <Flex
@@ -233,17 +233,41 @@ const ProfilePage = () => {
           User Profile
         </Heading>
 
-        <Flex>
-          <Flex direction="column" gap="30px" flexBasis="30%">
-            {/* Tab */}
-            {tabs.map((tab, index) => (
-              <Flex
-                gap="11px"
-                alignItems="center"
-                justifyContent="flex-start"
-                cursor="pointer"
-                key={index}
-                onClick={() => selectTab(index)}
+      <Flex>
+        <Flex direction="column" gap="30px" flexBasis="30%">
+          {/* Tab */}
+          {tabs.map((tab, index) => (
+            <Flex
+              gap="11px"
+              alignItems="center"
+              justifyContent="flex-start"
+              cursor="pointer"
+              key={index}
+              onClick={() => selectTab(index)}
+            >
+              <Icon
+                as={
+                  index === 0 ||
+                    (index === 2 &&
+                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 1 && wallets && wallets.length === 2)
+                    ? BsFillCheckCircleFill
+                    : BsFillExclamationCircleFill
+                }
+                color={
+                  index === 0 ||
+                    (index === 2 &&
+                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 1 && wallets && wallets.length === 2)
+                    ? '#49C7DA'
+                    : '#FFCC15'
+                }
+              />
+              <Text
+                color={index === selectedTab ? '#49C7DA' : '#303030'}
+                fontWeight="600"
+                fontSize="14px"
+                lineHeight="21px"
               >
                 <Icon
                   as={
@@ -308,4 +332,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { user: req.session.user },
   };
 },
-sessionOptions);
+  sessionOptions);
