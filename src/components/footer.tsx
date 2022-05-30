@@ -177,13 +177,6 @@ export const Footer = () => (
 const StyledContainer = styled(Container)`
   background: #303030;
   max-width: 100%;
-  margin-top: 60px;
-  @media screen and (min-width: 30em) {
-    margin-top: 90px;
-  }
-  @media screen and (min-width: 48em) {
-    margin-top: 120px;
-  }
 `;
 
 const StyledButton = styled(Button)`
@@ -233,5 +226,15 @@ const GeneralStack =  styled(Stack)`
   margin-left: 0 !important;
   @media screen and (min-width: 30em) {
     margin-left: inherit;
+  }
+`
+
+export const FooterWrapper = styled.div`
+  margin-top: 60px;
+  @media screen and (min-width: 30em) {
+    margin-top: 90px;
+  }
+  @media screen and (min-width: 48em) {
+    margin-top: 120px;
   }
 `

@@ -3,7 +3,7 @@ import { prop } from 'styled-tools';
 import styled from '@emotion/styled';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Flex, Text, Image } from '@chakra-ui/react';
-import { Footer } from '@/components/footer';
+import { Footer, FooterWrapper } from '@/components/footer';
 
 const LaunchpadPage = () => {
   return (
@@ -116,10 +116,11 @@ const LaunchpadPage = () => {
           </Card>
         </Flex>
       </Flex>
-      <Footer />
+      <FooterWrapper><Footer /></FooterWrapper>
     </Flex>
   );
 };
+
 
 const RegularText = styled(Text)`
   font-family: Poppins;

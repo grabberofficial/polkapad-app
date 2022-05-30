@@ -15,6 +15,7 @@ import { css, Global } from '@emotion/react';
 import { TabList } from '@/components/Header/components/HeaderItems/HeaderItems.style';
 import { useEthers } from '@usedapp/core';
 import { FaInfoCircle } from 'react-icons/fa';
+import { Footer } from '@/components/footer';
 
 const bnbSteps = [
   {
@@ -276,6 +277,7 @@ const LockerPage = () => {
           )}
         </Flex>
       </Flex>
+      <Footer />
     </>
   );
 };
