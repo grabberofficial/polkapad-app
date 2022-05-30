@@ -7,12 +7,12 @@ export default async function fetchJson<JSON = unknown>(
 ): Promise<JSON> {
   const headers = token
     ? new Headers({
-      Authorization: token,
-      'Content-Type': 'application/json',
-    })
+        Authorization: token,
+        'Content-Type': 'application/json',
+      })
     : new Headers({
-      'Content-Type': 'application/json',
-    });
+        'Content-Type': 'application/json',
+      });
 
   console.log({
     headers,
