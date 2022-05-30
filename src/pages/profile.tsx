@@ -88,7 +88,7 @@ const ProfilePage = () => {
 
   const startKyc = useCallback(() => {
     if (typeof window !== 'undefined') {
-      window.open(KYCUrl);
+      window.location.href = KYCUrl;
     }
   }, [KYCUrl]);
 
