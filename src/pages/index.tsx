@@ -17,7 +17,7 @@ const LaunchpadPage = () => {
         justifyContent={'center'}
       >
         <Flex
-          padding="76px 115px 119px"
+          padding={["76px 16px 119px", "76px 115px 119px"]}
           flexDirection="column"
           maxWidth="1440px"
           width="100%"
@@ -46,7 +46,7 @@ const LaunchpadPage = () => {
         <Flex
           position={'relative'}
           margin="0 auto"
-          padding="0px 40px 0px 40px"
+          padding={["0px 16px", "0px 40px"]}
           zIndex={2}
           flexDirection={['column', 'column', 'row']}
         >
@@ -139,10 +139,10 @@ const Card = styled(Flex)`
   position: relative;
   width: 100%;
   flex-direction: column;
-  padding: 0 15px;
 
   @media screen and (min-width: 48em) {
     width: 25%;
+    padding: 0 15px;
   }
 `;
 
