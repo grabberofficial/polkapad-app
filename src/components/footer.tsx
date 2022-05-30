@@ -124,7 +124,7 @@ export const Footer = () => (
         direction={{ base: 'column-reverse', md: 'column', lg: 'row' }}
         spacing={{ base: '12', md: '8' }}
       >
-        <Stack direction={["column","row"]} spacing="8">
+        <Stack direction={['column', 'row']} spacing="8">
           <Stack spacing="4" minW="36" flex="1">
             <Text fontSize="sm" color="#8E8E8E">
               Terms & Conditions
@@ -220,14 +220,14 @@ const CommunityStack = styled(Stack)`
   @media screen and (min-width: 30em) {
     display: block;
   }
-`
+`;
 
-const GeneralStack =  styled(Stack)`
+const GeneralStack = styled(Stack)`
   margin-left: 0 !important;
   @media screen and (min-width: 30em) {
     margin-left: inherit;
   }
-`
+`;
 
 export const FooterWrapper = styled.div`
   margin-top: 60px;
@@ -237,4 +237,4 @@ export const FooterWrapper = styled.div`
   @media screen and (min-width: 48em) {
     margin-top: 120px;
   }
-`
+`;

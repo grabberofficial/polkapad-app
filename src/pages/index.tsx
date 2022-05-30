@@ -116,11 +116,12 @@ const LaunchpadPage = () => {
           </Card>
         </Flex>
       </Flex>
-      <FooterWrapper><Footer /></FooterWrapper>
+      <FooterWrapper>
+        <Footer />
+      </FooterWrapper>
     </Flex>
   );
 };
-
 
 const RegularText = styled(Text)`
   font-family: Poppins;

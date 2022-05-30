@@ -274,7 +274,9 @@ const ProfilePage = () => {
         {/* TabContent */}
         {tabContent[selectedTab]}
       </Flex>
-      <FooterWrapper><Footer /></FooterWrapper>
+      <FooterWrapper>
+        <Footer />
+      </FooterWrapper>
     </Flex>
   );
 };
