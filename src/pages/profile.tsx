@@ -87,6 +87,12 @@ const ProfilePage = () => {
     setKYCUrl(kyc.iframeUrl);
   }, []);
 
+  const startKyc = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      window.open(KYCUrl);
+    }
+  }, [KYCUrl]);
+
   useEffect(() => {
     if (isKYC) {
       fetchKYC();
@@ -107,7 +113,7 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (user?.token.length && !wallets.length) fetchWallets();
-  }, [user, fetchWallets, wallets]);
+  }, [user?.token.length]);
 
   useEffect(() => {
     if (router.query.kyc && router.query.kyc === 'true') {
@@ -172,7 +178,7 @@ const ProfilePage = () => {
         width="120px"
         marginTop="20px"
         variant="primary"
-        onClick={() => selectTab(2)}
+        onClick={startKyc}
       >
         Start KYC
       </Button>
@@ -212,15 +218,10 @@ const ProfilePage = () => {
       )}
       {!isKYC && user?.kycStatus !== KycStatusTypes.ACCEPTED && (
         <Button
-          onClick={() => {
-            openKYC(true);
-          }}
+          onClick={startKyc}
         >
           Start KYC
         </Button>
-      )}
-      {isKYC && user?.kycStatus !== KycStatusTypes.ACCEPTED && (
-        <KYCIframe iframeUrl={KYCUrl} />
       )}
     </Flex>,
   ];
@@ -248,17 +249,17 @@ const ProfilePage = () => {
                 <Icon
                   as={
                     index === 0 ||
-                      (index === 2 &&
-                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                      (index === 1 && wallets && wallets.length === 2)
+                    (index === 2 &&
+                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 1 && wallets && wallets.length === 2)
                       ? BsFillCheckCircleFill
                       : BsFillExclamationCircleFill
                   }
                   color={
                     index === 0 ||
-                      (index === 2 &&
-                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                      (index === 1 && wallets && wallets.length === 2)
+                    (index === 2 &&
+                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 1 && wallets && wallets.length === 2)
                       ? '#49C7DA'
                       : '#FFCC15'
                   }
@@ -272,17 +273,17 @@ const ProfilePage = () => {
                   <Icon
                     as={
                       index === 0 ||
-                        (index === 2 &&
-                          user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                        (index === 1 && wallets && wallets.length === 2)
+                      (index === 2 &&
+                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                      (index === 1 && wallets && wallets.length === 2)
                         ? BsFillCheckCircleFill
                         : BsFillExclamationCircleFill
                     }
                     color={
                       index === 0 ||
-                        (index === 2 &&
-                          user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                        (index === 1 && wallets && wallets.length === 2)
+                      (index === 2 &&
+                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                      (index === 1 && wallets && wallets.length === 2)
                         ? '#49C7DA'
                         : '#FFCC15'
                     }
@@ -333,4 +334,4 @@ export const getServerSideProps = withIronSessionSsr(async function ({
     props: { user: req.session.user },
   };
 },
-  sessionOptions);
+sessionOptions);
