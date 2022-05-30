@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, Fragment } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
@@ -226,63 +226,39 @@ const ProfilePage = () => {
   ];
 
   return (
-    <>
+    <Fragment>
       {' '}
       <Flex padding="76px 155px 0" flexDirection="column">
         <Heading marginBottom={101} withUnderline>
           User Profile
         </Heading>
 
-      <Flex>
-        <Flex direction="column" gap="30px" flexBasis="30%">
-          {/* Tab */}
-          {tabs.map((tab, index) => (
-            <Flex
-              gap="11px"
-              alignItems="center"
-              justifyContent="flex-start"
-              cursor="pointer"
-              key={index}
-              onClick={() => selectTab(index)}
-            >
-              <Icon
-                as={
-                  index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                    (index === 1 && wallets && wallets.length === 2)
-                    ? BsFillCheckCircleFill
-                    : BsFillExclamationCircleFill
-                }
-                color={
-                  index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                    (index === 1 && wallets && wallets.length === 2)
-                    ? '#49C7DA'
-                    : '#FFCC15'
-                }
-              />
-              <Text
-                color={index === selectedTab ? '#49C7DA' : '#303030'}
-                fontWeight="600"
-                fontSize="14px"
-                lineHeight="21px"
+        <Flex>
+          <Flex direction="column" gap="30px" flexBasis="30%">
+            {/* Tab */}
+            {tabs.map((tab, index) => (
+              <Flex
+                gap="11px"
+                alignItems="center"
+                justifyContent="flex-start"
+                cursor="pointer"
+                key={index}
+                onClick={() => selectTab(index)}
               >
                 <Icon
                   as={
                     index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                    (index === 1 && wallets && wallets.length === 2)
+                      (index === 2 &&
+                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                      (index === 1 && wallets && wallets.length === 2)
                       ? BsFillCheckCircleFill
                       : BsFillExclamationCircleFill
                   }
                   color={
                     index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                    (index === 1 && wallets && wallets.length === 2)
+                      (index === 2 &&
+                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                      (index === 1 && wallets && wallets.length === 2)
                       ? '#49C7DA'
                       : '#FFCC15'
                   }
@@ -293,7 +269,32 @@ const ProfilePage = () => {
                   fontSize="14px"
                   lineHeight="21px"
                 >
-                  {tab}
+                  <Icon
+                    as={
+                      index === 0 ||
+                        (index === 2 &&
+                          user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                        (index === 1 && wallets && wallets.length === 2)
+                        ? BsFillCheckCircleFill
+                        : BsFillExclamationCircleFill
+                    }
+                    color={
+                      index === 0 ||
+                        (index === 2 &&
+                          user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                        (index === 1 && wallets && wallets.length === 2)
+                        ? '#49C7DA'
+                        : '#FFCC15'
+                    }
+                  />
+                  <Text
+                    color={index === selectedTab ? '#49C7DA' : '#303030'}
+                    fontWeight="600"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    {tab}
+                  </Text>
                 </Text>
               </Flex>
             ))}
@@ -305,7 +306,7 @@ const ProfilePage = () => {
       <FooterWrapper>
         <Footer />
       </FooterWrapper>
-    </>
+    </Fragment>
   );
 };
 
