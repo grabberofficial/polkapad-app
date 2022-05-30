@@ -9,7 +9,7 @@ import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
 import { shortenPolkaAddress } from '@/lib/utils';
 
-const Header: React.FC<{ type?: string; wallets: any[] }> = ({
+const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
   type = 'eth',
   wallets,
 }) => {
@@ -84,6 +84,7 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
 
   let numberText = '1.';
   let walletText = 'Funding wallet';
+  let walletUrl = 'https://metamask.io/';
   let networkText = 'BNB Smart chain';
   let commentText =
     'Accepted: DOT or KSM from Binance Smart Chain (EVM) with the lowest fees.';
@@ -91,6 +92,7 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
   if (type !== 'eth') {
     numberText = '2.';
     walletText = 'Receiving wallet';
+    walletUrl = 'https://polkadot.js.org/extension/';
     networkText = 'Polkadot';
     walletIcon = '/images/icon_polka.png';
     commentText = 'Required to receive tokens during a give away';
@@ -180,7 +182,7 @@ const Header: React.FC<{ type?: string; wallets: any[] }> = ({
         fontSize="14px"
         fontWeight="600"
         color="#49C7DA"
-        href="https://polkadot.js.org/extension/"
+        href={walletUrl}
         target="blank"
       >
         Get wallet
@@ -218,4 +220,4 @@ const WalletText = styled(Text)`
   border-left: 1px solid #e0e0e0;
 `;
 
-export default Header;
+export default WalletCard;
