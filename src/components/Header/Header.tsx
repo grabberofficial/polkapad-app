@@ -15,7 +15,7 @@ import { formatEther } from '@ethersproject/units';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCallback, useContext, useMemo } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { Button } from '../Button';
 import fetchJson from '@/lib/fetchJson';
@@ -204,7 +204,7 @@ export const Header: React.FC<{
   );
 };
 
-const MobileMenu: React.FC = (props) => {
+const MobileMenu: React.FC = () => {
   return (
     <Menu>
       <MenuButton
