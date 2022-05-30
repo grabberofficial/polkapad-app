@@ -9,7 +9,7 @@ import {
   MenuButton,
   MenuList,
 } from '@chakra-ui/react';
-import { AddIcon, HamburgerIcon } from '@chakra-ui/icons';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { Image } from '@chakra-ui/react';
 import { TabList } from './components/HeaderItems/HeaderItems.style';
