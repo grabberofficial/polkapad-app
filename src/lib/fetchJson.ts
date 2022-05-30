@@ -7,12 +7,12 @@ export default async function fetchJson<JSON = unknown>(
 ): Promise<JSON> {
   const headers = token
     ? new Headers({
-        Authorization: token,
-        'Content-Type': 'application/json',
-      })
+      Authorization: token,
+      'Content-Type': 'application/json',
+    })
     : new Headers({
-        'Content-Type': 'application/json',
-      });
+      'Content-Type': 'application/json',
+    });
 
   console.log({
     headers,
@@ -29,8 +29,13 @@ export default async function fetchJson<JSON = unknown>(
 
   // if the server replies, there's always some data in json
   // if there's a network error, it will throw at the previous line
-  const data = await response.json();
 
+  let data;
+  try {
+    data = await response.json();
+  } catch (e) {
+    console.log('e -->', e);
+  }
   // response.ok is true when res.status is 2xx
   // https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
   if (response.ok) {

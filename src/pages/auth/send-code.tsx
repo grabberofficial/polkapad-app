@@ -21,6 +21,7 @@ import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { ExceptionTypeEnum } from '@/lib/constants';
+// import { success } from '@/shared/utils/toast';
 
 interface IFormInput {
   email: string;
@@ -54,11 +55,12 @@ const CodeSendPage = () => {
             body: JSON.stringify(data),
           },
         );
-        console.log({
+        console.log('res --->', {
           res,
         });
-        res.message === 'ok' && setIsSent(true);
+        setIsSent(true);
       } catch (error) {
+        console.log('errror --->', error);
         if (error instanceof FetchError) {
           switch (error.data.type) {
             case ExceptionTypeEnum.NotFound:
