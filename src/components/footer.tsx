@@ -58,7 +58,7 @@ export const Footer = () => (
               </StyledButton>
             </Stack>
           </Stack>
-          <Stack spacing="4" minW="36" flex="1">
+          <GeneralStack spacing="4" minW="36" flex="1">
             <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
               General
             </Text>
@@ -73,8 +73,8 @@ export const Footer = () => (
               <StyledButton variant="link">Polkapad Academy</StyledButton>
               <StyledButton variant="link">Ambassadors room</StyledButton>
             </Stack>
-          </Stack>
-          <Stack spacing="4" minW="36" flex="1">
+          </GeneralStack>
+          <CommunityStack spacing="4" minW="36" flex="1">
             <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
               Community
             </Text>
@@ -90,7 +90,7 @@ export const Footer = () => (
               </StyledButton>
               <StyledButton variant="link">Discord</StyledButton>
             </Stack>
-          </Stack>
+          </CommunityStack>
         </Stack>
         <LastStack spacing="4">
           <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
@@ -124,7 +124,7 @@ export const Footer = () => (
         direction={{ base: 'column-reverse', md: 'column', lg: 'row' }}
         spacing={{ base: '12', md: '8' }}
       >
-        <Stack direction="row" spacing="8">
+        <Stack direction={["column","row"]} spacing="8">
           <Stack spacing="4" minW="36" flex="1">
             <Text fontSize="sm" color="#8E8E8E">
               Terms & Conditions
@@ -177,6 +177,13 @@ export const Footer = () => (
 const StyledContainer = styled(Container)`
   background: #303030;
   max-width: 100%;
+  margin-top: 60px;
+  @media screen and (min-width: 30em) {
+    margin-top: 90px;
+  }
+  @media screen and (min-width: 48em) {
+    margin-top: 120px;
+  }
 `;
 
 const StyledButton = styled(Button)`
@@ -214,3 +221,17 @@ const StyledText = styled(Text)`
   color: white;
   display: inline-block;
 `;
+
+const CommunityStack = styled(Stack)`
+  display: none;
+  @media screen and (min-width: 30em) {
+    display: block;
+  }
+`
+
+const GeneralStack =  styled(Stack)`
+  margin-left: 0 !important;
+  @media screen and (min-width: 30em) {
+    margin-left: inherit;
+  }
+`
