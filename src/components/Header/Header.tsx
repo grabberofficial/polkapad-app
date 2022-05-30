@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { Flex, Tabs, Menu, MenuItem, IconButton, MenuButton, MenuList } from '@chakra-ui/react';
+import {
+  Flex,
+  Tabs,
+  Menu,
+  MenuItem,
+  IconButton,
+  MenuButton,
+  MenuList,
+} from '@chakra-ui/react';
 import { AddIcon, HamburgerIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { Image } from '@chakra-ui/react';
@@ -10,7 +18,11 @@ import { RightContainer } from './Header.style';
 import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
-export const Header: React.FC<{ walletButton: React.FC; polkaConnectButton: React.FC; loginButton: React.FC }> = (props) => {
+export const Header: React.FC<{
+  walletButton: React.FC;
+  polkaConnectButton: React.FC;
+  loginButton: React.FC;
+}> = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
 
@@ -30,7 +42,7 @@ export const Header: React.FC<{ walletButton: React.FC; polkaConnectButton: Reac
       as="nav"
       align="center"
       justify="space-between"
-      padding={['0 16px','0 16px','0 78px 0 70px']}
+      padding={['0 16px', '0 16px', '0 78px 0 70px']}
       bg="#F7F5F5"
       position="sticky"
       top={0}
@@ -60,20 +72,26 @@ export const Header: React.FC<{ walletButton: React.FC; polkaConnectButton: Reac
       </DesktopMenuWrapper>
       <MobileMenuWrapper>
         <props.loginButton />
-        <MobileMenu walletButton={props.walletButton} polkaConnectButton={props.polkaConnectButton}/>
+        <MobileMenu
+          walletButton={props.walletButton}
+          polkaConnectButton={props.polkaConnectButton}
+        />
       </MobileMenuWrapper>
     </Flex>
   );
 };
 
-const MobileMenu:React.FC<{ walletButton: React.FC; polkaConnectButton: React.FC}> = (props) => {
+const MobileMenu: React.FC<{
+  walletButton: React.FC;
+  polkaConnectButton: React.FC;
+}> = (props) => {
   return (
     <Menu>
       <MenuButton
         as={StyledIconButton}
-        aria-label='Options'
+        aria-label="Options"
         icon={<HamburgerIcon />}
-        variant='outline'
+        variant="outline"
       />
       <MenuList>
         <MenuItem>
@@ -92,21 +110,20 @@ const MobileMenu:React.FC<{ walletButton: React.FC; polkaConnectButton: React.FC
           <props.polkaConnectButton />
         </MenuItem>
       </MenuList>
-  </Menu>
-  )
-}
-
+    </Menu>
+  );
+};
 
 const StyledIconButton = styled(IconButton)`
   padding: 23px;
-`
+`;
 const DesktopMenuWrapper = styled.div`
   display: none;
   @media screen and (min-width: 1100px) {
     display: flex;
     align-items: center;
   }
-`
+`;
 
 const MobileMenuWrapper = styled.div`
   display: flex;
@@ -117,4 +134,4 @@ const MobileMenuWrapper = styled.div`
   @media screen and (min-width: 1100px) {
     display: none;
   }
-`
+`;

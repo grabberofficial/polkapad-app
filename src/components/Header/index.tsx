@@ -141,7 +141,11 @@ const Header = () => {
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
 
   return (
-    <HeaderComponent walletButton={ConnectWalletButton} polkaConnectButton={PolkaConnentBtn} loginButton={isLoggedIn ? AccountButton : LoginButton}/>
+    <HeaderComponent
+      walletButton={ConnectWalletButton}
+      polkaConnectButton={PolkaConnentBtn}
+      loginButton={isLoggedIn ? AccountButton : LoginButton}
+    />
   );
 };
 
