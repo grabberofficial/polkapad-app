@@ -1,15 +1,18 @@
-import React, { useReducer, useContext } from 'react';
+import React, { useReducer, useContext, useEffect } from 'react';
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 
 import keyring from '@polkadot/ui-keyring';
 
+import { useConnectPolka, POLKA_CONNECT_KEY } from '../hooks/useConnectPolka';
+
 const connectedSocket = 'wss://kusama-rpc.polkadot.io';
 const RPC = {};
 const CUSTOM_TYPES = {};
-const DEVELOPMENT_KEYRING = false;
+export const DEVELOPMENT_KEYRING = false;
 const APP_NAME = 'Polkapad';
+export const CONNECTED_ACCOUNTS_STORAGE = 'connected_accounts_polka';
 
 console.log(`Connected socket: ${connectedSocket}`);
 
@@ -91,13 +94,23 @@ const loadAccounts = (state, dispatch) => {
     dispatch({ type: 'LOAD_KEYRING' });
     try {
       await polkadotExtensionDapp.web3Enable(APP_NAME);
-      let allAccounts = await polkadotExtensionDapp.web3Accounts();
-      allAccounts = allAccounts.map(({ address, meta }) => ({
-        address,
-        meta: { ...meta, name: `${meta.name} (${meta.source})` },
-      }));
-      keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
-      console.log('allAccounts', allAccounts);
+      const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
+      if (savedAccounts) {
+        const accounts = JSON.parse(savedAccounts);
+        keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, accounts);
+        dispatch({ type: 'SET_KEYRING', payload: keyring });
+      } else {
+        let allAccounts = await polkadotExtensionDapp.web3Accounts();
+        allAccounts = allAccounts.map(({ address, meta }) => ({
+          address,
+          meta: { ...meta, name: `${meta.name} (${meta.source})` },
+        }));
+        localStorage.setItem(
+          CONNECTED_ACCOUNTS_STORAGE,
+          JSON.stringify(allAccounts),
+        );
+        keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
+      }
       dispatch({ type: 'SET_KEYRING', payload: keyring });
     } catch (e) {
       console.error(e);
@@ -128,11 +141,25 @@ const SubstrateContextProvider = (props) => {
   });
 
   const [state, dispatch] = useReducer(reducer, initState);
+  // const { connectToPolka } = useConnectPolka();
 
   if (typeof window !== 'undefined') {
     connect(state, dispatch);
     loadAccounts(state, dispatch);
   }
+
+  const { connectToPolka } = useConnectPolka();
+
+  useEffect(() => {
+    // const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
+    // let accounts;
+    // if (savedAccounts) accounts = JSON.parse(savedAccounts);
+    // && accounts
+    const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
+    if (shouldConnectPolka && state.keyring && state.keyringState === 'READY') {
+      // connectToPolka();
+    }
+  }, [state, connectToPolka]);
 
   return (
     <SubstrateContext.Provider value={state}>

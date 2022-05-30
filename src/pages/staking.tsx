@@ -85,7 +85,7 @@ const IndexPage = () => {
           backgroundImage="url(http://localhost:8080/images/staking_bg.png)"
           backgroundRepeat="no-repeat"
           backgroundPosition="bottom"
-        // backgroundPositionY="bottom"
+          // backgroundPositionY="bottom"
         >
           <Heading marginBottom={75} withUnderline>
             Allocation
@@ -166,7 +166,7 @@ const IndexPage = () => {
                 <Text color="#49C7DA" as="span">
                   Stake
                 </Text>{' '}
-                xava
+                PLPD
               </Text>
             </GridItem>
             <GridItem rowSpan={1} colSpan={2}>
@@ -247,7 +247,7 @@ const IndexPage = () => {
                 <Text color="#49C7DA" as="span">
                   WITHDRAW
                 </Text>{' '}
-                xava
+                PLPD
               </Text>
             </GridItem>
             <GridItem rowSpan={1} colSpan={2}>
@@ -699,7 +699,7 @@ const IndexPage = () => {
                           fontWeight="600"
                           fontSize="14px"
                           lineHeight="21px"
-                        // color="#303030"
+                          // color="#303030"
                         >
                           {title}
                         </Box>

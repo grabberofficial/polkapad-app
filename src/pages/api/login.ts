@@ -46,6 +46,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         token: token,
         id: '',
         name: '',
+        kycStatus: '',
       };
       req.session.user = user;
       await req.session.save();
@@ -86,6 +87,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         token: token,
         id: '',
         name: '',
+        kycStatus: '',
       };
       req.session.user = user;
       await req.session.save();
