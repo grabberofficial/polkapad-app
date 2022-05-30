@@ -33,7 +33,7 @@ import { KYCIframe } from '@/modules/profile/KYCIframe';
 import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
 import fetchJson from '@/lib/fetchJson';
-import { Footer } from '@/components/footer';
+import { Footer, FooterWrapper } from '@/components/footer';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -274,7 +274,9 @@ const ProfilePage = () => {
         {/* TabContent */}
         {tabContent[selectedTab]}
       </Flex>
-      <Footer />
+      <FooterWrapper>
+        <Footer />
+      </FooterWrapper>
     </Flex>
   );
 };

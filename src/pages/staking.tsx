@@ -20,7 +20,7 @@ import { Spacer } from '@/modules/index/Spacer';
 import { Button } from '@/components/Button';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { css, Global } from '@emotion/react';
-import { Footer } from '@/components/footer';
+import { Footer, FooterWrapper } from '@/components/footer';
 
 const faq = [
   {
@@ -736,7 +736,9 @@ const IndexPage = () => {
           </Accordion>
         </Flex>
       </Flex>
-      <Footer />
+      <FooterWrapper>
+        <Footer />
+      </FooterWrapper>
     </>
   );
 };

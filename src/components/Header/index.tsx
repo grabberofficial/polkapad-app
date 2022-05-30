@@ -8,7 +8,6 @@ import { useCallback, useContext, useMemo } from 'react';
 
 import { Button } from '../Button';
 import fetchJson from '@/lib/fetchJson';
-import { HeaderItem } from './components/HeaderItems/HeaderItem';
 import { Header as HeaderComponent } from './Header';
 
 import { FaUserAlt } from 'react-icons/fa';
@@ -142,21 +141,12 @@ const Header = () => {
 
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
 
-  const headerButtons = useMemo(
-    () => [
-      ConnectWalletButton,
-      PolkaConnentBtn,
-      isLoggedIn ? AccountButton : LoginButton,
-    ],
-    [isLoggedIn],
-  );
-
   return (
-    <HeaderComponent right={headerButtons}>
-      <HeaderItem url="/">Launchpad</HeaderItem>
-      <HeaderItem url="/locker">Locker</HeaderItem>
-      <HeaderItem url="/staking">Staking</HeaderItem>
-    </HeaderComponent>
+    <HeaderComponent
+      walletButton={ConnectWalletButton}
+      polkaConnectButton={PolkaConnentBtn}
+      loginButton={isLoggedIn ? AccountButton : LoginButton}
+    />
   );
 };
 
