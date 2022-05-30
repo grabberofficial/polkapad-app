@@ -1,27 +1,152 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  Flex,
-  Tabs,
-  Menu,
-  MenuItem,
-  IconButton,
-  MenuButton,
-  MenuList,
-} from '@chakra-ui/react';
+import { Flex, Tabs, IconButton } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { Image } from '@chakra-ui/react';
 import { TabList } from './components/HeaderItems/HeaderItems.style';
-import { useRouter } from 'next/router';
 import { RightContainer } from './Header.style';
 import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
+import useUser from '@/lib/hooks/useUser';
+import { shortenIfAddress } from '@usedapp/core';
+import { formatEther } from '@ethersproject/units';
+
+import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useCallback, useContext, useMemo } from 'react';
+
+import { Button } from '../Button';
+import fetchJson from '@/lib/fetchJson';
+
+import { FaUserAlt } from 'react-icons/fa';
+import { shortenPolkaAddress } from '@/lib/utils';
+import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
+import { UserContext } from '@/shared/providers/userContext';
+
+export const ConnectWalletButton: React.FC = () => {
+  const { disconnectFromBSC, connenctToBSC, balance, connected, account } =
+    useConnectBSC();
+
+  return (
+    <>
+      {connected && account && (
+        <Button
+          onClick={disconnectFromBSC}
+          variant="secondary"
+          fixedWidth={220}
+          padding={'0px 32px'}
+        >
+          {balance &&
+            parseFloat(formatEther(balance)).toFixed(3) + ' BNB' + ' | '}
+          {shortenIfAddress(account)}
+        </Button>
+      )}
+      {!account && (
+        <Button onClick={connenctToBSC} variant="secondary" fixedWidth={220}>
+          Connect BSC
+        </Button>
+      )}
+    </>
+  );
+};
+
+export const PolkaConnentBtn = () => {
+  const { polka } = useContext(UserContext);
+  const { balance, account, connectToPolka } = useConnectPolka();
+
+  const hasData = (balance && account) || (polka?.address && polka?.balance);
+
+  return (
+    <>
+      {hasData && (
+        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
+          {balance && parseFloat(formatEther(balance)).toFixed(3)}
+          {polka.balance && polka.balance}
+          {' DOT  | '}
+          {shortenPolkaAddress(account || polka.address)}
+        </Button>
+      )}
+      {!hasData && (
+        <Button onClick={connectToPolka} variant="secondary" fixedWidth={220}>
+          Connect Polkadot
+        </Button>
+      )}
+    </>
+  );
+};
+
+export const LoginButton: React.FC = () => {
+  const router = useRouter();
+
+  return (
+    <Button
+      variant="primary"
+      iconPlacement="left"
+      icon={<Icon as={FaUserAlt} height="21px" width="21px" color="white" />}
+      fixedWidth={152}
+      withIconDivider
+      onClick={() => router.push('/auth/login')}
+    >
+      Log in
+    </Button>
+  );
+};
+
+export const AccountButton: React.FC = () => {
+  const { mutateUser } = useUser();
+  const router = useRouter();
+
+  const logout = useCallback(async () => {
+    mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
+    router.push('/');
+  }, [mutateUser, router]);
+
+  return (
+    <Menu gutter={30}>
+      <MenuButton
+        as={Button}
+        leftIcon={
+          <Icon as={FaUserAlt} height="21px" width="21px" color="#49C7DA" />
+        }
+        _active={{ background: 'white' }}
+      >
+        Account
+      </MenuButton>
+      <MenuList borderRadius="4px" background="#F6F5F5" border="none">
+        <MenuItem
+          color="#5B5B5B"
+          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
+          paddingLeft="20px"
+          onClick={() => router.push('/profile')}
+        >
+          My account
+        </MenuItem>
+        <MenuItem
+          color="#5B5B5B"
+          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
+          paddingLeft="20px"
+          onClick={() => router.push('/profile?kyc=true')}
+        >
+          KYC Verification
+        </MenuItem>
+        <MenuItem
+          color="#5B5B5B"
+          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
+          paddingLeft="20px"
+          onClick={logout}
+        >
+          Logout
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+};
+
 export const Header: React.FC<{
-  walletButton: React.FC;
-  polkaConnectButton: React.FC;
-  loginButton: React.FC;
+  isLoggedIn: boolean;
 }> = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
@@ -65,26 +190,20 @@ export const Header: React.FC<{
           </TabList>
         </Tabs>
         <RightContainer>
-          <props.walletButton />
-          <props.polkaConnectButton />
-          <props.loginButton />
+          <ConnectWalletButton />
+          <PolkaConnentBtn />
+          {props.isLoggedIn ? <AccountButton /> : <LoginButton />}
         </RightContainer>
       </DesktopMenuWrapper>
       <MobileMenuWrapper>
-        <props.loginButton />
-        <MobileMenu
-          walletButton={props.walletButton}
-          polkaConnectButton={props.polkaConnectButton}
-        />
+        {props.isLoggedIn ? <AccountButton /> : <LoginButton />}
+        <MobileMenu />
       </MobileMenuWrapper>
     </Flex>
   );
 };
 
-const MobileMenu: React.FC<{
-  walletButton: React.FC;
-  polkaConnectButton: React.FC;
-}> = (props) => {
+const MobileMenu: React.FC = (props) => {
   return (
     <Menu>
       <MenuButton
@@ -102,12 +221,6 @@ const MobileMenu: React.FC<{
         </MenuItem>
         <MenuItem>
           <Link href="/staking">Staking</Link>
-        </MenuItem>
-        <MenuItem>
-          <props.walletButton />
-        </MenuItem>
-        <MenuItem>
-          <props.polkaConnectButton />
         </MenuItem>
       </MenuList>
     </Menu>
