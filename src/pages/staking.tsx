@@ -736,7 +736,9 @@ const IndexPage = () => {
           </Accordion>
         </Flex>
       </Flex>
-      <FooterWrapper><Footer /></FooterWrapper>
+      <FooterWrapper>
+        <Footer />
+      </FooterWrapper>
     </>
   );
 };
