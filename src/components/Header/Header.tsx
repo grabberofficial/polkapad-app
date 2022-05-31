@@ -85,7 +85,7 @@ export const LoginButton: React.FC = () => {
     <Button
       variant="primary"
       iconPlacement="left"
-      icon={<Icon as={FaUserAlt} height="21px" width="21px" color="white" />}
+      icon={<Icon as={FaUserAlt} height={["14px","21px"]} width={["14px","21px"]} color="white" />}
       fixedWidth={152}
       withIconDivider
       onClick={() => router.push('/auth/login')}
@@ -178,7 +178,8 @@ export const Header: React.FC<{
         <Image
           src="/images/logo_header.png"
           alt="Polkapad"
-          padding={'24px 0'}
+          padding={['24px 10px 24px 0', '24px 0']}
+          width={['120px','170px']}
           cursor="pointer"
         />
       </Link>
@@ -205,6 +206,8 @@ export const Header: React.FC<{
 };
 
 const MobileMenu: React.FC = () => {
+  const router = useRouter();
+
   return (
     <Menu>
       <MenuButton
@@ -212,17 +215,12 @@ const MobileMenu: React.FC = () => {
         aria-label="Options"
         icon={<HamburgerIcon />}
         variant="outline"
+        
       />
       <MenuList>
-        <MenuItem>
-          <Link href="/">Launchpad</Link>
-        </MenuItem>
-        <MenuItem>
-          <Link href="/locker">Locker</Link>
-        </MenuItem>
-        <MenuItem>
-          <Link href="/staking">Staking</Link>
-        </MenuItem>
+        <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>
+        <MenuItem onClick={() => router.push('/locker')}>Locker</MenuItem>
+        <MenuItem onClick={() => router.push('/staking')}>Staking</MenuItem>
       </MenuList>
     </Menu>
   );
@@ -230,6 +228,12 @@ const MobileMenu: React.FC = () => {
 
 const StyledIconButton = styled(IconButton)`
   padding: 23px;
+  width: 14px;
+  height: 14px;
+  @media screen and (min-width: 30em) {
+    width: inherit;
+    height: inherit;
+  }
 `;
 const DesktopMenuWrapper = styled.div`
   display: none;

@@ -114,7 +114,7 @@ const LockerPage = () => {
     return (
       <Flex
         alignItems={'center'}
-        height={'106px'}
+        minHeight={'106px'}
         marginTop={'10px'}
         borderRadius={'4px'}
         padding={'10px'}
@@ -123,7 +123,7 @@ const LockerPage = () => {
         <Circle size="25px" fontSize="13px" bg="#49C7DA" color="white">
           <Text>{index + 1}.</Text>
         </Circle>
-        <Flex marginLeft={'20px'} flexDirection={'column'}>
+        <Flex marginLeft={'20px'} marginRight={'10px'} flexDirection={'column'}>
           <Text fontSize="14px" fontWeight={500}>
             {step.title}
           </Text>
@@ -162,8 +162,8 @@ const LockerPage = () => {
         <Flex
           bg="#E5E5E5"
           flexDirection={'column'}
-          padding={'76px 130px 0 115px'}
-          height="1200px"
+          padding={['40px 16px 40px', '40px 16px 40px', '76px 130px 0 115px']}
+          minHeight="1200px"
         >
           <Heading marginBottom={75} withUnderline>
             Step by step guide
@@ -185,19 +185,21 @@ const LockerPage = () => {
                   <Tab
                     borderRadius={'4px'}
                     _selected={{ color: 'white', bg: '#49C7DA' }}
+                    fontSize={['10px','12px',' inherit']}
                   >
                     BNB Smart Chain
                   </Tab>
                   <Tab
                     borderRadius={'4px'}
                     _selected={{ color: 'white', bg: '#49C7DA' }}
+                    fontSize={['10px','12px',' inherit']}
                   >
                     Kusama
                   </Tab>
-                  <Tab isDisabled _disabled={{ color: 'gray' }}>
+                  <Tab isDisabled _disabled={{ color: 'gray' }} fontSize={['10px','12px',' inherit']}>
                     Mooriver
                   </Tab>
-                  <Tab isDisabled _disabled={{ color: 'gray' }}>
+                  <Tab isDisabled _disabled={{ color: 'gray' }} fontSize={['10px','12px',' inherit']}>
                     Shiden
                   </Tab>
                 </TabList>
@@ -216,7 +218,7 @@ const LockerPage = () => {
           </Tabs>
         </Flex>
         {/* TODO: Extract to block */}
-        <Flex basis="40%" flexDirection={'column'} padding="52px 30px 59px">
+        <Flex basis="40%" flexDirection={'column'} padding={["40px 16px", "40px 16px", "52px 30px 59px"]}>
           <Heading marginBottom={75}>Locked Amount</Heading>
           <Text marginBottom="30px">
             Funds can be locked only at sale event. There is no way to put it
