@@ -100,10 +100,10 @@ export const AccountButton: React.FC = () => {
   const router = useRouter();
 
   const logout = useCallback(async () => {
-    mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
-    // router.push('/');
+    await mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
+
     window.location.href = '/';
-  }, [mutateUser, router]);
+  }, [mutateUser]);
 
   return (
     <Menu gutter={30}>
