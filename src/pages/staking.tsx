@@ -84,7 +84,7 @@ const IndexPage = () => {
           basis={'46%'}
           bg="#E5E5E5"
           flexDirection={'column'}
-          padding={'76px 130px 0 115px'}
+          padding={['40px 16px 40px', '40px 16px 40px', '76px 130px 0 115px']}
           height="100%"
           backgroundImage="url(/images/staking_bg.png)"
           backgroundRepeat="no-repeat"
