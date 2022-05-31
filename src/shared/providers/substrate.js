@@ -39,7 +39,6 @@ const INIT_STATE = {
 // Reducer function for `useReducer`
 
 const reducer = (state, action) => {
-  // console.log(action.type, { action });
   switch (action.type) {
     case 'CONNECT_INIT':
       return { ...state, apiState: 'CONNECT_INIT' };
@@ -107,8 +106,8 @@ const loadAccounts = (state, dispatch) => {
     try {
       await polkadotExtensionDapp.web3Enable(APP_NAME);
       const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
-      if (savedAccounts) {
-        const accounts = JSON.parse(savedAccounts);
+      const accounts = JSON.parse(savedAccounts);
+      if (accounts && accounts.length > 0) {
         keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, accounts);
         dispatch({ type: 'SET_KEYRING', payload: keyring });
       } else {
@@ -154,25 +153,29 @@ const SubstrateContextProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initState);
   const userContext = useContext(UserContext);
 
-  if (typeof window !== 'undefined') {
-    connect(state, dispatch);
-    loadAccounts(state, dispatch);
-  }
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      connect(state, dispatch);
+      loadAccounts(state, dispatch);
+    }
+  }, []);
 
   const connectToPolka = useCallback(async () => {
+    if (!state.keyring || !state.api) return;
     const keyringOptions = state.keyring.getPairs().map((account) => ({
       key: account.address,
       value: account.address,
       text: account.meta.name.toUpperCase(),
       icon: 'user',
     }));
-    dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
-
-    const {
-      data: { free: polkaBalance },
-    } = await state.api.query.system.account(keyringOptions[0].value);
-    dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
-    localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+    if (keyringOptions.length > 0) {
+      dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
+      const {
+        data: { free: polkaBalance },
+      } = await state.api.query.system.account(keyringOptions[0].value);
+      dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+      localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+    }
   }, [state]);
 
   useEffect(() => {
@@ -203,7 +206,6 @@ const SubstrateContextProvider = (props) => {
       state.connectToPolka !== null &&
       state.account === null
     ) {
-      console.log('connect call');
       state.connectToPolka();
     }
   }, [
