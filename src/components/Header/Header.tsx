@@ -205,6 +205,8 @@ export const Header: React.FC<{
 };
 
 const MobileMenu: React.FC = () => {
+  const router = useRouter();
+
   return (
     <Menu>
       <MenuButton
@@ -214,15 +216,9 @@ const MobileMenu: React.FC = () => {
         variant="outline"
       />
       <MenuList>
-        <MenuItem>
-          <Link href="/">Launchpad</Link>
-        </MenuItem>
-        <MenuItem>
-          <Link href="/locker">Locker</Link>
-        </MenuItem>
-        <MenuItem>
-          <Link href="/staking">Staking</Link>
-        </MenuItem>
+        <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>
+        <MenuItem onClick={() => router.push('/locker')}>Locker</MenuItem>
+        <MenuItem onClick={() => router.push('/staking')}>Staking</MenuItem>
       </MenuList>
     </Menu>
   );
