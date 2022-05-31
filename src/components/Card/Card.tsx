@@ -42,7 +42,7 @@ export const Card: React.FC<{ dark?: boolean }> = ({ children, ...props }) => {
       <Flex
         width="400px"
         height="161px"
-        background={`linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(http://localhost:8080/images/f64181f6ce31cc452d8eb8b7b502e2cb.png)`}
+        background={`linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(/images/f64181f6ce31cc452d8eb8b7b502e2cb.png)`}
         flexDirection="column"
         alignItems="flex-start"
       >
