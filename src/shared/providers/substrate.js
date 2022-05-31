@@ -1,12 +1,12 @@
-import React, { useReducer, useContext, useEffect } from 'react';
+import React, { useReducer, useContext, useEffect, useCallback } from 'react';
 import jsonrpc from '@polkadot/types/interfaces/jsonrpc';
-
 import { ApiPromise, WsProvider } from '@polkadot/api';
-
 import keyring from '@polkadot/ui-keyring';
+import { formatEther } from 'ethers/lib/utils';
 
-import { useConnectPolka, POLKA_CONNECT_KEY } from '../hooks/useConnectPolka';
+import { UserContext } from '../providers/userContext';
 
+const POLKA_CONNECT_KEY = 'shouldConnectPolka';
 const connectedSocket = 'wss://kusama-rpc.polkadot.io';
 const RPC = {};
 const CUSTOM_TYPES = {};
@@ -28,13 +28,18 @@ const INIT_STATE = {
   api: null,
   apiError: null,
   apiState: null,
+  // isReady: false,
+  // isConnected: false,
+  balance: null,
+  account: null,
+  connectToPolka: null,
 };
 
 ///
 // Reducer function for `useReducer`
 
 const reducer = (state, action) => {
-  console.log('Hye, thanks for looking into console');
+  // console.log(action.type, { action });
   switch (action.type) {
     case 'CONNECT_INIT':
       return { ...state, apiState: 'CONNECT_INIT' };
@@ -56,6 +61,12 @@ const reducer = (state, action) => {
 
     case 'KEYRING_ERROR':
       return { ...state, keyring: null, keyringState: 'ERROR' };
+    case 'LOAD_CONNECT_CALLBACK':
+      return { ...state, connectToPolka: action.payload };
+    case 'SET_BALANCE':
+      return { ...state, balance: action.payload };
+    case 'SET_ACCOUNT':
+      return { ...state, account: action.payload };
 
     default:
       throw new Error(`Unknown type: ${action.type}`);
@@ -141,25 +152,68 @@ const SubstrateContextProvider = (props) => {
   });
 
   const [state, dispatch] = useReducer(reducer, initState);
-  // const { connectToPolka } = useConnectPolka();
+  const userContext = useContext(UserContext);
 
   if (typeof window !== 'undefined') {
     connect(state, dispatch);
     loadAccounts(state, dispatch);
   }
 
-  const { connectToPolka } = useConnectPolka();
+  const connectToPolka = useCallback(async () => {
+    const keyringOptions = state.keyring.getPairs().map((account) => ({
+      key: account.address,
+      value: account.address,
+      text: account.meta.name.toUpperCase(),
+      icon: 'user',
+    }));
+    dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
+
+    const {
+      data: { free: polkaBalance },
+    } = await state.api.query.system.account(keyringOptions[0].value);
+    dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+    localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+  }, [state]);
 
   useEffect(() => {
-    // const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
-    // let accounts;
-    // if (savedAccounts) accounts = JSON.parse(savedAccounts);
-    // && accounts
-    const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
-    if (shouldConnectPolka && state.keyring && state.keyringState === 'READY') {
-      // connectToPolka();
+    if (state.apiState === 'READY' && state.connectToPolka === null)
+      dispatch({ type: 'LOAD_CONNECT_CALLBACK', payload: connectToPolka });
+  }, [state.apiState, state.connectToPolka, connectToPolka]);
+
+  // Set userContext when ready
+  useEffect(() => {
+    if (state.account && state.balance && !userContext?.polka?.address) {
+      userContext.setContext({
+        ...userContext,
+        polka: {
+          address: state.account,
+          balance: parseFloat(formatEther(state.balance)).toFixed(3),
+        },
+      });
     }
-  }, [state, connectToPolka]);
+  }, [state.account, state.balance, userContext]);
+
+  // Autoconnect to polka
+  useEffect(() => {
+    const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
+    if (
+      shouldConnectPolka === 'true' &&
+      state.keyring &&
+      state.keyringState === 'READY' &&
+      state.connectToPolka !== null &&
+      state.account === null
+    ) {
+      console.log('connect call');
+      state.connectToPolka();
+    }
+  }, [
+    state.account,
+    state.keyring,
+    state.keyringState,
+    state.connectToPolka,
+    state.connectToPolka,
+    state,
+  ]);
 
   return (
     <SubstrateContext.Provider value={state}>

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, Fragment } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
-import { sessionOptions } from '@/lib/session';
 import {
   Flex,
   FormControl,
@@ -13,8 +12,7 @@ import {
   Text,
   Image,
 } from '@chakra-ui/react';
-import { withIronSessionSsr } from 'iron-session/next';
-import { User } from './api/user';
+import dynamic from 'next/dynamic';
 
 import {
   BsFillCheckCircleFill,
@@ -268,27 +266,6 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
-
-export const getServerSideProps = withIronSessionSsr(async function ({
-  req,
-  res,
-}) {
-  const user = req.session.user;
-
-  if (user === undefined) {
-    res.setHeader('location', '/auth/login');
-    res.statusCode = 302;
-    res.end();
-    return {
-      props: {
-        user: { isLoggedIn: false, email: '', token: '' } as User,
-      },
-    };
-  }
-
-  return {
-    props: { user: req.session.user },
-  };
-},
-sessionOptions);
+export default dynamic(() => Promise.resolve(ProfilePage), {
+  ssr: false,
+});

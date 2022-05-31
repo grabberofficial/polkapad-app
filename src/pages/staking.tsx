@@ -691,7 +691,7 @@ const IndexPage = () => {
                 border="none"
                 backgroundColor="#F6F5F5"
                 key={index}
-                d="inline-block"
+                display="inline-block"
                 w="100%"
               >
                 {({ isExpanded }) => (
