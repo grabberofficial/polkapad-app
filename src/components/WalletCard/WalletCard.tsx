@@ -6,8 +6,8 @@ import { Button } from '@/components/Button';
 import { UserContext } from '@/shared/providers/userContext';
 import fetchJson from '@/lib/fetchJson';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
 import { shortenPolkaAddress } from '@/lib/utils';
+import { useSubstrate } from '@/shared/providers/substrate';
 
 const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
   type = 'eth',
@@ -20,7 +20,7 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
   const [walletAddress, setWalletAddress] = React.useState('');
 
   const { connenctToBSC } = useConnectBSC();
-  const { connectToPolka } = useConnectPolka();
+  const { account: polkaAccount, connectToPolka } = useSubstrate();
 
   useEffect(() => {
     if (wallets.length !== 0) {
@@ -38,12 +38,12 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
       }
     }
     if (type === 'polka') {
-      setWalletConnected(!!userContext.polka?.address);
-      if (userContext.polka?.address) {
-        setWalletAddress(userContext.polka?.address);
+      setWalletConnected(!!polkaAccount);
+      if (polkaAccount) {
+        setWalletAddress(polkaAccount);
       }
     }
-  }, [type, userContext]);
+  }, [type, polkaAccount, userContext.bsc?.address]);
 
   const connectWallet = useCallback(async () => {
     if (type === 'eth') {

@@ -23,8 +23,9 @@ import fetchJson from '@/lib/fetchJson';
 import { FaUserAlt } from 'react-icons/fa';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
+
 import { UserContext } from '@/shared/providers/userContext';
+import { useSubstrate } from '@/shared/providers/substrate';
 
 export const ConnectWalletButton: React.FC = () => {
   const { disconnectFromBSC, connenctToBSC, balance, connected, account } =
@@ -55,7 +56,7 @@ export const ConnectWalletButton: React.FC = () => {
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka } = useConnectPolka();
+  const { balance, account, connectToPolka } = useSubstrate();
 
   const hasData = (balance && account) || (polka?.address && polka?.balance);
 
