@@ -34,6 +34,7 @@ const INIT_STATE = {
 // Reducer function for `useReducer`
 
 const reducer = (state, action) => {
+  console.log('Hye, thanks for looking into console');
   switch (action.type) {
     case 'CONNECT_INIT':
       return { ...state, apiState: 'CONNECT_INIT' };
