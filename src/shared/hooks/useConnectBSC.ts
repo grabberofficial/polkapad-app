@@ -19,10 +19,6 @@ export const useConnectBSC = () => {
   const connenctToBSC = useCallback(async () => {
     await activateBrowserWallet();
 
-    console.log({
-      chainId,
-      BSCChainId: BSC.chainId,
-    });
     if (chainId !== BSC.chainId) {
       await window.ethereum.request({
         method: 'wallet_addEthereumChain',

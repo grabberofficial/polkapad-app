@@ -25,16 +25,11 @@ const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
 
       const verificationUrl = await verificationUrlRes.text();
 
-      console.log({
-        verificationUrl,
-      });
-
       res.json({
         iframeUrl: verificationUrl,
       });
-    } catch (e) {
-      console.error(e);
-    }
+      // eslint-disable-next-line no-empty
+    } catch (e) {}
   } else {
     res.json({
       iframeUrl: null,

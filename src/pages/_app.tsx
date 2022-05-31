@@ -13,9 +13,6 @@ const App = (props: AppProps): JSX.Element => {
     <SWRConfig
       value={{
         fetcher: fetchJson,
-        onError: (err) => {
-          console.error(err);
-        },
       }}
     >
       <MainLayout>

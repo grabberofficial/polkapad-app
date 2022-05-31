@@ -36,8 +36,6 @@ const MagicLinkPage = () => {
             // case '':
           }
         }
-
-        console.log({ error });
       }
     },
     [mutateUser],

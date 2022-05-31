@@ -14,7 +14,7 @@ export const DEVELOPMENT_KEYRING = false;
 const APP_NAME = 'Polkapad';
 export const CONNECTED_ACCOUNTS_STORAGE = 'connected_accounts_polka';
 
-console.log(`Connected socket: ${connectedSocket}`);
+// console.log(`Connected socket: ${connectedSocket}`);
 
 ///
 // Initial state for `useReducer`
@@ -113,7 +113,6 @@ const loadAccounts = (state, dispatch) => {
       }
       dispatch({ type: 'SET_KEYRING', payload: keyring });
     } catch (e) {
-      console.error(e);
       dispatch({ type: 'KEYRING_ERROR' });
     }
   };

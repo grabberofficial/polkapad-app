@@ -68,9 +68,7 @@ const ChangePasswordPage = () => {
             }),
           },
         );
-        console.log({
-          res,
-        });
+
         res.message === 'ok' && setIsSent(true);
       } catch (error) {
         if (error instanceof FetchError) {
@@ -88,7 +86,6 @@ const ChangePasswordPage = () => {
             // case '':
           }
         }
-        console.error({ error });
       }
     },
     [router, setError],

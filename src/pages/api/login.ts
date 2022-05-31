@@ -28,18 +28,11 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       const isCreated = tokenRes.status === 201;
 
       if (tokenRes.status !== 200 && !isCreated) {
-        console.log({
-          status: tokenRes.status,
-        });
         const error = await tokenRes.json();
         throw error;
       }
 
       const token = await tokenRes.text();
-
-      console.log({
-        token,
-      });
 
       const userRes: {
         id: string;

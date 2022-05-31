@@ -82,7 +82,7 @@ const ProfilePage = () => {
     if (typeof window !== 'undefined') {
       const kyc = await fetch('/api/kyc').then((data) => data.json());
 
-      window.location.href = kyc.iframeUrl;
+      window.open(kyc.iframeUrl);
     }
   }, []);
 
@@ -252,32 +252,7 @@ const ProfilePage = () => {
                   fontSize="14px"
                   lineHeight="21px"
                 >
-                  <Icon
-                    as={
-                      index === 0 ||
-                      (index === 2 &&
-                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                      (index === 1 && wallets && wallets.length === 2)
-                        ? BsFillCheckCircleFill
-                        : BsFillExclamationCircleFill
-                    }
-                    color={
-                      index === 0 ||
-                      (index === 2 &&
-                        user?.kycStatus === KycStatusTypes.ACCEPTED) ||
-                      (index === 1 && wallets && wallets.length === 2)
-                        ? '#49C7DA'
-                        : '#FFCC15'
-                    }
-                  />
-                  <Text
-                    color={index === selectedTab ? '#49C7DA' : '#303030'}
-                    fontWeight="600"
-                    fontSize="14px"
-                    lineHeight="21px"
-                  >
-                    {tab}
-                  </Text>
+                  {tab}
                 </Text>
               </Flex>
             ))}

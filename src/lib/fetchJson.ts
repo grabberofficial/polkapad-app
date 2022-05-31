@@ -14,17 +14,9 @@ export default async function fetchJson<JSON = unknown>(
         'Content-Type': 'application/json',
       });
 
-  console.log({
-    headers,
-  });
-
   const response = await fetch(input, {
     ...init,
     headers: headers,
-  });
-
-  console.log({
-    response,
   });
 
   // if the server replies, there's always some data in json
@@ -33,9 +25,8 @@ export default async function fetchJson<JSON = unknown>(
   let data;
   try {
     data = await response.json();
-  } catch (e) {
-    console.log('e -->', e);
-  }
+    // eslint-disable-next-line no-empty
+  } catch {}
   // response.ok is true when res.status is 2xx
   // https://developer.mozilla.org/en-US/docs/Web/API/Response/ok
   if (response.ok) {

@@ -55,9 +55,6 @@ const RestorePasswordPage = () => {
           },
         );
         res.message === 'ok' && setIsSent(true);
-        console.log({
-          res,
-        });
       } catch (error) {
         if (error instanceof FetchError) {
           switch (error.data.type) {
@@ -71,7 +68,6 @@ const RestorePasswordPage = () => {
             // case '':
           }
         }
-        console.error({ error });
       }
     },
     [setError],

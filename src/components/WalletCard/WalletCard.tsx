@@ -62,10 +62,8 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
     if (type === 'polka') {
       setWalletAddress(userContext.polka?.address);
     }
-    const createdWallet: Array<{
-      name: string;
-      value: string;
-    }> = await fetchJson(
+
+    await fetchJson(
       'https://app.polkapadapis.codes/wallets',
       {
         method: 'POST',
@@ -76,9 +74,7 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
       },
       userContext.user?.token,
     );
-    console.log({
-      createdWallet,
-    });
+
     setVerified(true);
   }, [type, userContext, walletAddress]);
 

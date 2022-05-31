@@ -47,20 +47,14 @@ const CodeSendPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
-        const res: { code: string; message: string } = await fetchJson(
-          'https://app.polkapadapis.codes/auth/code/send',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
-          },
-        );
-        console.log('res --->', {
-          res,
+        await fetchJson('https://app.polkapadapis.codes/auth/code/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
         });
+
         setIsSent(true);
       } catch (error) {
-        console.log('errror --->', error);
         if (error instanceof FetchError) {
           switch (error.data.type) {
             case ExceptionTypeEnum.NotFound:
@@ -73,7 +67,6 @@ const CodeSendPage = () => {
             // case '':
           }
         }
-        console.error({ error });
       }
     },
     [setError],

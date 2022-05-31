@@ -80,8 +80,6 @@ const LoginPage = () => {
             // case '':
           }
         }
-
-        console.log({ error });
       }
     },
     [mutateUser, setError],
