@@ -88,8 +88,8 @@ export const LoginButton: React.FC = () => {
       icon={
         <Icon
           as={FaUserAlt}
-          height={["14px","21px"]}
-          width={["14px","21px"]}
+          height={['14px', '21px']}
+          width={['14px', '21px']}
           color="white"
         />
       }
@@ -186,7 +186,7 @@ export const Header: React.FC<{
           src="/images/logo_header.png"
           alt="Polkapad"
           padding={['24px 10px 24px 0', '24px 0']}
-          width={['120px','170px']}
+          width={['120px', '170px']}
           cursor="pointer"
         />
       </Link>
@@ -222,7 +222,6 @@ const MobileMenu: React.FC = () => {
         aria-label="Options"
         icon={<HamburgerIcon />}
         variant="outline"
-
       />
       <MenuList>
         <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>

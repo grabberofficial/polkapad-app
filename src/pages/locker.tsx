@@ -185,21 +185,29 @@ const LockerPage = () => {
                   <Tab
                     borderRadius={'4px'}
                     _selected={{ color: 'white', bg: '#49C7DA' }}
-                    fontSize={['10px','12px',' inherit']}
+                    fontSize={['10px', '12px', ' inherit']}
                   >
                     BNB Smart Chain
                   </Tab>
                   <Tab
                     borderRadius={'4px'}
                     _selected={{ color: 'white', bg: '#49C7DA' }}
-                    fontSize={['10px','12px',' inherit']}
+                    fontSize={['10px', '12px', ' inherit']}
                   >
                     Kusama
                   </Tab>
-                  <Tab isDisabled _disabled={{ color: 'gray' }} fontSize={['10px','12px',' inherit']}>
+                  <Tab
+                    isDisabled
+                    _disabled={{ color: 'gray' }}
+                    fontSize={['10px', '12px', ' inherit']}
+                  >
                     Mooriver
                   </Tab>
-                  <Tab isDisabled _disabled={{ color: 'gray' }} fontSize={['10px','12px',' inherit']}>
+                  <Tab
+                    isDisabled
+                    _disabled={{ color: 'gray' }}
+                    fontSize={['10px', '12px', ' inherit']}
+                  >
                     Shiden
                   </Tab>
                 </TabList>
@@ -218,7 +226,11 @@ const LockerPage = () => {
           </Tabs>
         </Flex>
         {/* TODO: Extract to block */}
-        <Flex basis="40%" flexDirection={'column'} padding={["40px 16px", "40px 16px", "52px 30px 59px"]}>
+        <Flex
+          basis="40%"
+          flexDirection={'column'}
+          padding={['40px 16px', '40px 16px', '52px 30px 59px']}
+        >
           <Heading marginBottom={75}>Locked Amount</Heading>
           <Text marginBottom="30px">
             Funds can be locked only at sale event. There is no way to put it
