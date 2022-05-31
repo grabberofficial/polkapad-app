@@ -58,8 +58,6 @@ const schema = object()
 const ProfilePage = () => {
   const { user } = useUser();
   const [selectedTab, setSelectedTab] = useState(0);
-  const [KYCUrl, setKYCUrl] = useState('');
-  const [isKYC] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
 
@@ -80,23 +78,13 @@ const ProfilePage = () => {
     }
   }, [user, reset]);
 
-  const fetchKYC = useCallback(async () => {
-    const kyc = await fetch('/api/kyc').then((data) => data.json());
-
-    setKYCUrl(kyc.iframeUrl);
-  }, []);
-
-  const startKyc = useCallback(() => {
+  const startKyc = useCallback(async () => {
     if (typeof window !== 'undefined') {
-      window.location.href = KYCUrl;
-    }
-  }, [KYCUrl]);
+      const kyc = await fetch('/api/kyc').then((data) => data.json());
 
-  useEffect(() => {
-    if (isKYC) {
-      fetchKYC();
+      window.location.href = kyc.iframeUrl;
     }
-  }, [isKYC, fetchKYC]);
+  }, []);
 
   const fetchWallets = useCallback(async () => {
     const wallets: Array<{
@@ -191,7 +179,7 @@ const ProfilePage = () => {
       gap="28px"
       key="kyc"
     >
-      {user?.kycStatus === KycStatusTypes.ACCEPTED && (
+      {user?.kycStatus === KycStatusTypes.ACCEPTED ? (
         <>
           <Flex alignItems="center" gap="30px">
             <Image src={successful_kyc} color="#49C7DA" />
@@ -214,8 +202,7 @@ const ProfilePage = () => {
             </Button>
           </Flex>
         </>
-      )}
-      {!isKYC && user?.kycStatus !== KycStatusTypes.ACCEPTED && (
+      ) : (
         <Button onClick={startKyc}>Start KYC</Button>
       )}
     </Flex>,
@@ -315,7 +302,7 @@ export const getServerSideProps = withIronSessionSsr(async function ({
   const user = req.session.user;
 
   if (user === undefined) {
-    res.setHeader('location', '/login');
+    res.setHeader('location', '/auth/login');
     res.statusCode = 302;
     res.end();
     return {
