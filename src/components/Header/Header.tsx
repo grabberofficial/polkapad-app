@@ -85,7 +85,14 @@ export const LoginButton: React.FC = () => {
     <Button
       variant="primary"
       iconPlacement="left"
-      icon={<Icon as={FaUserAlt} height={["14px","21px"]} width={["14px","21px"]} color="white" />}
+      icon={
+        <Icon
+          as={FaUserAlt}
+          height={["14px","21px"]}
+          width={["14px","21px"]}
+          color="white"
+        />
+      }
       fixedWidth={152}
       withIconDivider
       onClick={() => router.push('/auth/login')}
@@ -215,7 +222,7 @@ const MobileMenu: React.FC = () => {
         aria-label="Options"
         icon={<HamburgerIcon />}
         variant="outline"
-        
+
       />
       <MenuList>
         <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>
