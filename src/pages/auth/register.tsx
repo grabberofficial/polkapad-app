@@ -23,6 +23,7 @@ import { object, ref, string } from 'yup';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
+import { gtagSendCreateAccount } from '@/services/analytics';
 
 interface IFormInput {
   name: string;
@@ -72,6 +73,9 @@ const RegisterPage = () => {
             },
           },
         );
+
+        gtagSendCreateAccount();
+
         push('/auth/login');
       } catch (err) {
         if (err instanceof FetchError) {

@@ -2,7 +2,7 @@ import { memo } from 'react';
 import { AppProps } from 'next/app';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
-import { Header } from '@/components';
+import { Header, GoogleAnalytics } from '@/components';
 import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
 
@@ -19,6 +19,7 @@ const App = (props: AppProps): JSX.Element => {
         <Header />
         <Component {...pageProps} />
       </MainLayout>
+      <GoogleAnalytics id="UA-224750182-1" />
     </SWRConfig>
   );
 };
