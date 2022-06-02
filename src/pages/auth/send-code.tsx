@@ -191,8 +191,8 @@ const CodeSendPage = () => {
           >
             {'Back to '}
             <Link href="/auth/login-code">
-              <Text as="a" href="/auth/send-code" color="#49C7DA">
-                Login via code
+              <Text as="a" href="/auth/login" color="#49C7DA">
+                Login via password
               </Text>
             </Link>
           </Text>
