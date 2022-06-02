@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { FC, useEffect } from 'react';
-import ReactGA, { InitializeOptions } from 'react-ga';
+import ReactGA from 'react-ga4';
 
 type PropTypes = {
   id: string;
-  options?: InitializeOptions;
+  options?: any;
 };
 
 export const GoogleAnalytics: FC<PropTypes> = ({ id, options }) => {
