@@ -234,7 +234,7 @@ const MobileMenu: React.FC = () => {
 };
 
 const StyledIconButton = styled(IconButton)`
-  padding: 23px;
+  padding: 15px;
   width: 14px;
   height: 14px;
   @media screen and (min-width: 30em) {
