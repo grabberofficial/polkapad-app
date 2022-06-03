@@ -116,13 +116,6 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
     commentText = 'Required to receive tokens during a give away';
   }
 
-  if (type === 'polka')
-    console.log({
-      walletConnected,
-      shoraddr: shortenPolkaAddress(walletAddress),
-      walletAddress,
-    });
-
   return (
     <Flex
       marginBottom={'24px'}
