@@ -25,4 +25,8 @@ export const HeaderItemStyled = styled<
     color: #303030;
     border-bottom: 3px solid #49c7da;
   }
+
+  &:focus {
+    box-shadow: none;
+  }
 `;
