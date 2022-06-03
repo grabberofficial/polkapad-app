@@ -86,7 +86,7 @@ const IndexPage = () => {
           flexDirection={'column'}
           padding={['40px 16px 40px', '40px 16px 40px', '76px 130px 0 115px']}
           height="100%"
-          backgroundImage={["none", "none", "url(/images/staking_bg.png)"]}
+          backgroundImage={['none', 'none', 'url(/images/staking_bg.png)']}
           backgroundRepeat="no-repeat"
           backgroundPosition="bottom"
           // backgroundPositionY="bottom"
@@ -150,9 +150,13 @@ const IndexPage = () => {
           <Divider margin={'20px 0 40px 0'} border={'1px solid #E0E0E0'} />
           {/* TODO: Extract to component, make form out of it */}
           <Grid
-            height={["100%", "100%", "87px"]}
-            templateRows={["21px 48px 48px 48px", "21px 48px 48px 48px", "21px 48px"]}
-            templateColumns={["1fr 1fr", "1fr 1fr", "160px 1fr 200px"]}
+            height={['100%', '100%', '87px']}
+            templateRows={[
+              '21px 48px 48px 48px',
+              '21px 48px 48px 48px',
+              '21px 48px',
+            ]}
+            templateColumns={['1fr 1fr', '1fr 1fr', '160px 1fr 200px']}
             gap="15px"
             marginBottom="50px"
           >
@@ -170,7 +174,7 @@ const IndexPage = () => {
                 PLPD
               </Text>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[1,1,2]}>
+            <GridItem rowSpan={1} colSpan={[1, 1, 2]}>
               <Flex justifyContent="flex-end">
                 <Text
                   textTransform="uppercase"
@@ -183,7 +187,7 @@ const IndexPage = () => {
                 </Text>
               </Flex>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[2,2,1]}>
+            <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
               <Flex flexDirection="column">
                 <Text
                   as="span"
@@ -215,14 +219,14 @@ const IndexPage = () => {
             </GridItem>
             <GridItem
               rowSpan={1}
-              colSpan={[2,2,1]}
+              colSpan={[2, 2, 1]}
               display="flex"
               alignItems="center"
               width="100%"
             >
               <Input text="PLPD" value={0} />
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[2,2,1]}>
+            <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
                 <Button
                   disabled
@@ -236,9 +240,13 @@ const IndexPage = () => {
             </GridItem>
           </Grid>
           <Grid
-            height={["100%", "100%", "87px"]}
-            templateRows={["21px 48px 48px 48px", "21px 48px 48px 48px", "21px 48px"]}
-            templateColumns={["1fr 1fr", "1fr 1fr", "160px 1fr 200px"]}
+            height={['100%', '100%', '87px']}
+            templateRows={[
+              '21px 48px 48px 48px',
+              '21px 48px 48px 48px',
+              '21px 48px',
+            ]}
+            templateColumns={['1fr 1fr', '1fr 1fr', '160px 1fr 200px']}
             gap="15px"
             marginBottom="50px"
           >
@@ -256,7 +264,7 @@ const IndexPage = () => {
                 PLPD
               </Text>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[1,1,2]}>
+            <GridItem rowSpan={1} colSpan={[1, 1, 2]}>
               <Flex justifyContent="flex-end">
                 <Text
                   textTransform="uppercase"
@@ -269,7 +277,7 @@ const IndexPage = () => {
                 </Text>
               </Flex>
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[2,2,1]}>
+            <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
               <Flex flexDirection="column">
                 <Text
                   as="span"
@@ -301,14 +309,14 @@ const IndexPage = () => {
             </GridItem>
             <GridItem
               rowSpan={1}
-              colSpan={[2,2,1]}
+              colSpan={[2, 2, 1]}
               display="flex"
               alignItems="center"
               width="100%"
             >
               <Input text="PLPD" value={0} />
             </GridItem>
-            <GridItem rowSpan={1} colSpan={[2,2,1]}>
+            <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
               <Flex justifyContent="flex-end" alignItems="center" height="100%">
                 <Button disabled withArrow variant="primary">
                   Withdraw PLPD
@@ -429,7 +437,11 @@ const IndexPage = () => {
               </Text>
             </Flex>
 
-            <Flex gap="11px" marginTop="26px" flexDirection={['column', 'column', 'row']}>
+            <Flex
+              gap="11px"
+              marginTop="26px"
+              flexDirection={['column', 'column', 'row']}
+            >
               <Button
                 disabled
                 withArrow
@@ -456,12 +468,12 @@ const IndexPage = () => {
       {/* TODO: Extract to block */}
       <Flex
         backgroundImage="images/staking/bg.svg"
-        height={["auto", "auto", "auto", "547px"]}
+        height={['auto', 'auto', 'auto', '547px']}
         backgroundColor="#025B63"
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
         flexDirection="column"
-        padding={["40px 16px","40px 16px", "113px 64px 0 113px"]}
+        padding={['40px 16px', '40px 16px', '113px 64px 0 113px']}
       >
         <Flex>
           <Flex flexBasis="calc(100% - 377px)">
@@ -691,7 +703,7 @@ const IndexPage = () => {
                 border="none"
                 backgroundColor="#F6F5F5"
                 key={index}
-                d="inline-block"
+                display="inline-block"
                 w="100%"
               >
                 {({ isExpanded }) => (

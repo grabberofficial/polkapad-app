@@ -23,8 +23,9 @@ import fetchJson from '@/lib/fetchJson';
 import { FaUserAlt } from 'react-icons/fa';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { useConnectPolka } from '@/shared/hooks/useConnectPolka';
+
 import { UserContext } from '@/shared/providers/userContext';
+import { useSubstrate } from '@/shared/providers/substrate';
 
 export const ConnectWalletButton: React.FC = () => {
   const { disconnectFromBSC, connenctToBSC, balance, connected, account } =
@@ -55,7 +56,7 @@ export const ConnectWalletButton: React.FC = () => {
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka } = useConnectPolka();
+  const { balance, account, connectToPolka } = useSubstrate();
 
   const hasData = (balance && account) || (polka?.address && polka?.balance);
 
@@ -85,7 +86,14 @@ export const LoginButton: React.FC = () => {
     <Button
       variant="primary"
       iconPlacement="left"
-      icon={<Icon as={FaUserAlt} height={["14px","21px"]} width={["14px","21px"]} color="white" />}
+      icon={
+        <Icon
+          as={FaUserAlt}
+          height={['14px', '21px']}
+          width={['14px', '21px']}
+          color="white"
+        />
+      }
       fixedWidth={152}
       withIconDivider
       onClick={() => router.push('/auth/login')}
@@ -179,7 +187,7 @@ export const Header: React.FC<{
           src="/images/logo_header.png"
           alt="Polkapad"
           padding={['24px 10px 24px 0', '24px 0']}
-          width={['120px','170px']}
+          width={['120px', '170px']}
           cursor="pointer"
         />
       </Link>
@@ -215,7 +223,6 @@ const MobileMenu: React.FC = () => {
         aria-label="Options"
         icon={<HamburgerIcon />}
         variant="outline"
-        
       />
       <MenuList>
         <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>

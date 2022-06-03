@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, Fragment } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
-import { sessionOptions } from '@/lib/session';
 import {
   Flex,
   FormControl,
@@ -13,8 +12,6 @@ import {
   Text,
   Image,
 } from '@chakra-ui/react';
-import { withIronSessionSsr } from 'iron-session/next';
-import { User } from './api/user';
 
 import {
   BsFillCheckCircleFill,
@@ -33,6 +30,7 @@ import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
 import fetchJson from '@/lib/fetchJson';
 import { Footer, FooterWrapper } from '@/components/footer';
+import { gtagSendStartKyc, gtagSendSuccessKyc } from '@/services/analytics';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -82,6 +80,8 @@ const ProfilePage = () => {
     if (typeof window !== 'undefined') {
       const kyc = await fetch('/api/kyc').then((data) => data.json());
 
+      gtagSendStartKyc();
+
       window.open(kyc.iframeUrl);
     }
   }, []);
@@ -103,8 +103,12 @@ const ProfilePage = () => {
   }, [fetchWallets, user?.token.length, wallets.length]);
 
   useEffect(() => {
-    if (router.query.kyc && router.query.kyc === 'true') {
-      setSelectedTab(2);
+    if (router.query.kyc) {
+      if (router.query.kyc === 'true') {
+        setSelectedTab(2);
+      } else if (router.query.kyc === 'success') {
+        gtagSendSuccessKyc();
+      }
     }
   }, [router, setSelectedTab]);
 
@@ -269,26 +273,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-
-export const getServerSideProps = withIronSessionSsr(async function ({
-  req,
-  res,
-}) {
-  const user = req.session.user;
-
-  if (user === undefined) {
-    res.setHeader('location', '/auth/login');
-    res.statusCode = 302;
-    res.end();
-    return {
-      props: {
-        user: { isLoggedIn: false, email: '', token: '' } as User,
-      },
-    };
-  }
-
-  return {
-    props: { user: req.session.user },
-  };
-},
-sessionOptions);
