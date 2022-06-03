@@ -158,7 +158,7 @@ const ProfilePage = () => {
     </Flex>,
     <Flex
       paddingBottom="100px"
-      width="466px"
+      width={['100%', '100%', '466px']}
       flexDirection="column"
       key="wallet"
       alignItems={'flex-end'}
@@ -215,13 +215,22 @@ const ProfilePage = () => {
   return (
     <Fragment>
       {' '}
-      <Flex padding="76px 155px 0" flexDirection="column">
+      <Flex
+        padding={['40px 16px', '40px 16px', '76px 155px 0']}
+        flexDirection="column"
+      >
         <Heading marginBottom={101} withUnderline>
           User Profile
         </Heading>
 
-        <Flex>
-          <Flex direction="column" gap="30px" flexBasis="30%">
+        <Flex flexDirection={['column', 'column', 'column', 'row']}>
+          <Flex
+            direction={['column', 'row', 'row', 'column']}
+            gap="30px"
+            flexBasis="30%"
+            mr={[0, 0, 0, '20px']}
+            mb={['20px', '20px', '20px', 0]}
+          >
             {/* Tab */}
             {tabs.map((tab, index) => (
               <Flex
