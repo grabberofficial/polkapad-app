@@ -56,19 +56,14 @@ export const ConnectWalletButton: React.FC = () => {
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka, disconnect } = useSubstrate();
+  const { balance, account, connectToPolka } = useSubstrate();
 
   const hasData = (balance && account) || (polka?.address && polka?.balance);
 
   return (
     <>
       {hasData && (
-        <Button
-          variant="secondary"
-          fixedWidth={220}
-          padding={'0px 32px'}
-          onClick={disconnect}
-        >
+        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
           {balance && parseFloat(formatEther(balance)).toFixed(3)}
           {polka.balance && polka.balance}
           {' DOT  | '}
