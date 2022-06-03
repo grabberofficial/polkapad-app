@@ -37,20 +37,31 @@ export const Footer = () => (
             <Stack spacing="3" shouldWrapChildren>
               <StyledButton
                 variant="link"
+                as="a"
+                target="_blank"
                 href="https://polkapad.network/docs/general/whitepaper/"
               >
                 Whitepaper
               </StyledButton>
-              <StyledButton variant="link" href="https://github.com/polkapad/">
+              <StyledButton
+                variant="link"
+                as="a"
+                target="_blank"
+                href="https://github.com/polkapad/"
+              >
                 Github
               </StyledButton>
               <StyledButton
                 variant="link"
+                as="a"
+                target="_blank"
                 href="https://polkapad.network/docs/general/whitepaper/"
               >
                 Docs
               </StyledButton>
               <StyledButton
+                as="a"
+                target="_blank"
                 variant="link"
                 href="https://polkapad.network/blog/"
               >
@@ -65,13 +76,26 @@ export const Footer = () => (
             <Stack spacing="3" shouldWrapChildren>
               <StyledButton
                 variant="link"
+                as="a"
+                target="_blank"
                 href="https://polkapad.network/sales/"
               >
                 IDO Sales
               </StyledButton>
-              <StyledButton variant="link">Apply a Project</StyledButton>
-              <StyledButton variant="link">Polkapad Academy</StyledButton>
-              <StyledButton variant="link">Ambassadors room</StyledButton>
+              <StyledButton
+                variant="link"
+                as="a"
+                target="_blank"
+                href="https://polkapad.network/projects/"
+              >
+                Apply a Project
+              </StyledButton>
+              <StyledButton variant="link" as="a" target="_blank">
+                Polkapad Academy
+              </StyledButton>
+              <StyledButton variant="link" as="a" target="_blank">
+                Ambassadors room
+              </StyledButton>
             </Stack>
           </GeneralStack>
           <CommunityStack spacing="4" minW="36" flex="1">
@@ -81,14 +105,31 @@ export const Footer = () => (
             <Stack spacing="3" shouldWrapChildren>
               <StyledButton
                 variant="link"
+                as="a"
+                target="_blank"
                 href="https://twitter.com/Polkapadnetwork"
               >
                 Twitter
               </StyledButton>
-              <StyledButton variant="link" href="https://t.me/polkapadnetwork">
+              <StyledButton
+                variant="link"
+                as="a"
+                target="_blank"
+                href="https://t.me/polkapadnetwork"
+              >
                 Telegram
               </StyledButton>
-              <StyledButton variant="link">Discord</StyledButton>
+              <StyledButton
+                variant="link"
+                as="a"
+                target="_blank"
+                href="https://t.me/Polkapaden"
+              >
+                Telegram chat
+              </StyledButton>
+              <StyledButton variant="link" as="a" target="_blank">
+                Discord
+              </StyledButton>
             </Stack>
           </CommunityStack>
         </Stack>
@@ -102,7 +143,14 @@ export const Footer = () => (
             maxW={{ lg: '360px' }}
             pt="7px"
           >
-            <SubscribeButton variant="primary" type="submit" flexShrink={0}>
+            <SubscribeButton
+              variant="primary"
+              type="submit"
+              flexShrink={0}
+              as="a"
+              href="https://polkapad.network/#about_us_subscribe_form"
+              target="_blank"
+            >
               Subscribe
             </SubscribeButton>
           </Stack>
@@ -146,25 +194,29 @@ export const Footer = () => (
             <StyledIconButton
               as="a"
               href="https://twitter.com/Polkapadnetwork"
+              target="_blank"
               aria-label="Twitter"
               icon={<FaTwitter fontSize="1.25rem" />}
             />
             <StyledIconButton
               as="a"
               href="https://t.me/polkapadnetwork"
+              target="_blank"
               aria-label="Telegram"
               icon={<FaTelegram fontSize="1.25rem" />}
             />
             <StyledIconButton
               as="a"
-              href="#"
+              href="https://discord.gg/77g6zdhb"
+              target="_blank"
               aria-label="Discord"
               icon={<FaDiscord fontSize="1.25rem" />}
             />
             <StyledIconButton
               as="a"
-              href="#"
               aria-label="GitHub"
+              target="_blank"
+              href="https://github.com/polkapad/"
               icon={<FaGithub fontSize="1.25rem" />}
             />
           </ButtonGroup>
