@@ -12,7 +12,6 @@ import {
   Text,
   Image,
 } from '@chakra-ui/react';
-import dynamic from 'next/dynamic';
 
 import {
   BsFillCheckCircleFill,
@@ -273,6 +272,4 @@ const ProfilePage = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(ProfilePage), {
-  ssr: false,
-});
+export default ProfilePage;

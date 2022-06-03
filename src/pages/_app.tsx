@@ -6,6 +6,7 @@ import { MainLayout } from '@/layouts';
 import { Header, GoogleAnalytics } from '@/components';
 import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
+import dynamic from 'next/dynamic';
 
 const meta = {
   title: 'Polkapad - Polkadot Fundraising Hub',
@@ -53,4 +54,6 @@ const AppWrapper = (props: any): JSX.Element => {
   );
 };
 
-export default AppWrapper;
+export default dynamic(() => Promise.resolve(AppWrapper), {
+  ssr: false,
+});
