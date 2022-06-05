@@ -1,12 +1,15 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import getConfig from 'next/config';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
 import { Header, GoogleAnalytics } from '@/components';
 import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
 import dynamic from 'next/dynamic';
+
+const { publicRuntimeConfig } = getConfig();
 
 const meta = {
   title: 'Polkapad - Polkadot Fundraising Hub',
@@ -36,7 +39,9 @@ const App = (props: AppProps): JSX.Element => {
           <Header />
           <Component {...pageProps} />
         </MainLayout>
-        <GoogleAnalytics id="UA-224750182-1" />
+        {publicRuntimeConfig.GOOGLE_ANALYTICS_ID && (
+          <GoogleAnalytics id={publicRuntimeConfig.GOOGLE_ANALYTICS_ID} />
+        )}
       </SWRConfig>
     </>
   );
