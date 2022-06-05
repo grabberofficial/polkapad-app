@@ -28,8 +28,8 @@ const LaunchpadPage = () => {
 
           <HeaderFlex flexDirection={'column'}>
             <RegularText marginBottom={'16px'} color="#fff" fontSize={'14px'}>
-              HMC (Heterogeneous Multi-Chain) Launchpad, matching the best new products
-              with their relevant communities, parachain-agnostic.
+              HMC (Heterogeneous Multi-Chain) Launchpad, matching the best new
+              products with their relevant communities, parachain-agnostic.
             </RegularText>
           </HeaderFlex>
         </Flex>
