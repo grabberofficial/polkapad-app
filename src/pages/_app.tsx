@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
+import getConfig from 'next/config';
 import Head from 'next/head';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
@@ -12,6 +13,8 @@ const meta = {
   description:
     'HMC (Heterogeneous Multi-Chain) Launchpad, matching the best new products with their relevant communities, parachain-agnostic.',
 };
+
+const { publicRuntimeConfig } = getConfig();
 
 const App = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props;
@@ -35,7 +38,9 @@ const App = (props: AppProps): JSX.Element => {
           <Header />
           <Component {...pageProps} />
         </MainLayout>
-        <GoogleAnalytics id="UA-224750182-1" />
+        {publicRuntimeConfig.GOOGLE_ANALYTICS_ID && (
+          <GoogleAnalytics id={publicRuntimeConfig.GOOGLE_ANALYTICS_ID} />
+        )}
       </SWRConfig>
     </>
   );
