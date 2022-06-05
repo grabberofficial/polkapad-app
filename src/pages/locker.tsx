@@ -171,11 +171,11 @@ const LockerPage = () => {
           <Text>
             Choose what suits you best.
             <br />
-            Cheap and easy: Fund DOT or KSM from Binance directly with BNB smart chain smart-contract
-            (Metamask and Polkadot.js needed).
+            Cheap and easy: Fund DOT or KSM from Binance directly with BNB smart
+            chain smart-contract (Metamask and Polkadot.js needed).
             <br />
-            True and Native: Fund KSM in old fashioned way by sending to the provided address with Kusama chain
-            (only Polkadot.js needed).
+            True and Native: Fund KSM in old fashioned way by sending to the
+            provided address with Kusama chain (only Polkadot.js needed).
           </Text>
           <Tabs padding={'30px 0px 0px 0px'} variant="unstyled">
             <Flex margin={'10px 0x 0px 0px'} flexDirection={'column'}>
@@ -236,8 +236,8 @@ const LockerPage = () => {
         >
           <Heading marginBottom={75}>Locked Amount</Heading>
           <Text marginBottom="30px">
-            Funds can be locked only at Polkapad sale event. There is no way to put it
-            after sale and before Polkapad mainnet
+            Funds can be locked only at Polkapad sale event. There is no way to
+            put it after sale and before Polkapad mainnet
           </Text>
           {!account && (
             <Box bg="#F6F5F5" w="100%" p={4}>

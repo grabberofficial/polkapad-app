@@ -21,9 +21,7 @@ export const Footer = () => (
     >
       <FirstStack spacing={{ base: '6', md: '8' }} align="start">
         <Logo />
-        <Text color="#8E8E8E">
-          Polkadot fundraising hub
-        </Text>
+        <Text color="#8E8E8E">Polkadot fundraising hub</Text>
       </FirstStack>
       <Stack
         direction={{ base: 'column-reverse', md: 'column', lg: 'row' }}
