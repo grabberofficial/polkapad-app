@@ -171,7 +171,7 @@ const ProfilePage = () => {
     >
       <WalletCard type="eth" wallets={wallets} />
       <WalletCard type="polka" wallets={wallets} />
-      {user && user.kycStatus === KycStatusTypes.NOT_VERIFIED && (
+      {user && user.kycStatus !== KycStatusTypes.ACCEPTED && (
         <Button
           width="120px"
           marginTop="20px"
@@ -215,28 +215,8 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {user?.kycStatus === KycStatusTypes.NOT_VERIFIED && (
+      {user?.kycStatus !== KycStatusTypes.ACCEPTED && (
         <Button onClick={startKyc}>Start KYC</Button>
-      )}
-      {user?.kycStatus === KycStatusTypes.IN_PROGRESS && (
-        <Text
-          color="#303030"
-          fontWeight="400"
-          fontSize="14px"
-          marginBottom="60px"
-        >
-          Verification in progress
-        </Text>
-      )}
-      {user?.kycStatus === KycStatusTypes.DECLINED && (
-        <Text
-          color="#303030"
-          fontWeight="400"
-          fontSize="14px"
-          marginBottom="60px"
-        >
-          Verification rejected
-        </Text>
       )}
     </Flex>,
   ];
