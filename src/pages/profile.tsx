@@ -68,6 +68,12 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
+    if (!user || !user?.isLoggedIn) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
     if (user) {
       reset({
         email: user.email,
@@ -99,8 +105,8 @@ const ProfilePage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (user?.token.length && !wallets.length) fetchWallets();
-  }, [fetchWallets, user?.token.length, wallets.length]);
+    if (user?.token?.length && !wallets.length) fetchWallets();
+  }, [fetchWallets, user?.token?.length, wallets?.length]);
 
   useEffect(() => {
     if (router.query.kyc) {
@@ -165,14 +171,16 @@ const ProfilePage = () => {
     >
       <WalletCard type="eth" wallets={wallets} />
       <WalletCard type="polka" wallets={wallets} />
-      <Button
-        width="120px"
-        marginTop="20px"
-        variant="primary"
-        onClick={startKyc}
-      >
-        Start KYC
-      </Button>
+      {user && user.kycStatus === KycStatusTypes.NOT_VERIFIED && (
+        <Button
+          width="120px"
+          marginTop="20px"
+          variant="primary"
+          onClick={startKyc}
+        >
+          Start KYC
+        </Button>
+      )}
     </Flex>,
     <Flex
       flexBasis={
@@ -183,7 +191,7 @@ const ProfilePage = () => {
       gap="28px"
       key="kyc"
     >
-      {user?.kycStatus === KycStatusTypes.ACCEPTED ? (
+      {user?.kycStatus === KycStatusTypes.ACCEPTED && (
         <>
           <Flex alignItems="center" gap="30px">
             <Image src={successful_kyc} color="#49C7DA" />
@@ -206,8 +214,29 @@ const ProfilePage = () => {
             </Button>
           </Flex>
         </>
-      ) : (
+      )}
+      {user?.kycStatus === KycStatusTypes.NOT_VERIFIED && (
         <Button onClick={startKyc}>Start KYC</Button>
+      )}
+      {user?.kycStatus === KycStatusTypes.IN_PROGRESS && (
+        <Text
+          color="#303030"
+          fontWeight="400"
+          fontSize="14px"
+          marginBottom="60px"
+        >
+          Verification in progress
+        </Text>
+      )}
+      {user?.kycStatus === KycStatusTypes.DECLINED && (
+        <Text
+          color="#303030"
+          fontWeight="400"
+          fontSize="14px"
+          marginBottom="60px"
+        >
+          Verification rejected
+        </Text>
       )}
     </Flex>,
   ];
