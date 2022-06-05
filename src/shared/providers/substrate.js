@@ -29,10 +29,11 @@ const INIT_STATE = {
   apiError: null,
   apiState: null,
   // isReady: false,
-  // isConnected: false,
+  isConnected: false,
   balance: null,
   account: null,
   connectToPolka: null,
+  disconnect: null,
 };
 
 ///
@@ -47,7 +48,7 @@ const reducer = (state, action) => {
       return { ...state, api: action.payload, apiState: 'CONNECTING' };
 
     case 'CONNECT_SUCCESS':
-      return { ...state, apiState: 'READY' };
+      return { ...state, apiState: 'READY', isConnected: true };
 
     case 'CONNECT_ERROR':
       return { ...state, apiState: 'ERROR', apiError: action.payload };
@@ -61,11 +62,17 @@ const reducer = (state, action) => {
     case 'KEYRING_ERROR':
       return { ...state, keyring: null, keyringState: 'ERROR' };
     case 'LOAD_CONNECT_CALLBACK':
-      return { ...state, connectToPolka: action.payload };
+      return {
+        ...state,
+        connectToPolka: action.payload.connectToPolka,
+        disconnect: action.payload.disconnect,
+      };
     case 'SET_BALANCE':
       return { ...state, balance: action.payload };
     case 'SET_ACCOUNT':
       return { ...state, account: action.payload };
+    case 'DISCONNECT':
+      return { ...state, account: null, balance: null, isConnected: false };
 
     default:
       throw new Error(`Unknown type: ${action.type}`);
@@ -93,6 +100,7 @@ const connect = (state, dispatch) => {
   });
   _api.on('ready', () => dispatch({ type: 'CONNECT_SUCCESS' }));
   _api.on('error', (err) => dispatch({ type: 'CONNECT_ERROR', payload: err }));
+  return _api;
 };
 
 ///
@@ -162,26 +170,62 @@ const SubstrateContextProvider = (props) => {
 
   const connectToPolka = useCallback(async () => {
     if (!state.keyring || !state.api) return;
-    const keyringOptions = state.keyring.getPairs().map((account) => ({
-      key: account.address,
-      value: account.address,
-      text: account.meta.name.toUpperCase(),
-      icon: 'user',
-    }));
-    if (keyringOptions.length > 0) {
-      dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
-      const {
-        data: { free: polkaBalance },
-      } = await state.api.query.system.account(keyringOptions[0].value);
-      dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
-      localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+    const isApiConnected = await state.api.isConnected;
+    if (!isApiConnected) {
+      const api = connect(initState, dispatch);
+      loadAccounts(initState, dispatch);
+      api.isReady.then(async () => {
+        const keyringOptions = keyring.getPairs().map((account) => ({
+          key: account.address,
+          value: account.address,
+          text: account.meta.name.toUpperCase(),
+          icon: 'user',
+        }));
+        if (keyringOptions.length > 0) {
+          dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
+          const {
+            data: { free: polkaBalance },
+          } = await api.query.system.account(keyringOptions[0].value);
+          dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+          localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+        }
+      });
+    } else {
+      const keyringOptions = state.keyring.getPairs().map((account) => ({
+        key: account.address,
+        value: account.address,
+        text: account.meta.name.toUpperCase(),
+        icon: 'user',
+      }));
+      if (keyringOptions.length > 0) {
+        dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
+        const {
+          data: { free: polkaBalance },
+        } = await state.api.query.system.account(keyringOptions[0].value);
+        dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+        localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+      }
     }
-  }, [state]);
+  }, [state, initState]);
+
+  const disconnect = useCallback(() => {
+    state.api.disconnect();
+    dispatch({ type: 'DISCONNECT' });
+    userContext.setContext({
+      ...userContext,
+      polka: {},
+    });
+    localStorage.removeItem(POLKA_CONNECT_KEY);
+    localStorage.removeItem(CONNECTED_ACCOUNTS_STORAGE);
+  }, [state, userContext]);
 
   useEffect(() => {
     if (state.apiState === 'READY' && state.connectToPolka === null)
-      dispatch({ type: 'LOAD_CONNECT_CALLBACK', payload: connectToPolka });
-  }, [state.apiState, state.connectToPolka, connectToPolka]);
+      dispatch({
+        type: 'LOAD_CONNECT_CALLBACK',
+        payload: { connectToPolka, disconnect },
+      });
+  }, [state.apiState, state.connectToPolka, connectToPolka, disconnect]);
 
   // Set userContext when ready
   useEffect(() => {

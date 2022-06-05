@@ -1,20 +1,18 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
-import getConfig from 'next/config';
 import Head from 'next/head';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
 import { Header, GoogleAnalytics } from '@/components';
 import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
+import dynamic from 'next/dynamic';
 
 const meta = {
   title: 'Polkapad - Polkadot Fundraising Hub',
   description:
     'HMC (Heterogeneous Multi-Chain) Launchpad, matching the best new products with their relevant communities, parachain-agnostic.',
 };
-
-const { publicRuntimeConfig } = getConfig();
 
 const App = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props;
@@ -38,9 +36,7 @@ const App = (props: AppProps): JSX.Element => {
           <Header />
           <Component {...pageProps} />
         </MainLayout>
-        {publicRuntimeConfig.GOOGLE_ANALYTICS_ID && (
-          <GoogleAnalytics id={publicRuntimeConfig.GOOGLE_ANALYTICS_ID} />
-        )}
+        <GoogleAnalytics id="UA-224750182-1" />
       </SWRConfig>
     </>
   );
@@ -58,4 +54,6 @@ const AppWrapper = (props: any): JSX.Element => {
   );
 };
 
-export default AppWrapper;
+export default dynamic(() => Promise.resolve(AppWrapper), {
+  ssr: false,
+});

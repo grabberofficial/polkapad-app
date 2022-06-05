@@ -12,7 +12,6 @@ import {
   Text,
   Image,
 } from '@chakra-ui/react';
-import dynamic from 'next/dynamic';
 
 import {
   BsFillCheckCircleFill,
@@ -69,6 +68,12 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
+    if (!user || !user?.isLoggedIn) {
+      router.push('/');
+    }
+  }, []);
+
+  useEffect(() => {
     if (user) {
       reset({
         email: user.email,
@@ -100,8 +105,8 @@ const ProfilePage = () => {
   }, [user]);
 
   useEffect(() => {
-    if (user?.token.length && !wallets.length) fetchWallets();
-  }, [fetchWallets, user?.token.length, wallets.length]);
+    if (user?.token?.length && !wallets.length) fetchWallets();
+  }, [fetchWallets, user?.token?.length, wallets?.length]);
 
   useEffect(() => {
     if (router.query.kyc) {
@@ -159,21 +164,23 @@ const ProfilePage = () => {
     </Flex>,
     <Flex
       paddingBottom="100px"
-      width="466px"
+      width={['100%', '100%', '466px']}
       flexDirection="column"
       key="wallet"
       alignItems={'flex-end'}
     >
       <WalletCard type="eth" wallets={wallets} />
       <WalletCard type="polka" wallets={wallets} />
-      <Button
-        width="120px"
-        marginTop="20px"
-        variant="primary"
-        onClick={startKyc}
-      >
-        Start KYC
-      </Button>
+      {user && user.kycStatus !== KycStatusTypes.ACCEPTED && (
+        <Button
+          width="120px"
+          marginTop="20px"
+          variant="primary"
+          onClick={startKyc}
+        >
+          Start KYC
+        </Button>
+      )}
     </Flex>,
     <Flex
       flexBasis={
@@ -184,7 +191,7 @@ const ProfilePage = () => {
       gap="28px"
       key="kyc"
     >
-      {user?.kycStatus === KycStatusTypes.ACCEPTED ? (
+      {user?.kycStatus === KycStatusTypes.ACCEPTED && (
         <>
           <Flex alignItems="center" gap="30px">
             <Image src={successful_kyc} color="#49C7DA" />
@@ -207,7 +214,8 @@ const ProfilePage = () => {
             </Button>
           </Flex>
         </>
-      ) : (
+      )}
+      {user?.kycStatus !== KycStatusTypes.ACCEPTED && (
         <Button onClick={startKyc}>Start KYC</Button>
       )}
     </Flex>,
@@ -216,13 +224,22 @@ const ProfilePage = () => {
   return (
     <Fragment>
       {' '}
-      <Flex padding="76px 155px 0" flexDirection="column">
+      <Flex
+        padding={['40px 16px', '40px 16px', '76px 155px 0']}
+        flexDirection="column"
+      >
         <Heading marginBottom={101} withUnderline>
           User Profile
         </Heading>
 
-        <Flex>
-          <Flex direction="column" gap="30px" flexBasis="30%">
+        <Flex flexDirection={['column', 'column', 'column', 'row']}>
+          <Flex
+            direction={['column', 'row', 'row', 'column']}
+            gap="30px"
+            flexBasis="30%"
+            mr={[0, 0, 0, '20px']}
+            mb={['20px', '20px', '20px', 0]}
+          >
             {/* Tab */}
             {tabs.map((tab, index) => (
               <Flex
@@ -273,6 +290,4 @@ const ProfilePage = () => {
   );
 };
 
-export default dynamic(() => Promise.resolve(ProfilePage), {
-  ssr: false,
-});
+export default ProfilePage;

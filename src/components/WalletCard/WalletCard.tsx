@@ -1,10 +1,17 @@
 import React, { useContext, useEffect, useCallback } from 'react';
 import styled from '@emotion/styled';
 
-import { Flex, Heading, Text, Link, Image } from '@chakra-ui/react';
+import {
+  Flex,
+  Heading,
+  Text,
+  Link,
+  Image,
+  usePrevious,
+} from '@chakra-ui/react';
 import { Button } from '@/components/Button';
 import { UserContext } from '@/shared/providers/userContext';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useSubstrate } from '@/shared/providers/substrate';
@@ -18,6 +25,8 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
   const [verified, setVerified] = React.useState(false);
   const [walletConnected, setWalletConnected] = React.useState(false);
   const [walletAddress, setWalletAddress] = React.useState('');
+  const previousAddress = usePrevious(walletAddress);
+  const [error, setError] = React.useState('');
 
   const { connenctToBSC } = useConnectBSC();
   const { account: polkaAccount, connectToPolka } = useSubstrate();
@@ -56,27 +65,40 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
   }, [connectToPolka, connenctToBSC, type]);
 
   const verifyWallet = useCallback(async () => {
+    let address;
     if (type === 'eth') {
-      setWalletAddress(userContext.bsc?.address);
+      address = userContext.bsc?.address;
     }
     if (type === 'polka') {
-      setWalletAddress(userContext.polka?.address);
+      address = userContext.polka?.address;
     }
+    if (walletAddress) address = walletAddress;
 
-    await fetchJson(
-      'https://app.polkapadapis.codes/wallets',
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          name: type,
-          value: walletAddress,
-        }),
-      },
-      userContext.user?.token,
-    );
-
-    setVerified(true);
+    try {
+      await fetchJson(
+        'https://app.polkapadapis.codes/wallets',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            name: type,
+            value: address,
+          }),
+        },
+        userContext.user?.token,
+      );
+      setVerified(true);
+      setWalletAddress(walletAddress);
+    } catch (e) {
+      const typedError = e as FetchError;
+      setError(typedError.data.message);
+    }
   }, [type, userContext, walletAddress]);
+
+  useEffect(() => {
+    if (walletAddress !== previousAddress) {
+      setError('');
+    }
+  }, [walletAddress, previousAddress]);
 
   let numberText = '1.';
   let walletText = 'Funding wallet';
@@ -99,7 +121,7 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
       marginBottom={'24px'}
       position={'relative'}
       flexDirection={'column'}
-      width={'466px'}
+      width={['100%', '100%', '466px']}
       padding={'26px 50px'}
       border={'1px solid #E9E9E9'}
       borderRadius="4px"
@@ -136,9 +158,7 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
             height="29px"
           />
           <WalletText>
-            {!verified && !walletConnected
-              ? networkText
-              : shortenPolkaAddress(walletAddress)}
+            {walletConnected ? shortenPolkaAddress(walletAddress) : networkText}
           </WalletText>
         </Flex>
         <Flex>
@@ -163,6 +183,18 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
           )}
         </Flex>
       </Flex>
+
+      {error.length > 0 && (
+        <Text
+          color="#EC305D"
+          fontFamily="Poppins"
+          fontSize="14px"
+          fontWeight="500"
+          marginTop="5px"
+        >
+          {error}
+        </Text>
+      )}
 
       <Text
         color="#A5A5A5"
