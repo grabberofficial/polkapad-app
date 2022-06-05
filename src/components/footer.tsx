@@ -175,17 +175,12 @@ export const Footer = () => (
         <Stack direction={['column', 'row']} spacing="8">
           <Stack spacing="4" minW="36" flex="1">
             <Text fontSize="sm" color="#8E8E8E">
-              Terms & Conditions
+              Terms of Service
             </Text>
           </Stack>
           <Stack spacing="4" minW="36" flex="1">
             <Text fontSize="sm" color="#8E8E8E">
               Privacy Policy
-            </Text>
-          </Stack>
-          <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" color="#8E8E8E">
-              Cookie Settings
             </Text>
           </Stack>
         </Stack>
