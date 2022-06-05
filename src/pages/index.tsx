@@ -23,16 +23,13 @@ const LaunchpadPage = () => {
           width="100%"
         >
           <Heading marginBottom={'48px'} color="#fff" withUnderline>
-            Launchpad
+            HMC (Heterogeneous Multi-Chain) Launchpad
           </Heading>
 
           <HeaderFlex flexDirection={'column'}>
             <RegularText marginBottom={'16px'} color="#fff" fontSize={'14px'}>
-              Stakers will receive their yield rewards only at the end of their
-              Staking Period when they unstake/restake their tokens.
-            </RegularText>
-            <RegularText color="#fff" fontSize={'14px'}>
-              Unstaking before the predefined period was reached will Unstake.
+              HMC (Heterogeneous Multi-Chain) Launchpad, matching the best new products
+              with their relevant communities, parachain-agnostic.
             </RegularText>
           </HeaderFlex>
         </Flex>
@@ -63,7 +60,7 @@ const LaunchpadPage = () => {
             <Header marginBottom={'10px'}>Sign Up and KYC</Header>
             <RegularText marginBottom="30px">
               In order to participate in sales on Polkapad, you must sign up and
-              KYC first. You can still stake and earn PLPD without registering.
+              KYC first.
             </RegularText>
           </Card>
           <Card>
@@ -91,10 +88,9 @@ const LaunchpadPage = () => {
               margin={'6px 0 24px 0px'}
               cursor="pointer"
             />
-            <Header marginBottom={'10px'}>Stake PLPD</Header>
+            <Header marginBottom={'10px'}>Stake</Header>
             <RegularText marginBottom="30px">
-              By staking PLPD, you earn allocation in IDOs. If you do not want
-              to participate in sales, you can still benefit from staking.
+              By staking or locking funds, you earn allocation in IDOs.
             </RegularText>
           </Card>
           <Card>
