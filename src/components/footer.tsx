@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import * as React from 'react';
 import styled from '@emotion/styled';
-import { FaGithub, FaTwitter, FaTelegram, FaDiscord } from 'react-icons/fa';
+import { FaGithub, FaTwitter, FaTelegram } from 'react-icons/fa';
 import { Logo } from './logo';
 
 export const Footer = () => (
@@ -22,7 +22,7 @@ export const Footer = () => (
       <FirstStack spacing={{ base: '6', md: '8' }} align="start">
         <Logo />
         <Text color="#8E8E8E">
-          The fully decentralized protocol for launching new ideas
+          Polkadot fundraising hub
         </Text>
       </FirstStack>
       <Stack
@@ -127,9 +127,6 @@ export const Footer = () => (
               >
                 Telegram chat
               </StyledButton>
-              <StyledButton variant="link" as="a" target="_blank">
-                Discord
-              </StyledButton>
             </Stack>
           </CommunityStack>
         </Stack>
@@ -199,13 +196,6 @@ export const Footer = () => (
               target="_blank"
               aria-label="Telegram"
               icon={<FaTelegram fontSize="1.25rem" />}
-            />
-            <StyledIconButton
-              as="a"
-              href="https://discord.gg/77g6zdhb"
-              target="_blank"
-              aria-label="Discord"
-              icon={<FaDiscord fontSize="1.25rem" />}
             />
             <StyledIconButton
               as="a"

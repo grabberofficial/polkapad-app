@@ -19,64 +19,64 @@ import { Footer } from '@/components/footer';
 
 const bnbSteps = [
   {
-    title: 'Complete registration & verify Metamask wallet',
-    text: `Don't forget to connect your BNB wallet!`,
+    title: 'Complete registration & verify your ETH/BNB and Polkadot addresses',
+    text: `Addressed can't be change until Polkapad mainnet`,
     buttonText: 'Register',
   },
   {
     title: 'Get KSM ot DOT on Binance',
-    text: `Funds can be accpted ONLY from verified wallet`,
+    text: `Funds can be accepted ONLY from verified wallet, not from Binance directly`,
     buttonText: 'To Binance',
   },
   {
-    title: 'Withdraw money to BNB Smart chain',
+    title: 'Withdraw funds to BNB Smart chain to verified ETH/BNB address',
     text: `Don't forget to put reminder to come to sale`,
     buttonText: 'Connect wallet',
   },
   {
-    title: 'Register on Polkadot sale',
+    title: 'Register on the Polkapad sale',
     text: `Don't forget to put reminder to come to sale`,
-    buttonText: 'Register',
+    buttonText: 'Get ready!',
   },
   {
     title: 'Come to sale and push the button',
     text: `Sale available ONLY in sale time only on this page!
              There is no way to add funds into locker before Polkapad mainnet`,
-    buttonText: 'Register',
+    buttonText: 'To sale',
   },
   {
-    title: 'Get locker balance. Ready to upcoming sales! ',
-    text: `Locker balance will be converted into PLPD tokens in GEAR mainnet`,
-    buttonText: 'To sale',
+    title: 'Get locker balance.',
+    text: `Ready to upcoming sales!`,
+    buttonText: 'Ready!',
   },
 ];
 
 const ksmSteps = [
   {
-    title: 'Complete registration & verify Polkadot wallet',
-    text: `Don't forget to connect your BNB wallet!`,
+    title: 'Complete registration & verify your Kusama address',
+    text: `Address can't be change until Polkapad mainnet`,
     buttonText: 'Register',
   },
   {
-    title: 'Get KSM to the Kusama relay chain',
-    text: `Only KSM in the KUSAMA relay will work`,
+    title: 'Get more KSM',
+    text: `Funds can be accpted ONLY from verified wallet. Funds can't be accepted from the exchanges directly.`,
     buttonText: 'To KSM',
   },
   {
-    title: 'Register on Polkadot sale',
+    title: 'Register on the Polkapad sale',
     text: `Don't forget to put reminder to come to sale`,
-    buttonText: 'Register',
+    buttonText: 'Get ready!',
   },
   {
     title: 'Come to sale and push and send funds to the address',
     text: `Sale available ONLY in sale time only on this page!
             There is no way to add funds into locker before Polkapad mainnet`,
-    buttonText: 'Register',
+    buttonText: 'To sale',
   },
   {
-    title: 'Get locker balance. Ready to upcoming sales! ',
-    text: `Locker balance will be converted into PLPD tokens in GEAR mainnet`,
-    buttonText: 'To Sale',
+    title: 'Get locker balance.',
+    text: `Ready to upcoming sales!`,
+    buttonText: 'Ready!',
   },
 ];
 
@@ -169,10 +169,13 @@ const LockerPage = () => {
             Step by step guide
           </Heading>
           <Text>
-            Choose what suits you best. Lock DOT and KSM to receive allocation
-            in first sales.
+            Choose what suits you best.
             <br />
-            Needed: Binance account, Metamask wallet, Polkadot wallet account.
+            Cheap and easy: Fund DOT or KSM from Binance directly with BNB smart chain smart-contract
+            (Metamask and Polkadot.js needed).
+            <br />
+            True and Native: Fund KSM in old fashioned way by sending to the provided address with Kusama chain
+            (only Polkadot.js needed).
           </Text>
           <Tabs padding={'30px 0px 0px 0px'} variant="unstyled">
             <Flex margin={'10px 0x 0px 0px'} flexDirection={'column'}>
@@ -233,14 +236,14 @@ const LockerPage = () => {
         >
           <Heading marginBottom={75}>Locked Amount</Heading>
           <Text marginBottom="30px">
-            Funds can be locked only at sale event. There is no way to put it
+            Funds can be locked only at Polkapad sale event. There is no way to put it
             after sale and before Polkapad mainnet
           </Text>
           {!account && (
             <Box bg="#F6F5F5" w="100%" p={4}>
               <Flex borderRadius={'4px'} alignItems="center" gap="14px">
                 <Icon as={FaInfoCircle} height="14px" width="14px" />
-                <Text fontWeight={600}>Login to check your amounts</Text>
+                <Text fontWeight={600}>Login to check your locked funds</Text>
               </Flex>
             </Box>
           )}
