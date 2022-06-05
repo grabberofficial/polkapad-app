@@ -32,7 +32,7 @@ const LaunchpadPage = () => {
               Staking Period when they unstake/restake their tokens.
             </RegularText>
             <RegularText color="#fff" fontSize={'14px'}>
-              Unstaking before the predefined period was reached will Unstake
+              Unstaking before the predefined period was reached will Unstake.
             </RegularText>
           </HeaderFlex>
         </Flex>
@@ -62,9 +62,8 @@ const LaunchpadPage = () => {
             />
             <Header marginBottom={'10px'}>Sign Up and KYC</Header>
             <RegularText marginBottom="30px">
-              In order to participate in sales on Avalaunch, you must sign up
-              and KYC first. You can still stake and earn PLPD without
-              registering.
+              In order to participate in sales on Polkapad, you must sign up and
+              KYC first. You can still stake and earn PLPD without registering.
             </RegularText>
           </Card>
           <Card>
