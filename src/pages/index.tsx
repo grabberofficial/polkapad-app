@@ -42,12 +42,11 @@ const LaunchpadPage = () => {
       >
         <Flex
           position={'relative'}
-          margin="0 auto"
-          padding={['0px 16px', '0px 16px', '0px 40px']}
-          zIndex={2}
+          margin="-40px auto 0"
+          padding={['40px 16px 0', '40px 16px 0', '40px 40px 0']}
+          background="white"
           flexDirection={['column', 'column', 'row']}
         >
-          <Line />
           <Card>
             <Image
               width={'68px'}

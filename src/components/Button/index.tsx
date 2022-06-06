@@ -28,6 +28,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
     },
     ref,
   ) => {
+    const { disabled } = rest;
     const hoverStyle =
       variant === 'primary'
         ? {
@@ -58,7 +59,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
         fontWeight={600}
         fontFamily="Poppins"
         lineHeight={21}
-        _hover={hoverStyle}
+        _hover={disabled ? {} : hoverStyle}
         width="100%"
         height="48px"
         display="flex"

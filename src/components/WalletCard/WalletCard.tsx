@@ -16,10 +16,11 @@ import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useSubstrate } from '@/shared/providers/substrate';
 
-const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
-  type = 'eth',
-  wallets,
-}) => {
+const WalletCard: React.FC<{
+  type?: string;
+  wallets: any[];
+  verifyCallback: () => void;
+}> = ({ type = 'eth', wallets, verifyCallback }) => {
   const userContext = useContext(UserContext);
 
   const [verified, setVerified] = React.useState(false);
@@ -88,11 +89,12 @@ const WalletCard: React.FC<{ type?: string; wallets: any[] }> = ({
       );
       setVerified(true);
       setWalletAddress(walletAddress);
+      verifyCallback();
     } catch (e) {
       const typedError = e as FetchError;
       setError(typedError.data.message);
     }
-  }, [type, userContext, walletAddress]);
+  }, [type, userContext, walletAddress, verifyCallback]);
 
   useEffect(() => {
     if (walletAddress !== previousAddress) {

@@ -83,7 +83,7 @@ const ksmSteps = [
 const lockedAmount = [
   {
     from: 'KSM from Kusama chain',
-    amount: 5,
+    amount: 0,
   },
   {
     from: 'DOT from BNB smart chain',
@@ -130,7 +130,7 @@ const LockerPage = () => {
           <Text fontSize="12px">{step.text}</Text>
         </Flex>
         <Flex marginLeft={'auto'}>
-          <Button>{step.buttonText}</Button>
+          <Button disabled>{step.buttonText}</Button>
         </Flex>
       </Flex>
     );
@@ -279,16 +279,21 @@ const LockerPage = () => {
                 </Flex>
               </Flex>
               <Flex gap="36px" marginBottom="40px">
-                <Button variant="primary" width="100px">
+                <Button variant="primary" width="100px" disabled>
                   Buy more
                 </Button>
-                <Button variant="secondary" width="120px">
+                <Button variant="secondary" width="120px" disabled>
                   Withdraw funds
                 </Button>
               </Flex>
               <Flex>
                 <Text marginRight={'5px'}>Don&apos;t see provided funds?</Text>
-                <Text color={'#49C7DA'} fontWeight={700}>
+                <Text
+                  color={'#49C7DA'}
+                  fontWeight={700}
+                  as="a"
+                  href="mailto:support@polkapad.network"
+                >
                   Contact support
                 </Text>
               </Flex>

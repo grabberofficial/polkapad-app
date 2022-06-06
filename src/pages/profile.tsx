@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, Fragment } from 'react';
+import React, { useCallback, useEffect, Fragment, useMemo } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
@@ -59,6 +59,8 @@ const ProfilePage = () => {
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
 
+  const walletsAreVerified = useMemo(() => wallets.length === 2, [wallets]);
+
   const selectTab = useCallback((index) => {
     setSelectedTab(index);
   }, []);
@@ -68,7 +70,7 @@ const ProfilePage = () => {
   });
 
   useEffect(() => {
-    if (!user || !user?.isLoggedIn) {
+    if ((user?.isLoggedIn ?? true) === false) {
       router.push('/');
     }
   }, []);
@@ -169,14 +171,19 @@ const ProfilePage = () => {
       key="wallet"
       alignItems={'flex-end'}
     >
-      <WalletCard type="eth" wallets={wallets} />
-      <WalletCard type="polka" wallets={wallets} />
+      <WalletCard type="eth" wallets={wallets} verifyCallback={fetchWallets} />
+      <WalletCard
+        type="polka"
+        wallets={wallets}
+        verifyCallback={fetchWallets}
+      />
       {user && user.kycStatus !== KycStatusTypes.ACCEPTED && (
         <Button
           width="120px"
           marginTop="20px"
           variant="primary"
           onClick={startKyc}
+          disabled={!walletsAreVerified}
         >
           Start KYC
         </Button>
@@ -216,7 +223,9 @@ const ProfilePage = () => {
         </>
       )}
       {user?.kycStatus !== KycStatusTypes.ACCEPTED && (
-        <Button onClick={startKyc}>Start KYC</Button>
+        <Button onClick={startKyc} disabled={!walletsAreVerified}>
+          Start KYC
+        </Button>
       )}
     </Flex>,
   ];
