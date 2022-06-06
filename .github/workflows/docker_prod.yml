@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Docker build
-        run: docker build -t $TAG --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.PROD_SECRET_COOKIE_PASSWORD }} -f .github/workflows/Dockerfile .
+        run: docker build -t $TAG --build-arg NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${{ secrets.GOOGLE_ANALYTICS_ID_DEV }} --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.PROD_SECRET_COOKIE_PASSWORD }} -f .github/workflows/Dockerfile .
 
       - name: Push to ECR and Argo
         uses: ./.github/actions/argo-push
