@@ -53,7 +53,7 @@ export const Footer = () => (
                 variant="link"
                 as="a"
                 target="_blank"
-                href="https://polkapad.network/docs/general/whitepaper/"
+                href="https://polkapad.network/docs/"
               >
                 Docs
               </StyledButton>
@@ -80,12 +80,7 @@ export const Footer = () => (
               >
                 IDO Sales
               </StyledButton>
-              <StyledButton
-                variant="link"
-                as="a"
-                target="_blank"
-                href="https://polkapad.network/projects/"
-              >
+              <StyledButton variant="link" as="a" target="_blank">
                 Apply a Project
               </StyledButton>
               <StyledButton variant="link" as="a" target="_blank">
@@ -117,12 +112,7 @@ export const Footer = () => (
               >
                 Telegram
               </StyledButton>
-              <StyledButton
-                variant="link"
-                as="a"
-                target="_blank"
-                href="https://t.me/Polkapaden"
-              >
+              <StyledButton variant="link" as="a" target="_blank">
                 Telegram chat
               </StyledButton>
             </Stack>
