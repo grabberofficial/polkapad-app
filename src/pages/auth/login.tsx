@@ -106,7 +106,7 @@ const LoginPage = () => {
       >
         Welcome to{' '}
         <Text as="span" color="#49C7DA">
-          Polkadot
+          Polkapad
         </Text>
       </Text>
       <Text

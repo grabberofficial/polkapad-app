@@ -12,9 +12,9 @@ import dynamic from 'next/dynamic';
 const { publicRuntimeConfig } = getConfig();
 
 const meta = {
-  title: 'Polkapad - Polkadot Fundraising Hub',
+  title: 'Polkapad - HMC Launchpad',
   description:
-    'HMC (Heterogeneous Multi-Chain) Launchpad, matching the best new products with their relevant communities, parachain-agnostic.',
+    'Heterogeneous Multi-Chain Launchpad is the first Polkadot-Native Launchpad.',
 };
 
 const App = (props: AppProps): JSX.Element => {
