@@ -11,6 +11,7 @@ import {
   InputLeftElement,
   Text,
   Image,
+  Spinner,
 } from '@chakra-ui/react';
 
 import {
@@ -56,6 +57,7 @@ const schema = object()
 const ProfilePage = () => {
   const { user } = useUser();
   const [selectedTab, setSelectedTab] = useState(0);
+  const [loading, setLoading] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
 
@@ -86,8 +88,9 @@ const ProfilePage = () => {
 
   const startKyc = useCallback(async () => {
     if (typeof window !== 'undefined') {
+      setLoading(true);
       const kyc = await fetch('/api/kyc').then((data) => data.json());
-
+      setLoading(false);
       gtagSendStartKyc();
 
       window.open(kyc.iframeUrl);
@@ -183,9 +186,9 @@ const ProfilePage = () => {
           marginTop="20px"
           variant="primary"
           onClick={startKyc}
-          disabled={!walletsAreVerified}
+          disabled={!walletsAreVerified || loading}
         >
-          Start KYC
+          Start KYC {loading && <Spinner />}
         </Button>
       )}
     </Flex>,
@@ -223,8 +226,8 @@ const ProfilePage = () => {
         </>
       )}
       {user?.kycStatus !== KycStatusTypes.ACCEPTED && (
-        <Button onClick={startKyc} disabled={!walletsAreVerified}>
-          Start KYC
+        <Button onClick={startKyc} disabled={!walletsAreVerified || loading}>
+          Start KYC {loading && <Spinner />}
         </Button>
       )}
     </Flex>,
