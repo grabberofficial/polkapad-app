@@ -141,16 +141,6 @@ const Card = styled(Flex)`
   }
 `;
 
-const Line = styled(Flex)`
-  position: absolute;
-  left: 0;
-  top: -40px;
-  height: 41px;
-  width: 100%;
-  background-color: #fff;
-  flex-direction: column;
-`;
-
 const HeaderFlex = styled(Flex)`
   width: 100%;
   max-width: 380px;
