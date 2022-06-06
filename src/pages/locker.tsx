@@ -94,7 +94,7 @@ const lockedAmount = [
     amount: 0,
   },
   {
-    from: 'MOVR from moonriver chain',
+    from: 'MOVR from Moonriver chain',
     amount: 0,
   },
   {
@@ -171,8 +171,10 @@ const LockerPage = () => {
           <Text>
             Choose what suits you best.
             <br />
+            <br />
             Cheap and easy: Fund DOT or KSM from Binance directly with BNB smart
             chain smart-contract (Metamask and Polkadot.js needed).
+            <br />
             <br />
             True and Native: Fund KSM in old fashioned way by sending to the
             provided address with Kusama chain (only Polkadot.js needed).
