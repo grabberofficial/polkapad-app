@@ -58,7 +58,6 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
         fontSize={14}
         fontWeight={600}
         fontFamily="Poppins"
-        lineHeight={21}
         _hover={disabled ? {} : hoverStyle}
         width="100%"
         height="48px"

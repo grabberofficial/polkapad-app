@@ -191,8 +191,8 @@ const RestorePasswordPage = () => {
             textAlign="center"
           >
             {'Back to '}
-            <Link href="/auth/login-code">
-              <Text as="a" href="/auth/login-code" color="#49C7DA">
+            <Link href="/auth/login">
+              <Text as="a" href="/auth/login" color="#49C7DA">
                 Login
               </Text>
             </Link>
