@@ -1,6 +1,7 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import getConfig from 'next/config';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
 import { Header, GoogleAnalytics } from '@/components';
@@ -8,7 +9,7 @@ import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
 import dynamic from 'next/dynamic';
 
-const { NEXT_PUBLIC_GOOGLE_ANALYTICS_ID } = process.env;
+const { publicRuntimeConfig } = getConfig();
 
 const meta = {
   title: 'Polkapad - HMC Launchpad',
@@ -38,8 +39,8 @@ const App = (props: AppProps): JSX.Element => {
           <Header />
           <Component {...pageProps} />
         </MainLayout>
-        {NEXT_PUBLIC_GOOGLE_ANALYTICS_ID && (
-          <GoogleAnalytics id={NEXT_PUBLIC_GOOGLE_ANALYTICS_ID} />
+        {publicRuntimeConfig?.googleAnalyticsId && (
+          <GoogleAnalytics id={publicRuntimeConfig?.googleAnalyticsId} />
         )}
       </SWRConfig>
     </>
