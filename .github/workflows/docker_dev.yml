@@ -44,9 +44,9 @@ jobs:
       - name: Docker build
         run: >
           docker build -t $TAG
-          --build-arg NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${{ secrets.GOOGLE_ANALYTICS_ID_DEV }}
-          --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.DEV_SECRET_COOKIE_PASSWORD }}
-          --build-arg SERVICE_URL=${{ secrets.SERVICE_URL_DEV }}
+          --build-arg NEXT_PUBLIC_GOOGLE_ANALYTICS_ID="${{ secrets.GOOGLE_ANALYTICS_ID_DEV }}"
+          --build-arg SECRET_COOKIE_PASSWORD="${{ secrets.DEV_SECRET_COOKIE_PASSWORD }}"
+          --build-arg SERVICE_URL="${{ secrets.SERVICE_URL_DEV }}"
           -f .github/workflows/Dockerfile .
 
       - name: Push to ECR and Argo
