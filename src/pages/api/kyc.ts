@@ -1,6 +1,7 @@
 import { sessionOptions } from '@/lib/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { serviceUrl } from '@/config/env';
 
 export type KYC = {
   iframeUrl: string | null;
@@ -10,7 +11,7 @@ const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
   if (req.session.user) {
     try {
       const verificationUrlRes = await fetch(
-        'https://app.polkapadapis.codes/kyc/verification-url',
+        `https://${serviceUrl}/kyc/verification-url`,
         {
           headers: {
             Authorization: req.session.user.token,

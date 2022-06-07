@@ -21,6 +21,7 @@ import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { ExceptionTypeEnum } from '@/lib/constants';
+import { serviceUrl } from '@/config/env';
 // import { success } from '@/shared/utils/toast';
 
 interface IFormInput {
@@ -47,7 +48,7 @@ const CodeSendPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
-        await fetchJson('https://app.polkapadapis.codes/auth/code/send', {
+        await fetchJson(`https://${serviceUrl}/auth/code/send`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),

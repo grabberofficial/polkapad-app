@@ -22,6 +22,7 @@ import { FormInput } from '@/components/FormInput/FormInput';
 import { RiLock2Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
+import { serviceUrl } from '@/config/env';
 
 interface IFormInput {
   newPassword: string;
@@ -57,7 +58,7 @@ const ChangePasswordPage = () => {
       if (!email || !code) return;
       try {
         const res: { code: string; message: string } = await fetchJson(
-          'https://app.polkapadapis.codes/auth/password/change',
+          `https://${serviceUrl}/auth/password/change`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

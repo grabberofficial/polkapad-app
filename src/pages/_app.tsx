@@ -1,23 +1,19 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import getConfig from 'next/config';
 import Providers from '@/shared/providers';
 import { MainLayout } from '@/layouts';
 import { Header, GoogleAnalytics } from '@/components';
 import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
 import dynamic from 'next/dynamic';
-
-const { publicRuntimeConfig } = getConfig();
+import { googleAnalyticsId } from '@/config/env';
 
 const meta = {
   title: 'Polkapad - HMC Launchpad',
   description:
     'Heterogeneous Multi-Chain Launchpad is the first Polkadot-Native Launchpad.',
 };
-
-console.log('App-publicRuntimeConfig', publicRuntimeConfig);
 
 const App = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props;
@@ -41,9 +37,7 @@ const App = (props: AppProps): JSX.Element => {
           <Header />
           <Component {...pageProps} />
         </MainLayout>
-        {publicRuntimeConfig?.googleAnalyticsId && (
-          <GoogleAnalytics id={publicRuntimeConfig?.googleAnalyticsId} />
-        )}
+        {googleAnalyticsId && <GoogleAnalytics id={googleAnalyticsId} />}
       </SWRConfig>
     </>
   );

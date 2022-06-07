@@ -15,6 +15,7 @@ import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useSubstrate } from '@/shared/providers/substrate';
+import { serviceUrl } from '@/config/env';
 
 const WalletCard: React.FC<{
   type?: string;
@@ -77,7 +78,7 @@ const WalletCard: React.FC<{
 
     try {
       await fetchJson(
-        'https://app.polkapadapis.codes/wallets',
+        `https://${serviceUrl}/wallets`,
         {
           method: 'POST',
           body: JSON.stringify({

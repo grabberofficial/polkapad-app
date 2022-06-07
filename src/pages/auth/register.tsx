@@ -24,6 +24,7 @@ import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
 import { gtagSendCreateAccount } from '@/services/analytics';
+import { serviceUrl } from '@/config/env';
 
 interface IFormInput {
   name: string;
@@ -59,20 +60,17 @@ const RegisterPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
-        await fetchJson(
-          'https://app.polkapadapis.codes/auth/password/register',
-          {
-            method: 'POST',
-            body: JSON.stringify({
-              name: data.name,
-              password: data.password,
-              email: data.email,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
+        await fetchJson(`https://${serviceUrl}/auth/password/register`, {
+          method: 'POST',
+          body: JSON.stringify({
+            name: data.name,
+            password: data.password,
+            email: data.email,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+        });
 
         gtagSendCreateAccount();
 

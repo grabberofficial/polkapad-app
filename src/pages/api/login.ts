@@ -2,6 +2,7 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import fetchJson from '@/lib/fetchJson';
+import { serviceUrl } from '@/config/env';
 
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = await req.body;
@@ -12,7 +13,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
 
     try {
       const tokenRes = await fetch(
-        'https://app.polkapadapis.codes/auth/password/login',
+        `https://${serviceUrl}/auth/password/login`,
         {
           method: 'POST',
           body: JSON.stringify({
@@ -39,7 +40,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         name: string;
         kycStatus: string;
       } = await fetchJson(
-        'https://app.polkapadapis.codes/users/currentUser',
+        `https://${serviceUrl}/users/currentUser`,
         undefined,
         token,
       );
@@ -60,19 +61,16 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
     const { email, code } = await req.body;
 
     try {
-      const tokenRes = await fetch(
-        'https://app.polkapadapis.codes/auth/code/login',
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            code: code,
-            email: email,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
+      const tokenRes = await fetch(`https://${serviceUrl}/auth/code/login`, {
+        method: 'POST',
+        body: JSON.stringify({
+          code: code,
+          email: email,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
         },
-      );
+      });
 
       const isCreated = tokenRes.status === 201;
 
@@ -88,7 +86,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         name: string;
         kycStatus: string;
       } = await fetchJson(
-        'https://app.polkapadapis.codes/users/currentUser',
+        `https://${serviceUrl}/users/currentUser`,
         undefined,
         token,
       );

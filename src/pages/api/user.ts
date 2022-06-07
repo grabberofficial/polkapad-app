@@ -1,3 +1,4 @@
+import { serviceUrl } from '@/config/env';
 import fetchJson from '@/lib/fetchJson';
 import { sessionOptions } from '@/lib/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
@@ -20,7 +21,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
         name: string;
         kycStatus: string;
       } = await fetchJson(
-        'https://app.polkapadapis.codes/users/currentUser',
+        `https://${serviceUrl}/users/currentUser`,
         undefined,
         req.session.user.token,
       );
