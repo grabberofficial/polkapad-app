@@ -35,7 +35,7 @@ jobs:
         run: npm ci
 
       - name: Docker build
-        run: |
+        run: >
           docker build -t $TAG \
           --build-arg NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${{ secrets.GOOGLE_ANALYTICS_ID_PROD }} \
           --build-arg SECRET_COOKIE_PASSWORD=${{ secrets.PROD_SECRET_COOKIE_PASSWORD }} \
