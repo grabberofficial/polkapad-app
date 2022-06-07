@@ -21,6 +21,7 @@ import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useCallback, useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { ExceptionTypeEnum } from '@/lib/constants';
+import { serviceUrl } from '@/config/env';
 
 interface IFormInput {
   email: string;
@@ -47,7 +48,7 @@ const RestorePasswordPage = () => {
     async (data) => {
       try {
         const res: { code: string; message: string } = await fetchJson(
-          'https://app.polkapadapis.codes/auth/password/reset',
+          `https://${serviceUrl}/auth/password/reset`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

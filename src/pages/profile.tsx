@@ -32,6 +32,7 @@ import { useRouter } from 'next/router';
 import fetchJson from '@/lib/fetchJson';
 import { Footer, FooterWrapper } from '@/components/footer';
 import { gtagSendStartKyc, gtagSendSuccessKyc } from '@/services/analytics';
+import { serviceUrl } from '@/config/env';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -101,11 +102,7 @@ const ProfilePage = () => {
     const wallets: Array<{
       name: string;
       value: string;
-    }> = await fetchJson(
-      'https://app.polkapadapis.codes/wallets',
-      {},
-      user?.token,
-    );
+    }> = await fetchJson(`https://${serviceUrl}/wallets`, {}, user?.token);
     setWallets(wallets);
   }, [user]);
 
