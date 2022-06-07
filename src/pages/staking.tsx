@@ -20,7 +20,7 @@ import { Spacer } from '@/modules/index/Spacer';
 import { Button } from '@/components/Button';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { css, Global } from '@emotion/react';
-import { Footer, FooterWrapper } from '@/components/footer';
+import { Footer } from '@/components/footer';
 
 const faq = [
   {
@@ -468,7 +468,7 @@ const IndexPage = () => {
       {/* TODO: Extract to block */}
       <Flex
         backgroundImage="images/staking/bg.svg"
-        height={['auto', 'auto', 'auto', '547px']}
+        height={['auto', 'auto', 'auto', '640px']}
         backgroundColor="#025B63"
         backgroundSize="cover"
         backgroundRepeat="no-repeat"
@@ -748,9 +748,7 @@ const IndexPage = () => {
           </Accordion>
         </Flex>
       </Flex>
-      <FooterWrapper>
-        <Footer />
-      </FooterWrapper>
+      <Footer />
     </>
   );
 };

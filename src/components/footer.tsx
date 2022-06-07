@@ -3,13 +3,13 @@ import {
   ButtonGroup,
   Container,
   IconButton,
+  Image,
   Stack,
   Text,
 } from '@chakra-ui/react';
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { FaGithub, FaTwitter, FaTelegram } from 'react-icons/fa';
-import { Logo } from './logo';
 
 export const Footer = () => (
   <StyledContainer as="footer" role="contentinfo">
@@ -20,8 +20,11 @@ export const Footer = () => (
       py={{ base: '12', md: '16' }}
     >
       <FirstStack spacing={{ base: '6', md: '8' }} align="start">
-        <Logo />
-        <Text color="#8E8E8E">Polkadot fundraising hub</Text>
+        <Image
+          src="/images/logo_footer.png"
+          alt="Polkadot fundraising hub"
+          width={240}
+        />
       </FirstStack>
       <Stack
         direction={{ base: 'column-reverse', md: 'column', lg: 'row' }}
@@ -83,10 +86,10 @@ export const Footer = () => (
               <StyledButton variant="link" as="a" target="_blank">
                 Apply a Project
               </StyledButton>
-              <StyledButton variant="link" as="a" target="_blank">
+              <StyledButton disabled variant="link" as="a" target="_blank">
                 Polkapad Academy
               </StyledButton>
-              <StyledButton variant="link" as="a" target="_blank">
+              <StyledButton disabled variant="link" as="a" target="_blank">
                 Ambassadors room
               </StyledButton>
             </Stack>
@@ -112,7 +115,7 @@ export const Footer = () => (
               >
                 Telegram
               </StyledButton>
-              <StyledButton variant="link" as="a" target="_blank">
+              <StyledButton disabled variant="link" as="a" target="_blank">
                 Telegram chat
               </StyledButton>
             </Stack>
