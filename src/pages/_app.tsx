@@ -17,6 +17,8 @@ const meta = {
     'Heterogeneous Multi-Chain Launchpad is the first Polkadot-Native Launchpad.',
 };
 
+console.log('App-publicRuntimeConfig', publicRuntimeConfig);
+
 const App = (props: AppProps): JSX.Element => {
   const { Component, pageProps } = props;
 
