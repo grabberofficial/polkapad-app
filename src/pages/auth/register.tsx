@@ -10,9 +10,10 @@ import {
   Text,
   Icon,
   Flex,
+  Spinner,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -55,11 +56,13 @@ const RegisterPage = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
+  const [loading, setLoading] = useState(false);
   const { push } = useRouter();
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
+        setLoading(true);
         await fetchJson(`https://${serviceUrl}/auth/password/register`, {
           method: 'POST',
           body: JSON.stringify({
@@ -71,11 +74,13 @@ const RegisterPage = () => {
             'Content-Type': 'application/json',
           },
         });
+        setLoading(false);
 
         gtagSendCreateAccount();
 
         push('/auth/login');
       } catch (err) {
+        setLoading(false);
         if (err instanceof FetchError) {
           switch (err.data.type) {
             case ExceptionTypeEnum.EmailAlreadyUsed:
@@ -286,7 +291,7 @@ const RegisterPage = () => {
           type="submit"
           disabled={Object.keys(errors).length > 0}
         >
-          Create account
+          {loading ? <Spinner /> : 'Create account'}
         </Button>
       </form>
       <Text

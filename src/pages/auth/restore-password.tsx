@@ -9,6 +9,7 @@ import {
   Icon,
   Flex,
   FormErrorMessage,
+  Spinner,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -34,6 +35,7 @@ const schema = object()
   .required();
 
 const RestorePasswordPage = () => {
+  const [loading, setLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const {
     control,
@@ -47,6 +49,7 @@ const RestorePasswordPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
+        setLoading(true);
         const res: { code: string; message: string } = await fetchJson(
           `https://${serviceUrl}/auth/password/reset`,
           {
@@ -55,8 +58,10 @@ const RestorePasswordPage = () => {
             body: JSON.stringify(data),
           },
         );
+        setLoading(false);
         res.message === 'ok' && setIsSent(true);
       } catch (error) {
+        setLoading(false);
         if (error instanceof FetchError) {
           switch (error.data.type) {
             case ExceptionTypeEnum.NotFound:
@@ -180,7 +185,7 @@ const RestorePasswordPage = () => {
             </FormControl>
 
             <Button variant="primary" type="submit">
-              Send Restore link
+              {loading ? <Spinner /> : 'Send Restore link'}
             </Button>
           </form>
           <Text

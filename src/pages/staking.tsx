@@ -21,6 +21,7 @@ import { Button } from '@/components/Button';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 import { css, Global } from '@emotion/react';
 import { Footer } from '@/components/footer';
+import styled from '@emotion/styled';
 
 const faq = [
   {
@@ -475,9 +476,14 @@ const IndexPage = () => {
         flexDirection="column"
         padding={['40px 16px', '40px 16px', '113px 64px 0 113px']}
       >
-        <Flex>
-          <Flex flexBasis="calc(100% - 377px)">
-            <Heading marginBottom={77} withUnderline color="white">
+        <Flex flexWrap="wrap" marginBottom="32px">
+          <Flex flexBasis={['100%', 'calc(100% - 377px)']}>
+            <Heading
+              marginBottom={77}
+              withUnderline
+              color="white"
+              fontSize={['30px', '50px']}
+            >
               PLPD Tokens Staked
               <br />
               Over Time
@@ -542,7 +548,7 @@ const IndexPage = () => {
           </Flex>
         </Flex>
         {/* TODO: Extract to block */}
-        <Flex gap="39px" alignItems="center">
+        <TotalStakedWrapper>
           {/* TODO: extract to component */}
           <Flex
             flexDirection="column"
@@ -670,7 +676,7 @@ const IndexPage = () => {
               ~
             </Text>
           </Flex>
-        </Flex>
+        </TotalStakedWrapper>
       </Flex>
 
       {/* TODO: Extract to block */}
@@ -752,5 +758,14 @@ const IndexPage = () => {
     </>
   );
 };
+
+const TotalStakedWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 39px;
+  @media (max-width: 1100px) {
+    flex-wrap: wrap;
+  }
+`;
 
 export default IndexPage;
