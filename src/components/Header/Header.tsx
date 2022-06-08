@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
 import useUser from '@/lib/hooks/useUser';
-import { shortenIfAddress } from '@usedapp/core';
+import { ChainId, shortenIfAddress } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
@@ -28,12 +28,20 @@ import { UserContext } from '@/shared/providers/userContext';
 import { useSubstrate } from '@/shared/providers/substrate';
 
 export const ConnectWalletButton: React.FC = () => {
-  const { disconnectFromBSC, connenctToBSC, balance, connected, account } =
-    useConnectBSC();
+  const {
+    disconnectFromBSC,
+    connenctToBSC,
+    balance,
+    connected,
+    account,
+    chainId,
+  } = useConnectBSC();
+
+  const isWrongNetwork = chainId !== ChainId.BSC;
 
   return (
     <>
-      {connected && account && (
+      {connected && account && !isWrongNetwork && (
         <Button
           onClick={disconnectFromBSC}
           variant="secondary"
@@ -43,6 +51,16 @@ export const ConnectWalletButton: React.FC = () => {
           {balance &&
             parseFloat(formatEther(balance)).toFixed(3) + ' BNB' + ' | '}
           {shortenIfAddress(account)}
+        </Button>
+      )}
+      {isWrongNetwork && (
+        <Button
+          onClick={connenctToBSC}
+          variant="secondary"
+          fixedWidth={220}
+          color="#EC305D"
+        >
+          Wrong network
         </Button>
       )}
       {!account && (

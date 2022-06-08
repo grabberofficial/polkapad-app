@@ -81,5 +81,6 @@ export const useConnectBSC = () => {
     balance: etherBalance,
     connected,
     account,
+    chainId,
   };
 };
