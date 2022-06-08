@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
 import useUser from '@/lib/hooks/useUser';
-import { ChainId, shortenIfAddress } from '@usedapp/core';
+import { ChainId } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
@@ -31,7 +31,8 @@ export const ConnectWalletButton: React.FC = () => {
   const {
     disconnectFromBSC,
     connenctToBSC,
-    balance,
+    dotBalance,
+    ksmBalance,
     connected,
     account,
     chainId,
@@ -49,9 +50,7 @@ export const ConnectWalletButton: React.FC = () => {
           fixedWidth={220}
           padding={'0px 32px'}
         >
-          {balance &&
-            parseFloat(formatEther(balance)).toFixed(3) + ' BNB' + ' | '}
-          {shortenIfAddress(account)}
+          {`${dotBalance} DOT | ${ksmBalance} KSM`}
         </Button>
       )}
       {isWrongNetwork && (
