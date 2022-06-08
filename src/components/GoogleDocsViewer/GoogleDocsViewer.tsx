@@ -18,6 +18,12 @@ interface GoogleDocsViewerProps {
   control: React.FC<{ onClick: () => void }>;
 }
 
+const style = {
+  height: '65vh',
+  width: '100%',
+  border: 'none',
+};
+
 export const GoogleDocsViewer = (props: GoogleDocsViewerProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setIsLoading] = useState(true);
@@ -31,12 +37,6 @@ export const GoogleDocsViewer = (props: GoogleDocsViewerProps) => {
       setIsLoading(true);
     }
   }, [isOpen]);
-
-  const style = {
-    height: '65vh',
-    width: '100%',
-    border: 'none',
-  };
 
   return (
     <>
