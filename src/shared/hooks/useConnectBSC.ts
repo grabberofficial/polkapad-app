@@ -52,8 +52,12 @@ export const useConnectBSC = () => {
         ],
       });
     }
-    switchNetwork(BSC.chainId);
-  }, [activateBrowserWallet, switchNetwork, chainId]);
+  }, [activateBrowserWallet, chainId]);
+
+  const switchToBSC = useCallback(
+    () => switchNetwork(BSC.chainId),
+    [switchNetwork],
+  );
 
   useEffect(() => {
     if (account && etherBalance && !userContext?.bsc?.address) {
@@ -82,5 +86,6 @@ export const useConnectBSC = () => {
     connected,
     account,
     chainId,
+    switchToBSC,
   };
 };

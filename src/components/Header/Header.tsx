@@ -35,6 +35,7 @@ export const ConnectWalletButton: React.FC = () => {
     connected,
     account,
     chainId,
+    switchToBSC,
   } = useConnectBSC();
 
   const isWrongNetwork = chainId !== ChainId.BSC;
@@ -55,7 +56,7 @@ export const ConnectWalletButton: React.FC = () => {
       )}
       {isWrongNetwork && (
         <Button
-          onClick={connenctToBSC}
+          onClick={switchToBSC}
           variant="secondary"
           fixedWidth={220}
           color="#EC305D"
