@@ -16,6 +16,7 @@ import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { shortenPolkaAddress } from '@/lib/utils';
 import { useSubstrate } from '@/shared/providers/substrate';
 import { serviceUrl } from '@/config/env';
+import { ChainId } from '@usedapp/core';
 
 const WalletCard: React.FC<{
   type?: string;
@@ -30,8 +31,10 @@ const WalletCard: React.FC<{
   const previousAddress = usePrevious(walletAddress);
   const [error, setError] = React.useState('');
 
-  const { connenctToBSC } = useConnectBSC();
+  const { connenctToBSC, chainId, switchToBSC } = useConnectBSC();
   const { account: polkaAccount, connectToPolka } = useSubstrate();
+
+  const isWrongNetwork = type === 'eth' && chainId !== ChainId.BSC;
 
   useEffect(() => {
     if (wallets.length !== 0) {
@@ -161,7 +164,11 @@ const WalletCard: React.FC<{
             height="29px"
           />
           <WalletText>
-            {walletConnected ? shortenPolkaAddress(walletAddress) : networkText}
+            {walletConnected
+              ? isWrongNetwork
+                ? 'Wrong network'
+                : shortenPolkaAddress(walletAddress)
+              : networkText}
           </WalletText>
         </Flex>
         <Flex>
@@ -170,9 +177,14 @@ const WalletCard: React.FC<{
               Connect wallet
             </Button>
           )}
-          {!verified && walletConnected && (
+          {!verified && walletConnected && !isWrongNetwork && (
             <Button height="36px" variant="primary" onClick={verifyWallet}>
               Verify
+            </Button>
+          )}
+          {!verified && walletConnected && isWrongNetwork && (
+            <Button height="36px" variant="primary" onClick={switchToBSC}>
+              Switch
             </Button>
           )}
           {verified && (

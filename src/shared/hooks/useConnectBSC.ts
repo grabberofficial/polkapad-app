@@ -1,7 +1,10 @@
-import { useEthers, useEtherBalance, BSC } from '@usedapp/core';
+import { useEthers, BSC, useTokenBalance } from '@usedapp/core';
 import { formatEther } from 'ethers/lib/utils';
 import { useCallback, useContext, useEffect } from 'react';
 import { UserContext } from '../providers/userContext';
+
+const KSM_BSC = '0x2aa69E8D25C045B659787BC1f03ce47a388DB6E8';
+const DOT_BSC = '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402';
 
 export const useConnectBSC = () => {
   const {
@@ -11,7 +14,10 @@ export const useConnectBSC = () => {
     deactivate: disconnectBSC,
     switchNetwork,
   } = useEthers();
-  const etherBalance = useEtherBalance(account, { chainId });
+
+  const dotBalance = useTokenBalance(DOT_BSC, account);
+  const ksmBalance = useTokenBalance(KSM_BSC, account);
+
   const connected = !!chainId;
 
   const userContext = useContext(UserContext);
@@ -52,20 +58,30 @@ export const useConnectBSC = () => {
         ],
       });
     }
-    switchNetwork(BSC.chainId);
-  }, [activateBrowserWallet, switchNetwork, chainId]);
+  }, [activateBrowserWallet, chainId]);
+
+  const switchToBSC = useCallback(
+    () => switchNetwork(BSC.chainId),
+    [switchNetwork],
+  );
 
   useEffect(() => {
-    if (account && etherBalance && !userContext?.bsc?.address) {
+    if (account && dotBalance && ksmBalance && !userContext?.bsc?.address) {
       userContext.setContext({
         ...userContext,
         bsc: {
           address: account as string,
-          balance: parseFloat(formatEther(etherBalance)).toFixed(3),
+          // balance: parseFloat(formatEther(etherBalance)).toFixed(3),
+          balance: {
+            dot: parseFloat(formatEther(dotBalance)).toFixed(3),
+            ksm: parseFloat(formatEther(ksmBalance)).toFixed(3),
+            // ksm: parseFloat(formatEther(ksmBalance)).toFixed(3),
+            // dot: parseFloat(formatEther(dotBalance)).toFixed(3),
+          },
         },
       });
     }
-  }, [account, etherBalance, userContext]);
+  }, [account, dotBalance, ksmBalance, userContext]);
 
   const deactivate = useCallback(() => {
     userContext.setContext({
@@ -78,8 +94,11 @@ export const useConnectBSC = () => {
   return {
     disconnectFromBSC: deactivate,
     connenctToBSC,
-    balance: etherBalance,
+    dotBalance,
+    ksmBalance,
     connected,
     account,
+    chainId,
+    switchToBSC,
   };
 };
