@@ -9,6 +9,7 @@ import {
   Icon,
   Flex,
   FormErrorMessage,
+  Spinner,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -42,6 +43,7 @@ const schema = object()
 
 const ChangePasswordPage = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const {
     control,
@@ -57,6 +59,7 @@ const ChangePasswordPage = () => {
       const { email, code } = router.query;
       if (!email || !code) return;
       try {
+        setLoading(true);
         const res: { code: string; message: string } = await fetchJson(
           `https://${serviceUrl}/auth/password/change`,
           {
@@ -69,9 +72,11 @@ const ChangePasswordPage = () => {
             }),
           },
         );
+        setLoading(false);
 
         res.message === 'ok' && setIsSent(true);
       } catch (error) {
+        setLoading(false);
         if (error instanceof FetchError) {
           switch (error.data.type) {
             case ExceptionTypeEnum.NotFound:
@@ -239,7 +244,7 @@ const ChangePasswordPage = () => {
             </FormControl>
 
             <Button variant="primary" type="submit">
-              Change
+              {loading ? <Spinner /> : 'Change'}
             </Button>
           </form>
           <Text

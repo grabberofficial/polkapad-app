@@ -9,6 +9,7 @@ import {
   Icon,
   Flex,
   FormErrorMessage,
+  Spinner,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -35,6 +36,7 @@ const schema = object()
   .required();
 
 const CodeSendPage = () => {
+  const [loading, setLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const {
     control,
@@ -48,14 +50,17 @@ const CodeSendPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
+        setLoading(true);
         await fetchJson(`https://${serviceUrl}/auth/code/send`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
+        setLoading(false);
 
         setIsSent(true);
       } catch (error) {
+        setLoading(false);
         if (error instanceof FetchError) {
           switch (error.data.type) {
             case ExceptionTypeEnum.NotFound:
@@ -179,7 +184,7 @@ const CodeSendPage = () => {
             </FormControl>
 
             <Button variant="primary" type="submit">
-              Send Magic Link
+              {loading ? <Spinner /> : 'Send Magic Link'}
             </Button>
           </form>
           <Text

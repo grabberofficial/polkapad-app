@@ -1,3 +1,10 @@
+import { useCallback, useState } from 'react';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import Link from 'next/link';
+import { MdEmail } from 'react-icons/md';
+import { RiLock2Fill } from 'react-icons/ri';
+import { object, string } from 'yup';
+
 import { Button } from '@/components/Button';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { ExceptionTypeEnum } from '@/lib/constants';
@@ -14,16 +21,9 @@ import {
   Text,
   Icon,
   Flex,
+  Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Link from 'next/link';
-// import { useRouter } from 'next/router';
-import { useCallback } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
-
-import { MdEmail } from 'react-icons/md';
-import { RiLock2Fill } from 'react-icons/ri';
-import { object, string } from 'yup';
 
 // TODO: server-side redirect from login page if user is already logged in
 
@@ -48,6 +48,7 @@ const LoginPage = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
+  const [loading, setLoading] = useState(false);
   const { mutateUser } = useUser({
     redirectTo: '/profile',
     redirectIfFound: true,
@@ -57,6 +58,7 @@ const LoginPage = () => {
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
+        setLoading(true);
         await mutateUser(
           await fetchJson('/api/login', {
             method: 'POST',
@@ -64,7 +66,9 @@ const LoginPage = () => {
             body: JSON.stringify({ ...data, authType: 'password' }),
           }),
         );
+        setLoading(false);
       } catch (error) {
+        setLoading(false);
         if (error instanceof FetchError) {
           switch (error.data.type) {
             case ExceptionTypeEnum.IncorrectEmailOrPassword:
@@ -208,7 +212,7 @@ const LoginPage = () => {
           type="submit"
           disabled={Object.keys(errors).length > 0}
         >
-          Login
+          {loading ? <Spinner /> : 'Login'}
         </Button>
       </form>
       <Text
