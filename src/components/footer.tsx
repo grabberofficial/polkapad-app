@@ -10,6 +10,7 @@ import {
 import * as React from 'react';
 import styled from '@emotion/styled';
 import { FaGithub, FaTwitter, FaTelegram } from 'react-icons/fa';
+import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 
 export const Footer = () => (
   <StyledContainer as="footer" role="contentinfo">
@@ -83,7 +84,12 @@ export const Footer = () => (
               >
                 IDO Sales
               </StyledButton>
-              <StyledButton variant="link" as="a" target="_blank">
+              <StyledButton
+                variant="link"
+                as="a"
+                target="_blank"
+                href="https://polkapad.network/projects/"
+              >
                 Apply a Project
               </StyledButton>
               <StyledButton disabled variant="link" as="a" target="_blank">
@@ -149,6 +155,7 @@ export const Footer = () => (
       spacing="8"
       direction={{ base: 'column', md: 'row' }}
       justify="center"
+      alignItems="baseline"
       py={{ base: '12', md: '16' }}
     >
       <FirstStack spacing={{ base: '6', md: '8' }} align="start">
@@ -162,14 +169,40 @@ export const Footer = () => (
       >
         <Stack direction={['column', 'row']} spacing="8">
           <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" color="#8E8E8E">
-              Terms of Service
-            </Text>
+            <GoogleDocsViewer
+              title="Terms and Service"
+              fileUrl="https://drive.google.com/file/d/1oK3rcN0t0J7L0B9vl-5hqN2NIYrM4HBZ/preview"
+              control={(props) => (
+                <Button
+                  {...props}
+                  variant="link"
+                  as="a"
+                  fontSize="sm"
+                  color="#8E8E8E"
+                  cursor="pointer"
+                >
+                  Terms and Service
+                </Button>
+              )}
+            />
           </Stack>
           <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" color="#8E8E8E">
-              Privacy Policy
-            </Text>
+            <GoogleDocsViewer
+              title="Privacy Policy"
+              fileUrl="https://drive.google.com/file/d/1eAtzhmFwk04CikA7Heg3XmyP_AS2j-Cg/preview"
+              control={(props) => (
+                <Button
+                  {...props}
+                  variant="link"
+                  as="a"
+                  fontSize="sm"
+                  color="#8E8E8E"
+                  cursor="pointer"
+                >
+                  Privacy Policy
+                </Button>
+              )}
+            />
           </Stack>
         </Stack>
         <LastStack spacing="4">

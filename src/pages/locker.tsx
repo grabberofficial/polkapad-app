@@ -121,7 +121,7 @@ const LockerPage = () => {
         backgroundColor={'white'}
       >
         <Circle size="25px" fontSize="13px" bg="#49C7DA" color="white">
-          <Text>{index + 1}.</Text>
+          <Text>{index + 1}</Text>
         </Circle>
         <Flex marginLeft={'20px'} marginRight={'10px'} flexDirection={'column'}>
           <Text fontSize="14px" fontWeight={500}>
@@ -130,7 +130,9 @@ const LockerPage = () => {
           <Text fontSize="12px">{step.text}</Text>
         </Flex>
         <Flex marginLeft={'auto'}>
-          <Button disabled>{step.buttonText}</Button>
+          <Button disabled width="140px">
+            {step.buttonText}
+          </Button>
         </Flex>
       </Flex>
     );
@@ -206,7 +208,7 @@ const LockerPage = () => {
                     _disabled={{ color: 'gray' }}
                     fontSize={['10px', '12px', ' inherit']}
                   >
-                    Mooriver
+                    Moonriver
                   </Tab>
                   <Tab
                     isDisabled
