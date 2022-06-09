@@ -114,6 +114,10 @@ const ProfilePage = () => {
         gtagSendSuccessKyc();
       }
     }
+
+    if (router.query.wallet) {
+      setSelectedTab(1);
+    }
   }, [router, setSelectedTab]);
 
   const tabContent = [

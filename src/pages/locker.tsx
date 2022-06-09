@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import {
   Circle,
   Flex,
@@ -13,70 +14,104 @@ import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline'
 import { Button } from '@/components/Button';
 import { css, Global } from '@emotion/react';
 import { TabList } from '@/components/Header/components/HeaderItems/HeaderItems.style';
-import { useEthers } from '@usedapp/core';
 import { FaInfoCircle } from 'react-icons/fa';
 import { Footer } from '@/components/footer';
+import Link from 'next/link';
+import useUser from '@/lib/hooks/useUser';
+import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
 
-const bnbSteps = [
+const getBnbSteps = (isLoggedIn: boolean) => [
   {
     title: 'Complete registration & verify your ETH/BNB and Polkadot addresses',
     text: `Addressed can't be change until Polkapad mainnet`,
-    buttonText: 'Register',
+    button: (
+      <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
+        <Button>Register</Button>
+      </Link>
+    ),
   },
   {
     title: 'Get KSM ot DOT on Binance',
     text: `Funds can be accepted ONLY from verified wallet, not from Binance directly`,
-    buttonText: 'To Binance',
+    button: (
+      <Link href="https://www.binance.com/">
+        <Button>Get on Binance</Button>
+      </Link>
+    ),
   },
   {
     title: 'Withdraw funds to BNB Smart chain to verified ETH/BNB address',
     text: `Don't forget to put reminder to come to sale`,
-    buttonText: 'Connect wallet',
+    button: <ConnectWalletButton />,
   },
   {
     title: 'Register on the Polkapad sale',
     text: `Don't forget to put reminder to come to sale`,
-    buttonText: 'Get ready!',
+    button: <Button disabled>Get ready</Button>,
   },
   {
     title: 'Come to sale and push the button',
     text: `Sale available ONLY in sale time only on this page!
              There is no way to add funds into locker before Polkapad mainnet`,
-    buttonText: 'To sale',
+    button: (
+      <Link href="/">
+        <Button>To sale</Button>
+      </Link>
+    ),
   },
   {
     title: 'Get locker balance.',
     text: `Ready to upcoming sales!`,
-    buttonText: 'Ready!',
+    button: (
+      <Link href="/">
+        <Button disabled>To next sale</Button>
+      </Link>
+    ),
   },
 ];
 
-const ksmSteps = [
+const getKSMSteps = (isLoggedIn: boolean) => [
   {
     title: 'Complete registration & verify your Kusama address',
     text: `Address can't be change until Polkapad mainnet`,
-    buttonText: 'Register',
+    button: (
+      <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
+        <Button>Register</Button>
+      </Link>
+    ),
   },
   {
     title: 'Get more KSM',
     text: `Funds can be accpted ONLY from verified wallet. Funds can't be accepted from the exchanges directly.`,
-    buttonText: 'To KSM',
+    button: (
+      <Link href="https://coinmarketcap.com/currencies/kusama/markets/">
+        <Button>Get KSM</Button>
+      </Link>
+    ),
   },
   {
     title: 'Register on the Polkapad sale',
     text: `Don't forget to put reminder to come to sale`,
-    buttonText: 'Get ready!',
+    button: <Button disabled>Get ready</Button>,
   },
   {
     title: 'Come to sale and push and send funds to the address',
     text: `Sale available ONLY in sale time only on this page!
             There is no way to add funds into locker before Polkapad mainnet`,
-    buttonText: 'To sale',
+    button: (
+      <Link href="/">
+        <Button>To sale</Button>
+      </Link>
+    ),
   },
   {
     title: 'Get locker balance.',
     text: `Ready to upcoming sales!`,
-    buttonText: 'Ready!',
+    button: (
+      <Link href="/">
+        <Button disabled>To next sale</Button>
+      </Link>
+    ),
   },
 ];
 
@@ -108,7 +143,8 @@ const lockedAmount = [
 ];
 
 const LockerPage = () => {
-  const { account } = useEthers();
+  const { user } = useUser();
+  const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
 
   const renderStep = (step: any, index: number) => {
     return (
@@ -129,10 +165,8 @@ const LockerPage = () => {
           </Text>
           <Text fontSize="12px">{step.text}</Text>
         </Flex>
-        <Flex marginLeft={'auto'}>
-          <Button disabled width="140px">
-            {step.buttonText}
-          </Button>
+        <Flex marginLeft={'auto'} width={140} flexShrink={0}>
+          {step.button}
         </Flex>
       </Flex>
     );
@@ -222,10 +256,10 @@ const LockerPage = () => {
               <Flex flexDirection={'column'}>
                 <TabPanels>
                   <TabPanel padding={'20px 0px 0px 0px'}>
-                    {(bnbSteps || []).map(renderStep)}
+                    {getBnbSteps(isLoggedIn).map(renderStep)}
                   </TabPanel>
                   <TabPanel padding={'20px 0px 0px 0px'}>
-                    {(ksmSteps || []).map(renderStep)}
+                    {getKSMSteps(isLoggedIn).map(renderStep)}
                   </TabPanel>
                 </TabPanels>
               </Flex>
@@ -243,7 +277,7 @@ const LockerPage = () => {
             Funds can be locked only at Polkapad sale event. There is no way to
             put it after sale and before Polkapad mainnet
           </Text>
-          {!account && (
+          {!isLoggedIn && (
             <Box bg="#F6F5F5" w="100%" p={4}>
               <Flex borderRadius={'4px'} alignItems="center" gap="14px">
                 <Icon as={FaInfoCircle} height="14px" width="14px" />
@@ -251,7 +285,7 @@ const LockerPage = () => {
               </Flex>
             </Box>
           )}
-          {account && (
+          {isLoggedIn && (
             <>
               <Text color="#A5A5A5" marginBottom="30px">
                 Minimum locked amount = 1 DOT
