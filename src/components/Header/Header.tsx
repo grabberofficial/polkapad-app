@@ -29,7 +29,6 @@ import { useSubstrate } from '@/shared/providers/substrate';
 
 export const ConnectWalletButton: React.FC = () => {
   const {
-    disconnectFromBSC,
     connenctToBSC,
     dotBalance,
     ksmBalance,
@@ -44,16 +43,11 @@ export const ConnectWalletButton: React.FC = () => {
   return (
     <>
       {connected && account && !isWrongNetwork && (
-        <Button
-          onClick={disconnectFromBSC}
-          variant="secondary"
-          fixedWidth={220}
-          padding={'0px 32px'}
-        >
+        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
           {`${dotBalance} DOT | ${ksmBalance} KSM`}
         </Button>
       )}
-      {isWrongNetwork && (
+      {connected && account && isWrongNetwork && (
         <Button
           onClick={switchToBSC}
           variant="secondary"
@@ -74,19 +68,14 @@ export const ConnectWalletButton: React.FC = () => {
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka, disconnect } = useSubstrate();
+  const { balance, account, connectToPolka } = useSubstrate();
 
   const hasData = (balance && account) || (polka?.address && polka?.balance);
 
   return (
     <>
       {hasData && (
-        <Button
-          variant="secondary"
-          fixedWidth={220}
-          padding={'0px 32px'}
-          onClick={disconnect}
-        >
+        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
           {balance && parseFloat(formatEther(balance)).toFixed(3)}
           {polka.balance && polka.balance}
           {' DOT  | '}

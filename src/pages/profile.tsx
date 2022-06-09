@@ -56,7 +56,9 @@ const schema = object()
   .required();
 
 const ProfilePage = () => {
-  const { user } = useUser();
+  const { user } = useUser({
+    redirectTo: '/auth/login',
+  });
   const [selectedTab, setSelectedTab] = useState(0);
   const [loading, setLoading] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
@@ -71,12 +73,6 @@ const ProfilePage = () => {
   const { control, reset } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    if ((user?.isLoggedIn ?? true) === false) {
-      router.push('/');
-    }
-  }, []);
 
   useEffect(() => {
     if (user) {

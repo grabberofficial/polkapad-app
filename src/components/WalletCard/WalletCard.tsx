@@ -164,11 +164,10 @@ const WalletCard: React.FC<{
             height="29px"
           />
           <WalletText>
-            {walletConnected
-              ? isWrongNetwork
-                ? 'Wrong network'
-                : shortenPolkaAddress(walletAddress)
-              : networkText}
+            {((verified && walletAddress) || (!verified && walletConnected)) &&
+              shortenPolkaAddress(walletAddress)}
+            {!verified && !walletConnected && networkText}
+            {!verified && walletConnected && isWrongNetwork && 'Wrong network'}
           </WalletText>
         </Flex>
         <Flex>
