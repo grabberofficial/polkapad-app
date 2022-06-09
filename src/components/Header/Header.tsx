@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
 import useUser from '@/lib/hooks/useUser';
-import { ChainId } from '@usedapp/core';
 import { formatEther } from '@ethersproject/units';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
@@ -22,49 +21,24 @@ import fetchJson from '@/lib/fetchJson';
 
 import { FaUserAlt } from 'react-icons/fa';
 import { shortenPolkaAddress } from '@/lib/utils';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-
 import { UserContext } from '@/shared/providers/userContext';
 import { useSubstrate } from '@/shared/providers/substrate';
+import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
 
-export const ConnectWalletButton: React.FC = () => {
-  const {
-    connenctToBSC,
-    dotBalance,
-    ksmBalance,
-    connected,
-    account,
-    chainId,
-    switchToBSC,
-  } = useConnectBSC();
-
-  const isWrongNetwork = chainId !== ChainId.BSC;
-
-  return (
-    <>
-      {connected && account && !isWrongNetwork && (
-        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
-          {`${dotBalance} DOT | ${ksmBalance} KSM`}
-        </Button>
-      )}
-      {connected && account && isWrongNetwork && (
-        <Button
-          onClick={switchToBSC}
-          variant="secondary"
-          fixedWidth={220}
-          color="#EC305D"
-        >
-          Wrong network
-        </Button>
-      )}
-      {!account && (
-        <Button onClick={connenctToBSC} variant="secondary" fixedWidth={220}>
-          Connect BSC
-        </Button>
-      )}
-    </>
-  );
-};
+const tabs = [
+  {
+    url: '/',
+    title: 'Launchpad',
+  },
+  {
+    url: '/locker',
+    title: 'Locker',
+  },
+  {
+    url: '/staking',
+    title: 'Staking',
+  },
+];
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
@@ -171,16 +145,10 @@ export const Header: React.FC<{
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
 
-  const childrenUrls = React.Children.map(props.children, (child) => {
-    if (React.isValidElement(child)) return child?.props?.url;
-  });
-
   useEffect(() => {
-    const selectedIndex = (childrenUrls ?? []).findIndex(
-      (url) => url === router.pathname,
-    );
+    const selectedIndex = tabs.findIndex(({ url }) => url === router.pathname);
     setSelectedTab(selectedIndex);
-  }, [router, childrenUrls]);
+  }, [router]);
 
   return (
     <Flex
@@ -205,9 +173,11 @@ export const Header: React.FC<{
       <DesktopMenuWrapper>
         <Tabs height={'100%'} index={selectedTab}>
           <TabList>
-            <HeaderItem url="/">Launchpad</HeaderItem>
-            <HeaderItem url="/locker">Locker</HeaderItem>
-            <HeaderItem url="/staking">Staking</HeaderItem>
+            {tabs.map((tab) => (
+              <HeaderItem key={tab.url} url={tab.url}>
+                {tab.title}
+              </HeaderItem>
+            ))}
           </TabList>
         </Tabs>
         <RightContainer>

@@ -26,12 +26,14 @@ import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
 import { gtagSendCreateAccount } from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
+import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 
 interface IFormInput {
   name: string;
   email: string;
   password: string;
   confirmPassword: string;
+  promocode: string;
 }
 
 const schema = object()
@@ -44,6 +46,7 @@ const schema = object()
     confirmPassword: string()
       .oneOf([ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
+    promocode: string().optional(),
   })
   .required();
 
@@ -69,6 +72,7 @@ const RegisterPage = () => {
             name: data.name,
             password: data.password,
             email: data.email,
+            promocode: data.promocode,
           }),
           headers: {
             'Content-Type': 'application/json',
@@ -285,6 +289,27 @@ const RegisterPage = () => {
               {errors.confirmPassword.message}
             </FormErrorMessage>
           )}
+        </FormControl>
+        <FormControl>
+          <FormLabel>Promo code</FormLabel>
+          <InputGroup>
+            <InputLeftElement pointerEvents="none" width="55px" height="100%">
+              <Flex
+                height="21px"
+                width="100%"
+                justifyContent="center"
+                alignItems="center"
+                borderRight="1px solid #E0E0E0"
+              >
+                <PromoCodeIcon />
+              </Flex>
+            </InputLeftElement>
+            <FormInput
+              fieldName="promocode"
+              fieldType="text"
+              control={control}
+            />
+          </InputGroup>
         </FormControl>
         <Button
           variant="primary"

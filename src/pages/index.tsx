@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { prop } from 'styled-tools';
 import styled from '@emotion/styled';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import { Flex, Text, Image } from '@chakra-ui/react';
 import { Footer, FooterWrapper } from '@/components/footer';
+import { Button } from '@/components/Button';
+import Link from 'next/link';
+import useUser from '@/lib/hooks/useUser';
 
 const LaunchpadPage = () => {
+  const { user } = useUser();
+  const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
+
   return (
     <Flex flexDirection="column">
       <Flex
@@ -45,6 +51,7 @@ const LaunchpadPage = () => {
           margin="-40px auto 0"
           padding={['40px 16px 0', '40px 16px 0', '40px 40px 0']}
           background="white"
+          rowGap={10}
           flexDirection={['column', 'column', 'row']}
         >
           <Card>
@@ -56,11 +63,14 @@ const LaunchpadPage = () => {
               margin={'6px 0 24px 0px'}
               cursor="pointer"
             />
-            <Header marginBottom={'10px'}>Sign Up and KYC</Header>
+            <Header marginBottom={'10px'}>Register</Header>
             <RegularText marginBottom="30px">
               In order to participate in sales on Polkapad, you must sign up and
               KYC first.
             </RegularText>
+            <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
+              <Button>Register</Button>
+            </Link>
           </Card>
           <Card>
             <Image
@@ -77,6 +87,9 @@ const LaunchpadPage = () => {
               your wallet. This is the only wallet you will be able to use for
               sales.
             </RegularText>
+            <Link href={isLoggedIn ? '/profile?wallet=true' : '/auth/register'}>
+              <Button>Verify wallet</Button>
+            </Link>
           </Card>
           <Card>
             <Image
@@ -87,10 +100,13 @@ const LaunchpadPage = () => {
               margin={'6px 0 24px 0px'}
               cursor="pointer"
             />
-            <Header marginBottom={'10px'}>Stake</Header>
+            <Header marginBottom={'10px'}>Check locker</Header>
             <RegularText marginBottom="30px">
               By staking or locking funds, you earn allocation in IDOs.
             </RegularText>
+            <Link href="locker">
+              <Button>Check locker</Button>
+            </Link>
           </Card>
           <Card>
             <Image
@@ -101,12 +117,15 @@ const LaunchpadPage = () => {
               margin={'6px 0 24px 0px'}
               cursor="pointer"
             />
-            <Header marginBottom={'10px'}>Register for Sale</Header>
+            <Header marginBottom={'10px'}>To sale</Header>
             <RegularText marginBottom="30px">
               During the registration period, you must confirm your interest in
               participation. Once registration closes, you will not be able to
               register.
             </RegularText>
+            <Link href="https://polkapad.network/#about_us_subscribe_form">
+              <Button>Subscribe</Button>
+            </Link>
           </Card>
         </Flex>
       </Flex>
@@ -134,6 +153,8 @@ const Card = styled(Flex)`
   position: relative;
   width: 100%;
   flex-direction: column;
+  justify-content: space-between;
+  height: 300px;
 
   @media screen and (min-width: 48em) {
     width: 25%;
