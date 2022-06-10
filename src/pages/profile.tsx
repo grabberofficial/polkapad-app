@@ -63,6 +63,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
+  const isKYCAccepted = user?.kycStatus === KycStatusTypes.ACCEPTED;
 
   const walletsAreVerified = useMemo(() => wallets.length === 2, [wallets]);
 
@@ -177,7 +178,7 @@ const ProfilePage = () => {
         wallets={wallets}
         verifyCallback={fetchWallets}
       />
-      {user && user.kycStatus !== KycStatusTypes.ACCEPTED && (
+      {user && !isKYCAccepted && (
         <Button
           width="120px"
           marginTop="20px"
@@ -190,15 +191,13 @@ const ProfilePage = () => {
       )}
     </Flex>,
     <Flex
-      flexBasis={
-        user?.kycStatus === KycStatusTypes.ACCEPTED ? '404px' : '800px'
-      }
+      flexBasis={isKYCAccepted ? '404px' : '800px'}
       height="550px"
       flexDirection="column"
-      gap="28px"
+      gap={isKYCAccepted ? '28px' : '9px'}
       key="kyc"
     >
-      {user?.kycStatus === KycStatusTypes.ACCEPTED && (
+      {isKYCAccepted && (
         <>
           <Flex alignItems="center" gap="30px">
             <Image src={successful_kyc} color="#49C7DA" />
@@ -222,10 +221,29 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {user?.kycStatus !== KycStatusTypes.ACCEPTED && (
-        <Button onClick={startKyc} disabled={!walletsAreVerified || loading}>
-          Start KYC {loading && <Spinner />}
-        </Button>
+      {!isKYCAccepted && (
+        <>
+          <Heading
+            color="#303030"
+            fontFamily="Poppins"
+            fontSize="24px"
+            fontWeight="700"
+          >
+            Individual KYC verification
+          </Heading>
+          <Text marginBottom="40px" color="#303030" width={468}>
+            Each account has 3 KYC credit. If your verification fails, please
+            contact an admin for more information before submitting again.
+          </Text>
+          <Button
+            variant="primary"
+            onClick={startKyc}
+            disabled={!walletsAreVerified || loading}
+            width={158}
+          >
+            Start KYC {loading && <Spinner />}
+          </Button>
+        </>
       )}
     </Flex>,
   ];
@@ -262,16 +280,14 @@ const ProfilePage = () => {
                 <Icon
                   as={
                     index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 2 && isKYCAccepted) ||
                     (index === 1 && wallets && wallets.length === 2)
                       ? BsFillCheckCircleFill
                       : BsFillExclamationCircleFill
                   }
                   color={
                     index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 2 && isKYCAccepted) ||
                     (index === 1 && wallets && wallets.length === 2)
                       ? '#49C7DA'
                       : '#FFCC15'
