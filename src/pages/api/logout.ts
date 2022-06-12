@@ -1,6 +1,7 @@
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { sessionOptions } from '@/lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { withSentry } from '@sentry/nextjs';
 // import type { User } from 'pages/api/user';
 
 const logoutRoute = (req: NextApiRequest, res: NextApiResponse<any>) => {
@@ -8,4 +9,4 @@ const logoutRoute = (req: NextApiRequest, res: NextApiResponse<any>) => {
   res.json({ isLoggedIn: false, login: '', avatarUrl: '' });
 };
 
-export default withIronSessionApiRoute(logoutRoute, sessionOptions);
+export default withSentry(withIronSessionApiRoute(logoutRoute, sessionOptions));

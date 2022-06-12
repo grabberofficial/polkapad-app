@@ -3,6 +3,7 @@ import { sessionOptions } from '@/lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import fetchJson from '@/lib/fetchJson';
 import { serviceUrl } from '@/config/env';
+import { withSentry } from '@sentry/nextjs';
 
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = await req.body;
@@ -108,4 +109,4 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default withIronSessionApiRoute(loginRoute, sessionOptions);
+export default withSentry(withIronSessionApiRoute(loginRoute, sessionOptions));

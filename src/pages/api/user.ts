@@ -1,6 +1,7 @@
 import { serviceUrl } from '@/config/env';
 import fetchJson from '@/lib/fetchJson';
 import { sessionOptions } from '@/lib/session';
+import { withSentry } from '@sentry/nextjs';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -56,4 +57,4 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
   }
 };
 
-export default withIronSessionApiRoute(userRoute, sessionOptions);
+export default withSentry(withIronSessionApiRoute(userRoute, sessionOptions));
