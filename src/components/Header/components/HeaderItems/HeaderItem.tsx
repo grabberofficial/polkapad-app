@@ -10,9 +10,7 @@ export const HeaderItem: React.FC<{ url: string }> = ({ url, children }) => {
   return (
     <Link href={url}>
       <HeaderItemStyled isSelected={router.pathname === url}>
-        <div>
-          {children}
-        </div>
+        <div>{children}</div>
       </HeaderItemStyled>
     </Link>
   );
