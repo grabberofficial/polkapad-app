@@ -171,7 +171,7 @@ export const Footer = () => (
           <Stack spacing="4" minW="36" flex="1">
             <GoogleDocsViewer
               title="Terms and Service"
-              fileUrl="https://drive.google.com/file/d/1oK3rcN0t0J7L0B9vl-5hqN2NIYrM4HBZ/preview"
+              fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
               control={(props) => (
                 <Button
                   {...props}
@@ -189,7 +189,7 @@ export const Footer = () => (
           <Stack spacing="4" minW="36" flex="1">
             <GoogleDocsViewer
               title="Privacy Policy"
-              fileUrl="https://drive.google.com/file/d/1eAtzhmFwk04CikA7Heg3XmyP_AS2j-Cg/preview"
+              fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
               control={(props) => (
                 <Button
                   {...props}

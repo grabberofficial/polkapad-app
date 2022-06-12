@@ -12,6 +12,7 @@ import {
   Text,
   Image,
   Spinner,
+  Button as ChakraButton,
 } from '@chakra-ui/react';
 
 import {
@@ -33,6 +34,9 @@ import fetchJson from '@/lib/fetchJson';
 import { Footer, FooterWrapper } from '@/components/footer';
 import { gtagSendStartKyc, gtagSendSuccessKyc } from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
+
+import supportIcon from '@/assets/support.svg';
+import styled from '@emotion/styled';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -63,6 +67,7 @@ const ProfilePage = () => {
   const [loading, setLoading] = useState(false);
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
+  const isKYCAccepted = user?.kycStatus === KycStatusTypes.ACCEPTED;
 
   const walletsAreVerified = useMemo(() => wallets.length === 2, [wallets]);
 
@@ -177,7 +182,7 @@ const ProfilePage = () => {
         wallets={wallets}
         verifyCallback={fetchWallets}
       />
-      {user && user.kycStatus !== KycStatusTypes.ACCEPTED && (
+      {user && !isKYCAccepted && (
         <Button
           width="120px"
           marginTop="20px"
@@ -190,15 +195,22 @@ const ProfilePage = () => {
       )}
     </Flex>,
     <Flex
-      flexBasis={
-        user?.kycStatus === KycStatusTypes.ACCEPTED ? '404px' : '800px'
-      }
+      flexBasis={isKYCAccepted ? '404px' : '800px'}
       height="550px"
       flexDirection="column"
-      gap="28px"
+      gap={isKYCAccepted ? '28px' : '9px'}
       key="kyc"
     >
-      {user?.kycStatus === KycStatusTypes.ACCEPTED && (
+      <SupportButton
+        top={['50px', '76px']}
+        right={['10px', '96px']}
+        _hover={{ backgroundColor: '#00BAD6' }}
+        as="a"
+        href="mailto:support@polkapad.network"
+      >
+        <Image src={supportIcon} width="20px" height="20px" />
+      </SupportButton>
+      {isKYCAccepted && (
         <>
           <Flex alignItems="center" gap="30px">
             <Image src={successful_kyc} color="#49C7DA" />
@@ -222,10 +234,29 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {user?.kycStatus !== KycStatusTypes.ACCEPTED && (
-        <Button onClick={startKyc} disabled={!walletsAreVerified || loading}>
-          Start KYC {loading && <Spinner />}
-        </Button>
+      {!isKYCAccepted && (
+        <>
+          <Heading
+            color="#303030"
+            fontFamily="Poppins"
+            fontSize="24px"
+            fontWeight="700"
+          >
+            Individual KYC verification
+          </Heading>
+          <Text marginBottom="40px" color="#303030" maxWidth={468}>
+            Each account has 3 KYC credit. If your verification fails, please
+            contact an admin for more information before submitting again.
+          </Text>
+          <Button
+            variant="primary"
+            onClick={startKyc}
+            disabled={!walletsAreVerified || loading}
+            width={158}
+          >
+            Start KYC {loading && <Spinner />}
+          </Button>
+        </>
       )}
     </Flex>,
   ];
@@ -236,6 +267,7 @@ const ProfilePage = () => {
       <Flex
         padding={['40px 16px', '40px 16px', '76px 155px 0']}
         flexDirection="column"
+        position="relative"
       >
         <Heading marginBottom={101} withUnderline>
           User Profile
@@ -249,7 +281,6 @@ const ProfilePage = () => {
             mr={[0, 0, 0, '20px']}
             mb={['20px', '20px', '20px', 0]}
           >
-            {/* Tab */}
             {tabs.map((tab, index) => (
               <Flex
                 gap="11px"
@@ -262,16 +293,14 @@ const ProfilePage = () => {
                 <Icon
                   as={
                     index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 2 && isKYCAccepted) ||
                     (index === 1 && wallets && wallets.length === 2)
                       ? BsFillCheckCircleFill
                       : BsFillExclamationCircleFill
                   }
                   color={
                     index === 0 ||
-                    (index === 2 &&
-                      user?.kycStatus === KycStatusTypes.ACCEPTED) ||
+                    (index === 2 && isKYCAccepted) ||
                     (index === 1 && wallets && wallets.length === 2)
                       ? '#49C7DA'
                       : '#FFCC15'
@@ -298,5 +327,17 @@ const ProfilePage = () => {
     </Fragment>
   );
 };
+
+const SupportButton = styled(ChakraButton)`
+  border-radius: 100%;
+  background-color: #49c7da;
+  width: 48px;
+  height: 48px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  cursor: pointer;
+  padding: 0;
+`;
 
 export default ProfilePage;
