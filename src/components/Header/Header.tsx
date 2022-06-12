@@ -49,7 +49,7 @@ export const PolkaConnentBtn = () => {
   return (
     <>
       {hasData && (
-        <Button variant="secondary" fixedWidth={220} padding={'0px 32px'}>
+        <Button variant="secondary" fixedWidth={180} flexShrink={0}>
           {balance && parseFloat(formatEther(balance)).toFixed(3)}
           {polka.balance && polka.balance}
           {' DOT  | '}
@@ -57,7 +57,12 @@ export const PolkaConnentBtn = () => {
         </Button>
       )}
       {!hasData && (
-        <Button onClick={connectToPolka} variant="secondary" fixedWidth={220}>
+        <Button
+          onClick={connectToPolka}
+          variant="secondary"
+          fixedWidth={180}
+          flexShrink={0}
+        >
           Connect Polkadot
         </Button>
       )}
@@ -161,7 +166,7 @@ export const Header: React.FC<{
       top={0}
       zIndex="2"
     >
-      <Link href="/">
+      <Link href="https://polkapad.network">
         <Image
           src="/images/logo_header.png"
           alt="Polkapad"

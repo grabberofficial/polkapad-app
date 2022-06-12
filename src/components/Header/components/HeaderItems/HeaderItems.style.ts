@@ -21,6 +21,10 @@ export const HeaderItemStyled = styled<
   color: #303030;
   height: 80px;
 
+  div {
+    transition: color 0.2s, transform 0.2s;
+  }
+
   &[aria-selected='true'] {
     color: #303030;
     border-bottom: 3px solid #49c7da;
@@ -28,5 +32,12 @@ export const HeaderItemStyled = styled<
 
   &:focus {
     box-shadow: none;
+  }
+
+  &:hover {
+    div {
+      color: #49c7da;
+      transform: scale(1.03);
+    }
   }
 `;
