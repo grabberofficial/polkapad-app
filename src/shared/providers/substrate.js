@@ -113,23 +113,23 @@ const loadAccounts = (state, dispatch) => {
     dispatch({ type: 'LOAD_KEYRING' });
     try {
       await polkadotExtensionDapp.web3Enable(APP_NAME);
-      const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
-      const accounts = JSON.parse(savedAccounts);
-      if (accounts && accounts.length > 0) {
-        keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, accounts);
-        dispatch({ type: 'SET_KEYRING', payload: keyring });
-      } else {
-        let allAccounts = await polkadotExtensionDapp.web3Accounts();
-        allAccounts = allAccounts.map(({ address, meta }) => ({
-          address,
-          meta: { ...meta, name: `${meta.name} (${meta.source})` },
-        }));
-        localStorage.setItem(
-          CONNECTED_ACCOUNTS_STORAGE,
-          JSON.stringify(allAccounts),
-        );
-        keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
-      }
+      // const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
+      // const accounts = JSON.parse(savedAccounts);
+      // if (accounts && accounts.length > 0) {
+      //   keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, accounts);
+      //   dispatch({ type: 'SET_KEYRING', payload: keyring });
+      // } else {
+      // }
+      let allAccounts = await polkadotExtensionDapp.web3Accounts();
+      allAccounts = allAccounts.map(({ address, meta }) => ({
+        address,
+        meta: { ...meta, name: `${meta.name} (${meta.source})` },
+      }));
+      // localStorage.setItem(
+      //   CONNECTED_ACCOUNTS_STORAGE,
+      //   JSON.stringify(allAccounts),
+      // );
+      keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
       dispatch({ type: 'SET_KEYRING', payload: keyring });
     } catch (e) {
       dispatch({ type: 'KEYRING_ERROR' });
@@ -241,25 +241,25 @@ const SubstrateContextProvider = (props) => {
   }, [state.account, state.balance, userContext]);
 
   // Autoconnect to polka
-  useEffect(() => {
-    const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
-    if (
-      shouldConnectPolka === 'true' &&
-      state.keyring &&
-      state.keyringState === 'READY' &&
-      state.connectToPolka !== null &&
-      state.account === null
-    ) {
-      state.connectToPolka();
-    }
-  }, [
-    state.account,
-    state.keyring,
-    state.keyringState,
-    state.connectToPolka,
-    state.connectToPolka,
-    state,
-  ]);
+  // useEffect(() => {
+  //   const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
+  //   if (
+  //     shouldConnectPolka === 'true' &&
+  //     state.keyring &&
+  //     state.keyringState === 'READY' &&
+  //     state.connectToPolka !== null &&
+  //     state.account === null
+  //   ) {
+  //     state.connectToPolka();
+  //   }
+  // }, [
+  //   state.account,
+  //   state.keyring,
+  //   state.keyringState,
+  //   state.connectToPolka,
+  //   state.connectToPolka,
+  //   state,
+  // ]);
 
   return (
     <SubstrateContext.Provider value={state}>
