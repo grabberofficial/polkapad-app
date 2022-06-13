@@ -63,7 +63,11 @@ const WalletCard: React.FC<{
     if (type === 'eth') {
       await connenctToBSC();
     }
-    if (type === 'polka') {
+    if (
+      type === 'polka' &&
+      connectToPolka &&
+      typeof connectToPolka === 'function'
+    ) {
       await connectToPolka();
     }
     setWalletConnected(true);
@@ -75,7 +79,7 @@ const WalletCard: React.FC<{
       address = userContext.bsc?.address;
     }
     if (type === 'polka') {
-      address = userContext.polka?.address;
+      address = userContext.polka?.address ?? polkaAccount;
     }
     if (walletAddress) address = walletAddress;
 
@@ -98,7 +102,7 @@ const WalletCard: React.FC<{
       const typedError = e as FetchError;
       setError(typedError.data.message);
     }
-  }, [type, userContext, walletAddress, verifyCallback]);
+  }, [type, userContext, walletAddress, verifyCallback, polkaAccount]);
 
   useEffect(() => {
     if (walletAddress !== previousAddress) {

@@ -169,8 +169,7 @@ const SubstrateContextProvider = (props) => {
   }, []);
 
   const connectToPolka = useCallback(async () => {
-    if (!state.keyring || !state.api) return;
-    const isApiConnected = await state.api.isConnected;
+    const isApiConnected = await state?.api?.isConnected;
     if (!isApiConnected) {
       const api = connect(initState, dispatch);
       await loadAccounts(initState, dispatch);
@@ -191,7 +190,7 @@ const SubstrateContextProvider = (props) => {
         }
       });
     } else {
-      const keyringOptions = state.keyring.getPairs().map((account) => ({
+      const keyringOptions = keyring.getPairs().map((account) => ({
         key: account.address,
         value: account.address,
         text: account.meta.name.toUpperCase(),
