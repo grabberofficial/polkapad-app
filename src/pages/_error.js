@@ -27,7 +27,6 @@ MyError.getInitialProps = async (context) => {
   if (res?.statusCode === 404) {
     return errorInitialProps;
   }
-
   // Running on the server, the response object (`res`) is available.
   //
   // Next.js will pass an err on the server if a page's data fetching methods
