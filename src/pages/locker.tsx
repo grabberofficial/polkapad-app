@@ -165,7 +165,7 @@ const LockerPage = () => {
           </Text>
           <Text fontSize="12px">{step.text}</Text>
         </Flex>
-        <Flex marginLeft={'auto'} width={140} flexShrink={0}>
+        <Flex marginLeft={'auto'} width={160} flexShrink={0}>
           {step.button}
         </Flex>
       </Flex>

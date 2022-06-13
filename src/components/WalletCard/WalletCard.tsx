@@ -110,7 +110,7 @@ const WalletCard: React.FC<{
     }
   }, [walletAddress, previousAddress]);
 
-  let numberText = '1.';
+  let numberText = '1';
   let walletText = 'Funding wallet';
   let walletUrl = 'https://metamask.io/';
   let networkText = 'BNB Smart chain';
@@ -118,7 +118,7 @@ const WalletCard: React.FC<{
     'Accepted: DOT or KSM from Binance Smart Chain (EVM) with the lowest fees.';
   let walletIcon = '/images/icon_bsc.png';
   if (type !== 'eth') {
-    numberText = '2.';
+    numberText = '2';
     walletText = 'Receiving wallet';
     walletUrl = 'https://polkadot.js.org/extension/';
     networkText = 'Polkadot';
