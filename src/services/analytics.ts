@@ -23,3 +23,7 @@ export const gtagSendStartKyc = (): void => {
 export const gtagSendSuccessKyc = (): void => {
   gtagSendEvent('success-kyc', 'kyc');
 };
+
+export const gtagSendWalletAdded = (): void => {
+  gtagSendEvent('wallet-added', 'kyc');
+};

@@ -49,7 +49,21 @@ export const PolkaConnentBtn = () => {
   return (
     <>
       {hasData && (
-        <Button variant="secondary" fixedWidth={180} flexShrink={0}>
+        <Button
+          variant="secondary"
+          fixedWidth={200}
+          flexShrink={0}
+          iconPlacement="left"
+          padding="0 32px"
+          icon={
+            <Image
+              src="/images/icon_polka.png"
+              alt="Polkapad"
+              width="29px"
+              height="29px"
+            />
+          }
+        >
           {balance && parseFloat(formatEther(balance)).toFixed(3)}
           {polka.balance && polka.balance}
           {' DOT  | '}
@@ -60,8 +74,18 @@ export const PolkaConnentBtn = () => {
         <Button
           onClick={connectToPolka}
           variant="secondary"
-          fixedWidth={180}
+          fixedWidth={200}
           flexShrink={0}
+          iconPlacement="left"
+          padding="0 32px"
+          icon={
+            <Image
+              src="/images/icon_polka.png"
+              alt="Polkapad"
+              width="29px"
+              height="29px"
+            />
+          }
         >
           Connect Polkadot
         </Button>

@@ -1,28 +1,34 @@
-import React, { useCallback, useEffect, Fragment, useMemo } from 'react';
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
 import {
+  Button as ChakraButton,
   Flex,
   FormControl,
   FormLabel,
   Icon,
+  Image,
   InputGroup,
   InputLeftElement,
-  Text,
-  Image,
   Spinner,
-  Button as ChakraButton,
+  Text,
 } from '@chakra-ui/react';
 
 import {
   BsFillCheckCircleFill,
   BsFillExclamationCircleFill,
 } from 'react-icons/bs';
-import { useState } from 'react';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { MdEmail } from 'react-icons/md';
-import { string, object } from 'yup';
+import { object, string } from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FaUser } from 'react-icons/fa';
@@ -32,20 +38,20 @@ import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
 import fetchJson from '@/lib/fetchJson';
 import { Footer, FooterWrapper } from '@/components/footer';
-import { gtagSendStartKyc, gtagSendSuccessKyc } from '@/services/analytics';
+import {
+  gtagSendStartKyc,
+  gtagSendSuccessKyc,
+  gtagSendWalletAdded,
+} from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 
 import supportIcon from '@/assets/support.svg';
 import styled from '@emotion/styled';
+import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
-enum KycStatusTypes {
-  NOT_VERIFIED = 'NOT_VERIFIED',
-  IN_PROGRESS = 'IN_PROGRESS',
-  ACCEPTED = 'ACCEPTED',
-  DECLINED = 'DECLINED',
-}
+const KYC_STATUS_POLL_INTERVAL = 10000;
 
 interface IFormInput {
   email: string;
@@ -63,11 +69,51 @@ const ProfilePage = () => {
   const { user } = useUser({
     redirectTo: '/auth/login',
   });
+  const intervalID = useRef<NodeJS.Timer | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [kycStatus, setKycStatus] = useState<KycStatusTypes | null | undefined>(
+    user?.kycStatus,
+  );
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
-  const isKYCAccepted = user?.kycStatus === KycStatusTypes.ACCEPTED;
+  const isKYCAccepted = kycStatus === KycStatusTypes.ACCEPTED;
+  const isKYCInProgress = kycStatus === KycStatusTypes.IN_PROGRESS;
+  const isKYCBlocked = kycStatus === KycStatusTypes.BLOCKED;
+
+  const getKycStatus = useCallback(async () => {
+    const newStatus: KYCStatus = await fetchJson('/api/kycStatus');
+
+    if (newStatus.kycStatus !== kycStatus) {
+      setKycStatus(newStatus.kycStatus);
+    }
+  }, [kycStatus]);
+
+  // Init
+  useEffect(() => {
+    if (!kycStatus && user?.kycStatus) {
+      setKycStatus(user.kycStatus);
+    }
+  }, [getKycStatus, kycStatus, user?.kycStatus]);
+
+  useEffect(() => {
+    if (kycStatus === KycStatusTypes.IN_PROGRESS && !intervalID.current) {
+      intervalID.current = setInterval(getKycStatus, KYC_STATUS_POLL_INTERVAL);
+    }
+
+    if (kycStatus !== KycStatusTypes.IN_PROGRESS && intervalID.current) {
+      clearInterval(intervalID.current);
+      intervalID.current = null;
+    }
+  }, [getKycStatus, kycStatus]);
+
+  useEffect(() => {
+    return () => {
+      if (intervalID.current) {
+        clearInterval(intervalID.current);
+        intervalID.current = null;
+      }
+    };
+  }, []);
 
   const walletsAreVerified = useMemo(() => wallets.length === 2, [wallets]);
 
@@ -90,9 +136,8 @@ const ProfilePage = () => {
 
   const startKyc = useCallback(async () => {
     if (typeof window !== 'undefined') {
-      setLoading(true);
+      setKycStatus(KycStatusTypes.IN_PROGRESS);
       const kyc = await fetch('/api/kyc').then((data) => data.json());
-      setLoading(false);
       gtagSendStartKyc();
 
       window.open(kyc.iframeUrl);
@@ -105,6 +150,7 @@ const ProfilePage = () => {
       value: string;
     }> = await fetchJson(`https://${serviceUrl}/wallets`, {}, user?.token);
     setWallets(wallets);
+    gtagSendWalletAdded();
   }, [user]);
 
   useEffect(() => {
@@ -187,10 +233,10 @@ const ProfilePage = () => {
           width="120px"
           marginTop="20px"
           variant="primary"
-          onClick={startKyc}
-          disabled={!walletsAreVerified || loading}
+          onClick={() => selectTab(2)}
+          disabled={!walletsAreVerified}
         >
-          Start KYC {loading && <Spinner />}
+          To KYC
         </Button>
       )}
     </Flex>,
@@ -201,15 +247,6 @@ const ProfilePage = () => {
       gap={isKYCAccepted ? '28px' : '9px'}
       key="kyc"
     >
-      <SupportButton
-        top={['50px', '76px']}
-        right={['10px', '96px']}
-        _hover={{ backgroundColor: '#00BAD6' }}
-        as="a"
-        href="mailto:support@polkapad.network"
-      >
-        <Image src={supportIcon} width="20px" height="20px" />
-      </SupportButton>
       {isKYCAccepted && (
         <>
           <Flex alignItems="center" gap="30px">
@@ -234,7 +271,17 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {!isKYCAccepted && (
+      {isKYCInProgress && (
+        <Flex
+          minHeight="300px"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
+        >
+          <Spinner size="xl" color="#49c7da" thickness="4px" />
+        </Flex>
+      )}
+      {!isKYCAccepted && !isKYCInProgress && (
         <>
           <Heading
             color="#303030"
@@ -249,12 +296,12 @@ const ProfilePage = () => {
             contact an admin for more information before submitting again.
           </Text>
           <Button
-            variant="primary"
+            variant={isKYCBlocked ? 'secondary' : 'primary'}
             onClick={startKyc}
-            disabled={!walletsAreVerified || loading}
+            disabled={!walletsAreVerified || isKYCBlocked}
             width={158}
           >
-            Start KYC {loading && <Spinner />}
+            {isKYCBlocked ? 'KYC blocked' : 'Start KYC'}
           </Button>
         </>
       )}
@@ -317,6 +364,15 @@ const ProfilePage = () => {
               </Flex>
             ))}
           </Flex>
+          <SupportButton
+            top={['50px', '76px']}
+            right={['10px', '96px']}
+            _hover={{ backgroundColor: '#00BAD6' }}
+            as="a"
+            href="mailto:support@polkapad.network"
+          >
+            <Image src={supportIcon} width="20px" height="20px" />
+          </SupportButton>
           {/* TabContent */}
           {tabContent[selectedTab]}
         </Flex>

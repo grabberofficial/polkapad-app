@@ -4,6 +4,7 @@ import { sessionOptions } from '@/lib/session';
 import { withSentry } from '@sentry/nextjs';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { KycStatusTypes } from '@/pages/api/kycStatus';
 
 export type User = {
   isLoggedIn: boolean;
@@ -11,7 +12,7 @@ export type User = {
   id: string;
   name: string;
   token: string;
-  kycStatus: string;
+  kycStatus: KycStatusTypes | null;
 };
 
 const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
@@ -20,7 +21,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
       const user: {
         id: string;
         name: string;
-        kycStatus: string;
+        kycStatus: KycStatusTypes | null;
       } = await fetchJson(
         `https://${serviceUrl}/users/currentUser`,
         undefined,
@@ -52,7 +53,7 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
       token: '',
       id: '',
       name: '',
-      kycStatus: '',
+      kycStatus: null,
     });
   }
 };
