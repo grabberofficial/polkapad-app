@@ -107,7 +107,7 @@ const connect = (state, dispatch) => {
 // Loading accounts from dev and polkadot-js extension
 
 let loadAccts = false;
-const loadAccounts = (state, dispatch) => {
+const loadAccounts = async (state, dispatch) => {
   const asyncLoadAccounts = async () => {
     const polkadotExtensionDapp = await import('@polkadot/extension-dapp');
     dispatch({ type: 'LOAD_KEYRING' });
@@ -144,7 +144,7 @@ const loadAccounts = (state, dispatch) => {
 
   // This is the heavy duty work
   loadAccts = true;
-  asyncLoadAccounts();
+  await asyncLoadAccounts();
 };
 
 const SubstrateContext = React.createContext();
@@ -173,7 +173,7 @@ const SubstrateContextProvider = (props) => {
     const isApiConnected = await state.api.isConnected;
     if (!isApiConnected) {
       const api = connect(initState, dispatch);
-      loadAccounts(initState, dispatch);
+      await loadAccounts(initState, dispatch);
       api.isReady.then(async () => {
         const keyringOptions = keyring.getPairs().map((account) => ({
           key: account.address,
