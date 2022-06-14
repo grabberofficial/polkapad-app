@@ -4,6 +4,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import fetchJson from '@/lib/fetchJson';
 import { serviceUrl } from '@/config/env';
 import { withSentry } from '@sentry/nextjs';
+import { KycStatusTypes } from '@/pages/api/kycStatus';
 
 const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   const body = await req.body;
@@ -39,7 +40,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       const userRes: {
         id: string;
         name: string;
-        kycStatus: string;
+        kycStatus: KycStatusTypes;
       } = await fetchJson(
         `https://${serviceUrl}/users/currentUser`,
         undefined,
@@ -85,7 +86,7 @@ const loginRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       const userRes: {
         id: string;
         name: string;
-        kycStatus: string;
+        kycStatus: KycStatusTypes;
       } = await fetchJson(
         `https://${serviceUrl}/users/currentUser`,
         undefined,
