@@ -34,6 +34,7 @@ const INIT_STATE = {
   account: null,
   connectToPolka: null,
   disconnect: null,
+  canUseWallet: false,
 };
 
 ///
@@ -73,6 +74,8 @@ const reducer = (state, action) => {
       return { ...state, account: action.payload };
     case 'DISCONNECT':
       return { ...state, account: null, balance: null, isConnected: false };
+    case 'CAN_USE_WALLET':
+      return { ...state, canUseWallet: true };
 
     default:
       throw new Error(`Unknown type: ${action.type}`);
@@ -112,7 +115,7 @@ const loadAccounts = async (state, dispatch) => {
     const polkadotExtensionDapp = await import('@polkadot/extension-dapp');
     dispatch({ type: 'LOAD_KEYRING' });
     try {
-      await polkadotExtensionDapp.web3Enable(APP_NAME);
+      const extensions = await polkadotExtensionDapp.web3Enable(APP_NAME);
       // const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
       // const accounts = JSON.parse(savedAccounts);
       // if (accounts && accounts.length > 0) {
@@ -121,6 +124,10 @@ const loadAccounts = async (state, dispatch) => {
       // } else {
       // }
       let allAccounts = await polkadotExtensionDapp.web3Accounts();
+
+      if (!!extensions.length && !!allAccounts.length)
+        dispatch({ type: 'CAN_USE_WALLET' });
+
       allAccounts = allAccounts.map(({ address, meta }) => ({
         address,
         meta: { ...meta, name: `${meta.name} (${meta.source})` },
