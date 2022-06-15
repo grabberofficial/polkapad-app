@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from 'react';
 
-import { Flex, Tabs, IconButton } from '@chakra-ui/react';
+import {
+  Flex,
+  Tabs,
+  IconButton,
+  Modal,
+  ModalOverlay,
+  ModalHeader,
+  ModalCloseButton,
+  ModalContent,
+  ModalBody,
+  Button as ChakraButton,
+} from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { Image } from '@chakra-ui/react';
@@ -40,11 +51,20 @@ const tabs = [
   },
 ];
 
+const StyledButton = styled(ChakraButton)`
+  color: #49c7da;
+`;
+
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka } = useSubstrate();
+  const { balance, account, connectToPolka, keyringState } = useSubstrate();
+  const [modalOpen, setModalOpen] = useState(false);
 
-  const hasData = (balance && account) || (polka?.address && polka?.balance);
+  const toggleModal = useCallback(() => {
+    setModalOpen((isOpen) => !isOpen);
+  }, []);
+
+  const hasData = balance || (polka?.address && polka?.balance);
 
   return (
     <>
@@ -72,7 +92,8 @@ export const PolkaConnentBtn = () => {
       )}
       {!hasData && (
         <Button
-          onClick={connectToPolka}
+          onClick={account ? connectToPolka : toggleModal}
+          disabled={keyringState !== 'READY'}
           variant="secondary"
           fixedWidth={200}
           flexShrink={0}
@@ -90,6 +111,54 @@ export const PolkaConnentBtn = () => {
           Connect Polkadot
         </Button>
       )}
+      <Modal isOpen={modalOpen} onClose={toggleModal}>
+        <ModalOverlay />
+        <ModalContent width="80%">
+          <ModalHeader>Haven’t got a Polkadot.js yet?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            You&apos;ll need to{' '}
+            <StyledButton
+              variant="link"
+              as="a"
+              target="_blank"
+              href="https://polkadot.js.org/extension/"
+            >
+              install Polkadot.js
+            </StyledButton>{' '}
+            to continue. Once you have it installed, go ahead and refresh this
+            page
+            <br />
+            <br />
+            Polkadot extension was not found or disabled. If you have
+            polkadot.js but it doesn&apos;t work try this.
+            <br />
+            <br />
+            <ol style={{ padding: '0 24px 24px' }}>
+              <li>Check that you use latest version of Chrome or Firefox. </li>
+              <li>
+                If you reject polkadot.js connection go polkadot.js extension in
+                your browser, press gear and check Manage Website Access.
+                App.Polkapad.network should be allowed to use Polkapad
+                launchpad.{' '}
+              </li>
+              <li>
+                How to troubleshoot other connection issues on polkadot.js{' '}
+                {'->'}{' '}
+                <StyledButton
+                  variant="link"
+                  as="a"
+                  target="_blank"
+                  href="https://support.polkadot.network/support/solutions/articles/65000176918-how-to-troubleshoot-connection-issues-on-polkadot-js"
+                >
+                  Polkadot support webpage
+                </StyledButton>
+                .
+              </li>
+            </ol>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

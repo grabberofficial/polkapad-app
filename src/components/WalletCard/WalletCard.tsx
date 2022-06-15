@@ -32,7 +32,11 @@ const WalletCard: React.FC<{
   const [error, setError] = React.useState('');
 
   const { connenctToBSC, chainId, switchToBSC } = useConnectBSC();
-  const { account: polkaAccount, connectToPolka } = useSubstrate();
+  const {
+    balance: polkaBalance,
+    account: polkaAccount,
+    connectToPolka,
+  } = useSubstrate();
 
   const isWrongNetwork = type === 'eth' && chainId !== ChainId.BSC;
 
@@ -52,12 +56,12 @@ const WalletCard: React.FC<{
       }
     }
     if (type === 'polka') {
-      setWalletConnected(!!polkaAccount);
-      if (polkaAccount) {
+      setWalletConnected(!!polkaBalance);
+      if (polkaBalance) {
         setWalletAddress(polkaAccount);
       }
     }
-  }, [type, polkaAccount, userContext.bsc?.address]);
+  }, [type, polkaBalance, polkaAccount, userContext.bsc?.address]);
 
   const connectWallet = useCallback(async () => {
     if (type === 'eth') {

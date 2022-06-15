@@ -131,6 +131,15 @@ const loadAccounts = async (state, dispatch) => {
       // );
       keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
       dispatch({ type: 'SET_KEYRING', payload: keyring });
+      const keyringOptions = keyring.getPairs().map((account) => ({
+        key: account.address,
+        value: account.address,
+        text: account.meta.name.toUpperCase(),
+        icon: 'user',
+      }));
+      if (keyringOptions.length > 0) {
+        dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
+      }
     } catch (e) {
       dispatch({ type: 'KEYRING_ERROR' });
     }
@@ -169,43 +178,11 @@ const SubstrateContextProvider = (props) => {
   }, []);
 
   const connectToPolka = useCallback(async () => {
-    const isApiConnected = await state?.api?.isConnected;
-    if (!isApiConnected) {
-      const api = connect(initState, dispatch);
-      await loadAccounts(initState, dispatch);
-      api.isReady.then(async () => {
-        const keyringOptions = keyring.getPairs().map((account) => ({
-          key: account.address,
-          value: account.address,
-          text: account.meta.name.toUpperCase(),
-          icon: 'user',
-        }));
-        if (keyringOptions.length > 0) {
-          dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
-          const {
-            data: { free: polkaBalance },
-          } = await api.query.system.account(keyringOptions[0].value);
-          dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
-          localStorage.setItem(POLKA_CONNECT_KEY, 'true');
-        }
-      });
-    } else {
-      const keyringOptions = keyring.getPairs().map((account) => ({
-        key: account.address,
-        value: account.address,
-        text: account.meta.name.toUpperCase(),
-        icon: 'user',
-      }));
-      if (keyringOptions.length > 0) {
-        dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
-        const {
-          data: { free: polkaBalance },
-        } = await state.api.query.system.account(keyringOptions[0].value);
-        dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
-        localStorage.setItem(POLKA_CONNECT_KEY, 'true');
-      }
-    }
-  }, [state, initState]);
+    const {
+      data: { free: polkaBalance },
+    } = await state.api.query.system.account(state.account);
+    dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+  }, [state]);
 
   const disconnect = useCallback(() => {
     state.api.disconnect();
