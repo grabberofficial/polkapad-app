@@ -48,6 +48,10 @@ import { serviceUrl } from '@/config/env';
 import supportIcon from '@/assets/support.svg';
 import styled from '@emotion/styled';
 import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
+import {
+  mailchimpSendFinishedKyc,
+  mailchimpSendWalletAdded,
+} from '@/services/mailchimp';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -151,6 +155,10 @@ const ProfilePage = () => {
     }> = await fetchJson(`https://${serviceUrl}/wallets`, {}, user?.token);
     setWallets(wallets);
     gtagSendWalletAdded();
+
+    if (user?.email) {
+      mailchimpSendWalletAdded(user.email);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -163,6 +171,10 @@ const ProfilePage = () => {
         setSelectedTab(2);
       } else if (router.query.kyc === 'success') {
         gtagSendSuccessKyc();
+
+        if (user?.email) {
+          mailchimpSendFinishedKyc(user.email);
+        }
       }
     }
 
@@ -278,6 +290,15 @@ const ProfilePage = () => {
           justifyContent="center"
           flexDirection="column"
         >
+          <Heading
+            color="#303030"
+            fontFamily="Poppins"
+            fontSize="24px"
+            fontWeight="700"
+            margin-bottom="15px"
+          >
+            Verification in progress
+          </Heading>
           <Spinner size="xl" color="#49c7da" thickness="4px" />
         </Flex>
       )}

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import React, { useContext, useEffect, useCallback, useState } from 'react';
 import styled from '@emotion/styled';
 
 import {
@@ -8,6 +8,13 @@ import {
   Link,
   Image,
   usePrevious,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Button as ChakraButton,
 } from '@chakra-ui/react';
 import { Button } from '@/components/Button';
 import { UserContext } from '@/shared/providers/userContext';
@@ -17,6 +24,10 @@ import { shortenPolkaAddress } from '@/lib/utils';
 import { useSubstrate } from '@/shared/providers/substrate';
 import { serviceUrl } from '@/config/env';
 import { ChainId } from '@usedapp/core';
+
+const StyledButton = styled(ChakraButton)`
+  color: #49c7da;
+`;
 
 const WalletCard: React.FC<{
   type?: string;
@@ -30,9 +41,18 @@ const WalletCard: React.FC<{
   const [walletAddress, setWalletAddress] = React.useState('');
   const previousAddress = usePrevious(walletAddress);
   const [error, setError] = React.useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const toggleModal = useCallback(() => {
+    setModalOpen((isOpen) => !isOpen);
+  }, []);
 
   const { connenctToBSC, chainId, switchToBSC } = useConnectBSC();
-  const { account: polkaAccount, connectToPolka } = useSubstrate();
+  const {
+    canUseWallet,
+    account: polkaAccount,
+    connectToPolka,
+  } = useSubstrate();
 
   const isWrongNetwork = type === 'eth' && chainId !== ChainId.BSC;
 
@@ -51,13 +71,13 @@ const WalletCard: React.FC<{
         setWalletAddress(userContext.bsc?.address);
       }
     }
-    if (type === 'polka') {
+    if (type === 'polka' && canUseWallet) {
       setWalletConnected(!!polkaAccount);
       if (polkaAccount) {
         setWalletAddress(polkaAccount);
       }
     }
-  }, [type, polkaAccount, userContext.bsc?.address]);
+  }, [type, polkaAccount, userContext.bsc?.address, canUseWallet]);
 
   const connectWallet = useCallback(async () => {
     if (type === 'eth') {
@@ -68,10 +88,15 @@ const WalletCard: React.FC<{
       connectToPolka &&
       typeof connectToPolka === 'function'
     ) {
-      await connectToPolka();
+      if (!canUseWallet) {
+        toggleModal();
+        return;
+      } else {
+        await connectToPolka();
+      }
     }
     setWalletConnected(true);
-  }, [connectToPolka, connenctToBSC, type]);
+  }, [connectToPolka, connenctToBSC, type, canUseWallet]);
 
   const verifyWallet = useCallback(async () => {
     let address;
@@ -233,6 +258,54 @@ const WalletCard: React.FC<{
       >
         Get wallet
       </Link>
+      <Modal isOpen={modalOpen} onClose={toggleModal}>
+        <ModalOverlay />
+        <ModalContent width="80%">
+          <ModalHeader>Haven’t got a Polkadot.js yet?</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            You&apos;ll need to{' '}
+            <StyledButton
+              variant="link"
+              as="a"
+              target="_blank"
+              href="https://polkadot.js.org/extension/"
+            >
+              install Polkadot.js
+            </StyledButton>{' '}
+            to continue. Once you have it installed, go ahead and refresh this
+            page
+            <br />
+            <br />
+            Polkadot extension was not found or disabled. If you have
+            polkadot.js but it doesn&apos;t work try this.
+            <br />
+            <br />
+            <ol style={{ padding: '0 24px 24px' }}>
+              <li>Check that you use latest version of Chrome or Firefox. </li>
+              <li>
+                If you reject polkadot.js connection go polkadot.js extension in
+                your browser, press gear and check Manage Website Access.
+                App.Polkapad.network should be allowed to use Polkapad
+                launchpad.{' '}
+              </li>
+              <li>
+                How to troubleshoot other connection issues on polkadot.js{' '}
+                {'->'}{' '}
+                <StyledButton
+                  variant="link"
+                  as="a"
+                  target="_blank"
+                  href="https://support.polkadot.network/support/solutions/articles/65000176918-how-to-troubleshoot-connection-issues-on-polkadot-js"
+                >
+                  Polkadot support webpage
+                </StyledButton>
+                .
+              </li>
+            </ol>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </Flex>
   );
 };

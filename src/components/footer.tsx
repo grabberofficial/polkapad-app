@@ -11,6 +11,7 @@ import * as React from 'react';
 import styled from '@emotion/styled';
 import { FaGithub, FaTwitter, FaTelegram } from 'react-icons/fa';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
+import { EmailSubscribeModal } from '@/components/EmailSubscribeModal/EmailSubscribeModal';
 
 export const Footer = () => (
   <StyledContainer as="footer" role="contentinfo">
@@ -137,16 +138,13 @@ export const Footer = () => (
             maxW={{ lg: '360px' }}
             pt="7px"
           >
-            <SubscribeButton
-              variant="primary"
-              type="submit"
-              flexShrink={0}
-              as="a"
-              href="https://polkapad.network/#about_us_subscribe_form"
-              target="_blank"
-            >
-              Subscribe
-            </SubscribeButton>
+            <EmailSubscribeModal
+              control={(props) => (
+                <SubscribeButton variant="primary" flexShrink={0} {...props}>
+                  Subscribe
+                </SubscribeButton>
+              )}
+            />
           </Stack>
         </LastStack>
       </Stack>

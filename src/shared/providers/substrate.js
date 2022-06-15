@@ -34,6 +34,7 @@ const INIT_STATE = {
   account: null,
   connectToPolka: null,
   disconnect: null,
+  canUseWallet: false,
 };
 
 ///
@@ -73,6 +74,8 @@ const reducer = (state, action) => {
       return { ...state, account: action.payload };
     case 'DISCONNECT':
       return { ...state, account: null, balance: null, isConnected: false };
+    case 'CAN_USE_WALLET':
+      return { ...state, canUseWallet: true };
 
     default:
       throw new Error(`Unknown type: ${action.type}`);
@@ -112,7 +115,7 @@ const loadAccounts = async (state, dispatch) => {
     const polkadotExtensionDapp = await import('@polkadot/extension-dapp');
     dispatch({ type: 'LOAD_KEYRING' });
     try {
-      await polkadotExtensionDapp.web3Enable(APP_NAME);
+      const extensions = await polkadotExtensionDapp.web3Enable(APP_NAME);
       // const savedAccounts = localStorage.getItem(CONNECTED_ACCOUNTS_STORAGE);
       // const accounts = JSON.parse(savedAccounts);
       // if (accounts && accounts.length > 0) {
@@ -121,6 +124,10 @@ const loadAccounts = async (state, dispatch) => {
       // } else {
       // }
       let allAccounts = await polkadotExtensionDapp.web3Accounts();
+
+      if (!!extensions.length && !!allAccounts.length)
+        dispatch({ type: 'CAN_USE_WALLET' });
+
       allAccounts = allAccounts.map(({ address, meta }) => ({
         address,
         meta: { ...meta, name: `${meta.name} (${meta.source})` },
@@ -131,6 +138,15 @@ const loadAccounts = async (state, dispatch) => {
       // );
       keyring.loadAll({ isDevelopment: DEVELOPMENT_KEYRING }, allAccounts);
       dispatch({ type: 'SET_KEYRING', payload: keyring });
+      const keyringOptions = keyring.getPairs().map((account) => ({
+        key: account.address,
+        value: account.address,
+        text: account.meta.name.toUpperCase(),
+        icon: 'user',
+      }));
+      if (keyringOptions.length > 0) {
+        dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
+      }
     } catch (e) {
       dispatch({ type: 'KEYRING_ERROR' });
     }
@@ -169,43 +185,11 @@ const SubstrateContextProvider = (props) => {
   }, []);
 
   const connectToPolka = useCallback(async () => {
-    const isApiConnected = await state?.api?.isConnected;
-    if (!isApiConnected) {
-      const api = connect(initState, dispatch);
-      await loadAccounts(initState, dispatch);
-      api.isReady.then(async () => {
-        const keyringOptions = keyring.getPairs().map((account) => ({
-          key: account.address,
-          value: account.address,
-          text: account.meta.name.toUpperCase(),
-          icon: 'user',
-        }));
-        if (keyringOptions.length > 0) {
-          dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
-          const {
-            data: { free: polkaBalance },
-          } = await api.query.system.account(keyringOptions[0].value);
-          dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
-          localStorage.setItem(POLKA_CONNECT_KEY, 'true');
-        }
-      });
-    } else {
-      const keyringOptions = keyring.getPairs().map((account) => ({
-        key: account.address,
-        value: account.address,
-        text: account.meta.name.toUpperCase(),
-        icon: 'user',
-      }));
-      if (keyringOptions.length > 0) {
-        dispatch({ type: 'SET_ACCOUNT', payload: keyringOptions[0].value });
-        const {
-          data: { free: polkaBalance },
-        } = await state.api.query.system.account(keyringOptions[0].value);
-        dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
-        localStorage.setItem(POLKA_CONNECT_KEY, 'true');
-      }
-    }
-  }, [state, initState]);
+    const {
+      data: { free: polkaBalance },
+    } = await state.api.query.system.account(state.account);
+    dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+  }, [state]);
 
   const disconnect = useCallback(() => {
     state.api.disconnect();
