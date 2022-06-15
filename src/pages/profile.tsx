@@ -50,6 +50,7 @@ import styled from '@emotion/styled';
 import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
 import {
   mailchimpSendFinishedKyc,
+  mailchimpSendStartKyc,
   mailchimpSendWalletAdded,
 } from '@/services/mailchimp';
 
@@ -108,6 +109,10 @@ const ProfilePage = () => {
       clearInterval(intervalID.current);
       intervalID.current = null;
     }
+
+    if (kycStatus === KycStatusTypes.ACCEPTED && user?.email) {
+      mailchimpSendFinishedKyc(user?.email);
+    }
   }, [getKycStatus, kycStatus]);
 
   useEffect(() => {
@@ -144,9 +149,13 @@ const ProfilePage = () => {
       const kyc = await fetch('/api/kyc').then((data) => data.json());
       gtagSendStartKyc();
 
+      if (user?.email) {
+        mailchimpSendStartKyc(user.email);
+      }
+
       window.open(kyc.iframeUrl);
     }
-  }, []);
+  }, [user?.email]);
 
   const fetchWallets = useCallback(async () => {
     const wallets: Array<{
@@ -299,7 +308,7 @@ const ProfilePage = () => {
           >
             Verification in progress
           </Heading>
-          <Spinner size="xl" color="#49c7da" thickness="4px" />
+          <Spinner size="xl" color="#49c7da" thickness="4px" marginTop="20px" />
         </Flex>
       )}
       {!isKYCAccepted && !isKYCInProgress && (
@@ -313,8 +322,8 @@ const ProfilePage = () => {
             Individual KYC verification
           </Heading>
           <Text marginBottom="40px" color="#303030" maxWidth={468}>
-            Each account has 3 KYC credit. If your verification fails, please
-            contact an admin for more information before submitting again.
+            Each account has 3 KYC credits. You can start KYC only after
+            verifying wallets.
           </Text>
           <Button
             variant={isKYCBlocked ? 'secondary' : 'primary'}

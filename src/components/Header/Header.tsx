@@ -131,15 +131,17 @@ export const PolkaConnentBtn = () => {
             page
             <br />
             <br />
-            Polkadot extension was not found or disabled. If you have
-            polkadot.js but it doesn&apos;t work try this.
+            Polkadot extension was not found or is disabled. If you have
+            polkadot.js but it doesn&apos;t work try this:
             <br />
             <br />
             <ol style={{ padding: '0 24px 24px' }}>
-              <li>Check that you use latest version of Chrome or Firefox. </li>
+              <li>
+                Check that you use the latest version of Chrome or Firefox.{' '}
+              </li>
               <li>
                 If you reject polkadot.js connection go polkadot.js extension in
-                your browser, press gear and check Manage Website Access.
+                your browser, press gear button and check Manage Website Access.
                 App.Polkapad.network should be allowed to use Polkapad
                 launchpad.{' '}
               </li>

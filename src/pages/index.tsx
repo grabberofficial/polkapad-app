@@ -15,7 +15,8 @@ const LaunchpadPage = () => {
   return (
     <Flex flexDirection="column">
       <Flex
-        backgroundImage="images/launchpad_bg.png"
+        backgroundImage="images/staking/bg.svg"
+        backgroundColor="#025B63"
         backgroundSize="cover"
         backgroundPosition="center"
         backgroundRepeat="no-repeat"
@@ -24,6 +25,10 @@ const LaunchpadPage = () => {
       >
         <Flex
           padding={['76px 16px 119px', '76px 16px 119px', '76px 115px 119px']}
+          backgroundImage="images/polka-min.png"
+          backgroundSize="50%"
+          backgroundPosition={['100%', '100%', '70% 25%']}
+          backgroundRepeat="no-repeat"
           flexDirection="column"
           maxWidth="1440px"
           width="100%"
@@ -34,8 +39,8 @@ const LaunchpadPage = () => {
 
           <HeaderFlex flexDirection={'column'}>
             <RegularText marginBottom={'16px'} color="#fff" fontSize={'14px'}>
-              Heterogeneous Multi-Chain Launchpad is the first Polkadot-Native
-              Launchpad.
+              We are the first Heterogeneous Multi-Chain Launchpad, native to
+              Polkadot and Kusama networks.
             </RegularText>
           </HeaderFlex>
         </Flex>
@@ -66,7 +71,7 @@ const LaunchpadPage = () => {
             <Header marginBottom={'10px'}>Register</Header>
             <RegularText marginBottom="30px">
               In order to participate in sales on Polkapad, you must sign up and
-              KYC first.
+              submit KYC first.
             </RegularText>
             <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
               <Button>Register</Button>
@@ -117,11 +122,11 @@ const LaunchpadPage = () => {
               margin={'6px 0 24px 0px'}
               cursor="pointer"
             />
-            <Header marginBottom={'10px'}>To sale</Header>
+            <Header marginBottom={'10px'}>To the sale</Header>
             <RegularText marginBottom="30px">
-              During the registration period, you must confirm your interest in
-              participation. Once registration closes, you will not be able to
-              register.
+              During the registration period, you must confirm you are
+              interested in participating. Once the registration window closes,
+              you will not be able to enter the sale.
             </RegularText>
             <Link href="https://polkapad.network/#about_us_subscribe_form">
               <Button>Subscribe</Button>

@@ -82,7 +82,7 @@ const RegisterPage = () => {
         setLoading(false);
 
         gtagSendCreateAccount();
-        mailchimpSendAccountCreated(data.email);
+        await mailchimpSendAccountCreated(data.email);
 
         push('/auth/login');
       } catch (err) {

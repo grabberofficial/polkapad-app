@@ -5,6 +5,7 @@ export enum MAILCHIMP_INTERESTS {
   NEWS = 'a909a3122f',
   COMPLETE_REGISTRATION = 'a67c5c40f9',
   WALLET_ADDED = '2bb55bf467',
+  START_KYC = 'b68c2a4367',
   FINISHED_KYC = '029fa5f103',
 }
 
@@ -31,6 +32,10 @@ export const mailchimpSendAccountCreated = async (email: string) => {
 
 export const mailchimpSendWalletAdded = async (email: string) => {
   await mailchimpSend(email, [MAILCHIMP_INTERESTS.WALLET_ADDED]);
+};
+
+export const mailchimpSendStartKyc = async (email: string) => {
+  await mailchimpSend(email, [MAILCHIMP_INTERESTS.START_KYC]);
 };
 
 export const mailchimpSendFinishedKyc = async (email: string) => {
