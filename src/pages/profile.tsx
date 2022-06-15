@@ -290,6 +290,15 @@ const ProfilePage = () => {
           justifyContent="center"
           flexDirection="column"
         >
+          <Heading
+            color="#303030"
+            fontFamily="Poppins"
+            fontSize="24px"
+            fontWeight="700"
+            margin-bottom="15px"
+          >
+            Verification in progress
+          </Heading>
           <Spinner size="xl" color="#49c7da" thickness="4px" />
         </Flex>
       )}
