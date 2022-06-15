@@ -4,3 +4,4 @@ const { publicRuntimeConfig } = getConfig();
 
 export const serviceUrl = publicRuntimeConfig?.serviceUrl;
 export const googleAnalyticsId = publicRuntimeConfig?.googleAnalyticsId;
+export const mailchimpId = publicRuntimeConfig?.mailchimpId;
