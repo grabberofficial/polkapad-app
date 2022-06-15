@@ -90,13 +90,14 @@ const IndexPage = () => {
           backgroundImage={['none', 'none', 'url(/images/staking_bg.png)']}
           backgroundRepeat="no-repeat"
           backgroundPosition="bottom"
+          backgroundSize="contain"
           // backgroundPositionY="bottom"
         >
           <Heading marginBottom={75} withUnderline>
             Staking
           </Heading>
           <Text maxWidth={383}>
-            To take a part in first sales you should have locked assets
+            To participate in sales, you must have some locked assets
           </Text>
         </Flex>
         {/* TODO: Extract to block */}
@@ -108,7 +109,9 @@ const IndexPage = () => {
         >
           <Alert marginBottom={45}>
             <AlertIcon />
-            <AlertTitle>Will be available after Polkapad mainnet.</AlertTitle>
+            <AlertTitle>
+              Will be available after the launch of Polkapad mainnet.
+            </AlertTitle>
           </Alert>
           <Flex justifyContent={'space-between'}>
             <Text

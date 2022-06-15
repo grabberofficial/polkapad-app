@@ -23,7 +23,7 @@ import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWal
 const getBnbSteps = (isLoggedIn: boolean) => [
   {
     title: 'Complete registration & verify your ETH/BNB and Polkadot addresses',
-    text: `Addressed can't be change until Polkapad mainnet`,
+    text: `Addresses can’t be changed until the launch of Polkapad mainnet.`,
     button: (
       <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
         <Button>Register</Button>
@@ -40,19 +40,18 @@ const getBnbSteps = (isLoggedIn: boolean) => [
     ),
   },
   {
-    title: 'Withdraw funds to BNB Smart chain to verified ETH/BNB address',
-    text: `Don't forget to put reminder to come to sale`,
+    title: 'Withdraw funds to BNB Smart Chain or verified ETH/BNB address',
+    text: `Don’t forget to set a reminder to come to the sale.`,
     button: <ConnectWalletButton />,
   },
   {
     title: 'Register on the Polkapad sale',
-    text: `Don't forget to put reminder to come to sale`,
+    text: `Don’t forget to set a reminder to come to the sale.`,
     button: <Button disabled>Get ready</Button>,
   },
   {
-    title: 'Come to sale and push the button',
-    text: `Sale available ONLY in sale time only on this page!
-             There is no way to add funds into locker before Polkapad mainnet`,
+    title: 'Come to the sale and push the button',
+    text: `The sale is available ONLY during specified time and only on this page! There will be no way to add funds into the locker before the launch of Polkapad mainnet`,
     button: (
       <Link href="/">
         <Button>To sale</Button>
@@ -60,8 +59,8 @@ const getBnbSteps = (isLoggedIn: boolean) => [
     ),
   },
   {
-    title: 'Get locker balance.',
-    text: `Ready to upcoming sales!`,
+    title: 'Get locker balance',
+    text: `Ready for upcoming sales!`,
     button: (
       <Link href="/">
         <Button disabled>To next sale</Button>
@@ -73,7 +72,7 @@ const getBnbSteps = (isLoggedIn: boolean) => [
 const getKSMSteps = (isLoggedIn: boolean) => [
   {
     title: 'Complete registration & verify your Kusama address',
-    text: `Address can't be change until Polkapad mainnet`,
+    text: `Addresses can’t be changed until the launch of Polkapad mainnet.`,
     button: (
       <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
         <Button>Register</Button>
@@ -82,7 +81,7 @@ const getKSMSteps = (isLoggedIn: boolean) => [
   },
   {
     title: 'Get more KSM',
-    text: `Funds can be accpted ONLY from verified wallet. Funds can't be accepted from the exchanges directly.`,
+    text: `Funds can be accepted ONLY from a verified wallet. Funds can't be accepted from exchanges directly.`,
     button: (
       <Link href="https://coinmarketcap.com/currencies/kusama/markets/">
         <Button>Get KSM</Button>
@@ -90,14 +89,14 @@ const getKSMSteps = (isLoggedIn: boolean) => [
     ),
   },
   {
-    title: 'Register on the Polkapad sale',
-    text: `Don't forget to put reminder to come to sale`,
+    title: 'Sign up for the Polkapad sale',
+    text: `Don’t forget to set a reminder to come to the sale.`,
     button: <Button disabled>Get ready</Button>,
   },
   {
-    title: 'Come to sale and push and send funds to the address',
-    text: `Sale available ONLY in sale time only on this page!
-            There is no way to add funds into locker before Polkapad mainnet`,
+    title: 'Come to the sale and push a button to send funds to the address',
+    text: `The sale is available ONLY during the designated time and ONLY on this page!
+     There will be no way to add funds to the locker before the launch of the main Polkapad network.`,
     button: (
       <Link href="/">
         <Button>To sale</Button>
@@ -105,8 +104,8 @@ const getKSMSteps = (isLoggedIn: boolean) => [
     ),
   },
   {
-    title: 'Get locker balance.',
-    text: `Ready to upcoming sales!`,
+    title: 'Get locker balance',
+    text: `Ready for upcoming sales!`,
     button: (
       <Link href="/">
         <Button disabled>To next sale</Button>
@@ -137,7 +136,7 @@ const lockedAmount = [
     amount: 0,
   },
   {
-    from: 'Ambassdor',
+    from: 'Ambassador',
     amount: 0,
   },
 ];
@@ -202,18 +201,19 @@ const LockerPage = () => {
           minHeight="1200px"
         >
           <Heading marginBottom={75} withUnderline>
-            Step by step guide
+            Step-by-step guide
           </Heading>
           <Text>
             Choose what suits you best.
             <br />
             <br />
-            Cheap and easy: Fund DOT or KSM from Binance directly with BNB smart
-            chain smart-contract (Metamask and Polkadot.js needed).
+            Cheap and Easy: deposit DOT or KSM directly from Binance via BNB
+            Smart Chain (Metamask and Polkadot.js required).
             <br />
             <br />
-            True and Native: Fund KSM in old fashioned way by sending to the
-            provided address with Kusama chain (only Polkadot.js needed).
+            True and Native: deposit KSM in an old-fashioned way by sending
+            tokens to the provided address via Kusama chain (only Polkadot.js
+            required).
           </Text>
           <Tabs padding={'30px 0px 0px 0px'} variant="unstyled">
             <Flex margin={'10px 0x 0px 0px'} flexDirection={'column'}>
@@ -274,8 +274,9 @@ const LockerPage = () => {
         >
           <Heading marginBottom={75}>Locked Amount</Heading>
           <Text marginBottom="30px">
-            Funds can be locked only at Polkapad sale event. There is no way to
-            put it after sale and before Polkapad mainnet
+            Funds can be locked only at the Polkapad sale event. There is no way
+            to add tokens after the sale and before the launch of Polkapad
+            mainnet
           </Text>
           {!isLoggedIn && (
             <Box bg="#F6F5F5" w="100%" p={4}>
@@ -323,7 +324,9 @@ const LockerPage = () => {
                 </Button>
               </Flex>
               <Flex>
-                <Text marginRight={'5px'}>Don&apos;t see provided funds?</Text>
+                <Text marginRight={'5px'}>
+                  Don&apos;t see the provided funds?
+                </Text>
                 <Text
                   color={'#49C7DA'}
                   fontWeight={700}
