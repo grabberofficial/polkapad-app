@@ -57,7 +57,8 @@ const StyledButton = styled(ChakraButton)`
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka, keyringState } = useSubstrate();
+  const { balance, account, connectToPolka, keyringState, canUseWallet } =
+    useSubstrate();
   const [modalOpen, setModalOpen] = useState(false);
 
   const toggleModal = useCallback(() => {
@@ -92,7 +93,7 @@ export const PolkaConnentBtn = () => {
       )}
       {!hasData && (
         <Button
-          onClick={account ? connectToPolka : toggleModal}
+          onClick={canUseWallet ? connectToPolka : toggleModal}
           disabled={keyringState !== 'READY'}
           variant="secondary"
           fixedWidth={200}
