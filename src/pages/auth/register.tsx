@@ -27,6 +27,7 @@ import { ExceptionTypeEnum } from '@/lib/constants';
 import { gtagSendCreateAccount } from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
+import { mailchimpSendAccountCreated } from '@/services/mailchimp';
 
 interface IFormInput {
   name: string;
@@ -81,6 +82,7 @@ const RegisterPage = () => {
         setLoading(false);
 
         gtagSendCreateAccount();
+        mailchimpSendAccountCreated(data.email);
 
         push('/auth/login');
       } catch (err) {

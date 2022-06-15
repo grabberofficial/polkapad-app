@@ -17,6 +17,7 @@ module.exports = withSentryConfig(
   withImages({
     publicRuntimeConfig: {
       serviceUrl: process.env.SERVICE_URL,
+      mailchimpId: process.env.MAILCHIMP_ID,
       googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
     },
   }),
