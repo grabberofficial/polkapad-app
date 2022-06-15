@@ -31,6 +31,9 @@ jobs:
         with:
           node-version: '16.13.0'
 
+      - name: Update npm
+        run: npm install -g npm@8.12.1
+
       - name: Install dependencies
         run: npm ci
 
