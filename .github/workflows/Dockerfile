@@ -15,5 +15,6 @@ ENV SERVICE_URL=$SERVICE_URL
 ENV SENTRY_DSN=$SENTRY_DSN
 ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 ENV MAILCHIMP_ID=$MAILCHIMP_ID
+RUN npm install -g npm@8.12.1
 RUN npm run-script build
 CMD ["npm", "run-script", "start"]
