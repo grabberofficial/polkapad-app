@@ -5,10 +5,19 @@ import { mailchimpId } from '@/config/env';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { email, groups } = req.body;
+
   const emailData = {
     email_address: email,
     status: 'subscribed',
-    groups,
+    interests: groups.reduce(
+      (acc: { [key: string]: boolean }, group: string) => {
+        return {
+          ...acc,
+          [group]: true,
+        };
+      },
+      {},
+    ),
   };
 
   const response = await fetchJson(
