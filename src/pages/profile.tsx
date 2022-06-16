@@ -18,7 +18,6 @@ import {
   Image,
   InputGroup,
   InputLeftElement,
-  Spinner,
   Text,
 } from '@chakra-ui/react';
 
