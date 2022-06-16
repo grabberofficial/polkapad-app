@@ -43,7 +43,11 @@ const schema = object()
     email: string().required('Email is required').email('Email is invalid'),
     password: string()
       .required('Password is required')
-      .min(8, 'Password must be at least 8 characters'),
+      .min(8, 'Password must be at least 8 characters')
+      .matches(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/,
+        'Password does not match the rules',
+      ),
     confirmPassword: string()
       .oneOf([ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
@@ -254,6 +258,21 @@ const RegisterPage = () => {
               {errors.password.message}
             </FormErrorMessage>
           )}
+          <Flex
+            fontWeight="400"
+            fontSize="10px"
+            lineHeight="18px"
+            color="#A5A5A5"
+            maxWidth="410px"
+            padding="5px 5px 0 5px"
+          >
+            &#8211; Minimal length 8 characters
+            <br />
+            &#8211; Only latin symbols A-z, at least one uppercase and one
+            lowercase
+            <br />
+            &#8211; At least one number and one special case character
+          </Flex>
         </FormControl>
         <FormControl isInvalid={!!errors.confirmPassword}>
           <FormLabel htmlFor="password-confirm">Confirm Password</FormLabel>

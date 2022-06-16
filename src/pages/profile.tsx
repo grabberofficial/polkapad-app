@@ -82,6 +82,8 @@ const ProfilePage = () => {
   const router = useRouter();
   const isKYCAccepted = kycStatus === KycStatusTypes.ACCEPTED;
   const isKYCBlocked = kycStatus === KycStatusTypes.BLOCKED;
+  const isKYCDeclined = kycStatus === KycStatusTypes.DECLINED;
+  const isKYCNotVerified = kycStatus === KycStatusTypes.NOT_VERIFIED;
 
   const getKycStatus = useCallback(async () => {
     const newStatus: KYCStatus = await fetchJson('/api/kycStatus');
@@ -290,7 +292,7 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {!isKYCAccepted && (
+      {isKYCNotVerified && (
         <>
           <Heading
             color="#303030"
@@ -301,19 +303,68 @@ const ProfilePage = () => {
             Individual KYC verification
           </Heading>
           <Text marginBottom="40px" color="#303030" maxWidth={468}>
-            Each account has 3 KYC credits. You can start KYC only after
-            verifying wallets.
+            You can start KYC only after verifying wallets
           </Text>
-          <Button
-            variant={isKYCBlocked ? 'secondary' : 'primary'}
-            onClick={startKyc}
-            disabled={!walletsAreVerified || isKYCBlocked}
-            width={158}
-          >
-            {isKYCBlocked ? 'KYC blocked' : 'Start KYC'}
-          </Button>
         </>
       )}
+      {isKYCDeclined && (
+        <>
+          <Heading
+            color="#303030"
+            fontFamily="Poppins"
+            fontSize="24px"
+            fontWeight="700"
+          >
+            KYC verification got failed.
+          </Heading>
+          <Text color="#303030">
+            Here&apos;s why your KYC verification may have failed:
+            <br />
+            <ol style={{ padding: '24px' }}>
+              <li>Name on documents and entered info does not match</li>
+              <li>Uploaded images are not clear</li>
+              <li>
+                Uploaded photocopy image does not match with the original
+                document image
+              </li>
+              <li>Mentioned document ID is Incorrect</li>
+              <li>Uploaded documents are not valid ones</li>
+              <li>Same document image uploaded for both documents</li>
+              <li>Document belong to an underage person</li>
+              <li>Selfie is invalid</li>
+            </ol>
+          </Text>
+          <Text fontWeight={500} marginBottom="40px">
+            To upload your KYC documents again, click on the start KYC button.
+          </Text>
+        </>
+      )}
+      {isKYCBlocked && (
+        <>
+          <Heading
+            color="#303030"
+            fontFamily="Poppins"
+            fontSize="24px"
+            fontWeight="700"
+          >
+            KYC verification got failed.
+          </Heading>
+          <Text marginBottom="40px" maxWidth={468}>
+            If you have any problems regarding KYC verification, please reach us
+            via support@polkapad.network. We will respond as soon as possible.
+            Email support is available in the following languages: English,
+            Chinese.
+          </Text>
+        </>
+      )}
+      <Button
+        variant={isKYCBlocked ? 'secondary' : 'primary'}
+        onClick={startKyc}
+        disabled={!walletsAreVerified || isKYCBlocked}
+        width={158}
+      >
+        {isKYCBlocked ? 'KYC blocked' : 'Start KYC'}
+      </Button>
     </Flex>,
   ];
 

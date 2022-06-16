@@ -7,6 +7,7 @@ import { Footer, FooterWrapper } from '@/components/footer';
 import { Button } from '@/components/Button';
 import Link from 'next/link';
 import useUser from '@/lib/hooks/useUser';
+import { EmailSubscribeModal } from '@/components/EmailSubscribeModal/EmailSubscribeModal';
 
 const LaunchpadPage = () => {
   const { user } = useUser();
@@ -128,9 +129,13 @@ const LaunchpadPage = () => {
               interested in participating. Once the registration window closes,
               you will not be able to enter the sale.
             </RegularText>
-            <Link href="https://polkapad.network/#about_us_subscribe_form">
-              <Button>Subscribe</Button>
-            </Link>
+            <EmailSubscribeModal
+              control={(props) => (
+                <Button variant="secondary" flexShrink={0} {...props}>
+                  Subscribe
+                </Button>
+              )}
+            />
           </Card>
         </Flex>
       </Flex>
@@ -159,7 +164,7 @@ const Card = styled(Flex)`
   width: 100%;
   flex-direction: column;
   justify-content: space-between;
-  height: 300px;
+  min-height: 300px;
 
   @media screen and (min-width: 48em) {
     width: 25%;
