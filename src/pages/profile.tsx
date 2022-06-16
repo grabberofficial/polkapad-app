@@ -82,7 +82,6 @@ const ProfilePage = () => {
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
   const isKYCAccepted = kycStatus === KycStatusTypes.ACCEPTED;
-  const isKYCInProgress = kycStatus === KycStatusTypes.IN_PROGRESS;
   const isKYCBlocked = kycStatus === KycStatusTypes.BLOCKED;
 
   const getKycStatus = useCallback(async () => {
@@ -292,26 +291,7 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {isKYCInProgress && (
-        <Flex
-          minHeight="300px"
-          alignItems="center"
-          justifyContent="center"
-          flexDirection="column"
-        >
-          <Heading
-            color="#303030"
-            fontFamily="Poppins"
-            fontSize="24px"
-            fontWeight="700"
-            margin-bottom="15px"
-          >
-            Verification in progress
-          </Heading>
-          <Spinner size="xl" color="#49c7da" thickness="4px" marginTop="20px" />
-        </Flex>
-      )}
-      {!isKYCAccepted && !isKYCInProgress && (
+      {!isKYCAccepted && (
         <>
           <Heading
             color="#303030"
