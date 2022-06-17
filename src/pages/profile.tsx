@@ -84,6 +84,7 @@ const ProfilePage = () => {
   const isKYCBlocked = kycStatus === KycStatusTypes.BLOCKED;
   const isKYCDeclined = kycStatus === KycStatusTypes.DECLINED;
   const isKYCNotVerified = kycStatus === KycStatusTypes.NOT_VERIFIED;
+  const isKYCInProgress = kycStatus === KycStatusTypes.IN_PROGRESS;
 
   const getKycStatus = useCallback(async () => {
     const newStatus: KYCStatus = await fetchJson('/api/kycStatus');
@@ -292,7 +293,7 @@ const ProfilePage = () => {
           </Flex>
         </>
       )}
-      {isKYCNotVerified && (
+      {(isKYCNotVerified || isKYCInProgress) && (
         <>
           <Heading
             color="#303030"
