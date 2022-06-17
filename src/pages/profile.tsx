@@ -358,14 +358,16 @@ const ProfilePage = () => {
           </Text>
         </>
       )}
-      <Button
-        variant={isKYCBlocked ? 'secondary' : 'primary'}
-        onClick={startKyc}
-        disabled={!walletsAreVerified || isKYCBlocked}
-        width={158}
-      >
-        {isKYCBlocked ? 'KYC blocked' : 'Start KYC'}
-      </Button>
+      {!isKYCAccepted && (
+        <Button
+          variant={isKYCBlocked ? 'secondary' : 'primary'}
+          onClick={startKyc}
+          disabled={!walletsAreVerified || isKYCBlocked}
+          width={158}
+        >
+          {isKYCBlocked ? 'KYC blocked' : 'Start KYC'}
+        </Button>
+      )}
     </Flex>,
   ];
 
