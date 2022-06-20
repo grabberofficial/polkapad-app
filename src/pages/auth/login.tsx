@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { object, string } from 'yup';
+import { BiHide, BiShow } from 'react-icons/bi';
 
 import { Button } from '@/components/Button';
 import { FormInput } from '@/components/FormInput/FormInput';
@@ -25,7 +26,6 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
-import { BiHide, BiShow } from 'react-icons/all';
 
 // TODO: server-side redirect from login page if user is already logged in
 
@@ -199,19 +199,11 @@ const LoginPage = () => {
               hasError={!!errors.password}
               fieldType={passwordType}
             />
-            {passwordType === 'password' ? (
-              <PasswordButton
-                as={BiShow}
-                passwordType={passwordType}
-                setPasswordType={setPasswordType}
-              />
-            ) : (
-              <PasswordButton
-                as={BiHide}
-                passwordType={passwordType}
-                setPasswordType={setPasswordType}
-              />
-            )}
+            <PasswordButton
+              as={passwordType === 'password' ? BiShow : BiHide}
+              passwordType={passwordType}
+              setPasswordType={setPasswordType}
+            />
           </InputGroup>
           {errors.password && (
             <FormErrorMessage
