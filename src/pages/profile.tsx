@@ -55,7 +55,7 @@ import {
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
-const KYC_STATUS_POLL_INTERVAL = 10000;
+const KYC_STATUS_POLL_INTERVAL = 3000;
 
 interface IFormInput {
   email: string;
