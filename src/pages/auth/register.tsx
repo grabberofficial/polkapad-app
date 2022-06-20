@@ -28,6 +28,8 @@ import { gtagSendCreateAccount } from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 import { mailchimpSendAccountCreated } from '@/services/mailchimp';
+import { BiHide, BiShow } from 'react-icons/all';
+import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
 
 interface IFormInput {
   name: string;
@@ -65,6 +67,9 @@ const RegisterPage = () => {
     resolver: yupResolver(schema),
   });
   const [loading, setLoading] = useState(false);
+  const [passwordType, setPasswordType] = useState<'password' | 'text'>(
+    'password',
+  );
   const { push } = useRouter();
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
@@ -243,10 +248,23 @@ const RegisterPage = () => {
             </InputLeftElement>
             <FormInput
               fieldName="password"
-              fieldType="password"
+              fieldType={passwordType}
               control={control}
               hasError={!!errors.password}
             />
+            {passwordType === 'password' ? (
+              <PasswordButton
+                as={BiShow}
+                passwordType={passwordType}
+                setPasswordType={setPasswordType}
+              />
+            ) : (
+              <PasswordButton
+                as={BiHide}
+                passwordType={passwordType}
+                setPasswordType={setPasswordType}
+              />
+            )}
           </InputGroup>
           {errors.password && (
             <FormErrorMessage
@@ -295,10 +313,23 @@ const RegisterPage = () => {
             </InputLeftElement>
             <FormInput
               fieldName="confirmPassword"
-              fieldType="password"
+              fieldType={passwordType}
               control={control}
               hasError={!!errors.confirmPassword}
             />
+            {passwordType === 'password' ? (
+              <PasswordButton
+                as={BiShow}
+                passwordType={passwordType}
+                setPasswordType={setPasswordType}
+              />
+            ) : (
+              <PasswordButton
+                as={BiHide}
+                passwordType={passwordType}
+                setPasswordType={setPasswordType}
+              />
+            )}
           </InputGroup>
           {errors.confirmPassword && (
             <FormErrorMessage
