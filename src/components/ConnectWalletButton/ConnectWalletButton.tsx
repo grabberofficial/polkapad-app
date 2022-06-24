@@ -8,7 +8,6 @@ export const ConnectWalletButton: React.FC = () => {
   const {
     connenctToBSC,
     dotBalance,
-    ksmBalance,
     connected,
     account,
     chainId,
@@ -35,7 +34,7 @@ export const ConnectWalletButton: React.FC = () => {
             />
           }
         >
-          {`${dotBalance} DOT | ${ksmBalance} KSM`}
+          {`${dotBalance} DOT`}
         </Button>
       )}
       {connected && account && isWrongNetwork && (
