@@ -186,9 +186,9 @@ const SubstrateContextProvider = (props) => {
 
   const connectToPolka = useCallback(async () => {
     const {
-      data: { free: polkaBalance },
+      data: { free: ksmBalance },
     } = await state.api.query.system.account(state.account);
-    dispatch({ type: 'SET_BALANCE', payload: polkaBalance.toString() });
+    dispatch({ type: 'SET_BALANCE', payload: ksmBalance.toString() });
   }, [state]);
 
   const disconnect = useCallback(() => {

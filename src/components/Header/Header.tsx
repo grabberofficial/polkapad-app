@@ -1,17 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import {
-  Flex,
-  Tabs,
-  IconButton,
-  Modal,
-  ModalOverlay,
-  ModalHeader,
-  ModalCloseButton,
-  ModalContent,
-  ModalBody,
-  Button as ChakraButton,
-} from '@chakra-ui/react';
+import { Flex, Tabs, IconButton } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
 import { Image } from '@chakra-ui/react';
@@ -21,20 +10,18 @@ import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
 import useUser from '@/lib/hooks/useUser';
-import { formatEther } from '@ethersproject/units';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useCallback, useContext } from 'react';
+import { useCallback } from 'react';
 
 import { Button } from '../Button';
 import fetchJson from '@/lib/fetchJson';
 
 import { FaUserAlt } from 'react-icons/fa';
-import { shortenPolkaAddress } from '@/lib/utils';
-import { UserContext } from '@/shared/providers/userContext';
-import { useSubstrate } from '@/shared/providers/substrate';
+
 import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
+import { PolkaConnentBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
 
 const tabs = [
   {
@@ -50,121 +37,6 @@ const tabs = [
     title: 'Staking',
   },
 ];
-
-const StyledButton = styled(ChakraButton)`
-  color: #49c7da;
-`;
-
-export const PolkaConnentBtn = () => {
-  const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka, keyringState, canUseWallet } =
-    useSubstrate();
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const toggleModal = useCallback(() => {
-    setModalOpen((isOpen) => !isOpen);
-  }, []);
-
-  const hasData = balance || (polka?.address && polka?.balance);
-
-  return (
-    <>
-      {hasData && (
-        <Button
-          variant="secondary"
-          fixedWidth={200}
-          flexShrink={0}
-          iconPlacement="left"
-          padding="0 32px"
-          icon={
-            <Image
-              src="/images/icon_polka.png"
-              alt="Polkapad"
-              width="29px"
-              height="29px"
-            />
-          }
-        >
-          {balance && parseFloat(formatEther(balance)).toFixed(3)}
-          {polka.balance && polka.balance}
-          {' DOT  | '}
-          {shortenPolkaAddress(account || polka.address)}
-        </Button>
-      )}
-      {!hasData && (
-        <Button
-          onClick={canUseWallet ? connectToPolka : toggleModal}
-          disabled={keyringState !== 'READY'}
-          variant="secondary"
-          fixedWidth={200}
-          flexShrink={0}
-          iconPlacement="left"
-          padding="0 32px"
-          icon={
-            <Image
-              src="/images/icon_polka.png"
-              alt="Polkapad"
-              width="29px"
-              height="29px"
-            />
-          }
-        >
-          Connect Polkadot
-        </Button>
-      )}
-      <Modal isOpen={modalOpen} onClose={toggleModal}>
-        <ModalOverlay />
-        <ModalContent width="80%">
-          <ModalHeader>Haven’t got a Polkadot.js yet?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            You&apos;ll need to{' '}
-            <StyledButton
-              variant="link"
-              as="a"
-              target="_blank"
-              href="https://polkadot.js.org/extension/"
-            >
-              install Polkadot.js
-            </StyledButton>{' '}
-            to continue. Once you have it installed, go ahead and refresh this
-            page
-            <br />
-            <br />
-            Polkadot extension was not found or is disabled. If you have
-            polkadot.js but it doesn&apos;t work try this:
-            <br />
-            <br />
-            <ol style={{ padding: '0 24px 24px' }}>
-              <li>
-                Check that you use the latest version of Chrome or Firefox.{' '}
-              </li>
-              <li>
-                If you reject polkadot.js connection go polkadot.js extension in
-                your browser, press gear button and check Manage Website Access.
-                App.Polkapad.network should be allowed to use Polkapad
-                launchpad.{' '}
-              </li>
-              <li>
-                How to troubleshoot other connection issues on polkadot.js{' '}
-                {'->'}{' '}
-                <StyledButton
-                  variant="link"
-                  as="a"
-                  target="_blank"
-                  href="https://support.polkadot.network/support/solutions/articles/65000176918-how-to-troubleshoot-connection-issues-on-polkadot-js"
-                >
-                  Polkadot support webpage
-                </StyledButton>
-                .
-              </li>
-            </ol>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-};
 
 export const LoginButton: React.FC = () => {
   const router = useRouter();
