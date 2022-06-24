@@ -122,7 +122,12 @@ export const Footer = () => (
               >
                 Telegram
               </StyledButton>
-              <StyledButton disabled variant="link" as="a" target="_blank">
+              <StyledButton
+                variant="link"
+                as="a"
+                target="_blank"
+                href="https://t.me/Polkapaden"
+              >
                 Telegram chat
               </StyledButton>
             </Stack>
