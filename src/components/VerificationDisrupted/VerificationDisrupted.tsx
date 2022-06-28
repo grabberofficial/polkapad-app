@@ -28,6 +28,7 @@ export const VerificationDisrupted = ({
       _hover={{ color: 'primary.hover' }}
       textDecoration="underline"
       marginTop="48px"
+      marginLeft="15px"
       onClick={() => setIsButtonVisible(true)}
     >
       Verification process disrupted?
