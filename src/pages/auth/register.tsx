@@ -30,6 +30,7 @@ import { serviceUrl } from '@/config/env';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 import { mailchimpSendAccountCreated } from '@/services/mailchimp';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
+import styled from '@emotion/styled';
 
 interface IFormInput {
   name: string;
@@ -142,18 +143,9 @@ const RegisterPage = () => {
         textAlign="center"
         marginTop="11px"
       >
-        Sign up with your email address
+        Sign up to find a dApp you love
       </Text>
-      <form
-        style={{
-          margin: '65px 0 0',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          gap: '22px',
-        }}
-        onSubmit={handleSubmit(onSubmit)}
-      >
+      <StyledForm onSubmit={handleSubmit(onSubmit)}>
         {/* TODO: extract FormControl to component if there is any other usage */}
         <FormControl isInvalid={!!errors.name}>
           <FormLabel htmlFor="name">Your Name</FormLabel>
@@ -354,7 +346,7 @@ const RegisterPage = () => {
         >
           {loading ? <Spinner /> : 'Create account'}
         </Button>
-      </form>
+      </StyledForm>
       <Text
         fontWeight="600"
         fontSize="14px"
@@ -366,12 +358,24 @@ const RegisterPage = () => {
         Already have an account?{' '}
         <Link href="/auth/login">
           <Text as="span" color="primary.basic" cursor="pointer">
-            Login
+            Log in
           </Text>
         </Link>
       </Text>
     </Grid>
   );
 };
+
+const StyledForm = styled.form`
+  margin: 65px 0 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+
+  @media (max-width: 450px) {
+    padding: 0 20px;
+  }
+`;
 
 export default RegisterPage;

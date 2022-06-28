@@ -2,14 +2,17 @@ import { Flex, Image, Text } from '@chakra-ui/react';
 import nationalIdIcon from '@/assets/national_id.svg';
 import passportIcon from '@/assets/passport.svg';
 import drivingLicenseIcon from '@/assets/driving_license.svg';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 interface KycIconsProps {
   direction?: 'column' | 'row';
 }
 
 export const KycIcons = ({ direction = 'column' }: KycIconsProps) => {
+  const isMobile = useIsMobile();
+
   return (
-    <Flex flexDirection={direction} gap="12px">
+    <Flex flexDirection={isMobile ? 'column' : direction} gap="12px">
       <Flex alignItems="center" height="36px">
         <Flex
           borderRadius="50%"
