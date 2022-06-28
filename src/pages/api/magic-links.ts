@@ -25,7 +25,7 @@ const magicLinksRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         throw error;
       }
 
-      res.status(200);
+      res.status(200).json('');
       // eslint-disable-next-line no-empty
     } catch (e) {}
   } else {
