@@ -96,6 +96,7 @@ const CodeSendPage = () => {
         lineHeight="62px"
         color="secondary.text"
         textAlign="center"
+        padding="0 20px"
       >
         Magic Login Link
       </Text>
@@ -106,6 +107,7 @@ const CodeSendPage = () => {
         color="secondary.text"
         textAlign="center"
         marginTop="11px"
+        padding="0 20px"
       >
         Please enter the email address you would like your magic login link sent
         to.
@@ -127,7 +129,7 @@ const CodeSendPage = () => {
             maxWidth="215px"
             textAlign="center"
           >
-            Your link is sent to your email
+            Your magic login link for Polkapad has been sent to your email
           </Text>
         </Flex>
       ) : (
@@ -139,6 +141,7 @@ const CodeSendPage = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               gap: '22px',
+              padding: '20px',
             }}
             onSubmit={handleSubmit(onSubmit)}
           >
