@@ -107,6 +107,8 @@ const RestorePasswordPage = () => {
         color="secondary.text"
         textAlign="center"
         marginTop="11px"
+        maxWidth="400px"
+        padding="0 20px"
       >
         Please enter the email address of an account you would like to restore
         password to.
@@ -140,6 +142,7 @@ const RestorePasswordPage = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               gap: '22px',
+              padding: '20px',
             }}
             onSubmit={handleSubmit(onSubmit)}
           >

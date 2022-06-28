@@ -115,6 +115,7 @@ const ChangePasswordPage = () => {
         lineHeight="62px"
         color="secondary.text"
         textAlign="center"
+        padding="0 20px"
       >
         Change password
       </Text>
@@ -157,6 +158,7 @@ const ChangePasswordPage = () => {
               flexDirection: 'column',
               justifyContent: 'center',
               gap: '22px',
+              padding: '20px',
             }}
             onSubmit={handleSubmit(onSubmit)}
           >
