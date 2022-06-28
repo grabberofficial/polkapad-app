@@ -175,7 +175,7 @@ export const Header: React.FC<{
 };
 
 const MobileMenu: React.FC = () => {
-  const { mutateUser } = useUser();
+  const { mutateUser, user } = useUser();
   const router = useRouter();
 
   const logout = useCallback(async () => {
@@ -192,14 +192,25 @@ const MobileMenu: React.FC = () => {
         variant="outline"
       />
       <MenuList>
-        <MenuItem onClick={() => router.push('/profile')}>My account</MenuItem>
-        <MenuItem onClick={() => router.push('/profile?kyc=true')}>
-          KYC verification
-        </MenuItem>
+        {user?.isLoggedIn && (
+          <>
+            <MenuItem onClick={() => router.push('/profile')}>
+              My account
+            </MenuItem>
+            <MenuItem onClick={() => router.push('/profile?kyc=true')}>
+              KYC verification
+            </MenuItem>
+          </>
+        )}
+        {!user?.isLoggedIn && (
+          <MenuItem onClick={() => router.push('/auth/register')}>
+            Sign up
+          </MenuItem>
+        )}
         <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>
         <MenuItem onClick={() => router.push('/locker')}>Locker</MenuItem>
         <MenuItem onClick={() => router.push('/staking')}>Staking</MenuItem>
-        <MenuItem onClick={logout}>Logout</MenuItem>
+        {user?.isLoggedIn && <MenuItem onClick={logout}>Logout</MenuItem>}
       </MenuList>
     </Menu>
   );
