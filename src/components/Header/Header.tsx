@@ -22,6 +22,7 @@ import { FaUserAlt } from 'react-icons/fa';
 
 import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
 import { PolkaConnentBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 const tabs = [
   {
@@ -40,6 +41,9 @@ const tabs = [
 
 export const SignUpButton: React.FC = () => {
   const router = useRouter();
+  const isMobile = useIsMobile();
+
+  if (isMobile) return null;
 
   return (
     <Button

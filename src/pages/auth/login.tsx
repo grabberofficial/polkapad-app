@@ -26,6 +26,8 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useRouter } from 'next/router';
 
 // TODO: server-side redirect from login page if user is already logged in
 
@@ -50,6 +52,8 @@ const LoginPage = () => {
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
+  const router = useRouter();
+  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(false);
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password',
@@ -112,8 +116,9 @@ const LoginPage = () => {
         lineHeight="62px"
         color="#303030"
         textAlign="center"
+        width={['350px', '350px', 'auto']}
       >
-        Welcome to{' '}
+        Welcome to&nbsp;
         <Text as="span" color="primary.basic">
           Polkapad
         </Text>
@@ -135,6 +140,7 @@ const LoginPage = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           gap: '22px',
+          minWidth: '350px',
         }}
         onSubmit={handleSubmit(onSubmit)}
       >
@@ -224,6 +230,15 @@ const LoginPage = () => {
         >
           {loading ? <Spinner /> : 'Log in'}
         </Button>
+        {isMobile && (
+          <Button
+            variant="secondary"
+            color="primary.basic"
+            onClick={() => router.push('/auth/register')}
+          >
+            Sign up
+          </Button>
+        )}
       </form>
       <Text
         fontWeight="600"
