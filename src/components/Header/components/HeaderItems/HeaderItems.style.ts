@@ -26,8 +26,8 @@ export const HeaderItemStyled = styled<
   }
 
   &[aria-selected='true'] {
-    color: #303030;
-    border-bottom: 3px solid #49c7da;
+    color: var(--chakra-colors-secondary-text);
+    border-bottom: 3px solid var(--chakra-colors-secondary-textHover);
   }
 
   &:focus {
@@ -36,7 +36,7 @@ export const HeaderItemStyled = styled<
 
   &:hover {
     div {
-      color: #49c7da;
+      color: var(--chakra-colors-secondary-textHover);
       transform: scale(1.03);
     }
   }

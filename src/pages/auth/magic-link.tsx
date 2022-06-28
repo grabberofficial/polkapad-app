@@ -1,18 +1,16 @@
 import { ExceptionTypeEnum } from '@/lib/constants';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
-import useUser from '@/lib/hooks/useUser';
 import { Grid, Text, Icon, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 
 import { BsHourglassSplit } from 'react-icons/bs';
+import useSWR from 'swr';
+import { User } from '@/pages/api/user';
 
 const MagicLinkPage = () => {
   const router = useRouter();
-  const { mutateUser } = useUser({
-    redirectTo: '/profile',
-    redirectIfFound: true,
-  });
+  const { data: user, mutate: mutateUser } = useSWR<User>('/api/user');
 
   const [text, setText] = useState('Authorizing you');
 
@@ -50,6 +48,12 @@ const MagicLinkPage = () => {
     }
   }, [router, authorize]);
 
+  useEffect(() => {
+    if (user?.isLoggedIn && typeof router.query.url === 'string') {
+      router.push(router.query.url);
+    }
+  }, [user]);
+
   return (
     <Grid
       maxWidth="700px"
@@ -66,7 +70,7 @@ const MagicLinkPage = () => {
         fontWeight="600"
         fontSize="50px"
         lineHeight="62px"
-        color="#303030"
+        color="secondary.text"
         textAlign="center"
       >
         Magic Login Link
@@ -75,7 +79,7 @@ const MagicLinkPage = () => {
         fontWeight="400"
         fontSize="18px"
         lineHeight="29px"
-        color="#303030"
+        color="secondary.text"
         textAlign="center"
         marginTop="11px"
       >
@@ -87,13 +91,13 @@ const MagicLinkPage = () => {
           as={BsHourglassSplit}
           width="95px"
           height="95px"
-          color="#FFCC15"
+          color="warning"
         />
         <Text
           fontWeight="700"
           fontSize="14px"
           lineHeight="23px"
-          color="#303030"
+          color="secondary.text"
           marginTop="32px"
           maxWidth="215px"
           textAlign="center"

@@ -52,6 +52,10 @@ import {
   mailchimpSendStartKyc,
   mailchimpSendWalletAdded,
 } from '@/services/mailchimp';
+import { KycIcons } from '@/components/KycIcons/KycIcons';
+import { VerificationInProgress } from '@/components/VerificationInProgress/VerificationInProgress';
+import { VerificationDisrupted } from '@/components/VerificationDisrupted/VerificationDisrupted';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -80,6 +84,7 @@ const ProfilePage = () => {
   );
   const [wallets, setWallets] = useState<{ name: string; value: string }[]>([]);
   const router = useRouter();
+  const isMobile = useIsMobile();
   const isKYCAccepted = kycStatus === KycStatusTypes.ACCEPTED;
   const isKYCBlocked = kycStatus === KycStatusTypes.BLOCKED;
   const isKYCDeclined = kycStatus === KycStatusTypes.DECLINED;
@@ -145,6 +150,10 @@ const ProfilePage = () => {
   }, [user, reset]);
 
   const startKyc = useCallback(async () => {
+    if (isMobile) {
+      router.push('/mobile-kyc');
+      return;
+    }
     if (typeof window !== 'undefined') {
       setKycStatus(KycStatusTypes.IN_PROGRESS);
       const kyc = await fetch('/api/kyc').then((data) => data.json());
@@ -156,7 +165,7 @@ const ProfilePage = () => {
 
       window.open(kyc.iframeUrl);
     }
-  }, [user?.email]);
+  }, [isMobile, router, user.email]);
 
   const fetchWallets = useCallback(async () => {
     const wallets: Array<{
@@ -213,7 +222,12 @@ const ProfilePage = () => {
               alignItems="center"
               borderRight="1px solid #E0E0E0"
             >
-              <Icon as={FaUser} height="21px" width="21px" color="#49C7DA" />
+              <Icon
+                as={FaUser}
+                height="21px"
+                width="21px"
+                color="primary.basic"
+              />
             </Flex>
           </InputLeftElement>
           <FormInput fieldName="name" hasError={false} control={control} />
@@ -230,7 +244,12 @@ const ProfilePage = () => {
               alignItems="center"
               borderRight="1px solid #E0E0E0"
             >
-              <Icon as={MdEmail} height="21px" width="21px" color="#49C7DA" />
+              <Icon
+                as={MdEmail}
+                height="21px"
+                width="21px"
+                color="primary.basic"
+              />
             </Flex>
           </InputLeftElement>
           <FormInput fieldName="email" hasError={false} control={control} />
@@ -272,56 +291,78 @@ const ProfilePage = () => {
       {isKYCAccepted && (
         <>
           <Flex alignItems="center" gap="30px">
-            <Image src={successful_kyc} color="#49C7DA" />
-            <Text color="#303030" fontWeight="700" fontSize="24px">
+            <Image src={successful_kyc} color="primary.basic" />
+            <Text color="secondary.text" fontWeight="700" fontSize="24px">
               You have been successfully verified!
             </Text>
           </Flex>
           <Flex flexDirection="column" marginTop="30px">
             <Text
-              color="#303030"
+              color="secondary.text"
               fontWeight="400"
               fontSize="14px"
               marginBottom="60px"
             >
               Now that you have verified your identity, you can participate in
-              sales, feel free to go to the launchpad.
+              sales. Feel free to go to the launchpad.
             </Text>
-            <Button variant="primary" onClick={() => router.push('/locker')}>
+            <Button
+              variant="primary"
+              onClick={() => router.push('/locker')}
+              width="158px"
+            >
               Ready to Lock
             </Button>
           </Flex>
         </>
       )}
-      {(isKYCNotVerified || isKYCInProgress) && (
+      {isKYCNotVerified && (
         <>
           <Heading
-            color="#303030"
+            color="secondary.text"
             fontFamily="Poppins"
             fontSize="24px"
             fontWeight="700"
           >
             Individual KYC verification
           </Heading>
-          <Text marginBottom="40px" color="#303030" maxWidth={468}>
-            You can start KYC only after verifying wallets
+          <Text
+            marginBottom="7px"
+            color="secondary.text"
+            maxWidth={340}
+            fontSize={14}
+          >
+            {walletsAreVerified
+              ? 'The type and name of the documents may differ depending on your country of residence.'
+              : 'You can start KYC only after verifying wallets'}
           </Text>
+          {walletsAreVerified && (
+            <Text
+              marginBottom="20px"
+              color="secondary.textLight"
+              maxWidth={340}
+              fontSize={12}
+            >
+              We recommend using a document on which the full name is indicated
+              in Latin.
+            </Text>
+          )}
         </>
       )}
       {isKYCDeclined && (
         <>
           <Heading
-            color="#303030"
+            color="secondary.text"
             fontFamily="Poppins"
             fontSize="24px"
             fontWeight="700"
           >
             KYC verification got failed.
           </Heading>
-          <Text color="#303030">
+          <Text color="secondary.text" fontSize={12} lineHeight="28px">
             Here&apos;s why your KYC verification may have failed:
             <br />
-            <ol style={{ padding: '24px' }}>
+            <ol style={{ padding: '24px 15px 0 15px' }}>
               <li>Name on documents and entered info does not match</li>
               <li>Uploaded images are not clear</li>
               <li>
@@ -335,7 +376,12 @@ const ProfilePage = () => {
               <li>Selfie is invalid</li>
             </ol>
           </Text>
-          <Text fontWeight={500} marginBottom="40px">
+          <Text
+            fontWeight={500}
+            marginBottom="20px"
+            fontSize={12}
+            lineHeight="28px"
+          >
             To upload your KYC documents again, click on the start KYC button.
           </Text>
         </>
@@ -343,27 +389,50 @@ const ProfilePage = () => {
       {isKYCBlocked && (
         <>
           <Heading
-            color="#303030"
+            color="secondary.text"
             fontFamily="Poppins"
             fontSize="24px"
             fontWeight="700"
           >
             KYC verification got failed.
           </Heading>
-          <Text marginBottom="40px" maxWidth={468}>
+          <Text maxWidth={468}>
             If you have any problems regarding KYC verification, please reach us
             via support@polkapad.network. We will respond as soon as possible.
+            <br />
+            <br />
             Email support is available in the following languages: English,
             Chinese.
           </Text>
         </>
       )}
-      {!isKYCAccepted && (
+      {isKYCInProgress && (
+        <Flex
+          minHeight="300px"
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="column"
+        >
+          <VerificationInProgress />
+          {!isMobile && (
+            <>
+              <KycIcons />
+              <VerificationDisrupted onClick={startKyc} />
+            </>
+          )}
+        </Flex>
+      )}
+      {!isKYCBlocked && !isKYCAccepted && !isKYCInProgress && (
+        <KycIcons direction={isKYCDeclined ? 'row' : 'column'} />
+      )}
+      {!isKYCAccepted && !isKYCInProgress && (
         <Button
           variant={isKYCBlocked ? 'secondary' : 'primary'}
           onClick={startKyc}
           disabled={!walletsAreVerified || isKYCBlocked}
           width={158}
+          marginTop="40px"
+          flexShrink={0}
         >
           {isKYCBlocked ? 'KYC blocked' : 'Start KYC'}
         </Button>
@@ -412,12 +481,15 @@ const ProfilePage = () => {
                     index === 0 ||
                     (index === 2 && isKYCAccepted) ||
                     (index === 1 && wallets && wallets.length === 2)
-                      ? '#49C7DA'
-                      : '#FFCC15'
+                      ? 'primary.basic'
+                      : 'warning'
                   }
                 />
                 <Text
-                  color={index === selectedTab ? '#49C7DA' : '#303030'}
+                  color={
+                    index === selectedTab ? 'primary.basic' : 'secondary.text'
+                  }
+                  _hover={{ color: 'secondary.textHover' }}
                   fontWeight="600"
                   fontSize="14px"
                   lineHeight="21px"
@@ -430,11 +502,11 @@ const ProfilePage = () => {
           <SupportButton
             top={['50px', '76px']}
             right={['10px', '96px']}
-            _hover={{ backgroundColor: '#00BAD6' }}
+            _hover={{ backgroundColor: 'primary.hover' }}
             as="a"
             href="mailto:support@polkapad.network"
           >
-            <Image src={supportIcon} width="20px" height="20px" />
+            <Image src={supportIcon} width="32px" height="32px" />
           </SupportButton>
           {/* TabContent */}
           {tabContent[selectedTab]}
@@ -449,7 +521,7 @@ const ProfilePage = () => {
 
 const SupportButton = styled(ChakraButton)`
   border-radius: 100%;
-  background-color: #49c7da;
+  background-color: var(--chakra-colors-primary-basic);
   width: 48px;
   height: 48px;
   justify-content: center;

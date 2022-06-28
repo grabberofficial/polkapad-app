@@ -113,7 +113,7 @@ const ChangePasswordPage = () => {
         fontWeight="600"
         fontSize="50px"
         lineHeight="62px"
-        color="#303030"
+        color="secondary.text"
         textAlign="center"
       >
         Change password
@@ -122,7 +122,7 @@ const ChangePasswordPage = () => {
         fontWeight="400"
         fontSize="18px"
         lineHeight="29px"
-        color="#303030"
+        color="secondary.text"
         textAlign="center"
         marginTop="11px"
       >
@@ -134,13 +134,13 @@ const ChangePasswordPage = () => {
             as={BsFillCheckCircleFill}
             width="95px"
             height="95px"
-            color="#49C7DA"
+            color="primary.basic"
           />
           <Text
             fontWeight="700"
             fontSize="14px"
             lineHeight="23px"
-            color="#303030"
+            color="secondary.text"
             marginTop="32px"
             maxWidth="215px"
             textAlign="center"
@@ -179,7 +179,7 @@ const ChangePasswordPage = () => {
                       as={RiLock2Fill}
                       height="21px"
                       width="21px"
-                      color={errors.newPassword ? '#EC305D' : '#49C7DA'}
+                      color={errors.newPassword ? 'error' : 'primary.basic'}
                     />
                   </Flex>
                 </InputLeftElement>
@@ -195,7 +195,7 @@ const ChangePasswordPage = () => {
                   fontWeight="400"
                   fontSize="12px"
                   lineHeight="18px"
-                  color="#EC305D"
+                  color="error"
                 >
                   {errors.newPassword.message}
                 </FormErrorMessage>
@@ -220,7 +220,9 @@ const ChangePasswordPage = () => {
                       as={RiLock2Fill}
                       height="21px"
                       width="21px"
-                      color={errors.confirmNewPassword ? '#EC305D' : '#49C7DA'}
+                      color={
+                        errors.confirmNewPassword ? 'error' : 'primary.basic'
+                      }
                     />
                   </Flex>
                 </InputLeftElement>
@@ -236,7 +238,7 @@ const ChangePasswordPage = () => {
                   fontWeight="400"
                   fontSize="12px"
                   lineHeight="18px"
-                  color="#EC305D"
+                  color="error"
                 >
                   {errors.confirmNewPassword.message}
                 </FormErrorMessage>
@@ -251,13 +253,13 @@ const ChangePasswordPage = () => {
             fontWeight="600"
             fontSize="14px"
             lineHeight="21px"
-            color="#303030"
+            color="secondary.text"
             marginTop="69px"
             textAlign="center"
           >
             {'Back to '}
             <Link href="/auth/login">
-              <Text as="a" href="/auth/login" color="#49C7DA">
+              <Text as="a" href="/auth/login" color="primary.basic">
                 Login
               </Text>
             </Link>

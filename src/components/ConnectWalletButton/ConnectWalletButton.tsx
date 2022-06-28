@@ -42,7 +42,7 @@ export const ConnectWalletButton: React.FC = () => {
           onClick={switchToBSC}
           variant="secondary"
           fixedWidth={220}
-          color="#EC305D"
+          color="error"
           padding="0 32px"
           iconPlacement="left"
           icon={
@@ -73,7 +73,7 @@ export const ConnectWalletButton: React.FC = () => {
             />
           }
         >
-          Connect BSC
+          Connect
         </Button>
       )}
     </>

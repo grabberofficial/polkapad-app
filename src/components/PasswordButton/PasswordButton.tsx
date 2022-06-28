@@ -22,7 +22,7 @@ export const PasswordButton = ({
 };
 
 const StyledImage = styled(Image)`
-  color: #49c7da;
+  color: var(--chakra-colors-primary-basic);
   width: 24px;
   height: 24px;
   position: absolute;
@@ -35,7 +35,7 @@ const StyledImage = styled(Image)`
 
   &:hover {
     transform: scale(1.03);
-    color: #49c7da;
+    color: var(--chakra-colors-primary-hover);
     opacity: 1;
   }
 

@@ -22,11 +22,19 @@ export const Footer = () => (
       py={{ base: '12', md: '16' }}
     >
       <FirstStack spacing={{ base: '6', md: '8' }} align="start">
-        <Image
-          src="/images/logo_footer.png"
-          alt="Polkadot fundraising hub"
-          width={240}
-        />
+        <div>
+          <Image
+            src="/images/logo_footer.svg"
+            alt="Polkadot fundraising hub"
+            width={240}
+          />
+          <Text color="footer.light" marginTop="15px">
+            Polkadot Fundraising Hub
+          </Text>
+        </div>
+        <Text color="footer.dark">
+          A single gateway to participate in developing the Polkadot ecosystem
+        </Text>
       </FirstStack>
       <Stack
         direction={{ base: 'column-reverse', md: 'column', lg: 'row' }}
@@ -34,7 +42,7 @@ export const Footer = () => (
       >
         <Stack direction="row" spacing="8">
           <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
+            <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
               Resources
             </Text>
             <Stack spacing="3" shouldWrapChildren>
@@ -73,7 +81,7 @@ export const Footer = () => (
             </Stack>
           </Stack>
           <GeneralStack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
+            <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
               General
             </Text>
             <Stack spacing="3" shouldWrapChildren>
@@ -102,7 +110,7 @@ export const Footer = () => (
             </Stack>
           </GeneralStack>
           <CommunityStack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
+            <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
               Community
             </Text>
             <Stack spacing="3" shouldWrapChildren>
@@ -134,7 +142,7 @@ export const Footer = () => (
           </CommunityStack>
         </Stack>
         <LastStack spacing="4">
-          <Text fontSize="sm" fontWeight="semibold" color="#49C7DA">
+          <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
             Join <StyledText>PolkaPad&apos;s</StyledText> mailing list
           </Text>
           <Stack
@@ -159,19 +167,19 @@ export const Footer = () => (
       direction={{ base: 'column', md: 'row' }}
       justify="center"
       alignItems="baseline"
-      py={{ base: '12', md: '16' }}
+      py={{ base: '2', md: '2' }}
     >
-      <FirstStack spacing={{ base: '6', md: '8' }} align="start">
-        <Text fontSize="sm" color="#8E8E8E">
+      <AllRightsStack spacing={{ base: '6', md: '8' }} align="start">
+        <Text fontSize="sm" color="footer.dark">
           &copy; PAD {new Date().getFullYear()} All Rights Reserved
         </Text>
-      </FirstStack>
+      </AllRightsStack>
       <Stack
         direction={{ base: 'column-reverse', md: 'column', lg: 'row' }}
         spacing={{ base: '12', md: '8' }}
       >
         <Stack direction={['column', 'row']} spacing="8">
-          <Stack spacing="4" minW="36" flex="1">
+          <Stack minW="130px" flex="1">
             <GoogleDocsViewer
               title="Terms and Service"
               fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
@@ -181,7 +189,7 @@ export const Footer = () => (
                   variant="link"
                   as="a"
                   fontSize="sm"
-                  color="#8E8E8E"
+                  color="footer.dark"
                   cursor="pointer"
                 >
                   Terms and Service
@@ -189,7 +197,7 @@ export const Footer = () => (
               )}
             />
           </Stack>
-          <Stack spacing="4" minW="36" flex="1">
+          <Stack>
             <GoogleDocsViewer
               title="Privacy Policy"
               fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
@@ -199,7 +207,7 @@ export const Footer = () => (
                   variant="link"
                   as="a"
                   fontSize="sm"
-                  color="#8E8E8E"
+                  color="footer.dark"
                   cursor="pointer"
                 >
                   Privacy Policy
@@ -208,7 +216,10 @@ export const Footer = () => (
             />
           </Stack>
         </Stack>
-        <LastStack spacing="4">
+        <Stack
+          minW={['auto', 'auto', '420px']}
+          alignItems={['flex-start', 'flex-start', 'flex-end']}
+        >
           <ButtonGroup variant="ghost">
             <StyledIconButton
               as="a"
@@ -232,15 +243,16 @@ export const Footer = () => (
               icon={<FaGithub fontSize="1.25rem" />}
             />
           </ButtonGroup>
-        </LastStack>
+        </Stack>
       </Stack>
     </Stack>
   </StyledContainer>
 );
 
 const StyledContainer = styled(Container)`
-  background: #303030;
+  background: var(--chakra-colors-footer-background);
   max-width: 100%;
+  padding-bottom: 30px;
 `;
 
 const StyledButton = styled(Button)`
@@ -248,12 +260,16 @@ const StyledButton = styled(Button)`
 `;
 
 const SubscribeButton = styled(Button)`
-  background: #49c7da;
+  background: var(--chakra-colors-primary-basic);
   color: white;
   font-weight: 600;
   font-size: 14px;
   line-height: 21px;
   padding: 13px 69px;
+
+  &:hover {
+    background: var(--chakra-colors-primary-hover);
+  }
 `;
 
 const FirstStack = styled(Stack)`
@@ -301,4 +317,12 @@ export const FooterWrapper = styled.div`
   @media screen and (min-width: 48em) {
     margin-top: 120px;
   }
+`;
+
+const AllRightsStack = styled(Stack)`
+  @media (min-width: 1100px) {
+    margin-left: -50px;
+  }
+
+  width: 250px;
 `;

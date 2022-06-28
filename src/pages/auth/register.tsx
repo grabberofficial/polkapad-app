@@ -47,7 +47,7 @@ const schema = object()
       .required('Password is required')
       .min(8, 'Password must be at least 8 characters')
       .matches(
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-._!"`'#%&,:;<>=@{}~$()*+/\\?[\]^|])(?=.{8,})(^\S*$)/,
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})(^\S*$)/,
         'Password does not match the rules',
       ),
     confirmPassword: string()
@@ -170,7 +170,7 @@ const RegisterPage = () => {
                   as={FaUser}
                   height="21px"
                   width="21px"
-                  color={errors.name ? '#EC305D' : '#49C7DA'}
+                  color={errors.name ? 'error' : 'primary.basic'}
                 />
               </Flex>
             </InputLeftElement>
@@ -185,7 +185,7 @@ const RegisterPage = () => {
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
-              color="#EC305D"
+              color="error"
             >
               {errors.name.message}
             </FormErrorMessage>
@@ -206,7 +206,7 @@ const RegisterPage = () => {
                   as={MdEmail}
                   height="21px"
                   width="21px"
-                  color={errors.email ? '#EC305D' : '#49C7DA'}
+                  color={errors.email ? 'error' : 'primary.basic'}
                 />
               </Flex>
             </InputLeftElement>
@@ -221,7 +221,7 @@ const RegisterPage = () => {
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
-              color="#EC305D"
+              color="error"
             >
               {errors.email.message}
             </FormErrorMessage>
@@ -242,7 +242,7 @@ const RegisterPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color={errors.password ? '#EC305D' : '#49C7DA'}
+                  color={errors.password ? 'error' : 'primary.basic'}
                 />
               </Flex>
             </InputLeftElement>
@@ -263,7 +263,7 @@ const RegisterPage = () => {
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
-              color="#EC305D"
+              color="error"
             >
               {errors.password.message}
             </FormErrorMessage>
@@ -281,7 +281,7 @@ const RegisterPage = () => {
             &#8211; Only latin symbols A-z, at least one uppercase and one
             lowercase
             <br />
-            &#8211; At least one number and one special case character
+            &#8211; At least one number
           </Flex>
         </FormControl>
         <FormControl isInvalid={!!errors.confirmPassword}>
@@ -299,7 +299,7 @@ const RegisterPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color={errors.confirmPassword ? '#EC305D' : '#49C7DA'}
+                  color={errors.confirmPassword ? 'error' : 'primary.basic'}
                 />
               </Flex>
             </InputLeftElement>
@@ -320,14 +320,14 @@ const RegisterPage = () => {
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
-              color="#EC305D"
+              color="error"
             >
               {errors.confirmPassword.message}
             </FormErrorMessage>
           )}
         </FormControl>
         <FormControl>
-          <FormLabel>Promo code</FormLabel>
+          <FormLabel>Secret code</FormLabel>
           <InputGroup>
             <InputLeftElement pointerEvents="none" width="55px" height="100%">
               <Flex
@@ -365,7 +365,7 @@ const RegisterPage = () => {
       >
         Already have an account?{' '}
         <Link href="/auth/login">
-          <Text as="span" color="#49C7DA">
+          <Text as="span" color="primary.basic" cursor="pointer">
             Login
           </Text>
         </Link>

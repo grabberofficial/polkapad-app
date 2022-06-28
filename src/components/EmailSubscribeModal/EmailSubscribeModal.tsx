@@ -90,7 +90,7 @@ export const EmailSubscribeModal = (props: EmailSubscribeModalProps) => {
                         as={MdEmail}
                         height="21px"
                         width="21px"
-                        color={errors.email ? '#EC305D' : '#49C7DA'}
+                        color={errors.email ? 'error' : 'primary.basic'}
                       />
                     </Flex>
                   </InputLeftElement>
@@ -105,7 +105,7 @@ export const EmailSubscribeModal = (props: EmailSubscribeModalProps) => {
                     fontWeight="400"
                     fontSize="12px"
                     lineHeight="18px"
-                    color="#EC305D"
+                    color="error"
                   >
                     {errors.email.message}
                   </FormErrorMessage>

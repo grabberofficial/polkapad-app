@@ -114,7 +114,7 @@ const LoginPage = () => {
         textAlign="center"
       >
         Welcome to{' '}
-        <Text as="span" color="#49C7DA">
+        <Text as="span" color="primary.basic">
           Polkapad
         </Text>
       </Text>
@@ -126,7 +126,7 @@ const LoginPage = () => {
         textAlign="center"
         marginTop="11px"
       >
-        Sign up with your email address
+        Log in with your email address
       </Text>
       <form
         style={{
@@ -153,7 +153,7 @@ const LoginPage = () => {
                   as={MdEmail}
                   height="21px"
                   width="21px"
-                  color={errors.email ? '#EC305D' : '#49C7DA'}
+                  color={errors.email ? 'error' : 'primary.basic'}
                 />
               </Flex>
             </InputLeftElement>
@@ -168,7 +168,7 @@ const LoginPage = () => {
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
-              color="#EC305D"
+              color="error"
             >
               {errors.email.message}
             </FormErrorMessage>
@@ -189,7 +189,7 @@ const LoginPage = () => {
                   as={RiLock2Fill}
                   height="21px"
                   width="21px"
-                  color={errors.password ? '#EC305D' : '#49C7DA'}
+                  color={errors.password ? 'error' : 'primary.basic'}
                 />
               </Flex>
             </InputLeftElement>
@@ -210,7 +210,7 @@ const LoginPage = () => {
               fontWeight="400"
               fontSize="12px"
               lineHeight="18px"
-              color="#EC305D"
+              color="error"
             >
               {errors.password.message}
             </FormErrorMessage>
@@ -222,26 +222,45 @@ const LoginPage = () => {
           type="submit"
           disabled={Object.keys(errors).length > 0}
         >
-          {loading ? <Spinner /> : 'Login'}
+          {loading ? <Spinner /> : 'Log in'}
         </Button>
       </form>
       <Text
         fontWeight="600"
         fontSize="14px"
         lineHeight="21px"
-        color="#303030"
+        color="secondary.text"
         marginTop="69px"
         textAlign="center"
         justifyContent="space-between"
         display="flex"
       >
-        <Link href="/auth/send-code">Send magic link</Link>
-        <Link href="/auth/restore-password">Forgot password?</Link>
-        <Link href="/auth/register">
-          <Text as="a" href="/auth/register" color="#49C7DA">
-            Create an account
-          </Text>
-        </Link>
+        <Flex>
+          Send
+          <Link href="/auth/send-code">
+            <Text
+              cursor="pointer"
+              color="primary.basic"
+              _hover={{ color: 'primary.hover' }}
+              marginLeft="6px"
+            >
+              magic link
+            </Text>
+          </Link>
+        </Flex>
+        <Flex>
+          <Link href="/auth/restore-password">
+            <Text
+              cursor="pointer"
+              color="primary.basic"
+              _hover={{ color: 'primary.hover' }}
+              marginRight="6px"
+            >
+              Forgot
+            </Text>
+          </Link>
+          password?
+        </Flex>
       </Text>
     </Grid>
   );

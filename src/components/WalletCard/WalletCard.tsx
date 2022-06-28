@@ -24,6 +24,8 @@ import { shortenPolkaAddress } from '@/lib/utils';
 import { useSubstrate } from '@/shared/providers/substrate';
 import { serviceUrl } from '@/config/env';
 import { ChainId } from '@usedapp/core';
+import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useRouter } from 'next/router';
 
 const StyledButton = styled(ChakraButton)`
   color: #49c7da;
@@ -42,6 +44,8 @@ const WalletCard: React.FC<{
   const previousAddress = usePrevious(walletAddress);
   const [error, setError] = React.useState('');
   const [modalOpen, setModalOpen] = useState(false);
+  const isMobile = useIsMobile();
+  const router = useRouter();
 
   const toggleModal = useCallback(() => {
     setModalOpen((isOpen) => !isOpen);
@@ -80,6 +84,11 @@ const WalletCard: React.FC<{
   }, [type, polkaAccount, userContext.bsc?.address, canUseWallet]);
 
   const connectWallet = useCallback(async () => {
+    if (isMobile) {
+      router.push('/mobile-wallet');
+      return;
+    }
+
     if (type === 'eth') {
       await connenctToBSC();
     }
@@ -96,7 +105,15 @@ const WalletCard: React.FC<{
       }
     }
     setWalletConnected(true);
-  }, [connectToPolka, connenctToBSC, type, canUseWallet]);
+  }, [
+    isMobile,
+    type,
+    connectToPolka,
+    router,
+    connenctToBSC,
+    canUseWallet,
+    toggleModal,
+  ]);
 
   const verifyWallet = useCallback(async () => {
     let address;
@@ -147,8 +164,8 @@ const WalletCard: React.FC<{
     walletText = 'Receiving wallet';
     walletUrl = 'https://polkadot.js.org/extension/';
     networkText = 'Polkadot';
-    walletIcon = '/images/icon_polka.png';
-    commentText = 'Required to receive tokens during a give away';
+    walletIcon = '/images/ksm-logo.svg';
+    commentText = 'Required to receive tokens during a giveaway';
   }
 
   return (
@@ -180,8 +197,8 @@ const WalletCard: React.FC<{
         alignItems="center"
         justifyContent="space-between"
         flexDirection={'row'}
-        border="1px solid #E5E4E4"
-        borderColor={verified ? '#49C7DA' : '#E5E4E4'}
+        border="1px solid var(--chakra-colors-primary-border)"
+        borderColor={verified ? 'primary.basic' : 'primary.border'}
         borderRadius={'4px'}
       >
         <Flex alignItems={'center'}>
@@ -191,6 +208,7 @@ const WalletCard: React.FC<{
             alt="Polkapad"
             width="29px"
             height="29px"
+            borderRadius="50%"
           />
           <WalletText>
             {((verified && walletAddress) || (!verified && walletConnected)) &&
@@ -218,7 +236,7 @@ const WalletCard: React.FC<{
           {verified && (
             <Image
               marginRight="10px"
-              src="/images/icon_ok.png"
+              src="/images/icon_ok.svg"
               alt="Polkapad"
               width="20px"
               height="20px"
@@ -229,7 +247,7 @@ const WalletCard: React.FC<{
 
       {error.length > 0 && (
         <Text
-          color="#EC305D"
+          color="error"
           fontFamily="Poppins"
           fontSize="14px"
           fontWeight="500"
@@ -252,7 +270,7 @@ const WalletCard: React.FC<{
         fontFamily="Poppins"
         fontSize="14px"
         fontWeight="600"
-        color="#49C7DA"
+        color="primary.basic"
         href={walletUrl}
         target="blank"
       >

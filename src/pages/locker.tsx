@@ -155,7 +155,7 @@ const LockerPage = () => {
         padding={'10px'}
         backgroundColor={'white'}
       >
-        <Circle size="25px" fontSize="13px" bg="#49C7DA" color="white">
+        <Circle size="25px" fontSize="13px" bg="primary.basic" color="white">
           <Text>{index + 1}</Text>
         </Circle>
         <Flex marginLeft={'20px'} marginRight={'10px'} flexDirection={'column'}>
@@ -225,14 +225,14 @@ const LockerPage = () => {
                 <TabList margin={'10px'} justifyContent={'space-between'}>
                   <Tab
                     borderRadius={'4px'}
-                    _selected={{ color: 'white', bg: '#49C7DA' }}
+                    _selected={{ color: 'white', bg: 'primary.basic' }}
                     fontSize={['10px', '12px', ' inherit']}
                   >
                     BNB Smart Chain
                   </Tab>
                   <Tab
                     borderRadius={'4px'}
-                    _selected={{ color: 'white', bg: '#49C7DA' }}
+                    _selected={{ color: 'white', bg: 'primary.basic' }}
                     fontSize={['10px', '12px', ' inherit']}
                   >
                     Kusama
@@ -328,7 +328,7 @@ const LockerPage = () => {
                   Don&apos;t see the provided funds?
                 </Text>
                 <Text
-                  color={'#49C7DA'}
+                  color="primary.basic"
                   fontWeight={700}
                   as="a"
                   href="mailto:support@polkapad.network"
