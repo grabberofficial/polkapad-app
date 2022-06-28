@@ -38,7 +38,7 @@ const tabs = [
   },
 ];
 
-export const LoginButton: React.FC = () => {
+export const SignUpButton: React.FC = () => {
   const router = useRouter();
 
   return (
@@ -55,9 +55,9 @@ export const LoginButton: React.FC = () => {
       }
       fixedWidth={152}
       withIconDivider
-      onClick={() => router.push('/auth/login')}
+      onClick={() => router.push('/auth/register')}
     >
-      Log in
+      Sign up
     </Button>
   );
 };
@@ -76,7 +76,12 @@ export const AccountButton: React.FC = () => {
       <MenuButton
         as={Button}
         leftIcon={
-          <Icon as={FaUserAlt} height="21px" width="21px" color="#49C7DA" />
+          <Icon
+            as={FaUserAlt}
+            height="21px"
+            width="21px"
+            color="primary.basic"
+          />
         }
         _active={{ background: 'white' }}
       >
@@ -84,24 +89,27 @@ export const AccountButton: React.FC = () => {
       </MenuButton>
       <MenuList borderRadius="4px" background="#F6F5F5" border="none">
         <MenuItem
-          color="#5B5B5B"
-          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
+          color="menu.text"
+          fontWeight={600}
+          _hover={{ color: 'white', backgroundColor: 'primary.basic' }}
           paddingLeft="20px"
           onClick={() => router.push('/profile')}
         >
           My account
         </MenuItem>
         <MenuItem
-          color="#5B5B5B"
-          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
+          color="menu.text"
+          fontWeight={600}
+          _hover={{ color: 'white', backgroundColor: 'primary.basic' }}
           paddingLeft="20px"
           onClick={() => router.push('/profile?kyc=true')}
         >
           KYC Verification
         </MenuItem>
         <MenuItem
-          color="#5B5B5B"
-          _hover={{ color: 'white', backgroundColor: '#49C7DA' }}
+          color="menu.text"
+          fontWeight={600}
+          _hover={{ color: 'white', backgroundColor: 'primary.basic' }}
           paddingLeft="20px"
           onClick={logout}
         >
@@ -136,7 +144,7 @@ export const Header: React.FC<{
     >
       <Link href="https://polkapad.network">
         <Image
-          src="/images/logo_header.png"
+          src="/images/logo_header.svg"
           alt="Polkapad"
           padding={['24px 10px 24px 0', '24px 0']}
           width={['120px', '170px']}
@@ -156,11 +164,11 @@ export const Header: React.FC<{
         <RightContainer>
           <ConnectWalletButton />
           <PolkaConnentBtn />
-          {props.isLoggedIn ? <AccountButton /> : <LoginButton />}
+          {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
         </RightContainer>
       </DesktopMenuWrapper>
       <MobileMenuWrapper>
-        {props.isLoggedIn ? <AccountButton /> : <LoginButton />}
+        {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
         <MobileMenu />
       </MobileMenuWrapper>
     </Flex>

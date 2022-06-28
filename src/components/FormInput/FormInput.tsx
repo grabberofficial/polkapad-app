@@ -33,8 +33,8 @@ export const FormInput = ({
             borderRadius="4px"
             id={fieldName}
             type={fieldType}
-            errorBorderColor={hasError ? '#EC305D' : undefined}
-            color={hasError ? '#EC305D' : undefined}
+            errorBorderColor={hasError ? 'error' : undefined}
+            color={hasError ? 'error' : undefined}
             {...field}
           />
         )}
@@ -50,8 +50,8 @@ export const FormInput = ({
       borderRadius="4px"
       id={fieldName}
       type={fieldType}
-      errorBorderColor={hasError ? '#EC305D' : undefined}
-      color={hasError ? '#EC305D' : undefined}
+      errorBorderColor={hasError ? 'error' : undefined}
+      color={hasError ? 'error' : undefined}
     />
   );
 };

@@ -167,12 +167,12 @@ const IndexPage = () => {
             <GridItem rowSpan={1} colSpan={1}>
               <Text
                 textTransform="uppercase"
-                color="#303030"
+                color="secondary.text"
                 lineHeight="21px"
                 fontSize="14px"
                 fontWeight="700"
               >
-                <Text color="#49C7DA" as="span">
+                <Text color="primary.basic" as="span">
                   Stake
                 </Text>{' '}
                 PLPD
@@ -257,12 +257,12 @@ const IndexPage = () => {
             <GridItem rowSpan={1} colSpan={1}>
               <Text
                 textTransform="uppercase"
-                color="#303030"
+                color="secondary.text"
                 lineHeight="21px"
                 fontSize="14px"
                 fontWeight="700"
               >
-                <Text color="#49C7DA" as="span">
+                <Text color="primary.basic" as="span">
                   WITHDRAW
                 </Text>{' '}
                 PLPD
@@ -339,7 +339,7 @@ const IndexPage = () => {
                 fontWeight="700"
               >
                 your{' '}
-                <Text color="#49C7DA" as="span">
+                <Text color="primary.basic" as="span">
                   Stats
                 </Text>
               </Text>
@@ -362,7 +362,7 @@ const IndexPage = () => {
                 lineHeight="27px"
                 textAlign="right"
                 textTransform="uppercase"
-                color="#303030"
+                color="secondary.text"
                 whiteSpace="nowrap"
               >
                 TBA
@@ -387,7 +387,7 @@ const IndexPage = () => {
                 lineHeight="27px"
                 textAlign="right"
                 textTransform="uppercase"
-                color="#303030"
+                color="secondary.text"
                 whiteSpace="nowrap"
                 position="relative"
                 // _after={{
@@ -423,7 +423,7 @@ const IndexPage = () => {
                 lineHeight="27px"
                 textAlign="right"
                 textTransform="uppercase"
-                color="#303030"
+                color="secondary.text"
                 whiteSpace="nowrap"
                 position="relative"
                 // _after={{
@@ -570,7 +570,7 @@ const IndexPage = () => {
               fontSize="14px"
               lineHeight="21px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               Total PLPD Staked <InfoIcon />
             </Text>
@@ -580,7 +580,7 @@ const IndexPage = () => {
               fontSize="38px"
               lineHeight="57px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               TBA
             </Text>
@@ -590,7 +590,7 @@ const IndexPage = () => {
               fontWeight="600"
               lineHeight="21px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               ~
             </Text>
@@ -612,7 +612,7 @@ const IndexPage = () => {
               fontSize="14px"
               lineHeight="21px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               Total Rewards Redistributed <InfoIcon />
             </Text>
@@ -622,7 +622,7 @@ const IndexPage = () => {
               fontSize="38px"
               lineHeight="57px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               TBA
             </Text>
@@ -632,7 +632,7 @@ const IndexPage = () => {
               fontWeight="600"
               lineHeight="21px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               ~
             </Text>
@@ -654,7 +654,7 @@ const IndexPage = () => {
               fontSize="14px"
               lineHeight="21px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               Reward Unlock Rate <InfoIcon />
             </Text>
@@ -664,7 +664,7 @@ const IndexPage = () => {
               fontSize="38px"
               lineHeight="57px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               TBA
             </Text>
@@ -674,7 +674,7 @@ const IndexPage = () => {
               fontWeight="600"
               lineHeight="21px"
               textTransform="uppercase"
-              color="#303030"
+              color="secondary.text"
             >
               ~
             </Text>
@@ -720,8 +720,8 @@ const IndexPage = () => {
                     <h2>
                       <AccordionButton
                         padding="20px 25px"
-                        color="#303030"
-                        _expanded={{ bg: '#303030', color: 'white' }}
+                        color="secondary.text"
+                        _expanded={{ bg: 'background.dark', color: 'white' }}
                       >
                         <Box
                           flex="1"
@@ -742,7 +742,7 @@ const IndexPage = () => {
                     </h2>
                     <AccordionPanel
                       padding="0px 155px 19px 25px"
-                      background="#303030"
+                      background="background.dark"
                       color="#F6F5F5"
                       fontWeight="400"
                       fontSize="14px"

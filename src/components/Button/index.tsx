@@ -32,17 +32,17 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
     const hoverStyle =
       variant === 'primary'
         ? {
-            backgroundColor: '#00BAD6',
+            backgroundColor: 'var(--chakra-colors-primary-hover)',
             '& .button-arrow': {
               transform: 'translateX(3px)',
               color: 'green',
             },
             '& .arrow-container': {
-              borderColor: '#12A8BF',
+              borderColor: 'yellow',
             },
           }
         : {
-            color: '#49c7da',
+            color: 'var(--chakra-colors-secondary-textHover)',
             '& .button-arrow': {
               transform: 'translateX(3px)',
             },
@@ -53,8 +53,16 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
 
     return (
       <ChakraButton
-        backgroundColor={variant === 'primary' ? '#49C7DA' : '#FFFFFF'}
-        color={variant === 'primary' ? '#FFFFFF' : '#303030'}
+        backgroundColor={
+          variant === 'primary'
+            ? 'var(--chakra-colors-primary-basic)'
+            : 'var(--chakra-colors-secondary-basic)'
+        }
+        color={
+          variant === 'primary'
+            ? 'var(--chakra-colors-primary-text)'
+            : 'var(--chakra-colors-secondary-text)'
+        }
         fontSize={14}
         fontWeight={600}
         fontFamily="Poppins"

@@ -12,7 +12,6 @@ import {
   Button as ChakraButton,
 } from '@chakra-ui/react';
 import { formatEther } from '@ethersproject/units';
-import { shortenPolkaAddress } from '@/lib/utils';
 import styled from '@emotion/styled';
 import { useSubstrate } from '@/shared/providers/substrate';
 
@@ -22,7 +21,7 @@ const StyledButton = styled(ChakraButton)`
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, account, connectToPolka, keyringState, canUseWallet } =
+  const { balance, connectToPolka, keyringState, canUseWallet } =
     useSubstrate();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -37,23 +36,23 @@ export const PolkaConnentBtn = () => {
       {hasData && (
         <Button
           variant="secondary"
-          fixedWidth={200}
+          fixedWidth={160}
           flexShrink={0}
           iconPlacement="left"
           padding="0 32px"
           icon={
             <Image
-              src="/images/icon_polka.png"
+              src="/images/ksm-logo.svg"
               alt="Polkapad"
               width="29px"
               height="29px"
+              borderRadius="50%"
             />
           }
         >
           {balance && parseFloat(formatEther(balance)) * 1000000}
           {polka.balance && polka.balance}
-          {' KSM  | '}
-          {shortenPolkaAddress(account || polka.address)}
+          {' KSM'}
         </Button>
       )}
       {!hasData && (
@@ -61,20 +60,21 @@ export const PolkaConnentBtn = () => {
           onClick={canUseWallet ? connectToPolka : toggleModal}
           disabled={keyringState !== 'READY'}
           variant="secondary"
-          fixedWidth={200}
+          fixedWidth={160}
           flexShrink={0}
           iconPlacement="left"
           padding="0 32px"
           icon={
             <Image
-              src="/images/icon_polka.png"
+              src="/images/ksm-logo.svg"
               alt="Polkapad"
               width="29px"
               height="29px"
+              borderRadius="50%"
             />
           }
         >
-          Connect Polkadot
+          Connect
         </Button>
       )}
       <Modal isOpen={modalOpen} onClose={toggleModal}>

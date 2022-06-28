@@ -17,7 +17,7 @@ export const Heading: React.FC<{ withUnderline?: boolean } & HeadingProps> = ({
               content: '""',
               width: '43px',
               height: '5px',
-              backgroundColor: '#49C7DA',
+              backgroundColor: 'primary.basic',
               position: 'absolute',
               bottom: '-11px',
               left: 0,
