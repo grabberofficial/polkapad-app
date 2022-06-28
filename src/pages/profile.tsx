@@ -165,7 +165,7 @@ const ProfilePage = () => {
 
       window.open(kyc.iframeUrl);
     }
-  }, [isMobile, router, user.email]);
+  }, [isMobile, router, user?.email]);
 
   const fetchWallets = useCallback(async () => {
     const wallets: Array<{
