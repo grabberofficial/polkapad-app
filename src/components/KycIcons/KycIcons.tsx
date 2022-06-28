@@ -43,7 +43,7 @@ export const KycIcons = ({ direction = 'column' }: KycIconsProps) => {
           Passport
         </Text>
       </Flex>
-      <Flex alignItems="baseline" height="36px">
+      <Flex alignItems="center" height="36px">
         <Flex
           borderRadius="50%"
           backgroundColor="kycIcons"
