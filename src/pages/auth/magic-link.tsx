@@ -49,8 +49,10 @@ const MagicLinkPage = () => {
   }, [router, authorize]);
 
   useEffect(() => {
-    if (user?.isLoggedIn && typeof router.query.url === 'string') {
-      router.push(router.query.url);
+    if (user?.isLoggedIn) {
+      router.push(
+        typeof router.query.url === 'string' ? router.query.url : '/profile',
+      );
     }
   }, [user]);
 

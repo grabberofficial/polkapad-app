@@ -22,7 +22,6 @@ import { FaUserAlt } from 'react-icons/fa';
 
 import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
 import { PolkaConnentBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
 
 const tabs = [
   {
@@ -41,9 +40,6 @@ const tabs = [
 
 export const SignUpButton: React.FC = () => {
   const router = useRouter();
-  const isMobile = useIsMobile();
-
-  if (isMobile) return null;
 
   return (
     <Button
@@ -172,7 +168,6 @@ export const Header: React.FC<{
         </RightContainer>
       </DesktopMenuWrapper>
       <MobileMenuWrapper>
-        {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
         <MobileMenu />
       </MobileMenuWrapper>
     </Flex>
@@ -180,7 +175,13 @@ export const Header: React.FC<{
 };
 
 const MobileMenu: React.FC = () => {
+  const { mutateUser } = useUser();
   const router = useRouter();
+
+  const logout = useCallback(async () => {
+    await mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
+    router.push('/');
+  }, [mutateUser, router]);
 
   return (
     <Menu>
@@ -191,9 +192,14 @@ const MobileMenu: React.FC = () => {
         variant="outline"
       />
       <MenuList>
+        <MenuItem onClick={() => router.push('/profile')}>My account</MenuItem>
+        <MenuItem onClick={() => router.push('/profile?kyc=true')}>
+          KYC verification
+        </MenuItem>
         <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>
         <MenuItem onClick={() => router.push('/locker')}>Locker</MenuItem>
         <MenuItem onClick={() => router.push('/staking')}>Staking</MenuItem>
+        <MenuItem onClick={logout}>Logout</MenuItem>
       </MenuList>
     </Menu>
   );

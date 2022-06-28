@@ -153,7 +153,7 @@ const WalletCard: React.FC<{
   }, [walletAddress, previousAddress]);
 
   let numberText = '1';
-  let walletText = 'Funding wallet';
+  let walletText = 'Funding network';
   let walletUrl = 'https://metamask.io/';
   let networkText = 'BNB Smart chain';
   let commentText =
@@ -161,7 +161,7 @@ const WalletCard: React.FC<{
   let walletIcon = '/images/icon_bsc.png';
   if (type !== 'eth') {
     numberText = '2';
-    walletText = 'Receiving wallet';
+    walletText = 'Receiving network';
     walletUrl = 'https://polkadot.js.org/extension/';
     networkText = 'Polkadot';
     walletIcon = '/images/ksm-logo.svg';
@@ -174,11 +174,11 @@ const WalletCard: React.FC<{
       position={'relative'}
       flexDirection={'column'}
       width={['100%', '100%', '466px']}
-      padding={'26px 50px'}
+      padding={['16px', '26px 50px']}
       border={'1px solid #E9E9E9'}
       borderRadius="4px"
     >
-      <Label>{numberText}</Label>
+      {!isMobile && <Label>{numberText}</Label>}
       <Heading
         color="#303030"
         fontFamily="Poppins"
@@ -220,7 +220,7 @@ const WalletCard: React.FC<{
         <Flex>
           {!walletConnected && !verified && (
             <Button height="36px" variant="primary" onClick={connectWallet}>
-              Connect wallet
+              Connect
             </Button>
           )}
           {!verified && walletConnected && !isWrongNetwork && (
@@ -358,6 +358,10 @@ const WalletText = styled(Text)`
   padding-left: 25px;
   height: 20px;
   border-left: 1px solid #e0e0e0;
+
+  @media (max-width: 500px) {
+    padding-left: 10px;
+  }
 `;
 
 export default WalletCard;
