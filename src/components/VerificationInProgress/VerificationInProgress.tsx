@@ -1,10 +1,10 @@
-import { Image, Text } from '@chakra-ui/react';
+import { Flex, Image, Text } from '@chakra-ui/react';
 import spinner from '@/assets/spinner.svg';
 import styled from '@emotion/styled';
 
 export const VerificationInProgress = () => {
   return (
-    <>
+    <Flex alignItems="center" flexDirection="column">
       <AnimatedImage src={spinner} />
       <Text
         color="secondary.text"
@@ -24,7 +24,7 @@ export const VerificationInProgress = () => {
       >
         Please wait 5 minutes
       </Text>
-    </>
+    </Flex>
   );
 };
 

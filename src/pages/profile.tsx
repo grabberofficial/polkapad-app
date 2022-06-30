@@ -412,14 +412,14 @@ const ProfilePage = () => {
         <Flex
           minHeight="300px"
           alignItems="center"
-          justifyContent="center"
+          justifyContent={isMobile ? 'center' : 'flex-start'}
           flexDirection="column"
         >
           <VerificationInProgress />
           {!isMobile && (
             <>
               <KycIcons />
-              <VerificationDisrupted onClick={startKyc} />
+              <VerificationDisrupted onButtonClick={startKyc} />
             </>
           )}
         </Flex>

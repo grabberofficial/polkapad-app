@@ -1,15 +1,20 @@
 import { Text } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Button } from '@/components/Button';
 
 interface VerificationDisruptedProps {
-  onClick: () => void;
+  onButtonClick: () => void;
 }
 
 export const VerificationDisrupted = ({
-  onClick,
+  onButtonClick,
 }: VerificationDisruptedProps) => {
   const [isButtonVisible, setIsButtonVisible] = useState(false);
+
+  const onClick = useCallback(() => {
+    setIsButtonVisible(false);
+    onButtonClick();
+  }, [onButtonClick]);
 
   return isButtonVisible ? (
     <Button
@@ -28,7 +33,6 @@ export const VerificationDisrupted = ({
       _hover={{ color: 'primary.hover' }}
       textDecoration="underline"
       marginTop="48px"
-      marginLeft="15px"
       onClick={() => setIsButtonVisible(true)}
     >
       Verification process disrupted?

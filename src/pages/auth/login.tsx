@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import Link from 'next/link';
 import { MdEmail } from 'react-icons/md';
@@ -43,12 +43,18 @@ const schema = object()
   })
   .required();
 
+enum EMAIL_ERROR_TYPES {
+  CUSTOM = 'custom',
+  VALIDATE = 'validate',
+}
+
 const LoginPage = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
   });
@@ -62,7 +68,12 @@ const LoginPage = () => {
     redirectTo: '/profile',
     redirectIfFound: true,
   });
-  // const { push } = useRouter();
+
+  useEffect(() => {
+    if (errors.email?.type === EMAIL_ERROR_TYPES.CUSTOM && !errors.password) {
+      clearErrors();
+    }
+  }, [clearErrors, errors.email, errors.password]);
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
@@ -82,11 +93,11 @@ const LoginPage = () => {
           switch (error.data.type) {
             case ExceptionTypeEnum.IncorrectEmailOrPassword:
               setError('email', {
-                type: 'custom',
+                type: EMAIL_ERROR_TYPES.CUSTOM,
               });
               setError('password', {
                 message: 'Incorrect email or password',
-                type: 'validate',
+                type: EMAIL_ERROR_TYPES.VALIDATE,
               });
               break;
             // TODO: other errors handling
