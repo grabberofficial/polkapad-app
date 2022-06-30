@@ -13,17 +13,21 @@ export const gtagSendEvent = (
 };
 
 export const gtagSendCreateAccount = (): void => {
-  gtagSendEvent('create-account', 'registration-form');
+  gtagSendEvent('create_account', 'wl_page');
+};
+
+export const gtagSendCreateAccountWaitList = (): void => {
+  gtagSendEvent('succes-waitlested', 'thx_page');
 };
 
 export const gtagSendStartKyc = (): void => {
-  gtagSendEvent('start-kyc', 'kyc');
+  gtagSendEvent('start_kyc', 'wl_page');
 };
 
 export const gtagSendSuccessKyc = (): void => {
-  gtagSendEvent('success-kyc', 'kyc');
+  gtagSendEvent('success_kyc', 'wl_page');
 };
 
 export const gtagSendWalletAdded = (): void => {
-  gtagSendEvent('wallet-added', 'kyc');
+  gtagSendEvent('wallet_added', 'wl_page');
 };

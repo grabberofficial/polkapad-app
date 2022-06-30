@@ -25,7 +25,10 @@ import { object, ref, string } from 'yup';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
-import { gtagSendCreateAccount } from '@/services/analytics';
+import {
+  gtagSendCreateAccount,
+  gtagSendCreateAccountWaitList,
+} from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 import { mailchimpSendAccountCreated } from '@/services/mailchimp';
@@ -71,7 +74,8 @@ const RegisterPage = () => {
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password',
   );
-  const { push } = useRouter();
+  const { push, pathname } = useRouter();
+  const isWaitRoute = pathname === '/auth/wait';
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
@@ -91,7 +95,7 @@ const RegisterPage = () => {
         });
         setLoading(false);
 
-        gtagSendCreateAccount();
+        isWaitRoute ? gtagSendCreateAccountWaitList() : gtagSendCreateAccount();
         await mailchimpSendAccountCreated(data.email);
 
         push('/auth/login');
@@ -111,7 +115,7 @@ const RegisterPage = () => {
         }
       }
     },
-    [push, setError],
+    [isWaitRoute, push, setError],
   );
 
   return (

@@ -8,6 +8,7 @@ interface FormInputProps {
   fieldType?: HTMLInputTypeAttribute;
   fieldName: string;
   hasError?: boolean;
+  onChange?: () => void;
 }
 
 export const FormInput = ({
@@ -23,7 +24,7 @@ export const FormInput = ({
         name={fieldName}
         control={control}
         defaultValue={defaultValue}
-        render={({ field }) => (
+        render={({ field: { onChange, ...field } }) => (
           <Input
             height="48px"
             paddingLeft="72px"
@@ -35,6 +36,7 @@ export const FormInput = ({
             type={fieldType}
             errorBorderColor={hasError ? 'error' : undefined}
             color={hasError ? 'error' : undefined}
+            onChange={onChange}
             {...field}
           />
         )}
