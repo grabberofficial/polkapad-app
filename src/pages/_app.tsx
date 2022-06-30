@@ -8,11 +8,14 @@ import { SWRConfig } from 'swr';
 import fetchJson from '@/lib/fetchJson';
 import dynamic from 'next/dynamic';
 import { googleAnalyticsId } from '@/config/env';
+import { checkIsIOS } from '@/shared/utils/checkIsIOS';
 
 const meta = {
   title: 'Polkapad - HMC Launchpad',
   description:
     'Heterogeneous Multi-Chain Launchpad is the first Polkadot-Native Launchpad.',
+  viewport:
+    'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
 };
 
 const App = (props: AppProps): JSX.Element => {
@@ -23,6 +26,7 @@ const App = (props: AppProps): JSX.Element => {
       <Head>
         <title>{meta.title}</title>
         <meta name="application-name" content={meta.title} />
+        {checkIsIOS() && <meta name="viewport" content={meta.viewport} />}
         <meta name="apple-mobile-web-app-title" content={meta.title} />
         <meta property="og:title" content={meta.title} />
         <meta name="description" content={meta.description} />

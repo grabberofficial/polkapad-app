@@ -10,7 +10,10 @@ import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline'
 import WalletCard from '@/components/WalletCard/WalletCard';
 import useUser from '@/lib/hooks/useUser';
 import {
-  Button as ChakraButton,
+  Accordion,
+  AccordionButton,
+  AccordionItem,
+  AccordionPanel,
   Flex,
   FormControl,
   FormLabel,
@@ -44,8 +47,6 @@ import {
 } from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 
-import supportIcon from '@/assets/support.svg';
-import styled from '@emotion/styled';
 import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
 import {
   mailchimpSendFinishedKyc,
@@ -56,6 +57,8 @@ import { KycIcons } from '@/components/KycIcons/KycIcons';
 import { VerificationInProgress } from '@/components/VerificationInProgress/VerificationInProgress';
 import { VerificationDisrupted } from '@/components/VerificationDisrupted/VerificationDisrupted';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { SupportButton } from '@/components/SupportButton/SupportButton';
+import { IoIosArrowForward } from 'react-icons/io';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -258,7 +261,7 @@ const ProfilePage = () => {
     </Flex>,
     <Flex
       paddingBottom="100px"
-      width={['100%', '100%', '466px']}
+      width={['100%', '100%', '100%', '100%', '466px']}
       flexDirection="column"
       key="wallet"
       alignItems={'flex-end'}
@@ -283,7 +286,6 @@ const ProfilePage = () => {
     </Flex>,
     <Flex
       flexBasis={isKYCAccepted ? '404px' : '800px'}
-      height="550px"
       flexDirection="column"
       gap={isKYCAccepted ? '28px' : '9px'}
       key="kyc"
@@ -444,72 +446,155 @@ const ProfilePage = () => {
     <Fragment>
       {' '}
       <Flex
-        padding={['40px 16px', '40px 16px', '76px 155px 0']}
+        padding={['40px 16px', '40px 16px', '40px 16px', '76px 155px 0']}
         flexDirection="column"
         position="relative"
       >
-        <Heading marginBottom={101} withUnderline>
-          User Profile
-        </Heading>
+        {isMobile ? (
+          <Heading fontSize="20px" marginBottom="20px">
+            User Profile
+          </Heading>
+        ) : (
+          <Heading marginBottom={101} withUnderline>
+            User Profile
+          </Heading>
+        )}
 
         <Flex flexDirection={['column', 'column', 'column', 'row']}>
-          <Flex
-            direction={['column', 'row', 'row', 'column']}
-            gap="30px"
-            flexBasis="30%"
-            mr={[0, 0, 0, '20px']}
-            mb={['20px', '20px', '20px', 0]}
-          >
-            {tabs.map((tab, index) => (
-              <Flex
-                gap="11px"
-                alignItems="center"
-                justifyContent="flex-start"
-                cursor="pointer"
-                key={index}
-                onClick={() => selectTab(index)}
-              >
-                <Icon
-                  as={
-                    index === 0 ||
-                    (index === 2 && isKYCAccepted) ||
-                    (index === 1 && wallets && wallets.length === 2)
-                      ? BsFillCheckCircleFill
-                      : BsFillExclamationCircleFill
-                  }
-                  color={
-                    index === 0 ||
-                    (index === 2 && isKYCAccepted) ||
-                    (index === 1 && wallets && wallets.length === 2)
-                      ? 'primary.basic'
-                      : 'warning'
-                  }
-                />
-                <Text
-                  color={
-                    index === selectedTab ? 'primary.basic' : 'secondary.text'
-                  }
-                  _hover={{ color: 'secondary.textHover' }}
-                  fontWeight="600"
-                  fontSize="14px"
-                  lineHeight="21px"
+          {!isMobile && (
+            <Flex
+              direction={['column', 'row', 'row', 'column']}
+              gap="30px"
+              flexBasis="30%"
+              mr={[0, 0, 0, '20px']}
+              mb={['20px', '20px', '20px', 0]}
+            >
+              {tabs.map((tab, index) => (
+                <Flex
+                  gap="11px"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  cursor="pointer"
+                  key={index}
+                  onClick={() => selectTab(index)}
                 >
-                  {tab}
-                </Text>
-              </Flex>
-            ))}
-          </Flex>
-          <SupportButton
-            top={['50px', '76px']}
-            right={['10px', '96px']}
-            _hover={{ backgroundColor: 'primary.hover' }}
-            as="a"
-            href="mailto:support@polkapad.network"
-          >
-            <Image src={supportIcon} width="32px" height="32px" />
-          </SupportButton>
-          {/* TabContent */}
-          {tabContent[selectedTab]}
+                  <Icon
+                    as={
+                      index === 0 ||
+                      (index === 2 && isKYCAccepted) ||
+                      (index === 1 && walletsAreVerified)
+                        ? BsFillCheckCircleFill
+                        : BsFillExclamationCircleFill
+                    }
+                    color={
+                      index === 0 ||
+                      (index === 2 && isKYCAccepted) ||
+                      (index === 1 && walletsAreVerified)
+                        ? 'primary.basic'
+                        : 'warning'
+                    }
+                  />
+                  <Text
+                    color={
+                      index === selectedTab ? 'primary.basic' : 'secondary.text'
+                    }
+                    _hover={{ color: 'secondary.textHover' }}
+                    fontWeight="600"
+                    fontSize="14px"
+                    lineHeight="21px"
+                  >
+                    {tab}
+                  </Text>
+                </Flex>
+              ))}
+            </Flex>
+          )}
+          <SupportButton />
+          {isMobile ? (
+            <Accordion allowMultiple w="100%" sx={{ columnCount: [1] }}>
+              {tabContent.map((tab, index) => (
+                <AccordionItem
+                  margin="10px 0"
+                  border="none"
+                  key="index"
+                  w="100%"
+                >
+                  {({ isExpanded }) => (
+                    <>
+                      <AccordionButton
+                        padding="20px 25px"
+                        color="secondary.text"
+                        backgroundColor="secondary.basic"
+                        border="1px solid var(--chakra-colors-border)"
+                        borderRadius="4px"
+                        _expanded={{
+                          bg: 'secondary.basic',
+                          borderBottom: 'none',
+                          borderBottomRadius: '0',
+                        }}
+                      >
+                        <Flex
+                          flex="1"
+                          flexDirection="row"
+                          textAlign="left"
+                          fontWeight="600"
+                          fontSize="14px"
+                          lineHeight="21px"
+                        >
+                          <Icon
+                            as={
+                              index === 0 ||
+                              (index === 2 && isKYCAccepted) ||
+                              (index === 1 && walletsAreVerified)
+                                ? BsFillCheckCircleFill
+                                : BsFillExclamationCircleFill
+                            }
+                            width={19}
+                            height={19}
+                            marginRight="11px"
+                            color={
+                              index === 0 ||
+                              (index === 2 && isKYCAccepted) ||
+                              (index === 1 && walletsAreVerified)
+                                ? 'primary.basic'
+                                : 'warning'
+                            }
+                          />
+                          <div>{tabs[index]}</div>
+                        </Flex>
+                        {isExpanded ? (
+                          <IoIosArrowForward
+                            fontSize="20px"
+                            style={{
+                              transform: 'rotate(90deg)',
+                              transition: 'transform 0.2s',
+                            }}
+                          />
+                        ) : (
+                          <IoIosArrowForward
+                            fontSize="20px"
+                            style={{ transition: 'transform 0.2s' }}
+                          />
+                        )}
+                      </AccordionButton>
+                      <AccordionPanel
+                        border="1px solid var(--chakra-colors-border)"
+                        borderTop="none"
+                        borderBottomRadius="4px"
+                        fontWeight="400"
+                        fontSize="14px"
+                        lineHeight="21px"
+                      >
+                        {tab}
+                      </AccordionPanel>
+                    </>
+                  )}
+                </AccordionItem>
+              ))}
+            </Accordion>
+          ) : (
+            tabContent[selectedTab]
+          )}
         </Flex>
       </Flex>
       <FooterWrapper>
@@ -518,17 +603,5 @@ const ProfilePage = () => {
     </Fragment>
   );
 };
-
-const SupportButton = styled(ChakraButton)`
-  border-radius: 100%;
-  background-color: var(--chakra-colors-primary-basic);
-  width: 48px;
-  height: 48px;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  cursor: pointer;
-  padding: 0;
-`;
 
 export default ProfilePage;
