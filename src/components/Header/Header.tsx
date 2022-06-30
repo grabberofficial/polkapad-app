@@ -125,6 +125,7 @@ export const Header: React.FC<{
 }> = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
+  const isWaitRoute = router.pathname === '/auth/wait';
 
   useEffect(() => {
     const selectedIndex = tabs.findIndex(({ url }) => url === router.pathname);
@@ -151,25 +152,29 @@ export const Header: React.FC<{
           cursor="pointer"
         />
       </Link>
-      <DesktopMenuWrapper>
-        <Tabs height={'100%'} index={selectedTab}>
-          <TabList>
-            {tabs.map((tab) => (
-              <HeaderItem key={tab.url} url={tab.url}>
-                {tab.title}
-              </HeaderItem>
-            ))}
-          </TabList>
-        </Tabs>
-        <RightContainer>
-          <ConnectWalletButton />
-          <PolkaConnentBtn />
-          {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
-        </RightContainer>
-      </DesktopMenuWrapper>
-      <MobileMenuWrapper>
-        <MobileMenu />
-      </MobileMenuWrapper>
+      {!isWaitRoute && (
+        <>
+          <DesktopMenuWrapper>
+            <Tabs height={'100%'} index={selectedTab}>
+              <TabList>
+                {tabs.map((tab) => (
+                  <HeaderItem key={tab.url} url={tab.url}>
+                    {tab.title}
+                  </HeaderItem>
+                ))}
+              </TabList>
+            </Tabs>
+            <RightContainer>
+              <ConnectWalletButton />
+              <PolkaConnentBtn />
+              {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
+            </RightContainer>
+          </DesktopMenuWrapper>
+          <MobileMenuWrapper>
+            <MobileMenu />
+          </MobileMenuWrapper>
+        </>
+      )}
     </Flex>
   );
 };
