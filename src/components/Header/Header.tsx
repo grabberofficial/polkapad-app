@@ -140,7 +140,7 @@ export const Header: React.FC<{
       bg="#F7F5F5"
       position="sticky"
       top={0}
-      zIndex="2"
+      zIndex="3"
     >
       <Link href="https://polkapad.network">
         <Image

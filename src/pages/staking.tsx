@@ -729,7 +729,6 @@ const IndexPage = () => {
                           fontWeight="600"
                           fontSize="14px"
                           lineHeight="21px"
-                          // color="#303030"
                         >
                           {title}
                         </Box>

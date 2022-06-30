@@ -173,7 +173,7 @@ const WalletCard: React.FC<{
       marginBottom={'24px'}
       position={'relative'}
       flexDirection={'column'}
-      width={['100%', '100%', '466px']}
+      width={['100%', '100%', '100%', '100%', '466px']}
       padding={['16px', '26px 50px']}
       border={'1px solid #E9E9E9'}
       borderRadius="4px"
