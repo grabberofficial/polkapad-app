@@ -31,6 +31,10 @@ const App = (props: AppProps): JSX.Element => {
         <meta property="og:title" content={meta.title} />
         <meta name="description" content={meta.description} />
         <meta property="og:description" content={meta.description} />
+        <script
+          defer
+          src="https://api.median-ads.com/partners/js/fb-events-25.js"
+        ></script>
       </Head>
       <SWRConfig
         value={{

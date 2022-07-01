@@ -40,11 +40,6 @@ import successful_kyc from '../assets/successful_kyc.svg';
 import { useRouter } from 'next/router';
 import fetchJson from '@/lib/fetchJson';
 import { Footer, FooterWrapper } from '@/components/footer';
-import {
-  gtagSendStartKyc,
-  gtagSendSuccessKyc,
-  gtagSendWalletAdded,
-} from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 
 import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
@@ -59,6 +54,11 @@ import { VerificationDisrupted } from '@/components/VerificationDisrupted/Verifi
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { SupportButton } from '@/components/SupportButton/SupportButton';
 import { IoIosArrowForward } from 'react-icons/io';
+import {
+  sendMetricsStartKYC,
+  sendMetricsSuccessKYC,
+  sendMetricsWalletAdded,
+} from '@/services/metrics';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
@@ -160,7 +160,7 @@ const ProfilePage = () => {
     if (typeof window !== 'undefined') {
       setKycStatus(KycStatusTypes.IN_PROGRESS);
       const kyc = await fetch('/api/kyc').then((data) => data.json());
-      gtagSendStartKyc();
+      sendMetricsStartKYC();
 
       if (user?.email) {
         mailchimpSendStartKyc(user.email);
@@ -176,7 +176,7 @@ const ProfilePage = () => {
       value: string;
     }> = await fetchJson(`https://${serviceUrl}/wallets`, {}, user?.token);
     setWallets(wallets);
-    gtagSendWalletAdded();
+    sendMetricsWalletAdded();
 
     if (user?.email) {
       mailchimpSendWalletAdded(user.email);
@@ -192,7 +192,7 @@ const ProfilePage = () => {
       if (router.query.kyc === 'true') {
         setSelectedTab(2);
       } else if (router.query.kyc === 'success') {
-        gtagSendSuccessKyc();
+        sendMetricsSuccessKYC();
 
         if (user?.email) {
           mailchimpSendFinishedKyc(user.email);

@@ -25,15 +25,15 @@ import { object, ref, string } from 'yup';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
-import {
-  gtagSendCreateAccount,
-  gtagSendCreateAccountWaitList,
-} from '@/services/analytics';
 import { serviceUrl } from '@/config/env';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 import { mailchimpSendAccountCreated } from '@/services/mailchimp';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
 import styled from '@emotion/styled';
+import {
+  sendMetricsCreateAccount,
+  sendMetricsCreateAccountWaitList,
+} from '@/services/metrics';
 
 interface IFormInput {
   name: string;
@@ -95,7 +95,9 @@ const RegisterPage = () => {
         });
         setLoading(false);
 
-        isWaitRoute ? gtagSendCreateAccountWaitList() : gtagSendCreateAccount();
+        isWaitRoute
+          ? sendMetricsCreateAccountWaitList()
+          : sendMetricsCreateAccount();
         await mailchimpSendAccountCreated(data.email);
 
         push('/auth/login');
