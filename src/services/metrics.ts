@@ -12,28 +12,41 @@ import {
   fbSendSuccessKYC,
   fbSendWalletAdded,
 } from '@/services/facebook';
+import { environment } from '@/config/env';
+
+const isProduction = environment === 'PRODUCTION';
 
 export const sendMetricsCreateAccount = () => {
-  gtagSendCreateAccount();
-  fbSendCreateAccount();
+  if (isProduction) {
+    gtagSendCreateAccount();
+    fbSendCreateAccount();
+  }
 };
 
 export const sendMetricsCreateAccountWaitList = () => {
-  gtagSendCreateAccountWaitList();
-  fbSendCreateAccountWaitList();
+  if (isProduction) {
+    gtagSendCreateAccountWaitList();
+    fbSendCreateAccountWaitList();
+  }
 };
 
 export const sendMetricsWalletAdded = () => {
-  gtagSendWalletAdded();
-  fbSendWalletAdded();
+  if (isProduction) {
+    gtagSendWalletAdded();
+    fbSendWalletAdded();
+  }
 };
 
 export const sendMetricsStartKYC = () => {
-  gtagSendStartKyc();
-  fbSendStartKyc();
+  if (isProduction) {
+    gtagSendStartKyc();
+    fbSendStartKyc();
+  }
 };
 
 export const sendMetricsSuccessKYC = () => {
-  gtagSendSuccessKyc();
-  fbSendSuccessKYC();
+  if (isProduction) {
+    gtagSendSuccessKyc();
+    fbSendSuccessKYC();
+  }
 };

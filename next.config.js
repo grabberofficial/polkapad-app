@@ -19,6 +19,7 @@ module.exports = withSentryConfig(
       serviceUrl: process.env.SERVICE_URL,
       mailchimpId: process.env.MAILCHIMP_ID,
       googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+      environment: process.env.ENVIRONMENT,
     },
   }),
   sentryWebpackPluginOptions,
