@@ -4,26 +4,22 @@ declare global {
   }
 }
 
-window.FbEvents = window.FbEvents || {};
-
-const { FbEvents } = window;
-
 export const fbSendCreateAccount = () => {
-  FbEvents.CompleteRegistration(null, null, true);
+  window.FbEvents.CompleteRegistration(null, null, true);
 };
 
 export const fbSendCreateAccountWaitList = () => {
-  FbEvents.Purchase([], null);
+  window.FbEvents.Purchase([], null);
 };
 
 export const fbSendWalletAdded = () => {
-  FbEvents.CustomEvent('AddPaymentInfo', null);
+  window.FbEvents.CustomEvent('AddPaymentInfo', null);
 };
 
 export const fbSendStartKyc = () => {
-  FbEvents.InitiateCheckout([]);
+  window.FbEvents.InitiateCheckout([]);
 };
 
 export const fbSendSuccessKYC = () => {
-  FbEvents.SubmitApplication();
+  window.FbEvents.SubmitApplication();
 };
