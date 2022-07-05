@@ -41,7 +41,7 @@ export const WalletTab = ({ setSelectedTab }: WalletTabProps) => {
           onClick={() => setSelectedTab(2)}
           disabled={!walletsAreVerified}
         >
-          To KYC
+          Start KYC
         </Button>
       )}
     </Flex>

@@ -24,7 +24,6 @@ import { BiHide, BiShow } from 'react-icons/bi';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
-import { serviceUrl } from '@/config/env';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 import { mailchimpSendAccountCreated } from '@/services/mailchimp';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
@@ -34,6 +33,8 @@ import {
   sendMetricsCreateAccountWaitList,
 } from '@/services/metrics';
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
+import useUser from '@/lib/hooks/useUser';
+import { User } from '@/pages/api/user';
 
 interface IFormInput {
   name: string;
@@ -44,6 +45,10 @@ interface IFormInput {
 }
 
 export const SignUpPage = () => {
+  const { mutateUser } = useUser({
+    redirectTo: '/profile',
+    redirectIfFound: true,
+  });
   const {
     control,
     handleSubmit,
@@ -56,33 +61,35 @@ export const SignUpPage = () => {
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password',
   );
-  const { push, pathname } = useRouter();
+  const { pathname } = useRouter();
   const isWaitRoute = pathname === '/auth/wait';
 
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
         setLoading(true);
-        await fetchJson(`https://${serviceUrl}/auth/password/register`, {
-          method: 'POST',
-          body: JSON.stringify({
-            name: data.name,
-            password: data.password,
-            email: data.email,
-            promocode: data.promocode,
-          }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
+        await mutateUser(
+          (async () => {
+            await fetchJson(`/api/register`, {
+              method: 'POST',
+              body: JSON.stringify({
+                name: data.name,
+                password: data.password,
+                email: data.email,
+                promocode: data.promocode,
+              }),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+
+            isWaitRoute
+              ? sendMetricsCreateAccountWaitList()
+              : sendMetricsCreateAccount();
+            await mailchimpSendAccountCreated(data.email);
+          })() as unknown as Promise<User>,
+        );
         setLoading(false);
-
-        isWaitRoute
-          ? sendMetricsCreateAccountWaitList()
-          : sendMetricsCreateAccount();
-        await mailchimpSendAccountCreated(data.email);
-
-        push('/auth/login');
       } catch (err) {
         setLoading(false);
         if (err instanceof FetchError) {
@@ -99,7 +106,7 @@ export const SignUpPage = () => {
         }
       }
     },
-    [isWaitRoute, push, setError],
+    [isWaitRoute, mutateUser, setError],
   );
 
   return (

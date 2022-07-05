@@ -9,18 +9,23 @@ import {
 import { FaUser } from 'react-icons/fa';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { MdEmail } from 'react-icons/md';
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ProfilePageSchema } from '@/components/pages/Profile/ProfilePage.schema';
 import useUser from '@/lib/hooks/useUser';
+import { Button } from '@/components/Button';
 
 interface IFormInput {
   email: string;
   name: string;
 }
 
-export const AccountTab = () => {
+interface AccountTabProps {
+  setSelectedTab: Dispatch<SetStateAction<number>>;
+}
+
+export const AccountTab = ({ setSelectedTab }: AccountTabProps) => {
   const { user } = useUser({
     redirectTo: '/auth/login',
   });
@@ -91,6 +96,14 @@ export const AccountTab = () => {
           <FormInput fieldName="email" hasError={false} control={control} />
         </InputGroup>
       </FormControl>
+      <Button
+        width="80px"
+        marginTop="20px"
+        variant="primary"
+        onClick={() => setSelectedTab(1)}
+      >
+        Next
+      </Button>
     </Flex>
   );
 };
