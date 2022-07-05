@@ -67,7 +67,7 @@ const ProfilePageContent = () => {
   }, [router, setSelectedTab]);
 
   const tabContent = [
-    <AccountTab key="account" />,
+    <AccountTab key="account" setSelectedTab={setSelectedTab} />,
     <WalletTab key="wallet" setSelectedTab={setSelectedTab} />,
     <KYCTab key="kyc" />,
   ];

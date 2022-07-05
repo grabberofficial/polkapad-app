@@ -140,8 +140,8 @@ export const LockerPage = () => {
             </Flex>
           </Tabs>
         </Flex>
+        <LockedAmounts />
       </Flex>
-      <LockedAmounts />
       <Footer />
     </>
   );
