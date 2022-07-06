@@ -1,4 +1,4 @@
-import { object, ref, string } from 'yup';
+import { boolean, object, ref, string } from 'yup';
 
 export const SignUpPageSchema = object()
   .shape({
@@ -15,5 +15,8 @@ export const SignUpPageSchema = object()
       .oneOf([ref('password'), null], 'Passwords must match')
       .required('Confirm password is required'),
     promocode: string().optional(),
+    terms: boolean()
+      .required('You must accept the terms and conditions')
+      .oneOf([true], 'You must accept the terms and conditions'),
   })
   .required();

@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import fetchJson from '@/lib/fetchJson';
 import { serviceUrl } from '@/config/env';
-import { sendMetricsWalletAdded } from '@/services/metrics';
-import { mailchimpSendWalletAdded } from '@/services/mailchimp';
 import { User } from '@/pages/api/user';
 
 export type WalletsType = { name: string; value: string }[];
@@ -16,11 +14,6 @@ export const useWallets = (user?: User) => {
       value: string;
     }> = await fetchJson(`https://${serviceUrl}/wallets`, {}, user?.token);
     setWallets(wallets);
-    sendMetricsWalletAdded();
-
-    if (user?.email) {
-      mailchimpSendWalletAdded(user.email);
-    }
   }, [user]);
 
   useEffect(() => {

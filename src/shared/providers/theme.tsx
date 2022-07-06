@@ -31,6 +31,9 @@ const theme = extendTheme({
     error: '#E868AF',
     kycIcons: '#3E9685',
     border: '#E9E9E9',
+    red: {
+      500: '#E868AF',
+    },
   },
 });
 

@@ -35,6 +35,7 @@ import {
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
 import useUser from '@/lib/hooks/useUser';
 import { User } from '@/pages/api/user';
+import { Checkbox } from '@/components/Checkbox/Checkbox';
 
 interface IFormInput {
   name: string;
@@ -42,6 +43,7 @@ interface IFormInput {
   password: string;
   confirmPassword: string;
   promocode: string;
+  terms: boolean;
 }
 
 export const SignUpPage = () => {
@@ -127,8 +129,9 @@ export const SignUpPage = () => {
         lineHeight="62px"
         color="#303030"
         textAlign="center"
+        maxWidth="420px"
       >
-        Create an account
+        {isWaitRoute ? 'Waiting List Registration' : 'Create an account'}
       </Text>
       <Text
         fontWeight="400"
@@ -137,8 +140,12 @@ export const SignUpPage = () => {
         color="#303030"
         textAlign="center"
         marginTop="11px"
+        maxWidth="400px"
+        justifySelf="center"
       >
-        Sign up to find a dApp you love
+        {isWaitRoute
+          ? 'Sign up and receive a guaranteed allocation in the Polkapad token sale'
+          : 'Sign up to find a dApp you love'}
       </Text>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         {/* TODO: extract FormControl to component if there is any other usage */}
@@ -333,6 +340,36 @@ export const SignUpPage = () => {
               control={control}
             />
           </InputGroup>
+        </FormControl>
+        <FormControl isInvalid={!!errors.terms}>
+          <Checkbox
+            control={control}
+            fieldName="terms"
+            alignItems="flex-start"
+            hasError={!!errors.terms}
+          >
+            <Text
+              marginLeft="3px"
+              width="100%"
+              fontSize={11}
+              lineHeight="16px"
+              color="secondary.textLight"
+              fontFamily="Poppins"
+            >
+              Yes, I understand and agree to the Polkapad Terms <br />
+              of Service, including the User Agreement and Privacy Policy.
+            </Text>
+          </Checkbox>
+          {errors.terms && (
+            <FormErrorMessage
+              fontWeight="400"
+              fontSize="12px"
+              lineHeight="18px"
+              color="error"
+            >
+              {errors.terms.message}
+            </FormErrorMessage>
+          )}
         </FormControl>
         <Button
           variant="primary"
