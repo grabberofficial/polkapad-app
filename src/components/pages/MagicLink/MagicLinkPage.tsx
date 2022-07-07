@@ -7,10 +7,15 @@ import { useCallback, useEffect, useState } from 'react';
 import { BsHourglassSplit } from 'react-icons/bs';
 import useSWR from 'swr';
 import { User } from '@/pages/api/user';
+import {
+  API_LOGIN_ROUTE,
+  API_USER_ROUTE,
+  PROFILE_ROUTE,
+} from '@/constants/routes';
 
 export const MagicLinkPage = () => {
   const router = useRouter();
-  const { data: user, mutate: mutateUser } = useSWR<User>('/api/user');
+  const { data: user, mutate: mutateUser } = useSWR<User>(API_USER_ROUTE);
 
   const [text, setText] = useState('Authorizing you');
 
@@ -18,7 +23,7 @@ export const MagicLinkPage = () => {
     async (email, code) => {
       try {
         mutateUser(
-          await fetchJson('/api/login', {
+          await fetchJson(API_LOGIN_ROUTE, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, code, authType: 'code' }),
@@ -51,7 +56,7 @@ export const MagicLinkPage = () => {
   useEffect(() => {
     if (user?.isLoggedIn) {
       router.push(
-        typeof router.query.url === 'string' ? router.query.url : '/profile',
+        typeof router.query.url === 'string' ? router.query.url : PROFILE_ROUTE,
       );
     }
   }, [user]);

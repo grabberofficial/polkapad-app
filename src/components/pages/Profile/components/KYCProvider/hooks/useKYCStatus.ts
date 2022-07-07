@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
 import fetchJson from '@/lib/fetchJson';
-import { mailchimpSendFinishedKyc } from '@/services/mailchimp';
 import { User } from '@/pages/api/user';
+import { API_KYC_STATUS_ROUTE } from '@/constants/routes';
 
 const KYC_STATUS_POLL_INTERVAL = 3000;
 
@@ -19,7 +19,7 @@ export const useKYCStatus = (user?: User) => {
   const isKYCInProgress = KYCStatus === KycStatusTypes.IN_PROGRESS;
 
   const getKycStatus = useCallback(async () => {
-    const newStatus: KYCStatus = await fetchJson('/api/kycStatus');
+    const newStatus: KYCStatus = await fetchJson(API_KYC_STATUS_ROUTE);
 
     if (newStatus.kycStatus !== KYCStatus) {
       newStatus.kycStatus;
@@ -41,10 +41,6 @@ export const useKYCStatus = (user?: User) => {
     if (KYCStatus !== KycStatusTypes.IN_PROGRESS && intervalID.current) {
       clearInterval(intervalID.current);
       intervalID.current = null;
-    }
-
-    if (KYCStatus === KycStatusTypes.ACCEPTED && user?.email) {
-      mailchimpSendFinishedKyc(user?.email);
     }
   }, [getKycStatus, KYCStatus]);
 

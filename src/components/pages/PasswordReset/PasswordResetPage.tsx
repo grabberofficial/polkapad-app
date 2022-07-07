@@ -24,6 +24,7 @@ import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
 import { serviceUrl } from '@/config/env';
 import { PasswordResetPageSchema } from '@/components/pages/PasswordReset/PasswordResetPage.schema';
+import { LOGIN_ROUTE } from '@/constants/routes';
 
 interface IFormInput {
   newPassword: string;
@@ -249,8 +250,8 @@ export const PasswordResetPage = () => {
             textAlign="center"
           >
             {'Back to '}
-            <Link href="/auth/login">
-              <Text as="a" href="/auth/login" color="primary.basic">
+            <Link href={LOGIN_ROUTE}>
+              <Text as="a" href={LOGIN_ROUTE} color="primary.basic">
                 Login
               </Text>
             </Link>

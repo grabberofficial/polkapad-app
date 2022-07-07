@@ -5,12 +5,13 @@ import { Text } from '@chakra-ui/react';
 import { MagicLinkTypes } from '@/pages/api/magic-links';
 import { useWalletConnect } from '@/components/WalletConnect/WalletConnect';
 import { environment } from '@/config/env';
+import { API_MAGIC_LINKS_ROUTE } from '@/constants/routes';
 
 const isDevelopment = environment === 'DEVELOPMENT';
 
 export const MobileWalletPage = () => {
   useEffect(() => {
-    fetch('/api/magic-links', {
+    fetch(API_MAGIC_LINKS_ROUTE, {
       method: 'POST',
       body: JSON.stringify({ type: MagicLinkTypes.WALLET }),
     });

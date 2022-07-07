@@ -27,7 +27,7 @@ import { ChainId } from '@usedapp/core';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { sendMetricsWalletAdded } from '@/services/metrics';
-import { mailchimpSendWalletAdded } from '@/services/mailchimp';
+import { MOBILE_WALLET_ROUTE } from '@/constants/routes';
 
 const StyledButton = styled(ChakraButton)`
   color: #49c7da;
@@ -87,7 +87,7 @@ const WalletCard: React.FC<{
 
   const connectWallet = useCallback(async () => {
     if (isMobile) {
-      router.push('/mobile-wallet');
+      router.push(MOBILE_WALLET_ROUTE);
       return;
     }
 
@@ -142,10 +142,6 @@ const WalletCard: React.FC<{
       setVerified(true);
       setWalletAddress(walletAddress);
       sendMetricsWalletAdded();
-
-      if (userContext.user?.email) {
-        mailchimpSendWalletAdded(userContext.user.email);
-      }
       verifyCallback();
     } catch (e) {
       const typedError = e as FetchError;

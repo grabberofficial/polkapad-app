@@ -8,17 +8,17 @@ import { VerificationDisrupted } from '@/components/pages/Profile/components/KYC
 import React, { useCallback, useContext } from 'react';
 import { KycStatusTypes } from '@/pages/api/kycStatus';
 import { sendMetricsStartKYC } from '@/services/metrics';
-import { mailchimpSendStartKyc } from '@/services/mailchimp';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
 import { useRouter } from 'next/router';
-import useUser from '@/lib/hooks/useUser';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
+import {
+  API_KYC_ROUTE,
+  LOCKER_ROUTE,
+  MOBILE_KYC_ROUTE,
+} from '@/constants/routes';
 
 export const KYCTab = () => {
-  const { user } = useUser({
-    redirectTo: '/auth/login',
-  });
   const isMobile = useIsMobile();
   const {
     isKYCAccepted,
@@ -33,21 +33,16 @@ export const KYCTab = () => {
 
   const startKyc = useCallback(async () => {
     if (isMobile) {
-      router.push('/mobile-kyc');
+      router.push(MOBILE_KYC_ROUTE);
       return;
     }
     if (typeof window !== 'undefined') {
       setKYCStatus(KycStatusTypes.IN_PROGRESS);
-      const kyc = await fetch('/api/kyc').then((data) => data.json());
+      const kyc = await fetch(API_KYC_ROUTE).then((data) => data.json());
       sendMetricsStartKYC();
-
-      if (user?.email) {
-        mailchimpSendStartKyc(user.email);
-      }
-
       window.open(kyc.iframeUrl);
     }
-  }, [isMobile, router, setKYCStatus, user?.email]);
+  }, [isMobile, router, setKYCStatus]);
 
   return (
     <Flex
@@ -76,7 +71,7 @@ export const KYCTab = () => {
             </Text>
             <Button
               variant="primary"
-              onClick={() => router.push('/locker')}
+              onClick={() => router.push(LOCKER_ROUTE)}
               width="158px"
             >
               Ready to Lock

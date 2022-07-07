@@ -28,6 +28,13 @@ import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { LoginPageSchema } from '@/components/pages/Login/LoginPage.schema';
 import { EMAIL_ERROR_TYPES } from '@/components/pages/Login/LoginPage.constants';
+import {
+  API_LOGIN_ROUTE,
+  PROFILE_ROUTE,
+  REGISTER_ROUTE,
+  RESTORE_PASSWORD_ROUTE,
+  SEND_CODE_ROUTE,
+} from '@/constants/routes';
 
 // TODO: server-side redirect from login page if user is already logged in
 
@@ -53,7 +60,7 @@ export const LoginPage = () => {
     'password',
   );
   const { mutateUser } = useUser({
-    redirectTo: '/profile',
+    redirectTo: PROFILE_ROUTE,
     redirectIfFound: true,
   });
 
@@ -68,7 +75,7 @@ export const LoginPage = () => {
       try {
         setLoading(true);
         await mutateUser(
-          await fetchJson('/api/login', {
+          await fetchJson(API_LOGIN_ROUTE, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...data, authType: 'password' }),
@@ -233,7 +240,7 @@ export const LoginPage = () => {
           <Button
             variant="secondary"
             color="primary.basic"
-            onClick={() => router.push('/auth/register')}
+            onClick={() => router.push(REGISTER_ROUTE)}
           >
             Sign up
           </Button>
@@ -251,7 +258,7 @@ export const LoginPage = () => {
       >
         <Flex>
           Send
-          <Link href="/auth/send-code">
+          <Link href={SEND_CODE_ROUTE}>
             <Text
               cursor="pointer"
               color="primary.basic"
@@ -263,7 +270,7 @@ export const LoginPage = () => {
           </Link>
         </Flex>
         <Flex>
-          <Link href="/auth/restore-password">
+          <Link href={RESTORE_PASSWORD_ROUTE}>
             <Text
               cursor="pointer"
               color="primary.basic"

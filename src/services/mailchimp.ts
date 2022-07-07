@@ -1,4 +1,5 @@
 import fetchJson from '@/lib/fetchJson';
+import { API_MAILCHIMP_ROUTE } from '@/constants/routes';
 
 export enum MAILCHIMP_INTERESTS {
   ALL_SUBSCRIBERS = '9f556022b5',
@@ -11,7 +12,7 @@ export enum MAILCHIMP_INTERESTS {
 
 export const mailchimpSend = async (email: string, groups: string[]) => {
   try {
-    await fetchJson('/api/mailchimp', {
+    await fetchJson(API_MAILCHIMP_ROUTE, {
       method: 'POST',
       body: JSON.stringify({ email, groups }),
     });

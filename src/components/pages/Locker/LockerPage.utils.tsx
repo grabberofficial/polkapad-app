@@ -1,13 +1,14 @@
 import Link from 'next/link';
 import { Button } from '@/components/Button';
 import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
+import { PROFILE_ROUTE, REGISTER_ROUTE } from '@/constants/routes';
 
 export const getBnbSteps = (isLoggedIn: boolean) => [
   {
     title: 'Complete registration & verify your ETH/BNB and Polkadot addresses',
     text: `Addresses can’t be changed until the launch of Polkapad mainnet.`,
     button: (
-      <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
+      <Link href={isLoggedIn ? PROFILE_ROUTE : REGISTER_ROUTE}>
         <Button>Register</Button>
       </Link>
     ),
@@ -56,7 +57,7 @@ export const getKSMSteps = (isLoggedIn: boolean) => [
     title: 'Complete registration & verify your Kusama address',
     text: `Addresses can’t be changed until the launch of Polkapad mainnet.`,
     button: (
-      <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
+      <Link href={isLoggedIn ? PROFILE_ROUTE : REGISTER_ROUTE}>
         <Button>Register</Button>
       </Link>
     ),
