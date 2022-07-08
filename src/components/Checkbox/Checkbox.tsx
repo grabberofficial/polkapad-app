@@ -6,6 +6,7 @@ import {
 } from '@chakra-ui/react';
 import checkboxChecked from '@/assets/checkbox_checked.svg';
 import { Control, Controller } from 'react-hook-form';
+import styled from '@emotion/styled';
 
 interface ICheckboxProps extends CheckboxProps {
   control?: Control<any, any>;
@@ -32,17 +33,25 @@ export const Checkbox = ({
       name={fieldName}
       control={control}
       render={({ field: { onChange, ...field } }) => (
-        <ChakraCheckbox
-          icon={<Image src={checkboxChecked} transform="scale(1.3)" />}
+        <StyledCheckbox
+          icon={<Image src={checkboxChecked} />}
           colorScheme="transparent"
-          borderColor={isChecked ? '#fff' : undefined}
+          _hover={{ borderColor: 'primary.basic' }}
+          borderColor={isChecked ? 'primary.basic' : undefined}
           onChange={({ target: { checked } }) => onCheck(checked, onChange)}
           {...props}
           {...field}
         >
           {children}
-        </ChakraCheckbox>
+        </StyledCheckbox>
       )}
     />
   );
 };
+
+const StyledCheckbox = styled(ChakraCheckbox)`
+  span {
+    border-width: 1px;
+    border-radius: 4px;
+  }
+`;

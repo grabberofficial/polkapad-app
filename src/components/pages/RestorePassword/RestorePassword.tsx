@@ -23,6 +23,7 @@ import { FormInput } from '@/components/FormInput/FormInput';
 import { ExceptionTypeEnum } from '@/lib/constants';
 import { serviceUrl } from '@/config/env';
 import { RestorePasswordPageSchema } from '@/components/pages/RestorePassword/RestorePasswordPage.schema';
+import { LOGIN_ROUTE } from '@/constants/routes';
 
 interface IFormInput {
   email: string;
@@ -194,8 +195,8 @@ export const RestorePasswordPage = () => {
             textAlign="center"
           >
             {'Back to '}
-            <Link href="/auth/login">
-              <Text as="a" href="/auth/login" color="primary.basic">
+            <Link href={LOGIN_ROUTE}>
+              <Text as="a" href={LOGIN_ROUTE} color="primary.basic">
                 Login
               </Text>
             </Link>

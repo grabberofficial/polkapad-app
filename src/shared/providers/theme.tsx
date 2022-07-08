@@ -15,6 +15,7 @@ const theme = extendTheme({
       text: '#303030',
       textLight: '#A5A5A5',
       textHover: '#0096EF',
+      backgroundHover: 'rgba(0, 150, 239, 0.08)',
     },
     footer: {
       dark: '#8E8E8E',

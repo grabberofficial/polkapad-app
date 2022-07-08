@@ -1,6 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
-import useUser from '@/lib/hooks/useUser';
 import {
   Accordion,
   AccordionButton,
@@ -19,7 +18,6 @@ import {
 import { useRouter } from 'next/router';
 import { Footer, FooterWrapper } from '@/components/footer';
 
-import { mailchimpSendFinishedKyc } from '@/services/mailchimp';
 import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { SupportButton } from '@/components/pages/Profile/components/KYCTab/components/SupportButton/SupportButton';
 import { IoIosArrowForward } from 'react-icons/io';
@@ -39,9 +37,6 @@ import {
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
 const ProfilePageContent = () => {
-  const { user } = useUser({
-    redirectTo: '/auth/login',
-  });
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -54,10 +49,6 @@ const ProfilePageContent = () => {
         setSelectedTab(2);
       } else if (router.query.kyc === 'success') {
         sendMetricsSuccessKYC();
-
-        if (user?.email) {
-          mailchimpSendFinishedKyc(user.email);
-        }
       }
     }
 

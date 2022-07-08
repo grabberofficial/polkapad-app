@@ -22,18 +22,28 @@ import { FaUserAlt } from 'react-icons/fa';
 
 import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
 import { PolkaConnentBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
+import {
+  HOME_ROUTE,
+  KYC_ROUTE,
+  LOCKER_ROUTE,
+  API_LOGOUT_ROUTE,
+  PROFILE_ROUTE,
+  REGISTER_ROUTE,
+  STAKING_ROUTE,
+  WAIT_ROUTE,
+} from '@/constants/routes';
 
 const tabs = [
   {
-    url: '/',
+    url: HOME_ROUTE,
     title: 'Launchpad',
   },
   {
-    url: '/locker',
+    url: LOCKER_ROUTE,
     title: 'Locker',
   },
   {
-    url: '/staking',
+    url: STAKING_ROUTE,
     title: 'Staking',
   },
 ];
@@ -55,7 +65,7 @@ export const SignUpButton: React.FC = () => {
       }
       fixedWidth={152}
       withIconDivider
-      onClick={() => router.push('/auth/register')}
+      onClick={() => router.push(REGISTER_ROUTE)}
     >
       Sign up
     </Button>
@@ -67,8 +77,11 @@ export const AccountButton: React.FC = () => {
   const router = useRouter();
 
   const logout = useCallback(async () => {
-    await mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
-    router.push('/');
+    await mutateUser(
+      await fetchJson(API_LOGOUT_ROUTE, { method: 'POST' }),
+      false,
+    );
+    router.push(HOME_ROUTE);
   }, [mutateUser, router]);
 
   return (
@@ -93,7 +106,7 @@ export const AccountButton: React.FC = () => {
           fontWeight={600}
           _hover={{ color: 'white', backgroundColor: 'primary.basic' }}
           paddingLeft="20px"
-          onClick={() => router.push('/profile')}
+          onClick={() => router.push(PROFILE_ROUTE)}
         >
           My account
         </MenuItem>
@@ -102,7 +115,7 @@ export const AccountButton: React.FC = () => {
           fontWeight={600}
           _hover={{ color: 'white', backgroundColor: 'primary.basic' }}
           paddingLeft="20px"
-          onClick={() => router.push('/profile?kyc=true')}
+          onClick={() => router.push(KYC_ROUTE)}
         >
           KYC Verification
         </MenuItem>
@@ -125,7 +138,7 @@ export const Header: React.FC<{
 }> = (props) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
-  const isWaitRoute = router.pathname === '/auth/wait';
+  const isWaitRoute = router.pathname === WAIT_ROUTE;
 
   useEffect(() => {
     const selectedIndex = tabs.findIndex(({ url }) => url === router.pathname);
@@ -184,8 +197,11 @@ const MobileMenu: React.FC = () => {
   const router = useRouter();
 
   const logout = useCallback(async () => {
-    await mutateUser(await fetchJson('/api/logout', { method: 'POST' }), false);
-    router.push('/');
+    await mutateUser(
+      await fetchJson(API_LOGOUT_ROUTE, { method: 'POST' }),
+      false,
+    );
+    router.push(HOME_ROUTE);
   }, [mutateUser, router]);
 
   return (
@@ -199,22 +215,22 @@ const MobileMenu: React.FC = () => {
       <MenuList>
         {user?.isLoggedIn && (
           <>
-            <MenuItem onClick={() => router.push('/profile')}>
+            <MenuItem onClick={() => router.push(PROFILE_ROUTE)}>
               My account
             </MenuItem>
-            <MenuItem onClick={() => router.push('/profile?kyc=true')}>
+            <MenuItem onClick={() => router.push(KYC_ROUTE)}>
               KYC verification
             </MenuItem>
           </>
         )}
         {!user?.isLoggedIn && (
-          <MenuItem onClick={() => router.push('/auth/register')}>
+          <MenuItem onClick={() => router.push(REGISTER_ROUTE)}>
             Sign up
           </MenuItem>
         )}
-        <MenuItem onClick={() => router.push('/')}>Launchpad</MenuItem>
-        <MenuItem onClick={() => router.push('/locker')}>Locker</MenuItem>
-        <MenuItem onClick={() => router.push('/staking')}>Staking</MenuItem>
+        <MenuItem onClick={() => router.push(HOME_ROUTE)}>Launchpad</MenuItem>
+        <MenuItem onClick={() => router.push(LOCKER_ROUTE)}>Locker</MenuItem>
+        <MenuItem onClick={() => router.push(STAKING_ROUTE)}>Staking</MenuItem>
         {user?.isLoggedIn && <MenuItem onClick={logout}>Logout</MenuItem>}
       </MenuList>
     </Menu>

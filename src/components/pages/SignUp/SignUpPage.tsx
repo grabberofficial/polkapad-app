@@ -25,7 +25,6 @@ import fetchJson, { FetchError } from '@/lib/fetchJson';
 import { useRouter } from 'next/router';
 import { ExceptionTypeEnum } from '@/lib/constants';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
-import { mailchimpSendAccountCreated } from '@/services/mailchimp';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
 import styled from '@emotion/styled';
 import {
@@ -35,9 +34,10 @@ import {
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
 import useUser from '@/lib/hooks/useUser';
 import { User } from '@/pages/api/user';
-import { Checkbox } from '@/components/Checkbox/Checkbox';
+import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
+import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
 
-interface IFormInput {
+export interface SignupFormInput {
   name: string;
   email: string;
   password: string;
@@ -48,7 +48,7 @@ interface IFormInput {
 
 export const SignUpPage = () => {
   const { mutateUser } = useUser({
-    redirectTo: '/profile',
+    redirectTo: PROFILE_ROUTE,
     redirectIfFound: true,
   });
   const {
@@ -56,7 +56,7 @@ export const SignUpPage = () => {
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<IFormInput>({
+  } = useForm<SignupFormInput>({
     resolver: yupResolver(SignUpPageSchema),
   });
   const [loading, setLoading] = useState(false);
@@ -64,9 +64,9 @@ export const SignUpPage = () => {
     'password',
   );
   const { pathname } = useRouter();
-  const isWaitRoute = pathname === '/auth/wait';
+  const isWaitRoute = pathname === WAIT_ROUTE;
 
-  const onSubmit: SubmitHandler<IFormInput> = useCallback(
+  const onSubmit: SubmitHandler<SignupFormInput> = useCallback(
     async (data) => {
       try {
         setLoading(true);
@@ -88,7 +88,6 @@ export const SignUpPage = () => {
             isWaitRoute
               ? sendMetricsCreateAccountWaitList()
               : sendMetricsCreateAccount();
-            await mailchimpSendAccountCreated(data.email);
           })() as unknown as Promise<User>,
         );
         setLoading(false);
@@ -341,36 +340,7 @@ export const SignUpPage = () => {
             />
           </InputGroup>
         </FormControl>
-        <FormControl isInvalid={!!errors.terms}>
-          <Checkbox
-            control={control}
-            fieldName="terms"
-            alignItems="flex-start"
-            hasError={!!errors.terms}
-          >
-            <Text
-              marginLeft="3px"
-              width="100%"
-              fontSize={11}
-              lineHeight="16px"
-              color="secondary.textLight"
-              fontFamily="Poppins"
-            >
-              Yes, I understand and agree to the Polkapad Terms <br />
-              of Service, including the User Agreement and Privacy Policy.
-            </Text>
-          </Checkbox>
-          {errors.terms && (
-            <FormErrorMessage
-              fontWeight="400"
-              fontSize="12px"
-              lineHeight="18px"
-              color="error"
-            >
-              {errors.terms.message}
-            </FormErrorMessage>
-          )}
-        </FormControl>
+        <TermsCheckbox control={control} errors={errors.terms} />
         <Button
           variant="primary"
           type="submit"
@@ -380,18 +350,26 @@ export const SignUpPage = () => {
         </Button>
       </StyledForm>
       <Text
-        fontWeight="600"
+        fontWeight="700"
         fontSize="14px"
         lineHeight="21px"
         color="#303030"
         marginTop="69px"
-        textAlign="center"
+        textAlign="left"
       >
         Already have an account?{' '}
-        <Link href="/auth/login">
-          <Text as="span" color="primary.basic" cursor="pointer">
+        <Link href={LOGIN_ROUTE}>
+          <Button
+            variant="secondary"
+            marginTop="10px"
+            color="primary.basic"
+            _hover={{
+              backgroundColor: 'secondary.backgroundHover',
+              borderColor: 'primary.basic',
+            }}
+          >
             Log in
-          </Text>
+          </Button>
         </Link>
       </Text>
     </Grid>

@@ -2,12 +2,13 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { User } from '@/pages/api/user';
+import { API_USER_ROUTE } from '@/constants/routes';
 
 export default function useUser({
   redirectTo = '',
   redirectIfFound = false,
 } = {}) {
-  const { data: user, mutate: mutateUser } = useSWR<User>('/api/user');
+  const { data: user, mutate: mutateUser } = useSWR<User>(API_USER_ROUTE);
   const router = useRouter();
 
   useEffect(() => {

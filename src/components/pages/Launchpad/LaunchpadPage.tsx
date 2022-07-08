@@ -8,6 +8,12 @@ import { Button } from '@/components/Button';
 import Link from 'next/link';
 import useUser from '@/lib/hooks/useUser';
 import { EmailSubscribeModal } from '@/components/EmailSubscribeModal/EmailSubscribeModal';
+import {
+  LOCKER_ROUTE,
+  PROFILE_ROUTE,
+  REGISTER_ROUTE,
+  WALLET_ROUTE,
+} from '@/constants/routes';
 
 export const LaunchpadPage = () => {
   const { user } = useUser();
@@ -74,7 +80,7 @@ export const LaunchpadPage = () => {
               In order to participate in sales on Polkapad, you must sign up and
               submit KYC first.
             </RegularText>
-            <Link href={isLoggedIn ? '/profile' : '/auth/register'}>
+            <Link href={isLoggedIn ? PROFILE_ROUTE : REGISTER_ROUTE}>
               <Button>Register</Button>
             </Link>
           </Card>
@@ -93,7 +99,7 @@ export const LaunchpadPage = () => {
               your wallet. This is the only wallet you will be able to use for
               sales.
             </RegularText>
-            <Link href={isLoggedIn ? '/profile?wallet=true' : '/auth/register'}>
+            <Link href={isLoggedIn ? WALLET_ROUTE : REGISTER_ROUTE}>
               <Button>Verify wallet</Button>
             </Link>
           </Card>
@@ -110,7 +116,7 @@ export const LaunchpadPage = () => {
             <RegularText marginBottom="30px">
               By staking or locking funds, you earn allocation in IDOs.
             </RegularText>
-            <Link href="locker">
+            <Link href={LOCKER_ROUTE}>
               <Button>Check locker</Button>
             </Link>
           </Card>
