@@ -86,8 +86,8 @@ export const SignUpPage = () => {
             });
 
             isWaitRoute
-              ? sendMetricsCreateAccountWaitList()
-              : sendMetricsCreateAccount();
+              ? setTimeout(sendMetricsCreateAccountWaitList, 10000)
+              : setTimeout(sendMetricsCreateAccount, 10000);
           })() as unknown as Promise<User>,
         );
         setLoading(false);
