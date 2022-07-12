@@ -189,6 +189,7 @@ const SubstrateContextProvider = (props) => {
       data: { free: ksmBalance },
     } = await state.api.query.system.account(state.account);
     dispatch({ type: 'SET_BALANCE', payload: ksmBalance.toString() });
+    localStorage.setItem(POLKA_CONNECT_KEY, 'true');
   }, [state]);
 
   const disconnect = useCallback(() => {
@@ -224,25 +225,25 @@ const SubstrateContextProvider = (props) => {
   }, [state.account, state.balance, userContext]);
 
   // Autoconnect to polka
-  // useEffect(() => {
-  //   const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
-  //   if (
-  //     shouldConnectPolka === 'true' &&
-  //     state.keyring &&
-  //     state.keyringState === 'READY' &&
-  //     state.connectToPolka !== null &&
-  //     state.account === null
-  //   ) {
-  //     state.connectToPolka();
-  //   }
-  // }, [
-  //   state.account,
-  //   state.keyring,
-  //   state.keyringState,
-  //   state.connectToPolka,
-  //   state.connectToPolka,
-  //   state,
-  // ]);
+  useEffect(() => {
+    const shouldConnectPolka = localStorage.getItem(POLKA_CONNECT_KEY);
+    if (
+      shouldConnectPolka === 'true' &&
+      state.keyring &&
+      state.keyringState === 'READY' &&
+      state.connectToPolka !== null &&
+      state.account !== null
+    ) {
+      state.connectToPolka();
+    }
+  }, [
+    state.account,
+    state.keyring,
+    state.keyringState,
+    state.connectToPolka,
+    state.connectToPolka,
+    state,
+  ]);
 
   return (
     <SubstrateContext.Provider value={state}>
