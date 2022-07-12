@@ -34,6 +34,7 @@ import {
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
 import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
 import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
+import { environment } from '@/config/env';
 
 export interface SignupFormInput {
   name: string;
@@ -43,6 +44,8 @@ export interface SignupFormInput {
   promocode: string;
   terms: boolean;
 }
+
+const isProduction = environment === 'PRODUCTION';
 
 export const SignUpPage = () => {
   const {
@@ -81,7 +84,9 @@ export const SignUpPage = () => {
           ? setTimeout(sendMetricsCreateAccountWaitList, 10000)
           : setTimeout(sendMetricsCreateAccount, 10000);
 
-        router.push({ pathname: PROFILE_ROUTE, query: { initial: true } });
+        isProduction
+          ? router.push(LOGIN_ROUTE)
+          : router.push({ pathname: PROFILE_ROUTE, query: { initial: true } });
         setLoading(false);
       } catch (err) {
         setLoading(false);
