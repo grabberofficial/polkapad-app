@@ -36,13 +36,14 @@ export const PolkaConnentBtn = () => {
       {hasData && (
         <Button
           variant="secondary"
-          fixedWidth={160}
+          width="auto"
           flexShrink={0}
+          flexGrow={0}
           iconPlacement="left"
-          padding="0 32px"
+          padding="0 16px"
           icon={
             <Image
-              src="/images/ksm-logo.svg"
+              src="/images/polkadot-logo.svg"
               alt="Polkapad"
               width="29px"
               height="29px"
@@ -60,13 +61,14 @@ export const PolkaConnentBtn = () => {
           onClick={canUseWallet ? connectToPolka : toggleModal}
           disabled={keyringState !== 'READY'}
           variant="secondary"
-          fixedWidth={160}
+          width="auto"
           flexShrink={0}
+          flexGrow={0}
           iconPlacement="left"
-          padding="0 32px"
+          padding="0 16px"
           icon={
             <Image
-              src="/images/ksm-logo.svg"
+              src="/images/polkadot-logo.svg"
               alt="Polkapad"
               width="29px"
               height="29px"

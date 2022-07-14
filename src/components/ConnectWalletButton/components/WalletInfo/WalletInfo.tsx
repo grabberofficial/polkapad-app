@@ -16,6 +16,7 @@ import copyIcon from '@/assets/copy_icon.svg';
 import externalLinkIcon from '@/assets/external_link.svg';
 import historyIcon from '@/assets/history.svg';
 import { shortenPolkaAddress } from '@/lib/utils';
+import bscIcon from '@/assets/bsc_icon.svg';
 
 interface WalletsInfoProps {
   isOpen: boolean;
@@ -134,7 +135,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
             >
               <Image
                 margin="0px 14px 0px 11px"
-                src="/images/icon_bsc.png"
+                src={bscIcon}
                 alt="bsc"
                 width="24px"
                 height="24px"

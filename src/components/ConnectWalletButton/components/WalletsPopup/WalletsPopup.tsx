@@ -12,6 +12,7 @@ import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { WalletPopupItem } from '@/components/ConnectWalletButton/components/WalletsPopup/components/WalletPopupItem';
 import { Button } from '@/components/Button';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
+import bscIcon from '@/assets/bsc_icon.svg';
 import styled from '@emotion/styled';
 
 interface WalletsPopupProps {
@@ -42,11 +43,7 @@ export const WalletsPopup = ({ isOpen, onClose }: WalletsPopupProps) => {
             icon="/images/metamask.svg"
             onClick={onConnect}
           />
-          <WalletPopupItem
-            isComingSoon
-            text="Binance Wallet"
-            icon="/images/icon_bsc.png"
-          />
+          <WalletPopupItem isComingSoon text="Binance Wallet" icon={bscIcon} />
           <Text
             marginTop="24px"
             fontFamily="Poppins"

@@ -1,11 +1,10 @@
-import { Flex, Image, Text } from '@chakra-ui/react';
-import spinner from '@/assets/spinner.svg';
-import styled from '@emotion/styled';
+import { Flex, Text } from '@chakra-ui/react';
+import { Loader } from '@/components/Loader/Loader';
 
 export const VerificationInProgress = () => {
   return (
     <Flex alignItems="center" flexDirection="column">
-      <AnimatedImage src={spinner} />
+      <Loader />
       <Text
         color="secondary.text"
         fontFamily="Poppins"
@@ -27,12 +26,3 @@ export const VerificationInProgress = () => {
     </Flex>
   );
 };
-
-const AnimatedImage = styled(Image)`
-  @keyframes rotate {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  animation: rotate 2s linear infinite;
-`;
