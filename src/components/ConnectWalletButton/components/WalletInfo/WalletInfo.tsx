@@ -39,7 +39,13 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent minWidth={['100%', '600px']} padding="0 20px">
-        <ModalHeader fontSize="24px" paddingLeft="40px" marginTop="32px">
+        <ModalHeader
+          fontSize="24px"
+          fontFamily="Poppins"
+          fontWeight={700}
+          paddingLeft="40px"
+          marginTop="32px"
+        >
           <Flex>
             <Flex
               borderRadius="50%"
@@ -121,7 +127,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
               width="100%"
               backgroundColor="primary.grey"
               borderRadius="4px"
-              marginRight="4px"
+              marginRight="10px"
               fontSize="16px"
               alignItems="center"
               padding="7px 10px"
