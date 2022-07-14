@@ -11,11 +11,11 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal';
-import { shortenAddress } from '@usedapp/core';
 import nationalIdIcon from '@/assets/national_id.svg';
 import copyIcon from '@/assets/copy_icon.svg';
 import externalLinkIcon from '@/assets/external_link.svg';
 import historyIcon from '@/assets/history.svg';
+import { shortenPolkaAddress } from '@/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
 
 interface WalletsInfoProps {
@@ -140,7 +140,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
                 width="24px"
                 height="24px"
               />
-              {account && shortenAddress(account)}
+              {account && shortenPolkaAddress(account, 12)}
             </Flex>
             <Button
               width="107px"
