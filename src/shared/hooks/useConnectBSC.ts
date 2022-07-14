@@ -22,41 +22,45 @@ export const useConnectBSC = () => {
 
   const userContext = useContext(UserContext);
 
-  const connenctToBSC = useCallback(async () => {
-    await activateBrowserWallet();
+  const connectToBSC = useCallback(async () => {
+    try {
+      await activateBrowserWallet();
 
-    if (chainId !== BSC.chainId) {
-      await window.ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [
-          {
-            chainId: `0x${Number(56).toString(16)}`,
-            chainName: 'Binance Smart Chain Mainnet',
-            nativeCurrency: {
-              name: 'Binance Chain Native Token',
-              symbol: 'BNB',
-              decimals: 18,
+      if (chainId !== BSC.chainId) {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainId: `0x${Number(56).toString(16)}`,
+              chainName: 'Binance Smart Chain Mainnet',
+              nativeCurrency: {
+                name: 'Binance Chain Native Token',
+                symbol: 'BNB',
+                decimals: 18,
+              },
+              rpcUrls: [
+                'https://bsc-dataseed.binance.org',
+                'https://bsc-dataseed1.defibit.io',
+                'https://bsc-dataseed1.ninicoin.io',
+                'https://bsc-dataseed2.defibit.io',
+                'https://bsc-dataseed3.defibit.io',
+                'https://bsc-dataseed4.defibit.io',
+                'https://bsc-dataseed2.ninicoin.io',
+                'https://bsc-dataseed3.ninicoin.io',
+                'https://bsc-dataseed4.ninicoin.io',
+                'https://bsc-dataseed1.binance.org',
+                'https://bsc-dataseed2.binance.org',
+                'https://bsc-dataseed3.binance.org',
+                'https://bsc-dataseed4.binance.org',
+                'wss://bsc-ws-node.nariox.org',
+              ],
+              blockExplorerUrls: ['https://bscscan.com'],
             },
-            rpcUrls: [
-              'https://bsc-dataseed.binance.org',
-              'https://bsc-dataseed1.defibit.io',
-              'https://bsc-dataseed1.ninicoin.io',
-              'https://bsc-dataseed2.defibit.io',
-              'https://bsc-dataseed3.defibit.io',
-              'https://bsc-dataseed4.defibit.io',
-              'https://bsc-dataseed2.ninicoin.io',
-              'https://bsc-dataseed3.ninicoin.io',
-              'https://bsc-dataseed4.ninicoin.io',
-              'https://bsc-dataseed1.binance.org',
-              'https://bsc-dataseed2.binance.org',
-              'https://bsc-dataseed3.binance.org',
-              'https://bsc-dataseed4.binance.org',
-              'wss://bsc-ws-node.nariox.org',
-            ],
-            blockExplorerUrls: ['https://bscscan.com'],
-          },
-        ],
-      });
+          ],
+        });
+      }
+    } catch (e) {
+      console.error(e);
     }
   }, [activateBrowserWallet, chainId]);
 
@@ -93,7 +97,7 @@ export const useConnectBSC = () => {
 
   return {
     disconnectFromBSC: deactivate,
-    connenctToBSC,
+    connectToBSC,
     dotBalance,
     ksmBalance,
     connected,

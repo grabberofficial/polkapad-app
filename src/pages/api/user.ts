@@ -45,6 +45,15 @@ const userRoute = async (req: NextApiRequest, res: NextApiResponse<User>) => {
         isLoggedIn: true,
         kycStatus: user.kycStatus,
       });
+    } else {
+      res.json({
+        isLoggedIn: false,
+        email: '',
+        token: '',
+        id: '',
+        name: '',
+        kycStatus: null,
+      });
     }
   } catch {
     res.json({

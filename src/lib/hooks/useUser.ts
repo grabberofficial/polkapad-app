@@ -10,7 +10,6 @@ export default function useUser({
 } = {}) {
   const { data: user, mutate: mutateUser } = useSWR<User>(API_USER_ROUTE);
   const router = useRouter();
-  const { initial } = router.query;
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
@@ -21,7 +20,6 @@ export default function useUser({
       // If redirectTo is set, redirect if the user was not found.
       (redirectTo.length > 0 &&
         !redirectIfFound &&
-        !initial &&
         (!user?.isLoggedIn || user === undefined)) ||
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && user?.isLoggedIn)
