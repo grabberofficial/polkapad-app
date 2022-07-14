@@ -28,6 +28,7 @@ import { useIsMobile } from '@/shared/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { sendMetricsWalletAdded } from '@/services/metrics';
 import { MOBILE_WALLET_ROUTE } from '@/constants/routes';
+import bscIcon from '@/assets/bsc_icon.svg';
 
 const StyledButton = styled(ChakraButton)`
   color: #49c7da;
@@ -161,13 +162,13 @@ const WalletCard: React.FC<{
   let networkText = 'BNB Smart chain';
   let commentText =
     'Accepted: DOT or KSM from Binance Smart Chain (EVM) with the lowest fees.';
-  let walletIcon = '/images/icon_bsc.png';
+  let walletIcon = bscIcon;
   if (type !== 'eth') {
     numberText = '2';
     walletText = 'Receiving network';
     walletUrl = 'https://polkadot.js.org/extension/';
     networkText = 'Polkadot';
-    walletIcon = '/images/ksm-logo.svg';
+    walletIcon = '/images/polkadot-logo.svg';
     commentText = 'Required to receive tokens during a giveaway';
   }
 
