@@ -4,12 +4,14 @@ import styled from '@emotion/styled';
 interface WalletPopupItemProps {
   text: string;
   icon: string;
+  isComingSoon?: boolean;
   onClick?: () => void;
 }
 
 export const WalletPopupItem = ({
   text,
   icon,
+  isComingSoon,
   onClick,
 }: WalletPopupItemProps) => {
   return (
@@ -29,7 +31,7 @@ export const WalletPopupItem = ({
       cursor="pointer"
       onClick={onClick}
     >
-      <Flex alignItems={'center'}>
+      <Flex alignItems="center" width="100%">
         <Image
           margin="0px 14px 0px 11px"
           src={icon}
@@ -38,6 +40,17 @@ export const WalletPopupItem = ({
           height="29px"
         />
         <WalletText>{text}</WalletText>
+        {isComingSoon && (
+          <Text
+            fontFamily="Poppins"
+            fontSize="12px"
+            color="secondary.textLight"
+            marginLeft="auto"
+            marginRight="19px"
+          >
+            Coming soon
+          </Text>
+        )}
       </Flex>
     </Flex>
   );

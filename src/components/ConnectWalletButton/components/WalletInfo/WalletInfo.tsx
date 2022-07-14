@@ -1,15 +1,21 @@
-import { Flex, Image, Modal, Text } from '@chakra-ui/react';
+import React, { useCallback } from 'react';
+import { Flex, Image, Link, Modal, Text } from '@chakra-ui/react';
+import toast from 'react-hot-toast';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { Button } from '@/components/Button';
 import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal';
-import React, { useCallback } from 'react';
 import { shortenAddress } from '@usedapp/core';
+import nationalIdIcon from '@/assets/national_id.svg';
+import copyIcon from '@/assets/copy_icon.svg';
+import externalLinkIcon from '@/assets/external_link.svg';
+import historyIcon from '@/assets/history.svg';
 
 interface WalletsInfoProps {
   isOpen: boolean;
@@ -24,17 +30,33 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
     onClose();
   }, [disconnectFromBSC, onClose]);
 
+  const onCopyAddress = useCallback(() => {
+    account && navigator.clipboard.writeText(account);
+    toast.success('Address copied');
+  }, [account]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent
-        height="250px"
-        minWidth={['100%', '600px']}
-        padding="0 20px"
-      >
-        <ModalHeader>Account</ModalHeader>
+      <ModalContent minWidth={['100%', '600px']} padding="0 20px">
+        <ModalHeader fontSize="24px" paddingLeft="40px" marginTop="32px">
+          <Flex>
+            <Flex
+              borderRadius="50%"
+              backgroundColor="kycIcons"
+              width="36px"
+              height="36px"
+              justifyContent="center"
+              alignItems="center"
+              marginRight="20px"
+            >
+              <Image src={nationalIdIcon} width="22px" height="14px" />
+            </Flex>
+            Account
+          </Flex>
+        </ModalHeader>
         <ModalCloseButton onClick={onClose} />
-        <ModalBody>
+        <ModalBody padding="8px 36px">
           <Flex justifyContent="space-between">
             <Flex flexDirection="column">
               <Text
@@ -89,8 +111,8 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
             </Flex>
           </Flex>
           <Flex
-            margin="10px -44px"
-            padding="32px 36px"
+            margin="10px -56px 0"
+            padding="32px 48px"
             border="1px solid var(--chakra-colors-primary-border)"
           >
             <Flex
@@ -126,6 +148,43 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
             </Button>
           </Flex>
         </ModalBody>
+        <ModalFooter justifyContent="space-between" padding="20px 32px 30px">
+          <Flex
+            fontSize="12px"
+            fontWeight={700}
+            fontFamily="Poppins"
+            alignItems="center"
+            cursor="pointer"
+            _hover={{ color: 'primary.basic' }}
+            onClick={onCopyAddress}
+          >
+            <Image src={copyIcon} marginRight="10px" />
+            Copy address
+          </Flex>
+          <Link
+            fontSize="12px"
+            fontWeight={700}
+            fontFamily="Poppins"
+            display="flex"
+            alignItems="center"
+            _hover={{ color: 'primary.basic' }}
+            href={`https://testnet.bscscan.com/address/${account}`}
+            isExternal
+          >
+            <Image src={externalLinkIcon} marginRight="10px" />
+            View on Explorer
+          </Link>
+          <Flex
+            fontSize="12px"
+            fontWeight={700}
+            fontFamily="Poppins"
+            alignItems="center"
+            _hover={{ color: 'primary.basic' }}
+          >
+            <Image src={historyIcon} marginRight="10px" />
+            History
+          </Flex>
+        </ModalFooter>
       </ModalContent>
     </Modal>
   );

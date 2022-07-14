@@ -11,6 +11,8 @@ import { useCallback } from 'react';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { WalletPopupItem } from '@/components/ConnectWalletButton/components/WalletsPopup/components/WalletPopupItem';
 import { Button } from '@/components/Button';
+import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
+import styled from '@emotion/styled';
 
 interface WalletsPopupProps {
   isOpen: boolean;
@@ -29,28 +31,48 @@ export const WalletsPopup = ({ isOpen, onClose }: WalletsPopupProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent width={['100%', '500px']}>
-        <ModalHeader>Connect an EVM Wallet</ModalHeader>
+      <ModalContent minWidth={['100%', '500px']}>
+        <ModalHeader fontSize="24px" paddingLeft="70px" marginTop="32px">
+          Connect an EVM Wallet
+        </ModalHeader>
         <ModalCloseButton onClick={onClose} />
-        <ModalBody>
+        <ModalBody padding="0px 70px">
           <WalletPopupItem
             text={isMetamaskAvailable ? 'Metamask' : 'Install Metamask'}
             icon="/images/metamask.svg"
             onClick={onConnect}
           />
-          <WalletPopupItem text="Binance Wallet" icon="/images/icon_bsc.png" />
+          <WalletPopupItem
+            isComingSoon
+            text="Binance Wallet"
+            icon="/images/icon_bsc.png"
+          />
           <Text
             marginTop="24px"
             fontFamily="Poppins"
             fontSize="12px"
             color="secondary.text"
           >
-            By connecting a wallet, you agree to the Terms & Conditions and
-            acknowledge that you have read and understand our Privacy Policy.
+            By connecting a wallet, you agree to the
+            <GoogleDocsViewer
+              title="Terms and Service"
+              fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
+              control={(props) => (
+                <DocUrl {...props}> Terms & Conditions</DocUrl>
+              )}
+            />{' '}
+            and acknowledge that you have read and understand our
+            <GoogleDocsViewer
+              title="Privacy Policy"
+              fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
+              control={(props) => <DocUrl {...props}> Privacy Policy</DocUrl>}
+            />
+            .
           </Text>
         </ModalBody>
         <ModalFooter
           marginTop="32px"
+          padding="20px 70px"
           borderTop="1px solid var(--chakra-colors-primary-border)"
         >
           <Button variant="primary">Learn how to connect</Button>
@@ -59,3 +81,12 @@ export const WalletsPopup = ({ isOpen, onClose }: WalletsPopupProps) => {
     </Modal>
   );
 };
+
+const DocUrl = styled.span`
+  cursor: pointer;
+  font-weight: 900;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
