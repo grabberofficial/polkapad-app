@@ -53,7 +53,7 @@ const WalletCard: React.FC<{
     setModalOpen((isOpen) => !isOpen);
   }, []);
 
-  const { connenctToBSC, chainId, switchToBSC } = useConnectBSC();
+  const { connectToBSC, chainId, switchToBSC } = useConnectBSC();
   const {
     canUseWallet,
     account: polkaAccount,
@@ -92,7 +92,7 @@ const WalletCard: React.FC<{
     }
 
     if (type === 'eth') {
-      await connenctToBSC();
+      await connectToBSC();
     }
     if (
       type === 'polka' &&
@@ -112,7 +112,7 @@ const WalletCard: React.FC<{
     type,
     connectToPolka,
     router,
-    connenctToBSC,
+    connectToBSC,
     canUseWallet,
     toggleModal,
   ]);

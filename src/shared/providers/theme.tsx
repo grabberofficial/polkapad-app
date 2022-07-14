@@ -9,6 +9,7 @@ const theme = extendTheme({
       hover: '#0685D0',
       text: '#FFF',
       border: '#E5E4E4',
+      grey: '#F6F5F5',
     },
     secondary: {
       basic: '#fff',

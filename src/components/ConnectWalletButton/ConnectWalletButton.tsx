@@ -1,18 +1,26 @@
-import React from 'react';
+import { FC } from 'react';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { ChainId } from '@usedapp/core';
 import { Button } from '@/components/Button';
 import { Image } from '@chakra-ui/react';
+import { WalletsPopup } from './components/WalletsPopup/WalletsPopup';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { WalletsInfo } from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
 
-export const ConnectWalletButton: React.FC = () => {
+export const ConnectWalletButton: FC = () => {
   const {
-    connenctToBSC,
-    dotBalance,
-    connected,
-    account,
-    chainId,
-    switchToBSC,
-  } = useConnectBSC();
+    isOpen: isPopupOpen,
+    onOpen: onPopupOpen,
+    onClose: onPopupClose,
+  } = useDisclosure();
+  const {
+    isOpen: isInfoOpen,
+    onOpen: onInfoOpen,
+    onClose: onInfoClose,
+  } = useDisclosure();
+
+  const { dotBalance, connected, account, chainId, switchToBSC } =
+    useConnectBSC();
 
   const isWrongNetwork = chainId !== ChainId.BSC;
 
@@ -20,6 +28,7 @@ export const ConnectWalletButton: React.FC = () => {
     <>
       {connected && account && !isWrongNetwork && (
         <Button
+          onClick={onInfoOpen}
           variant="secondary"
           fixedWidth={240}
           padding="0px 32px"
@@ -59,7 +68,7 @@ export const ConnectWalletButton: React.FC = () => {
       )}
       {!account && (
         <Button
-          onClick={connenctToBSC}
+          onClick={onPopupOpen}
           variant="secondary"
           fixedWidth={220}
           iconPlacement="left"
@@ -76,6 +85,8 @@ export const ConnectWalletButton: React.FC = () => {
           Connect
         </Button>
       )}
+      <WalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
+      <WalletsInfo isOpen={isInfoOpen} onClose={onInfoClose} />
     </>
   );
 };
