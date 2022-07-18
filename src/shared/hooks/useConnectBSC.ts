@@ -4,7 +4,7 @@ import {
   network,
   networkName,
   rpcUrls,
-  blockExplorerUrls
+  blockExplorerUrls,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useContext, useEffect } from 'react';
@@ -35,7 +35,7 @@ export const useConnectBSC = () => {
           network,
           networkName,
           rpcUrls,
-          blockExplorerUrls
+          blockExplorerUrls,
         );
 
         await window.ethereum.request(requestArguments);
@@ -43,7 +43,6 @@ export const useConnectBSC = () => {
     } catch (e) {
       console.error(e);
     }
-
   }, [activateBrowserWallet, chainId]);
 
   const switchToBSC = useCallback(
@@ -78,7 +77,8 @@ export const useConnectBSC = () => {
     chainId: number,
     chainName: string,
     rpcUrls: string[],
-    blockExplorerUrls: string[]) => {
+    blockExplorerUrls: string[],
+  ) => {
     return {
       method: 'wallet_addEthereumChain',
       params: [
@@ -94,7 +94,7 @@ export const useConnectBSC = () => {
           blockExplorerUrls,
         },
       ],
-    }
+    };
   };
 
   return {

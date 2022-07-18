@@ -1,7 +1,7 @@
 import { User } from '@/pages/api/user';
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { BigNumber } from 'ethers';
-import {formatEther} from "ethers/lib/utils";
+import { formatEther } from 'ethers/lib/utils';
 
 export class Balance {
   readonly value: BigNumber;
@@ -12,14 +12,14 @@ export class Balance {
 
   public toString = (): string => {
     return `${parseFloat(formatEther(this.value)).toFixed(3)}`;
-  }
+  };
 }
 
 interface Account {
   address: string;
   balance: {
-    bsc: Balance,
-    polka: Balance
+    bsc: Balance;
+    polka: Balance;
   };
 }
 

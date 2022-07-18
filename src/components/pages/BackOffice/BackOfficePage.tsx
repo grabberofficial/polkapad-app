@@ -1,11 +1,13 @@
 import {
   Divider,
   Flex,
-  FormControl, FormHelperText,
+  FormControl,
+  FormHelperText,
   FormLabel,
-  Spinner, Stack,
-  Text
-} from '@chakra-ui/react'
+  Spinner,
+  Stack,
+  Text,
+} from '@chakra-ui/react';
 import { useEthers } from '@usedapp/core';
 
 import {
@@ -13,7 +15,10 @@ import {
   getClientAllocationSize,
   getDefaultAllocationSize,
   lock,
-  setPlpdPrice, changeClientAllocationSize, remove, getPlpdPrice
+  setPlpdPrice,
+  changeClientAllocationSize,
+  remove,
+  getPlpdPrice,
 } from '@/services/contracts';
 import { Button } from '@/components/Button';
 import { useState } from 'react';
@@ -45,7 +50,9 @@ export const BackOfficePage = () => {
     if (!account) return;
 
     setLoading(true);
-    const allocationSize = formatEther(await getDefaultAllocationSize()).toString();
+    const allocationSize = formatEther(
+      await getDefaultAllocationSize(),
+    ).toString();
     setLoading(false);
 
     setDefaultAllocationSize(allocationSize);
@@ -55,7 +62,9 @@ export const BackOfficePage = () => {
     if (!account) return;
 
     setLoading(true);
-    const allocationSize = formatEther(await getClientAllocationSize(allocationSizeAddress)).toString();
+    const allocationSize = formatEther(
+      await getClientAllocationSize(allocationSizeAddress),
+    ).toString();
     setLoading(false);
 
     setAllocationSize(allocationSize);
@@ -65,7 +74,11 @@ export const BackOfficePage = () => {
     if (!account) return;
 
     setLoading(true);
-    await changeClientAllocationSize(account, allocationSizeAddress, maxAllocationSize);
+    await changeClientAllocationSize(
+      account,
+      allocationSizeAddress,
+      maxAllocationSize,
+    );
     setLoading(false);
   };
 
@@ -91,7 +104,7 @@ export const BackOfficePage = () => {
     setLoading(true);
     await lock(account, maxAllocationSize);
     setLoading(false);
-  }
+  };
 
   const getPLPDPrice = async () => {
     if (!account) return;
@@ -101,7 +114,7 @@ export const BackOfficePage = () => {
     setLoading(false);
 
     setPlpd(plpdPrice);
-  }
+  };
 
   const setPLPDPrice = async () => {
     if (!account) return;
@@ -109,31 +122,22 @@ export const BackOfficePage = () => {
     setLoading(true);
     await setPlpdPrice(account, plpdPriceNum);
     setLoading(false);
-  }
-
+  };
 
   return (
-    <Flex
-      flexDirection={'column'}
-      padding={'10px'}
-      >
-      <Stack
-        maxWidth={'350px'}
-        padding={'10px'}
-        direction='column'
-      >
-        <Text fontSize="xl" fontWeight="bold">Locker</Text>
-        <Divider  />
+    <Flex flexDirection={'column'} padding={'10px'}>
+      <Stack maxWidth={'350px'} padding={'10px'} direction="column">
+        <Text fontSize="xl" fontWeight="bold">
+          Locker
+        </Text>
+        <Divider />
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
             <FormLabel>Lock (execute by whitelisted address only)</FormLabel>
             <FormHelperText>Allocation Size</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setMaxAllocationSize(event.currentTarget.value);
               }}
@@ -141,37 +145,40 @@ export const BackOfficePage = () => {
             <Button
               marginTop={'10px'}
               onClick={lockAllocation}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Lock'}
             </Button>
           </FormControl>
         </Flex>
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
             <FormLabel>Get PLPD price</FormLabel>
             <Button
               onClick={getPLPDPrice}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Get'}
             </Button>
-            <Text fontSize="xl" fontWeight="bold">{!!plpdPrice ? plpdPrice : 0} USD</Text>
+            <Text fontSize="xl" fontWeight="bold">
+              {!!plpdPrice ? plpdPrice : 0} USD
+            </Text>
           </FormControl>
         </Flex>
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
-            <FormLabel>Set PLPD price (execute by multisig address only)</FormLabel>
+            <FormLabel>
+              Set PLPD price (execute by multisig address only)
+            </FormLabel>
             <FormHelperText>Price</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setPlpdNum(event.currentTarget.value as number);
               }}
@@ -179,70 +186,72 @@ export const BackOfficePage = () => {
             <Button
               marginTop={'10px'}
               onClick={setPLPDPrice}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Set'}
             </Button>
           </FormControl>
         </Flex>
-
       </Stack>
-      <Stack
-        maxWidth={'350px'}
-        padding={'10px'}
-        direction='column'
-        >
-        <Text fontSize="xl" fontWeight="bold">Whitelist</Text>
-        <Divider  />
+      <Stack maxWidth={'350px'} padding={'10px'} direction="column">
+        <Text fontSize="xl" fontWeight="bold">
+          Whitelist
+        </Text>
+        <Divider />
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
             <FormLabel>Get default max allocation size</FormLabel>
             <Button
               onClick={getAllocationSize}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Get'}
             </Button>
-            <Text fontSize="xl" fontWeight="bold">{!!defaultAllocationSize ? defaultAllocationSize : 0} USD</Text>
+            <Text fontSize="xl" fontWeight="bold">
+              {!!defaultAllocationSize ? defaultAllocationSize : 0} USD
+            </Text>
           </FormControl>
         </Flex>
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
             <FormLabel>Get max allocation size by address</FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
-                  setAllocationSizeAddress(event.currentTarget.value);
+                setAllocationSizeAddress(event.currentTarget.value);
               }}
               // control={formControl}
             />
             <Button
               marginTop={'10px'}
               onClick={getAllocationSizeByAddress}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Get'}
             </Button>
-            <Text fontSize="xl" fontWeight="bold">{!!allocationSize ? allocationSize : 0} USD</Text>
+            <Text fontSize="xl" fontWeight="bold">
+              {!!allocationSize ? allocationSize : 0} USD
+            </Text>
           </FormControl>
         </Flex>
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
-            <FormLabel>Change max allocation size of address (execute by multisig only)</FormLabel>
+            <FormLabel>
+              Change max allocation size of address (execute by multisig only)
+            </FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
@@ -250,6 +259,7 @@ export const BackOfficePage = () => {
             />
             <FormHelperText>Max Allocation Size</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setMaxAllocationSize(event.currentTarget.value);
               }}
@@ -258,21 +268,21 @@ export const BackOfficePage = () => {
             <Button
               marginTop={'10px'}
               onClick={changeAllocationSizeByAddress}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Change'}
             </Button>
           </FormControl>
         </Flex>
 
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
             <FormLabel>Add to whitelist (execute by multisig only)</FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
@@ -280,6 +290,7 @@ export const BackOfficePage = () => {
             />
             <FormHelperText>Max Allocation Size</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setMaxAllocationSize(event.currentTarget.value);
               }}
@@ -288,20 +299,22 @@ export const BackOfficePage = () => {
             <Button
               marginTop={'10px'}
               onClick={addToWhitelist}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Add'}
             </Button>
           </FormControl>
         </Flex>
-        <Flex
-          alignItems={'center'}
-          marginTop={'10px'}
-          padding={'10px'}
-        >
+        <Flex alignItems={'center'} marginTop={'10px'} padding={'10px'}>
           <FormControl>
-            <FormLabel>Remove from whitelist (execute by multisig only)</FormLabel>
+            <FormLabel>
+              Remove from whitelist (execute by multisig only)
+            </FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
+              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
@@ -310,13 +323,15 @@ export const BackOfficePage = () => {
             <Button
               marginTop={'10px'}
               onClick={removeFromWhitelist}
-              variant="primary" width="100px" type="submit">
+              variant="primary"
+              width="100px"
+              type="submit"
+            >
               {loading ? <Spinner /> : 'Remove'}
             </Button>
           </FormControl>
         </Flex>
       </Stack>
     </Flex>
-
   );
-}
+};

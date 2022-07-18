@@ -6,14 +6,14 @@ import { DOT_BSC } from '@/config/network';
 
 export enum ADDRESS {
   WHITELIST = '0xaB8CC909Fa3BD4b7045f74874f6343903E5471ef',
-  LOCKER = '0x77fb21119fb06afBa01aA02CA20dBFbB43432591'
+  LOCKER = '0x77fb21119fb06afBa01aA02CA20dBFbB43432591',
 }
 
 export const lock = async (address: string, allocationSize: number) => {
   await approve(address, allocationSize);
 
-  const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-  const signer = provider.getSigner(address)
+  const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  const signer = provider.getSigner(address);
 
   const transactionCount = await provider.getTransactionCount(address);
 
@@ -30,11 +30,11 @@ export const lock = async (address: string, allocationSize: number) => {
   await transaction.wait();
 
   console.log('lock', await locker._locks(address));
-}
+};
 
 export const setPlpdPrice = async (address: string, price: number) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-  const signer = provider.getSigner(address)
+  const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  const signer = provider.getSigner(address);
 
   const transactionCount = await provider.getTransactionCount(address);
 
@@ -49,22 +49,30 @@ export const setPlpdPrice = async (address: string, price: number) => {
   });
 
   await transaction.wait();
-}
+};
 
 export const getPlpdPrice = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
   const locker = new ethers.Contract(ADDRESS.LOCKER, Locker.abi, provider);
 
   return await locker._plpdPrice();
-}
+};
 
-export const add = async (signerAddress: string, address: string, maxAllocationSize: number) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-  const signer = provider.getSigner(signerAddress)
+export const add = async (
+  signerAddress: string,
+  address: string,
+  maxAllocationSize: number,
+) => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  const signer = provider.getSigner(signerAddress);
 
   const transactionCount = await provider.getTransactionCount(signerAddress);
 
-  const whitelist = new ethers.Contract(ADDRESS.WHITELIST, Whitelist.abi, provider);
+  const whitelist = new ethers.Contract(
+    ADDRESS.WHITELIST,
+    Whitelist.abi,
+    provider,
+  );
   const signedWhitelist = whitelist.connect(signer);
 
   const transaction = await signedWhitelist.add(address, maxAllocationSize, {
@@ -73,15 +81,19 @@ export const add = async (signerAddress: string, address: string, maxAllocationS
   });
 
   await transaction.wait();
-}
+};
 
 export const remove = async (signerAddress: string, address: string) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-  const signer = provider.getSigner(signerAddress)
+  const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  const signer = provider.getSigner(signerAddress);
 
   const transactionCount = await provider.getTransactionCount(signerAddress);
 
-  const whitelist = new ethers.Contract(ADDRESS.WHITELIST, Whitelist.abi, provider);
+  const whitelist = new ethers.Contract(
+    ADDRESS.WHITELIST,
+    Whitelist.abi,
+    provider,
+  );
   const signedWhitelist = whitelist.connect(signer);
 
   const transaction = await signedWhitelist.remove(address, {
@@ -90,11 +102,11 @@ export const remove = async (signerAddress: string, address: string) => {
   });
 
   await transaction.wait();
-}
+};
 
 export const activateBurning = async (account: string) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-  const signer = provider.getSigner(account)
+  const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  const signer = provider.getSigner(account);
 
   const transactionCount = await provider.getTransactionCount(account);
 
@@ -109,40 +121,63 @@ export const activateBurning = async (account: string) => {
   await transaction.wait();
 
   console.log('can Burn', await signedLocker._canBurn());
-}
+};
 
 export const getDefaultAllocationSize = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-  const whitelist = new ethers.Contract(ADDRESS.WHITELIST, Whitelist.abi, provider);
+  const whitelist = new ethers.Contract(
+    ADDRESS.WHITELIST,
+    Whitelist.abi,
+    provider,
+  );
 
   return await whitelist.defaultAllocationSize();
-}
+};
 
 export const getClientAllocationSize = async (client: string) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-  const whitelist = new ethers.Contract(ADDRESS.WHITELIST, Whitelist.abi, provider);
+  const whitelist = new ethers.Contract(
+    ADDRESS.WHITELIST,
+    Whitelist.abi,
+    provider,
+  );
 
   return await whitelist.allocationSizes(client);
-}
+};
 
-export const changeClientAllocationSize = async (account: string, client: string, maxAllocationSize: number) => {
+export const changeClientAllocationSize = async (
+  account: string,
+  client: string,
+  maxAllocationSize: number,
+) => {
   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-  const whitelist = new ethers.Contract(ADDRESS.WHITELIST, Whitelist.abi, provider);
-  const signer = provider.getSigner(account)
+  const whitelist = new ethers.Contract(
+    ADDRESS.WHITELIST,
+    Whitelist.abi,
+    provider,
+  );
+  const signer = provider.getSigner(account);
 
   const signedWhitelist = whitelist.connect(signer);
 
   const transactionCount = await provider.getTransactionCount(account);
 
-  const newMaxAllocationSize = ethers.utils.parseUnits(maxAllocationSize.toString(), 18);
+  const newMaxAllocationSize = ethers.utils.parseUnits(
+    maxAllocationSize.toString(),
+    18,
+  );
 
-  const transaction = await signedWhitelist.changeAllocationSize(client, newMaxAllocationSize, {
-    gasLimit: ethers.utils.hexlify(100000),
-    nonce: ethers.utils.hexlify(transactionCount),
-  });
+  const transaction = await signedWhitelist.changeAllocationSize(
+    client,
+    newMaxAllocationSize,
+    {
+      gasLimit: ethers.utils.hexlify(100000),
+      nonce: ethers.utils.hexlify(transactionCount),
+    },
+  );
 
   await transaction.wait();
-}
+};
 
 export const getDotPrice = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
@@ -151,7 +186,7 @@ export const getDotPrice = async () => {
   const dotPrice = (await locker.getLatestPrice()).toString();
 
   console.log('dot price', dotPrice);
-}
+};
 
 export const getBurnFlag = async () => {
   const provider = new ethers.providers.Web3Provider(window.ethereum as any);
@@ -160,11 +195,11 @@ export const getBurnFlag = async () => {
   const canBurn = (await locker._canBurn()).toString();
 
   console.log('can burn', canBurn);
-}
+};
 
 export const approve = async (address: string, allocationSize: number) => {
-  const provider = new ethers.providers.Web3Provider(window.ethereum as any)
-  const signer = provider.getSigner(address)
+  const provider = new ethers.providers.Web3Provider(window.ethereum as any);
+  const signer = provider.getSigner(address);
 
   const transactionCount = await provider.getTransactionCount(address);
 
@@ -181,5 +216,4 @@ export const approve = async (address: string, allocationSize: number) => {
   });
 
   await transaction.wait();
-}
-
+};
