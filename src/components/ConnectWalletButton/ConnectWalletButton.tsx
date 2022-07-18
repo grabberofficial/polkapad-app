@@ -8,6 +8,8 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import { WalletsInfo } from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { Loader } from '@/components/Loader/Loader';
+import { formatEther } from 'ethers/lib/utils';
+import { isProduction } from '@/config/env';
 
 export const ConnectWalletButton: FC = () => {
   const {
@@ -24,7 +26,8 @@ export const ConnectWalletButton: FC = () => {
   const { dotBalance, connected, account, chainId, switchToBSC } =
     useConnectBSC();
 
-  const isWrongNetwork = chainId !== ChainId.BSC;
+  const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
+  const isWrongNetwork = chainId !== network;
 
   return (
     <>
@@ -47,7 +50,7 @@ export const ConnectWalletButton: FC = () => {
           }
         >
           {dotBalance ? (
-            `${dotBalance} DOT`
+            `${parseFloat(formatEther(dotBalance)).toFixed(3)} DOT`
           ) : (
             <Loader width="32px" height="32px" />
           )}

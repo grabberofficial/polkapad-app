@@ -12,9 +12,7 @@ import {
   fbSendSuccessKYC,
   fbSendWalletAdded,
 } from '@/services/facebook';
-import { environment } from '@/config/env';
-
-const isProduction = environment === 'PRODUCTION';
+import { isProduction } from '@/config/env';
 
 export const sendMetricsCreateAccount = () => {
   if (isProduction) {
