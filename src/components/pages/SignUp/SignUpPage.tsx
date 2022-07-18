@@ -36,6 +36,7 @@ import useUser from '@/lib/hooks/useUser';
 import { User } from '@/pages/api/user';
 import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
 import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
+import { environment } from '@/config/env';
 
 export interface SignupFormInput {
   name: string;
@@ -45,6 +46,8 @@ export interface SignupFormInput {
   promocode: string;
   terms: boolean;
 }
+
+const isProduction = environment === 'PRODUCTION';
 
 export const SignUpPage = () => {
   const { mutateUser } = useUser({
@@ -63,33 +66,54 @@ export const SignUpPage = () => {
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password',
   );
-  const { pathname } = useRouter();
-  const isWaitRoute = pathname === WAIT_ROUTE;
+  const router = useRouter();
+  const isWaitRoute = router.pathname === WAIT_ROUTE;
 
   const onSubmit: SubmitHandler<SignupFormInput> = useCallback(
     async (data) => {
       try {
         setLoading(true);
-        await mutateUser(
-          (async () => {
-            await fetchJson(`/api/register`, {
-              method: 'POST',
-              body: JSON.stringify({
-                name: data.name,
-                password: data.password,
-                email: data.email,
-                promocode: data.promocode,
-              }),
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
+        if (isProduction) {
+          await fetchJson(`/api/register`, {
+            method: 'POST',
+            body: JSON.stringify({
+              name: data.name,
+              password: data.password,
+              email: data.email,
+              promocode: data.promocode,
+            }),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
 
-            isWaitRoute
-              ? sendMetricsCreateAccountWaitList()
-              : sendMetricsCreateAccount();
-          })() as unknown as Promise<User>,
-        );
+          isWaitRoute
+            ? setTimeout(sendMetricsCreateAccountWaitList, 10000)
+            : setTimeout(sendMetricsCreateAccount, 10000);
+
+          router.push(LOGIN_ROUTE);
+        } else {
+          await mutateUser(
+            (async () => {
+              await fetchJson(`/api/register`, {
+                method: 'POST',
+                body: JSON.stringify({
+                  name: data.name,
+                  password: data.password,
+                  email: data.email,
+                  promocode: data.promocode,
+                }),
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+
+              isWaitRoute
+                ? setTimeout(sendMetricsCreateAccountWaitList, 10000)
+                : setTimeout(sendMetricsCreateAccount, 10000);
+            })() as unknown as Promise<User>,
+          );
+        }
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -107,7 +131,7 @@ export const SignUpPage = () => {
         }
       }
     },
-    [isWaitRoute, mutateUser, setError],
+    [isWaitRoute, mutateUser, router, setError],
   );
 
   return (
@@ -269,12 +293,12 @@ export const SignUpPage = () => {
             maxWidth="410px"
             padding="5px 5px 0 5px"
           >
-            &#8211; Minimal length 8 characters
+            &#8211; 8 or more characters
             <br />
             &#8211; Only latin symbols A-z, at least one uppercase and one
             lowercase
             <br />
-            &#8211; At least one number
+            &#8211; At least one digit
           </Flex>
         </FormControl>
         <FormControl isInvalid={!!errors.confirmPassword}>

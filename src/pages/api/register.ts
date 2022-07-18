@@ -3,7 +3,7 @@ import { sessionOptions } from '@/lib/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 import fetchJson from '@/lib/fetchJson';
 import { serviceUrl } from '@/config/env';
-import { withSentry } from '@sentry/nextjs';
+// import { withSentry } from '@sentry/nextjs';
 import { KycStatusTypes } from '@/pages/api/kycStatus';
 
 const signupRoute = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -54,4 +54,5 @@ const signupRoute = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default withSentry(withIronSessionApiRoute(signupRoute, sessionOptions));
+// export default withSentry(withIronSessionApiRoute(signupRoute, sessionOptions));
+export default withIronSessionApiRoute(signupRoute, sessionOptions);
