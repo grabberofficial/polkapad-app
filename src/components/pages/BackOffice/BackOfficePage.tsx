@@ -4,6 +4,7 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
+  Input,
   Spinner,
   Stack,
   Text,
@@ -23,7 +24,6 @@ import {
 import { Button } from '@/components/Button';
 import { useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
-import { Input } from '@/components/Input/Input';
 import { useRouter } from 'next/router';
 import { isProduction } from '@/config/env';
 import { HOME_ROUTE } from '@/constants/routes';
@@ -137,7 +137,6 @@ export const BackOfficePage = () => {
             <FormLabel>Lock (execute by whitelisted address only)</FormLabel>
             <FormHelperText>Allocation Size</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setMaxAllocationSize(event.currentTarget.value);
               }}
@@ -166,7 +165,7 @@ export const BackOfficePage = () => {
               {loading ? <Spinner /> : 'Get'}
             </Button>
             <Text fontSize="xl" fontWeight="bold">
-              {!!plpdPrice ? plpdPrice : 0} USD
+              {plpdPrice ? plpdPrice : 0} USD
             </Text>
           </FormControl>
         </Flex>
@@ -178,7 +177,6 @@ export const BackOfficePage = () => {
             </FormLabel>
             <FormHelperText>Price</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setPlpdNum(event.currentTarget.value as number);
               }}
@@ -213,7 +211,7 @@ export const BackOfficePage = () => {
               {loading ? <Spinner /> : 'Get'}
             </Button>
             <Text fontSize="xl" fontWeight="bold">
-              {!!defaultAllocationSize ? defaultAllocationSize : 0} USD
+              {defaultAllocationSize ? defaultAllocationSize : 0} USD
             </Text>
           </FormControl>
         </Flex>
@@ -223,7 +221,6 @@ export const BackOfficePage = () => {
             <FormLabel>Get max allocation size by address</FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
@@ -239,7 +236,7 @@ export const BackOfficePage = () => {
               {loading ? <Spinner /> : 'Get'}
             </Button>
             <Text fontSize="xl" fontWeight="bold">
-              {!!allocationSize ? allocationSize : 0} USD
+              {allocationSize ? allocationSize : 0} USD
             </Text>
           </FormControl>
         </Flex>
@@ -251,7 +248,6 @@ export const BackOfficePage = () => {
             </FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
@@ -259,7 +255,6 @@ export const BackOfficePage = () => {
             />
             <FormHelperText>Max Allocation Size</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setMaxAllocationSize(event.currentTarget.value);
               }}
@@ -282,7 +277,6 @@ export const BackOfficePage = () => {
             <FormLabel>Add to whitelist (execute by multisig only)</FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
@@ -290,7 +284,6 @@ export const BackOfficePage = () => {
             />
             <FormHelperText>Max Allocation Size</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setMaxAllocationSize(event.currentTarget.value);
               }}
@@ -314,7 +307,6 @@ export const BackOfficePage = () => {
             </FormLabel>
             <FormHelperText>Address</FormHelperText>
             <Input
-              // @ts-ignore
               onChange={(event: any) => {
                 setAllocationSizeAddress(event.currentTarget.value);
               }}
