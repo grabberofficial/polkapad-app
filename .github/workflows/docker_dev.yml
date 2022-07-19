@@ -54,6 +54,7 @@ jobs:
           --build-arg SENTRY_AUTH_TOKEN="${{ secrets.SENTRY_AUTH_TOKEN }}"
           --build-arg MAILCHIMP_ID="${{ secrets.DEV_MAILCHIMP_ID }}"
           --build-arg ENVIRONMENT="DEVELOPMENT"
+          --build-arg FACEBOOK_PIXEL="${{ secrets.FACEBOOK_PIXEL }}"
           -f .github/workflows/Dockerfile .
 
       - name: Push to ECR and Argo

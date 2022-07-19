@@ -1,10 +1,14 @@
-import { useEthers, BSC, useTokenBalance } from '@usedapp/core';
-import { formatEther } from 'ethers/lib/utils';
+import {
+  DOT_BSC,
+  KSM_BSC,
+  network,
+  networkName,
+  rpcUrls,
+  blockExplorerUrls,
+} from '@/config/network';
+import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useContext, useEffect } from 'react';
-import { UserContext } from '../providers/userContext';
-
-const KSM_BSC = '0x2aa69E8D25C045B659787BC1f03ce47a388DB6E8';
-const DOT_BSC = '0x7083609fCE4d1d8Dc0C979AAb8c869Ea2C873402';
+import { Balance, UserContext } from '../providers/userContext';
 
 export const useConnectBSC = () => {
   const {
@@ -26,38 +30,15 @@ export const useConnectBSC = () => {
     try {
       await activateBrowserWallet();
 
-      if (chainId !== BSC.chainId) {
-        await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [
-            {
-              chainId: `0x${Number(56).toString(16)}`,
-              chainName: 'Binance Smart Chain Mainnet',
-              nativeCurrency: {
-                name: 'Binance Chain Native Token',
-                symbol: 'BNB',
-                decimals: 18,
-              },
-              rpcUrls: [
-                'https://bsc-dataseed.binance.org',
-                'https://bsc-dataseed1.defibit.io',
-                'https://bsc-dataseed1.ninicoin.io',
-                'https://bsc-dataseed2.defibit.io',
-                'https://bsc-dataseed3.defibit.io',
-                'https://bsc-dataseed4.defibit.io',
-                'https://bsc-dataseed2.ninicoin.io',
-                'https://bsc-dataseed3.ninicoin.io',
-                'https://bsc-dataseed4.ninicoin.io',
-                'https://bsc-dataseed1.binance.org',
-                'https://bsc-dataseed2.binance.org',
-                'https://bsc-dataseed3.binance.org',
-                'https://bsc-dataseed4.binance.org',
-                'wss://bsc-ws-node.nariox.org',
-              ],
-              blockExplorerUrls: ['https://bscscan.com'],
-            },
-          ],
-        });
+      if (chainId !== network) {
+        const requestArguments = getNetworkArguments(
+          network,
+          networkName,
+          rpcUrls,
+          blockExplorerUrls,
+        );
+
+        await window.ethereum.request(requestArguments);
       }
     } catch (e) {
       console.error(e);
@@ -65,7 +46,7 @@ export const useConnectBSC = () => {
   }, [activateBrowserWallet, chainId]);
 
   const switchToBSC = useCallback(
-    () => switchNetwork(BSC.chainId),
+    () => switchNetwork(network),
     [switchNetwork],
   );
 
@@ -75,12 +56,9 @@ export const useConnectBSC = () => {
         ...userContext,
         bsc: {
           address: account as string,
-          // balance: parseFloat(formatEther(etherBalance)).toFixed(3),
           balance: {
-            dot: parseFloat(formatEther(dotBalance)).toFixed(3),
-            ksm: parseFloat(formatEther(ksmBalance)).toFixed(3),
-            // ksm: parseFloat(formatEther(ksmBalance)).toFixed(3),
-            // dot: parseFloat(formatEther(dotBalance)).toFixed(3),
+            bsc: new Balance(dotBalance),
+            polka: new Balance(ksmBalance),
           },
         },
       });
@@ -94,6 +72,30 @@ export const useConnectBSC = () => {
     });
     disconnectBSC();
   }, [disconnectBSC, userContext]);
+
+  const getNetworkArguments = (
+    chainId: number,
+    chainName: string,
+    rpcUrls: string[],
+    blockExplorerUrls: string[],
+  ) => {
+    return {
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: `0x${Number(chainId).toString(16)}`,
+          chainName,
+          nativeCurrency: {
+            name: 'Binance Chain Native Token',
+            symbol: 'BNB',
+            decimals: 18,
+          },
+          rpcUrls,
+          blockExplorerUrls,
+        },
+      ],
+    };
+  };
 
   return {
     disconnectFromBSC: deactivate,
