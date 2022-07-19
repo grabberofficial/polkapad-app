@@ -1,4 +1,4 @@
-import { isProduction } from '@/config/env';
+import { isProduction } from '@/shared/utils/general';
 import { BSC, BSCTestnet } from '@usedapp/core';
 
 export const KSM_BSC = '0x2aa69E8D25C045B659787BC1f03ce47a388DB6E8';

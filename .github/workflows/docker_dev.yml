@@ -55,6 +55,7 @@ jobs:
           --build-arg MAILCHIMP_ID="${{ secrets.DEV_MAILCHIMP_ID }}"
           --build-arg ENVIRONMENT="DEVELOPMENT"
           --build-arg FACEBOOK_PIXEL="${{ secrets.FACEBOOK_PIXEL }}"
+          --build-arg FACEBOOK_VERIFY_ID="${{ secrets.FACEBOOK_VERIFY_ID }}"
           -f .github/workflows/Dockerfile .
 
       - name: Push to ECR and Argo

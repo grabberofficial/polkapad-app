@@ -1,15 +1,17 @@
 import { FC } from 'react';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { ChainId } from '@usedapp/core';
-import { Button } from '@/components/Button';
-import { Image } from '@chakra-ui/react';
-import { WalletsPopup } from './components/WalletsPopup/WalletsPopup';
-import { useDisclosure } from '@chakra-ui/hooks';
-import { WalletsInfo } from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
-import bscIcon from '@/assets/bsc_icon.svg';
-import { Loader } from '@/components/Loader/Loader';
 import { formatEther } from 'ethers/lib/utils';
-import { isProduction } from '@/config/env';
+import bscIcon from '@/assets/bsc_icon.svg';
+import { Button } from '@/components/Button';
+import {
+  WalletsInfo,
+} from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
+import { Loader } from '@/components/Loader/Loader';
+import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { isProduction } from '@/shared/utils/general';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { Image } from '@chakra-ui/react';
+import { ChainId } from '@usedapp/core';
+import { WalletsPopup } from './components/WalletsPopup/WalletsPopup';
 
 export const ConnectWalletButton: FC = () => {
   const {

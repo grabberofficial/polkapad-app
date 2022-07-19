@@ -2,10 +2,6 @@ import {
   gtagSendCreateAccount, gtagSendCreateAccountWaitList, gtagSendStartKyc,
   gtagSendSuccessKyc, gtagSendWalletAdded,
 } from '@/services/analytics';
-import {
-  fbSendCreateAccount, fbSendCreateAccountWaitList, fbSendStartKyc,
-  fbSendSuccessKYC, fbSendWalletAdded,
-} from '@/services/facebookMedianAds';
 import { isProduction } from '@/shared/utils/general';
 
 export const sendMetricsCreateAccount = () => {

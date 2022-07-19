@@ -1,32 +1,20 @@
-import {
-  Divider,
-  Flex,
-  FormControl,
-  FormHelperText,
-  FormLabel,
-  Input,
-  Spinner,
-  Stack,
-  Text,
-} from '@chakra-ui/react';
-import { useEthers } from '@usedapp/core';
-
-import {
-  add,
-  getClientAllocationSize,
-  getDefaultAllocationSize,
-  lock,
-  setPlpdPrice,
-  changeClientAllocationSize,
-  remove,
-  getPlpdPrice,
-} from '@/services/contracts';
-import { Button } from '@/components/Button';
 import { useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { useRouter } from 'next/router';
-import { isProduction } from '@/config/env';
+import { Button } from '@/components/Button';
 import { HOME_ROUTE } from '@/constants/routes';
+import {
+  add, changeClientAllocationSize, getClientAllocationSize,
+  getDefaultAllocationSize, getPlpdPrice, lock,
+  remove, setPlpdPrice,
+} from '@/services/contracts';
+import { isProduction } from '@/shared/utils/general';
+import {
+  Divider, Flex, FormControl,
+  FormHelperText, FormLabel, Input,
+  Spinner, Stack, Text,
+} from '@chakra-ui/react';
+import { useEthers } from '@usedapp/core';
 
 export const BackOfficePage = () => {
   const router = useRouter();
