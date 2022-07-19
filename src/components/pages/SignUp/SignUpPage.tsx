@@ -1,42 +1,39 @@
-import { Button } from '@/components/Button';
-import { FormInput } from '@/components/FormInput/FormInput';
-import {
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Grid,
-  InputGroup,
-  InputLeftElement,
-  Text,
-  Icon,
-  Flex,
-  Spinner,
-} from '@chakra-ui/react';
-import Link from 'next/link';
 import { useCallback, useState } from 'react';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { BiHide, BiShow } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
-import { BiHide, BiShow } from 'react-icons/bi';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
-import { useRouter } from 'next/router';
-import { ExceptionTypeEnum } from '@/lib/constants';
+import { Button } from '@/components/Button';
+import { FormInput } from '@/components/FormInput/FormInput';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
-import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
-import styled from '@emotion/styled';
 import {
-  sendMetricsCreateAccount,
-  sendMetricsCreateAccountWaitList,
-} from '@/services/metrics';
+  TermsCheckbox,
+} from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
+import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
+import { environment } from '@/config/env';
+import {
+  LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE,
+} from '@/constants/routes';
+import { ExceptionTypeEnum } from '@/lib/constants';
+import fetchJson, { FetchError } from '@/lib/fetchJson';
 import useUser from '@/lib/hooks/useUser';
 import { User } from '@/pages/api/user';
-import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
-import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
-import { environment } from '@/config/env';
+import {
+  sendMetricsCreateAccount, sendMetricsCreateAccountWaitList,
+} from '@/services/metrics';
+import { isProduction } from '@/shared/utils/general';
+import {
+  Flex, FormControl, FormErrorMessage,
+  FormLabel, Grid, Icon,
+  InputGroup, InputLeftElement, Spinner,
+  Text,
+} from '@chakra-ui/react';
+import styled from '@emotion/styled';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 export interface SignupFormInput {
   name: string;
@@ -46,8 +43,6 @@ export interface SignupFormInput {
   promocode: string;
   terms: boolean;
 }
-
-const isProduction = environment === 'PRODUCTION';
 
 export const SignUpPage = () => {
   const { mutateUser } = useUser({
