@@ -1,13 +1,14 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
-import Head from 'next/head';
-import Providers from '@/shared/providers';
-import { MainLayout } from '@/layouts';
-import { Header, GoogleAnalytics } from '@/components';
-import { SWRConfig } from 'swr';
-import fetchJson from '@/lib/fetchJson';
 import dynamic from 'next/dynamic';
-import { googleAnalyticsId } from '@/config/env';
+import Head from 'next/head';
+import { SWRConfig } from 'swr';
+import { GoogleAnalytics, Header } from '@/components';
+import { FacebookPixel } from '@/components/FacebookPixel';
+import { facebookPixel, googleAnalyticsId } from '@/config/env';
+import { MainLayout } from '@/layouts';
+import fetchJson from '@/lib/fetchJson';
+import Providers from '@/shared/providers';
 import { checkIsIOS } from '@/shared/utils/checkIsIOS';
 
 const meta = {
@@ -19,7 +20,7 @@ const meta = {
 };
 
 const App = (props: AppProps): JSX.Element => {
-  const { Component, pageProps } = props;
+  const {Component, pageProps} = props;
 
   return (
     <>
@@ -31,10 +32,7 @@ const App = (props: AppProps): JSX.Element => {
         <meta property="og:title" content={meta.title} />
         <meta name="description" content={meta.description} />
         <meta property="og:description" content={meta.description} />
-        <script
-          defer
-          src="https://api.median-ads.com/partners/js/fb-events-25.js"
-        ></script>
+        {facebookPixel && <meta name="facebook-domain-verification" content="kpa4q0e24rfflzhpsv3b4n80ured84" />}
       </Head>
       <SWRConfig
         value={{
@@ -46,6 +44,7 @@ const App = (props: AppProps): JSX.Element => {
           <Component {...pageProps} />
         </MainLayout>
         {googleAnalyticsId && <GoogleAnalytics id={googleAnalyticsId} />}
+        {facebookPixel && <FacebookPixel id={facebookPixel} />}
       </SWRConfig>
     </>
   );
@@ -54,7 +53,7 @@ const App = (props: AppProps): JSX.Element => {
 const MemoApp = memo(App);
 
 const AppWrapper = (props: any): JSX.Element => {
-  const { ...rest } = props;
+  const {...rest} = props;
 
   return (
     <Providers>

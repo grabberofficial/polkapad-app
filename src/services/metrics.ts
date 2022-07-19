@@ -1,50 +1,44 @@
 import {
-  gtagSendCreateAccount,
-  gtagSendCreateAccountWaitList,
-  gtagSendStartKyc,
-  gtagSendSuccessKyc,
-  gtagSendWalletAdded,
+  gtagSendCreateAccount, gtagSendCreateAccountWaitList, gtagSendStartKyc,
+  gtagSendSuccessKyc, gtagSendWalletAdded,
 } from '@/services/analytics';
 import {
-  fbSendCreateAccount,
-  fbSendCreateAccountWaitList,
-  fbSendStartKyc,
-  fbSendSuccessKYC,
-  fbSendWalletAdded,
-} from '@/services/facebook';
-import { isProduction } from '@/config/env';
+  fbSendCreateAccount, fbSendCreateAccountWaitList, fbSendStartKyc,
+  fbSendSuccessKYC, fbSendWalletAdded,
+} from '@/services/facebookMedianAds';
+import { isProduction } from '@/shared/utils/general';
 
 export const sendMetricsCreateAccount = () => {
   if (isProduction) {
     gtagSendCreateAccount();
-    fbSendCreateAccount();
+    // fbSendCreateAccount();
   }
 };
 
 export const sendMetricsCreateAccountWaitList = () => {
   if (isProduction) {
     gtagSendCreateAccountWaitList();
-    fbSendCreateAccountWaitList();
+    // fbSendCreateAccountWaitList();
   }
 };
 
 export const sendMetricsWalletAdded = () => {
   if (isProduction) {
     gtagSendWalletAdded();
-    fbSendWalletAdded();
+    // fbSendWalletAdded();
   }
 };
 
 export const sendMetricsStartKYC = () => {
   if (isProduction) {
     gtagSendStartKyc();
-    fbSendStartKyc();
+    // fbSendStartKyc();
   }
 };
 
 export const sendMetricsSuccessKYC = () => {
   if (isProduction) {
     gtagSendSuccessKyc();
-    fbSendSuccessKYC();
+    // fbSendSuccessKYC();
   }
 };

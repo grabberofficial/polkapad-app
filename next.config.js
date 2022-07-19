@@ -19,6 +19,7 @@ module.exports = withImages({
     serviceUrl: process.env.SERVICE_URL,
     mailchimpId: process.env.MAILCHIMP_ID,
     googleAnalyticsId: process.env.GOOGLE_ANALYTICS_ID,
+    facebookPixel: process.env.FACEBOOK_PIXEL,
     environment: process.env.ENVIRONMENT,
   },
 });
