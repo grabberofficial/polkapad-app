@@ -4,15 +4,26 @@ import { useRouter } from 'next/router';
 import { Button } from '@/components/Button';
 import { HOME_ROUTE } from '@/constants/routes';
 import {
-  add, changeClientAllocationSize, getClientAllocationSize,
-  getDefaultAllocationSize, getPlpdPrice, lock,
-  remove, setPlpdPrice,
+  add,
+  changeClientAllocationSize,
+  getClientAllocationSize,
+  getDefaultAllocationSize,
+  getPlpdPrice,
+  lock,
+  remove,
+  setPlpdPrice,
 } from '@/services/contracts';
 import { isProduction } from '@/shared/utils/general';
 import {
-  Divider, Flex, FormControl,
-  FormHelperText, FormLabel, Input,
-  Spinner, Stack, Text,
+  Divider,
+  Flex,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Input,
+  Spinner,
+  Stack,
+  Text,
 } from '@chakra-ui/react';
 import { useEthers } from '@usedapp/core';
 

@@ -2,9 +2,7 @@ import { FC } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { Button } from '@/components/Button';
-import {
-  WalletsInfo,
-} from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
+import { WalletsInfo } from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
 import { Loader } from '@/components/Loader/Loader';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { isProduction } from '@/shared/utils/general';
