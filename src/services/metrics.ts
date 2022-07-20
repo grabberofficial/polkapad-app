@@ -1,6 +1,9 @@
 import {
-  gtagSendCreateAccount, gtagSendCreateAccountWaitList, gtagSendStartKyc,
-  gtagSendSuccessKyc, gtagSendWalletAdded,
+  gtagSendCreateAccount,
+  gtagSendCreateAccountWaitList,
+  gtagSendStartKyc,
+  gtagSendSuccessKyc,
+  gtagSendWalletAdded,
 } from '@/services/analytics';
 import { isProduction } from '@/shared/utils/general';
 
