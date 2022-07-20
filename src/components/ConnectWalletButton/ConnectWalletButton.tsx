@@ -1,13 +1,17 @@
 import { FC } from 'react';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { ChainId } from '@usedapp/core';
-import { Button } from '@/components/Button';
-import { Image } from '@chakra-ui/react';
-import { WalletsPopup } from './components/WalletsPopup/WalletsPopup';
-import { useDisclosure } from '@chakra-ui/hooks';
-import { WalletsInfo } from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
+import { formatEther } from 'ethers/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
+import { Button } from '@/components/Button';
+import {
+  WalletsInfo,
+} from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
 import { Loader } from '@/components/Loader/Loader';
+import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { isProduction } from '@/shared/utils/general';
+import { useDisclosure } from '@chakra-ui/hooks';
+import { Image } from '@chakra-ui/react';
+import { ChainId } from '@usedapp/core';
+import { WalletsPopup } from './components/WalletsPopup/WalletsPopup';
 
 export const ConnectWalletButton: FC = () => {
   const {
@@ -24,7 +28,8 @@ export const ConnectWalletButton: FC = () => {
   const { dotBalance, connected, account, chainId, switchToBSC } =
     useConnectBSC();
 
-  const isWrongNetwork = chainId !== ChainId.BSC;
+  const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
+  const isWrongNetwork = chainId !== network;
 
   return (
     <>
@@ -47,7 +52,7 @@ export const ConnectWalletButton: FC = () => {
           }
         >
           {dotBalance ? (
-            `${dotBalance} DOT`
+            `${parseFloat(formatEther(dotBalance)).toFixed(3)} DOT`
           ) : (
             <Loader width="32px" height="32px" />
           )}
