@@ -6,7 +6,9 @@ import { SWRConfig } from 'swr';
 import { GoogleAnalytics, Header } from '@/components';
 import { FacebookPixel } from '@/components/FacebookPixel';
 import {
-  facebookPixel, facebookVerifyId, googleAnalyticsId,
+  facebookPixel,
+  facebookVerifyId,
+  googleAnalyticsId,
 } from '@/config/env';
 import { MainLayout } from '@/layouts';
 import fetchJson from '@/lib/fetchJson';
@@ -22,7 +24,7 @@ const meta = {
 };
 
 const App = (props: AppProps): JSX.Element => {
-  const {Component, pageProps} = props;
+  const { Component, pageProps } = props;
 
   return (
     <>
@@ -34,7 +36,12 @@ const App = (props: AppProps): JSX.Element => {
         <meta property="og:title" content={meta.title} />
         <meta name="description" content={meta.description} />
         <meta property="og:description" content={meta.description} />
-        {facebookVerifyId && <meta name="facebook-domain-verification" content={facebookVerifyId} />}
+        {facebookVerifyId && (
+          <meta
+            name="facebook-domain-verification"
+            content={facebookVerifyId}
+          />
+        )}
       </Head>
       <SWRConfig
         value={{
@@ -55,7 +62,7 @@ const App = (props: AppProps): JSX.Element => {
 const MemoApp = memo(App);
 
 const AppWrapper = (props: any): JSX.Element => {
-  const {...rest} = props;
+  const { ...rest } = props;
 
   return (
     <Providers>

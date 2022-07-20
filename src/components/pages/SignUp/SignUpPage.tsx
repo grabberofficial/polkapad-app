@@ -9,27 +9,29 @@ import { RiLock2Fill } from 'react-icons/ri';
 import { Button } from '@/components/Button';
 import { FormInput } from '@/components/FormInput/FormInput';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
-import {
-  TermsCheckbox,
-} from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
+import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
-import { environment } from '@/config/env';
-import {
-  LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE,
-} from '@/constants/routes';
+import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
 import { ExceptionTypeEnum } from '@/lib/constants';
 import fetchJson, { FetchError } from '@/lib/fetchJson';
 import useUser from '@/lib/hooks/useUser';
 import { User } from '@/pages/api/user';
 import {
-  sendMetricsCreateAccount, sendMetricsCreateAccountWaitList,
+  sendMetricsCreateAccount,
+  sendMetricsCreateAccountWaitList,
 } from '@/services/metrics';
 import { isProduction } from '@/shared/utils/general';
 import {
-  Flex, FormControl, FormErrorMessage,
-  FormLabel, Grid, Icon,
-  InputGroup, InputLeftElement, Spinner,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Grid,
+  Icon,
+  InputGroup,
+  InputLeftElement,
+  Spinner,
   Text,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
