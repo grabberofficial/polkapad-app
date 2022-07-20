@@ -1,13 +1,13 @@
 declare global {
-    interface Window {
-        fbq: any;
-    }
+  interface Window {
+    fbq: any;
+  }
 }
 
 export const pageview = () => {
-    window.fbq('track', 'PageView')
-}
+  window.fbq('track', 'PageView');
+};
 
 export const event = (name: string, options = {}) => {
-    window.fbq('track', name, options)
-}
+  window.fbq('track', name, options);
+};

@@ -10,7 +10,7 @@
     "start": "NODE_OPTIONS='-r next-logger' next start -p 8080",
     "type-check": "tsc",
     "lint": "eslint --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\"",
-    "format": "prettier --ignore-path .gitignore \"src/**/*.+(ts|js|tsx)\" --write",
+    "format": "prettier --ignore-path .gitignore --write \"src/**/*.+(ts|js|tsx)\"",
     "postinstall": "husky install",
     "commit": "cz"
   },
