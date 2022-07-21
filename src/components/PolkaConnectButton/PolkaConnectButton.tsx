@@ -1,40 +1,44 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { UserContext } from '@/shared/providers/userContext';
 import { Button } from '@/components/Button';
-import {
-  Image,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Button as ChakraButton,
-} from '@chakra-ui/react';
-import { formatEther } from '@ethersproject/units';
-import styled from '@emotion/styled';
+import { Image } from '@chakra-ui/react';
+import { formatUnits } from '@ethersproject/units';
 import { useSubstrate } from '@/shared/providers/substrate';
-
-const StyledButton = styled(ChakraButton)`
-  color: #49c7da;
-`;
+import { useDisclosure } from '@chakra-ui/hooks';
+import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
+import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
+import {
+  convertSS58Address,
+  POLKA_ADDRESS_PREFIX,
+} from '@/shared/utils/convertSS58Address';
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
-  const { balance, connectToPolka, keyringState, canUseWallet } =
-    useSubstrate();
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const toggleModal = useCallback(() => {
-    setModalOpen((isOpen) => !isOpen);
-  }, []);
+  const { account, balance, keyringState, disconnect } = useSubstrate();
+  const {
+    isOpen: isPopupOpen,
+    onOpen: onPopupOpen,
+    onClose: onPopupClose,
+  } = useDisclosure();
+  const {
+    isOpen: isInfoOpen,
+    onOpen: onInfoOpen,
+    onClose: onInfoClose,
+  } = useDisclosure();
 
   const hasData = balance || (polka?.address && polka?.balance);
+  const formattedBalance = balance && formatUnits(balance, 12);
+
+  const onDisconnect = useCallback(async () => {
+    await disconnect();
+    onInfoClose();
+  }, [disconnect, onInfoClose]);
 
   return (
     <>
       {hasData && (
         <Button
+          onClick={onInfoOpen}
           variant="secondary"
           width="auto"
           flexShrink={0}
@@ -51,14 +55,13 @@ export const PolkaConnentBtn = () => {
             />
           }
         >
-          {balance && parseFloat(formatEther(balance)) * 1000000}
-          {polka.balance && polka.balance}
+          {formattedBalance}
           {' KSM'}
         </Button>
       )}
       {!hasData && (
         <Button
-          onClick={canUseWallet ? connectToPolka : toggleModal}
+          onClick={onPopupOpen}
           disabled={keyringState !== 'READY'}
           variant="secondary"
           width="auto"
@@ -79,56 +82,17 @@ export const PolkaConnentBtn = () => {
           Connect
         </Button>
       )}
-      <Modal isOpen={modalOpen} onClose={toggleModal}>
-        <ModalOverlay />
-        <ModalContent width="80%">
-          <ModalHeader>Haven’t got a Polkadot.js yet?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            You&apos;ll need to{' '}
-            <StyledButton
-              variant="link"
-              as="a"
-              target="_blank"
-              href="https://polkadot.js.org/extension/"
-            >
-              install Polkadot.js
-            </StyledButton>{' '}
-            to continue. Once you have it installed, go ahead and refresh this
-            page
-            <br />
-            <br />
-            Polkadot extension was not found or is disabled. If you have
-            polkadot.js but it doesn&apos;t work try this:
-            <br />
-            <br />
-            <ol style={{ padding: '0 24px 24px' }}>
-              <li>
-                Check that you use the latest version of Chrome or Firefox.{' '}
-              </li>
-              <li>
-                If you reject polkadot.js connection go polkadot.js extension in
-                your browser, press gear button and check Manage Website Access.
-                App.Polkapad.network should be allowed to use Polkapad
-                launchpad.{' '}
-              </li>
-              <li>
-                How to troubleshoot other connection issues on polkadot.js{' '}
-                {'->'}{' '}
-                <StyledButton
-                  variant="link"
-                  as="a"
-                  target="_blank"
-                  href="https://support.polkadot.network/support/solutions/articles/65000176918-how-to-troubleshoot-connection-issues-on-polkadot-js"
-                >
-                  Polkadot support webpage
-                </StyledButton>
-                .
-              </li>
-            </ol>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+      <WalletsPopup isPolka isOpen={isPopupOpen} onClose={onPopupClose} />
+      {account && (
+        <WalletsInfo
+          isPolka
+          account={convertSS58Address(account, POLKA_ADDRESS_PREFIX.POLKA)}
+          balance={formattedBalance}
+          onDisconnect={onDisconnect}
+          isOpen={isInfoOpen}
+          onClose={onInfoClose}
+        />
+      )}
     </>
   );
 };

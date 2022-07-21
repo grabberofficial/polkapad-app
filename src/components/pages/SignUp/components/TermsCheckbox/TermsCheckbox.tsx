@@ -33,10 +33,10 @@ export const TermsCheckbox = ({ errors, control }: TermsCheckboxProps) => {
           <GoogleDocsViewer
             title="Terms and Service"
             fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
-            control={(props) => <DocUrl {...props}>Terms of Service,</DocUrl>}
+            control={(props) => <DocUrl {...props}>Terms of Service</DocUrl>}
           />
           <br />
-          including the User Agreement and&nbsp;
+          and&nbsp;
           <GoogleDocsViewer
             title="Privacy Policy"
             fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"

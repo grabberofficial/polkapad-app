@@ -86,24 +86,31 @@ const reducer = (state, action) => {
 // Connecting to the Substrate node
 
 const connect = (state, dispatch) => {
-  const { apiState, socket, jsonrpc, types } = state;
-  // We only want this function to be performed once
-  if (apiState) return;
+  try {
+    const { apiState, socket, jsonrpc, types } = state;
+    // We only want this function to be performed once
+    if (apiState) return;
 
-  dispatch({ type: 'CONNECT_INIT' });
+    dispatch({ type: 'CONNECT_INIT' });
 
-  const provider = new WsProvider(socket);
-  const _api = new ApiPromise({ provider, types, rpc: jsonrpc });
-
-  // Set listeners for disconnection and reconnection event.
-  _api.on('connected', () => {
-    dispatch({ type: 'CONNECT', payload: _api });
-    // `ready` event is not emitted upon reconnection and is checked explicitly here.
-    _api.isReady.then(() => dispatch({ type: 'CONNECT_SUCCESS' }));
-  });
-  _api.on('ready', () => dispatch({ type: 'CONNECT_SUCCESS' }));
-  _api.on('error', (err) => dispatch({ type: 'CONNECT_ERROR', payload: err }));
-  return _api;
+    const provider = new WsProvider(socket);
+    const _api = new ApiPromise({ provider, types, rpc: jsonrpc });
+    provider.on('disconnected', () => console.log('provider', 'disconnected'));
+    // Set listeners for disconnection and reconnection event.
+    _api.on('connected', () => {
+      dispatch({ type: 'CONNECT', payload: _api });
+      // `ready` event is not emitted upon reconnection and is checked explicitly here.
+      _api.isReady.then(() => dispatch({ type: 'CONNECT_SUCCESS' }));
+    });
+    _api.on('disconnected', () => console.log('api', 'disconnected'));
+    _api.on('ready', () => dispatch({ type: 'CONNECT_SUCCESS' }));
+    _api.on('error', (err) =>
+      dispatch({ type: 'CONNECT_ERROR', payload: err }),
+    );
+    return _api;
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 ///
@@ -192,15 +199,19 @@ const SubstrateContextProvider = (props) => {
     localStorage.setItem(POLKA_CONNECT_KEY, 'true');
   }, [state]);
 
-  const disconnect = useCallback(() => {
-    state.api.disconnect();
-    dispatch({ type: 'DISCONNECT' });
-    userContext.setContext({
-      ...userContext,
-      polka: {},
-    });
-    localStorage.removeItem(POLKA_CONNECT_KEY);
-    localStorage.removeItem(CONNECTED_ACCOUNTS_STORAGE);
+  const disconnect = useCallback(async () => {
+    try {
+      await state.api.disconnect();
+      dispatch({ type: 'DISCONNECT' });
+      userContext.setContext({
+        ...userContext,
+        polka: {},
+      });
+      localStorage.removeItem(POLKA_CONNECT_KEY);
+      localStorage.removeItem(CONNECTED_ACCOUNTS_STORAGE);
+    } catch (e) {
+      console.error(e);
+    }
   }, [state, userContext]);
 
   useEffect(() => {

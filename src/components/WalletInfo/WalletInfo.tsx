@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import { Flex, Image, Link, Modal, Text } from '@chakra-ui/react';
 import toast from 'react-hot-toast';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { Button } from '@/components/Button';
 import {
   ModalBody,
@@ -17,19 +16,30 @@ import externalLinkIcon from '@/assets/external_link.svg';
 import historyIcon from '@/assets/history.svg';
 import { shortenPolkaAddress } from '@/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
+import { BigNumber } from 'ethers';
+import { isProduction } from '@/shared/utils/general';
+import { BSC, BSCTestnet } from '@usedapp/core';
 
 interface WalletsInfoProps {
   isOpen: boolean;
+  isPolka?: boolean;
+  account: string;
+  balance: BigNumber | string;
+  onDisconnect: () => void;
   onClose: () => void;
 }
 
-export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
-  const { dotBalance, account, disconnectFromBSC } = useConnectBSC();
+const getExplorerUrl = (account: string, isPolka?: boolean) => {
+  if (isPolka) {
+    return `https://explorer.polkascan.io/polkadot/account/${account}`;
+  }
+  return isProduction
+    ? BSC.getExplorerAddressLink(account)
+    : BSCTestnet.getExplorerAddressLink(account);
+};
 
-  const onDisconnect = useCallback(() => {
-    disconnectFromBSC();
-    onClose();
-  }, [disconnectFromBSC, onClose]);
+export const WalletsInfo = (props: WalletsInfoProps) => {
+  const { account, balance, isPolka, isOpen, onDisconnect, onClose } = props;
 
   const onCopyAddress = useCallback(() => {
     account && navigator.clipboard.writeText(account);
@@ -79,7 +89,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
                 fontWeight={600}
                 color="secondary.text"
               >
-                {`${dotBalance}`} DOT
+                {`${balance}`} DOT
               </Text>
             </Flex>
             <Flex flexDirection="column">
@@ -96,7 +106,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
                 fontWeight={600}
                 color="secondary.text"
               >
-                BSC
+                {isPolka ? 'Polkadot' : 'BSC'}
               </Text>
             </Flex>
             <Flex flexDirection="column">
@@ -113,7 +123,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
                 fontWeight={600}
                 color="secondary.text"
               >
-                Metamask
+                {isPolka ? 'Polkadot.js' : 'Metamask'}
               </Text>
             </Flex>
           </Flex>
@@ -175,7 +185,7 @@ export const WalletsInfo = ({ isOpen, onClose }: WalletsInfoProps) => {
             display="flex"
             alignItems="center"
             _hover={{ color: 'primary.basic' }}
-            href={`https://testnet.bscscan.com/address/${account}`}
+            href={getExplorerUrl(account, isPolka)}
             isExternal
           >
             <Image src={externalLinkIcon} marginRight="10px" />

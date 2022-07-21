@@ -16,7 +16,6 @@ export const useConnectBSC = () => {
     account,
     chainId,
     deactivate: disconnectBSC,
-    switchNetwork,
   } = useEthers();
 
   const dotBalance = useTokenBalance(DOT_BSC, account);
@@ -45,10 +44,16 @@ export const useConnectBSC = () => {
     }
   }, [activateBrowserWallet, chainId]);
 
-  const switchToBSC = useCallback(
-    () => switchNetwork(network),
-    [switchNetwork],
-  );
+  const switchToBSC = useCallback(async () => {
+    const requestArguments = getNetworkArguments(
+      network,
+      networkName,
+      rpcUrls,
+      blockExplorerUrls,
+    );
+
+    await window.ethereum.request(requestArguments);
+  }, []);
 
   useEffect(() => {
     if (account && dotBalance && ksmBalance && !userContext?.bsc?.address) {

@@ -39,5 +39,5 @@ export const rpcUrls = isProduction
     ];
 
 export const blockExplorerUrls = isProduction
-  ? ['http://bscscan.com']
-  : ['http://testnet.bscscan.com'];
+  ? ['https://bscscan.com']
+  : ['https://testnet.bscscan.com'];
