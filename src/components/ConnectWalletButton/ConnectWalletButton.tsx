@@ -1,15 +1,15 @@
-import { FC } from 'react';
+import { FC, useCallback } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { Button } from '@/components/Button';
-import { WalletsInfo } from '@/components/ConnectWalletButton/components/WalletInfo/WalletInfo';
+import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
 import { Loader } from '@/components/Loader/Loader';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { isProduction } from '@/shared/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
-import { WalletsPopup } from './components/WalletsPopup/WalletsPopup';
+import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 
 export const ConnectWalletButton: FC = () => {
   const {
@@ -23,11 +23,22 @@ export const ConnectWalletButton: FC = () => {
     onClose: onInfoClose,
   } = useDisclosure();
 
-  const { dotBalance, connected, account, chainId, switchToBSC } =
-    useConnectBSC();
+  const {
+    dotBalance,
+    connected,
+    account,
+    chainId,
+    disconnectFromBSC,
+    switchToBSC,
+  } = useConnectBSC();
 
   const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
   const isWrongNetwork = chainId !== network;
+
+  const onDisconnect = useCallback(() => {
+    disconnectFromBSC();
+    onInfoClose();
+  }, [disconnectFromBSC, onInfoClose]);
 
   return (
     <>
@@ -84,7 +95,15 @@ export const ConnectWalletButton: FC = () => {
         </Button>
       )}
       <WalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
-      <WalletsInfo isOpen={isInfoOpen} onClose={onInfoClose} />
+      {account && dotBalance && (
+        <WalletsInfo
+          isOpen={isInfoOpen}
+          account={account}
+          balance={dotBalance}
+          onClose={onInfoClose}
+          onDisconnect={onDisconnect}
+        />
+      )}
     </>
   );
 };
