@@ -145,7 +145,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
             >
               <Image
                 margin="0px 14px 0px 11px"
-                src={bscIcon}
+                src={isPolka ? '/images/polka_icon.svg' : bscIcon}
                 alt="bsc"
                 width="24px"
                 height="24px"
