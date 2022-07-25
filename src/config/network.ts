@@ -41,3 +41,11 @@ export const rpcUrls = isProduction
 export const blockExplorerUrls = isProduction
   ? ['https://bscscan.com']
   : ['https://testnet.bscscan.com'];
+
+export const WCProviderConfig = {
+  infuraId: 'd8df2cb7844e4a54ab0a782f608749dd',
+  rpc: {
+    [BSC.chainId]: 'https://bsc-dataseed.binance.org/',
+    [BSCTestnet.chainId]: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+  },
+};

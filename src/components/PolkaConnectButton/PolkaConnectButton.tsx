@@ -11,6 +11,7 @@ import {
   convertSS58Address,
   POLKA_ADDRESS_PREFIX,
 } from '@/shared/utils/convertSS58Address';
+import { Loader } from '@/components/Loader/Loader';
 
 export const PolkaConnentBtn = () => {
   const { polka } = useContext(UserContext);
@@ -55,8 +56,11 @@ export const PolkaConnentBtn = () => {
             />
           }
         >
-          {formattedBalance}
-          {' KSM'}
+          {formattedBalance ? (
+            `${formattedBalance} DOT`
+          ) : (
+            <Loader width="32px" height="32px" />
+          )}
         </Button>
       )}
       {!hasData && (

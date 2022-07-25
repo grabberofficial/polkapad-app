@@ -34,6 +34,8 @@ export const ConnectWalletButton: FC = () => {
 
   const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
   const isWrongNetwork = chainId !== network;
+  const formattedBalance =
+    dotBalance && parseFloat(formatEther(dotBalance)).toFixed(3);
 
   const onDisconnect = useCallback(() => {
     disconnectFromBSC();
@@ -60,8 +62,8 @@ export const ConnectWalletButton: FC = () => {
             />
           }
         >
-          {dotBalance ? (
-            `${parseFloat(formatEther(dotBalance)).toFixed(3)} DOT`
+          {formattedBalance ? (
+            `${formattedBalance} DOT`
           ) : (
             <Loader width="32px" height="32px" />
           )}
@@ -95,11 +97,11 @@ export const ConnectWalletButton: FC = () => {
         </Button>
       )}
       <WalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
-      {account && dotBalance && (
+      {account && formattedBalance && (
         <WalletsInfo
           isOpen={isInfoOpen}
           account={account}
-          balance={dotBalance}
+          balance={formattedBalance}
           onClose={onInfoClose}
           onDisconnect={onDisconnect}
         />

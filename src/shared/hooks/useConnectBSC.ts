@@ -5,14 +5,24 @@ import {
   networkName,
   rpcUrls,
   blockExplorerUrls,
+  WCProviderConfig,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useContext, useEffect } from 'react';
 import { Balance, UserContext } from '../providers/userContext';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+
+const WALLET_CONNECT_KEY = 'walletconnect';
+
+export enum BSCProvider {
+  METAMASK = 'METAMASK',
+  WALLETCONNECT = 'WALLETCONNECT',
+}
 
 export const useConnectBSC = () => {
   const {
     activateBrowserWallet,
+    activate,
     account,
     chainId,
     deactivate: disconnectBSC,
@@ -25,24 +35,34 @@ export const useConnectBSC = () => {
 
   const userContext = useContext(UserContext);
 
-  const connectToBSC = useCallback(async () => {
-    try {
-      await activateBrowserWallet();
+  const connectToBSC = useCallback(
+    async (provider: BSCProvider = BSCProvider.METAMASK) => {
+      try {
+        if (provider === BSCProvider.METAMASK) {
+          await activateBrowserWallet();
 
-      if (chainId !== network) {
-        const requestArguments = getNetworkArguments(
-          network,
-          networkName,
-          rpcUrls,
-          blockExplorerUrls,
-        );
+          if (chainId !== network) {
+            const requestArguments = getNetworkArguments(
+              network,
+              networkName,
+              rpcUrls,
+              blockExplorerUrls,
+            );
 
-        await window.ethereum.request(requestArguments);
+            await window.ethereum.request(requestArguments);
+          }
+        }
+        if (provider === BSCProvider.WALLETCONNECT) {
+          const provider = new WalletConnectProvider(WCProviderConfig);
+          await provider.enable();
+          await activate(provider);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }, [activateBrowserWallet, chainId]);
+    },
+    [activate, activateBrowserWallet, chainId],
+  );
 
   const switchToBSC = useCallback(async () => {
     const requestArguments = getNetworkArguments(
@@ -76,6 +96,7 @@ export const useConnectBSC = () => {
       bsc: {},
     });
     disconnectBSC();
+    localStorage.removeItem(WALLET_CONNECT_KEY);
   }, [disconnectBSC, userContext]);
 
   const getNetworkArguments = (
