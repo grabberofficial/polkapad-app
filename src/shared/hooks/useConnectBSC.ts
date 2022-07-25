@@ -8,7 +8,7 @@ import {
   WCProviderConfig,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Balance, UserContext } from '../providers/userContext';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
@@ -26,6 +26,7 @@ export const useConnectBSC = () => {
     account,
     chainId,
     deactivate: disconnectBSC,
+    library,
   } = useEthers();
 
   const dotBalance = useTokenBalance(DOT_BSC, account);
@@ -34,6 +35,12 @@ export const useConnectBSC = () => {
   const connected = !!chainId;
 
   const userContext = useContext(UserContext);
+
+  const walletName = useMemo(() => {
+    return library?.connection.url === 'metamask'
+      ? 'MetaMask'
+      : 'WalletConnect';
+  }, [library?.connection.url]);
 
   const connectToBSC = useCallback(
     async (provider: BSCProvider = BSCProvider.METAMASK) => {
@@ -132,5 +139,6 @@ export const useConnectBSC = () => {
     account,
     chainId,
     switchToBSC,
+    walletName,
   };
 };

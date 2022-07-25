@@ -30,6 +30,7 @@ export const ConnectWalletButton: FC = () => {
     chainId,
     disconnectFromBSC,
     switchToBSC,
+    walletName,
   } = useConnectBSC();
 
   const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
@@ -101,6 +102,7 @@ export const ConnectWalletButton: FC = () => {
         <WalletsInfo
           isOpen={isInfoOpen}
           account={account}
+          walletName={walletName}
           balance={formattedBalance}
           onClose={onInfoClose}
           onDisconnect={onDisconnect}
