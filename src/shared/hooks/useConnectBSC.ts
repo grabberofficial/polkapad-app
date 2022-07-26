@@ -30,12 +30,10 @@ export const useConnectBSC = () => {
     library,
   } = useEthers();
 
+  const connected = !!chainId;
+  const userContext = useContext(UserContext);
   const dotBalance = useTokenBalance(DOT_BSC, account);
   const ksmBalance = useTokenBalance(KSM_BSC, account);
-
-  const connected = !!chainId;
-
-  const userContext = useContext(UserContext);
 
   const isMetamask = useMemo(() => {
     return library?.connection.url === 'metamask';
@@ -83,6 +81,12 @@ export const useConnectBSC = () => {
     );
 
     await window.ethereum.request(requestArguments);
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem(WALLET_CONNECT_KEY)) {
+      connectToBSC(BSCProvider.WALLETCONNECT);
+    }
   }, []);
 
   useEffect(() => {
