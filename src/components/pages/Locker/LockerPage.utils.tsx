@@ -36,7 +36,7 @@ export const getBnbSteps = (isLoggedIn: boolean) => [
     title: 'Come to the sale and push the button',
     text: `The sale is available ONLY during specified time and only on this page! There will be no way to add funds into the locker before the launch of Polkapad mainnet`,
     button: (
-      <Link href="/src/components/pages">
+      <Link href="/">
         <Button>To sale</Button>
       </Link>
     ),
@@ -81,7 +81,7 @@ export const getKSMSteps = (isLoggedIn: boolean) => [
     text: `The sale is available ONLY during the designated time and ONLY on this page!
      There will be no way to add funds to the locker before the launch of the main Polkapad network.`,
     button: (
-      <Link href="/src/components/pages">
+      <Link href="/">
         <Button>To sale</Button>
       </Link>
     ),

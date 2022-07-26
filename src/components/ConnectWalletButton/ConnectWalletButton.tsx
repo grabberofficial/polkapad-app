@@ -65,7 +65,7 @@ export const ConnectWalletButton: FC = () => {
           onClick={onInfoOpen}
           variant="secondary"
           width="auto"
-          flexShrink={0}
+          minWidth="150px"
           padding="0px 16px"
           iconPlacement="left"
           icon={
@@ -90,6 +90,7 @@ export const ConnectWalletButton: FC = () => {
           onClick={onChangeNetwork}
           variant="secondary"
           width="auto"
+          minWidth="150px"
           flexShrink={0}
           color="error"
           padding="0 16px"
@@ -104,6 +105,7 @@ export const ConnectWalletButton: FC = () => {
           onClick={onPopupOpen}
           variant="secondary"
           width="auto"
+          minWidth="150px"
           flexShrink={0}
           iconPlacement="left"
           padding="0 16px"
