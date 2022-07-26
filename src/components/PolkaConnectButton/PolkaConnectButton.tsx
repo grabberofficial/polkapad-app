@@ -46,6 +46,7 @@ export const PolkaConnentBtn = () => {
           flexShrink={0}
           flexGrow={0}
           iconPlacement="left"
+          iconGap="10px"
           padding="0 16px"
           icon={
             <Image
@@ -73,6 +74,7 @@ export const PolkaConnentBtn = () => {
           minWidth="150px"
           flexShrink={0}
           flexGrow={0}
+          iconGap="10px"
           iconPlacement="left"
           padding="0 16px"
           icon={

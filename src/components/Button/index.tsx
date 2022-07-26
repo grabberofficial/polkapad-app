@@ -1,11 +1,17 @@
-import { Button as ChakraButton, Flex, forwardRef } from '@chakra-ui/react';
+import {
+  Button as ChakraButton,
+  ButtonProps as ChakraButtonProps,
+  Flex,
+  forwardRef,
+} from '@chakra-ui/react';
 import React from 'react';
 import { Arrow, ButtonDivider } from './Button.style';
 
-interface ButtonProps {
+interface ButtonProps extends ChakraButtonProps {
   variant: 'primary' | 'secondary';
   fixedWidth?: number;
   icon?: React.ReactNode;
+  iconGap?: number;
   iconPlacement?: 'left' | 'right';
   withArrow?: boolean;
   withIconDivider?: boolean;
@@ -23,6 +29,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
       withArrow,
       fixedWidth,
       icon,
+      iconGap,
       withIconDivider,
       ...rest
     },
@@ -79,7 +86,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
         <Flex
           justifyContent="center"
           flexBasis="calc(100% - 50px)"
-          gap="7px"
+          gap={iconGap || '7px'}
           maxHeight="100%"
           alignItems="center"
           padding={withArrow ? '0 10px' : undefined}
