@@ -13,6 +13,7 @@ import { Balance, UserContext } from '../providers/userContext';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
 const WALLET_CONNECT_KEY = 'walletconnect';
+const WALLET_CONNECT_DEEPLINK_KEY = 'WALLETCONNECT_DEEPLINK_CHOICE';
 
 export enum BSCProvider {
   METAMASK = 'METAMASK',
@@ -36,11 +37,13 @@ export const useConnectBSC = () => {
 
   const userContext = useContext(UserContext);
 
-  const walletName = useMemo(() => {
-    return library?.connection.url === 'metamask'
-      ? 'MetaMask'
-      : 'WalletConnect';
+  const isMetamask = useMemo(() => {
+    return library?.connection.url === 'metamask';
   }, [library?.connection.url]);
+
+  const walletName = useMemo(() => {
+    return isMetamask ? 'Metamask' : 'WalletConnect';
+  }, [isMetamask]);
 
   const connectToBSC = useCallback(
     async (provider: BSCProvider = BSCProvider.METAMASK) => {
@@ -104,6 +107,7 @@ export const useConnectBSC = () => {
     });
     disconnectBSC();
     localStorage.removeItem(WALLET_CONNECT_KEY);
+    localStorage.removeItem(WALLET_CONNECT_DEEPLINK_KEY);
   }, [disconnectBSC, userContext]);
 
   const getNetworkArguments = (
@@ -140,5 +144,6 @@ export const useConnectBSC = () => {
     chainId,
     switchToBSC,
     walletName,
+    isMetamask,
   };
 };

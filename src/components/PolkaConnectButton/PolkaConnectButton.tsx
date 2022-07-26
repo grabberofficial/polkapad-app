@@ -92,6 +92,7 @@ export const PolkaConnentBtn = () => {
           isPolka
           account={convertSS58Address(account, POLKA_ADDRESS_PREFIX.POLKA)}
           balance={formattedBalance}
+          walletName="Polkadot.js"
           onDisconnect={onDisconnect}
           isOpen={isInfoOpen}
           onClose={onInfoClose}

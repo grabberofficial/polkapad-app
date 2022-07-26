@@ -10,6 +10,7 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import { Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
+import { ChangeWalletConnectNetwork } from '@/components/ConnectWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
 
 export const ConnectWalletButton: FC = () => {
   const {
@@ -22,12 +23,18 @@ export const ConnectWalletButton: FC = () => {
     onOpen: onInfoOpen,
     onClose: onInfoClose,
   } = useDisclosure();
+  const {
+    isOpen: isChangeNetworkOpen,
+    onOpen: onChangeNetworkOpen,
+    onClose: onChangeNetworkClose,
+  } = useDisclosure();
 
   const {
     dotBalance,
     connected,
     account,
     chainId,
+    isMetamask,
     disconnectFromBSC,
     switchToBSC,
     walletName,
@@ -42,6 +49,14 @@ export const ConnectWalletButton: FC = () => {
     disconnectFromBSC();
     onInfoClose();
   }, [disconnectFromBSC, onInfoClose]);
+
+  const onChangeNetwork = useCallback(() => {
+    if (isMetamask) {
+      switchToBSC();
+    } else {
+      onChangeNetworkOpen();
+    }
+  }, [isMetamask, onChangeNetworkOpen, switchToBSC]);
 
   return (
     <>
@@ -72,7 +87,7 @@ export const ConnectWalletButton: FC = () => {
       )}
       {connected && account && isWrongNetwork && (
         <Button
-          onClick={switchToBSC}
+          onClick={onChangeNetwork}
           variant="secondary"
           width="auto"
           flexShrink={0}
@@ -108,6 +123,10 @@ export const ConnectWalletButton: FC = () => {
           onDisconnect={onDisconnect}
         />
       )}
+      <ChangeWalletConnectNetwork
+        isOpen={isChangeNetworkOpen}
+        onClose={onChangeNetworkClose}
+      />
     </>
   );
 };
