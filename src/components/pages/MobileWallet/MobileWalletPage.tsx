@@ -3,11 +3,7 @@ import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Text } from '@chakra-ui/react';
 import { MagicLinkTypes } from '@/pages/api/magic-links';
-import { useWalletConnect } from '@/components/WalletConnect/WalletConnect';
-import { environment } from '@/config/env';
 import { API_MAGIC_LINKS_ROUTE } from '@/constants/routes';
-
-const isDevelopment = environment === 'DEVELOPMENT';
 
 export const MobileWalletPage = () => {
   useEffect(() => {
@@ -16,11 +12,6 @@ export const MobileWalletPage = () => {
       body: JSON.stringify({ type: MagicLinkTypes.WALLET }),
     });
   }, []);
-
-  if (isDevelopment) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    useWalletConnect();
-  }
 
   return (
     <>

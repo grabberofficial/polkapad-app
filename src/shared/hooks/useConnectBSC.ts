@@ -5,17 +5,29 @@ import {
   networkName,
   rpcUrls,
   blockExplorerUrls,
+  WCProviderConfig,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
-import { useCallback, useContext, useEffect } from 'react';
+import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Balance, UserContext } from '../providers/userContext';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+
+const WALLET_CONNECT_KEY = 'walletconnect';
+const WALLET_CONNECT_DEEPLINK_KEY = 'WALLETCONNECT_DEEPLINK_CHOICE';
+
+export enum BSCProvider {
+  METAMASK = 'METAMASK',
+  WALLETCONNECT = 'WALLETCONNECT',
+}
 
 export const useConnectBSC = () => {
   const {
     activateBrowserWallet,
+    activate,
     account,
     chainId,
     deactivate: disconnectBSC,
+    library,
   } = useEthers();
 
   const dotBalance = useTokenBalance(DOT_BSC, account);
@@ -25,24 +37,42 @@ export const useConnectBSC = () => {
 
   const userContext = useContext(UserContext);
 
-  const connectToBSC = useCallback(async () => {
-    try {
-      await activateBrowserWallet();
+  const isMetamask = useMemo(() => {
+    return library?.connection.url === 'metamask';
+  }, [library?.connection.url]);
 
-      if (chainId !== network) {
-        const requestArguments = getNetworkArguments(
-          network,
-          networkName,
-          rpcUrls,
-          blockExplorerUrls,
-        );
+  const walletName = useMemo(() => {
+    return isMetamask ? 'Metamask' : 'WalletConnect';
+  }, [isMetamask]);
 
-        await window.ethereum.request(requestArguments);
+  const connectToBSC = useCallback(
+    async (provider: BSCProvider = BSCProvider.METAMASK) => {
+      try {
+        if (provider === BSCProvider.METAMASK) {
+          await activateBrowserWallet();
+
+          if (chainId !== network) {
+            const requestArguments = getNetworkArguments(
+              network,
+              networkName,
+              rpcUrls,
+              blockExplorerUrls,
+            );
+
+            await window.ethereum.request(requestArguments);
+          }
+        }
+        if (provider === BSCProvider.WALLETCONNECT) {
+          const provider = new WalletConnectProvider(WCProviderConfig);
+          await provider.enable();
+          await activate(provider);
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }, [activateBrowserWallet, chainId]);
+    },
+    [activate, activateBrowserWallet, chainId],
+  );
 
   const switchToBSC = useCallback(async () => {
     const requestArguments = getNetworkArguments(
@@ -76,6 +106,8 @@ export const useConnectBSC = () => {
       bsc: {},
     });
     disconnectBSC();
+    localStorage.removeItem(WALLET_CONNECT_KEY);
+    localStorage.removeItem(WALLET_CONNECT_DEEPLINK_KEY);
   }, [disconnectBSC, userContext]);
 
   const getNetworkArguments = (
@@ -111,5 +143,7 @@ export const useConnectBSC = () => {
     account,
     chainId,
     switchToBSC,
+    walletName,
+    isMetamask,
   };
 };

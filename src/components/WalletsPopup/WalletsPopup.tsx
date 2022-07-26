@@ -8,7 +8,7 @@ import {
   ModalOverlay,
 } from '@chakra-ui/modal';
 import { useCallback } from 'react';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { BSCProvider, useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { WalletPopupItem } from '@/components/WalletsPopup/components/WalletPopupItem';
 import { Button } from '@/components/Button';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
@@ -16,6 +16,7 @@ import styled from '@emotion/styled';
 import { useSubstrate } from '@/shared/providers/substrate';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { PolkaInstallModal } from '@/components/PolkaConnectButton/components/PolkaInstallModal';
+import { isProduction } from '@/shared/utils/general';
 
 interface WalletsPopupProps {
   isOpen: boolean;
@@ -38,7 +39,12 @@ export const WalletsPopup = ({
   } = useDisclosure();
 
   const onMetamaskConnect = useCallback(() => {
-    connectToBSC();
+    connectToBSC(BSCProvider.METAMASK);
+    onClose();
+  }, [connectToBSC, onClose]);
+
+  const onWalletConnect = useCallback(() => {
+    connectToBSC(BSCProvider.WALLETCONNECT);
     onClose();
   }, [connectToBSC, onClose]);
 
@@ -60,7 +66,7 @@ export const WalletsPopup = ({
             {isPolka ? 'Connect a Polkadot wallet' : 'Connect an EVM Wallet'}
           </ModalHeader>
           <ModalCloseButton onClick={onClose} />
-          <ModalBody padding="0px 70px">
+          <ModalBody padding="0px 70px" marginBottom="32px">
             {!isPolka && (
               <>
                 <WalletPopupItem
@@ -69,7 +75,7 @@ export const WalletsPopup = ({
                   onClick={onMetamaskConnect}
                 />
                 <WalletPopupItem
-                  isComingSoon
+                  onClick={onWalletConnect}
                   text="Wallet connect"
                   icon="/images/wallet_connect.svg"
                 />
@@ -132,13 +138,14 @@ export const WalletsPopup = ({
               .
             </Text>
           </ModalBody>
-          <ModalFooter
-            marginTop="32px"
-            padding="20px 70px"
-            borderTop="1px solid var(--chakra-colors-primary-border)"
-          >
-            <Button variant="primary">Learn how to connect</Button>
-          </ModalFooter>
+          {!isProduction && (
+            <ModalFooter
+              padding="20px 70px"
+              borderTop="1px solid var(--chakra-colors-primary-border)"
+            >
+              <Button variant="primary">Learn how to connect</Button>
+            </ModalFooter>
+          )}
         </ModalContent>
       </Modal>
       <PolkaInstallModal

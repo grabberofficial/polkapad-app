@@ -25,6 +25,7 @@ interface WalletsInfoProps {
   isPolka?: boolean;
   account: string;
   balance: BigNumber | string;
+  walletName: string;
   onDisconnect: () => void;
   onClose: () => void;
 }
@@ -39,7 +40,15 @@ const getExplorerUrl = (account: string, isPolka?: boolean) => {
 };
 
 export const WalletsInfo = (props: WalletsInfoProps) => {
-  const { account, balance, isPolka, isOpen, onDisconnect, onClose } = props;
+  const {
+    account,
+    balance,
+    walletName,
+    isPolka,
+    isOpen,
+    onDisconnect,
+    onClose,
+  } = props;
 
   const onCopyAddress = useCallback(() => {
     account && navigator.clipboard.writeText(account);
@@ -123,7 +132,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
                 fontWeight={600}
                 color="secondary.text"
               >
-                {isPolka ? 'Polkadot.js' : 'Metamask'}
+                {walletName}
               </Text>
             </Flex>
           </Flex>

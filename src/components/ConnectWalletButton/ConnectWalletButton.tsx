@@ -10,6 +10,7 @@ import { useDisclosure } from '@chakra-ui/hooks';
 import { Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
+import { ChangeWalletConnectNetwork } from '@/components/ConnectWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
 
 export const ConnectWalletButton: FC = () => {
   const {
@@ -22,23 +23,40 @@ export const ConnectWalletButton: FC = () => {
     onOpen: onInfoOpen,
     onClose: onInfoClose,
   } = useDisclosure();
+  const {
+    isOpen: isChangeNetworkOpen,
+    onOpen: onChangeNetworkOpen,
+    onClose: onChangeNetworkClose,
+  } = useDisclosure();
 
   const {
     dotBalance,
     connected,
     account,
     chainId,
+    isMetamask,
     disconnectFromBSC,
     switchToBSC,
+    walletName,
   } = useConnectBSC();
 
   const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
   const isWrongNetwork = chainId !== network;
+  const formattedBalance =
+    dotBalance && parseFloat(formatEther(dotBalance)).toFixed(3);
 
   const onDisconnect = useCallback(() => {
     disconnectFromBSC();
     onInfoClose();
   }, [disconnectFromBSC, onInfoClose]);
+
+  const onChangeNetwork = useCallback(() => {
+    if (isMetamask) {
+      switchToBSC();
+    } else {
+      onChangeNetworkOpen();
+    }
+  }, [isMetamask, onChangeNetworkOpen, switchToBSC]);
 
   return (
     <>
@@ -60,8 +78,8 @@ export const ConnectWalletButton: FC = () => {
             />
           }
         >
-          {dotBalance ? (
-            `${parseFloat(formatEther(dotBalance)).toFixed(3)} DOT`
+          {formattedBalance ? (
+            `${formattedBalance} DOT`
           ) : (
             <Loader width="32px" height="32px" />
           )}
@@ -69,7 +87,7 @@ export const ConnectWalletButton: FC = () => {
       )}
       {connected && account && isWrongNetwork && (
         <Button
-          onClick={switchToBSC}
+          onClick={onChangeNetwork}
           variant="secondary"
           width="auto"
           flexShrink={0}
@@ -95,15 +113,20 @@ export const ConnectWalletButton: FC = () => {
         </Button>
       )}
       <WalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
-      {account && dotBalance && (
+      {account && formattedBalance && (
         <WalletsInfo
           isOpen={isInfoOpen}
           account={account}
-          balance={dotBalance}
+          walletName={walletName}
+          balance={formattedBalance}
           onClose={onInfoClose}
           onDisconnect={onDisconnect}
         />
       )}
+      <ChangeWalletConnectNetwork
+        isOpen={isChangeNetworkOpen}
+        onClose={onChangeNetworkClose}
+      />
     </>
   );
 };
