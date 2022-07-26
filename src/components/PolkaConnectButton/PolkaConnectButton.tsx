@@ -42,9 +42,11 @@ export const PolkaConnentBtn = () => {
           onClick={onInfoOpen}
           variant="secondary"
           width="auto"
+          minWidth="150px"
           flexShrink={0}
           flexGrow={0}
           iconPlacement="left"
+          iconGap="10px"
           padding="0 16px"
           icon={
             <Image
@@ -69,8 +71,10 @@ export const PolkaConnentBtn = () => {
           disabled={keyringState !== 'READY'}
           variant="secondary"
           width="auto"
+          minWidth="150px"
           flexShrink={0}
           flexGrow={0}
+          iconGap="10px"
           iconPlacement="left"
           padding="0 16px"
           icon={

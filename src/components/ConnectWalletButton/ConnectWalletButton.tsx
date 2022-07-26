@@ -7,7 +7,7 @@ import { Loader } from '@/components/Loader/Loader';
 import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
 import { isProduction } from '@/shared/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';
-import { Image } from '@chakra-ui/react';
+import { Flex, Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { ChangeWalletConnectNetwork } from '@/components/ConnectWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
@@ -65,23 +65,18 @@ export const ConnectWalletButton: FC = () => {
           onClick={onInfoOpen}
           variant="secondary"
           width="auto"
-          flexShrink={0}
+          minWidth="150px"
           padding="0px 16px"
+          iconGap="10px"
           iconPlacement="left"
-          icon={
-            <Image
-              marginRight="5px"
-              src={bscIcon}
-              alt="BSC"
-              width="29px"
-              height="29px"
-            />
-          }
+          icon={<Image src={bscIcon} alt="BSC" width="29px" height="29px" />}
         >
           {formattedBalance ? (
             `${formattedBalance} DOT`
           ) : (
-            <Loader width="32px" height="32px" />
+            <Flex width="80px" justifyContent="center">
+              <Loader width="28px" height="28px" />
+            </Flex>
           )}
         </Button>
       )}
@@ -90,7 +85,9 @@ export const ConnectWalletButton: FC = () => {
           onClick={onChangeNetwork}
           variant="secondary"
           width="auto"
+          minWidth="150px"
           flexShrink={0}
+          iconGap="10px"
           color="error"
           padding="0 16px"
           iconPlacement="left"
@@ -104,7 +101,9 @@ export const ConnectWalletButton: FC = () => {
           onClick={onPopupOpen}
           variant="secondary"
           width="auto"
+          minWidth="150px"
           flexShrink={0}
+          iconGap="10px"
           iconPlacement="left"
           padding="0 16px"
           icon={<Image src={bscIcon} alt="BSC" width="29px" height="29px" />}
