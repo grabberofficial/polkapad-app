@@ -17,6 +17,7 @@ export const KYC_ROUTE = '/profile?kyc=true';
 export const API_LOGIN_ROUTE = '/api/login';
 export const API_LOGOUT_ROUTE = '/api/logout';
 export const API_MAILCHIMP_ROUTE = '/api/mailchimp';
+export const API_ANALYTICS_ROUTE = '/api/analytics';
 export const API_USER_ROUTE = '/api/user';
 export const API_MAGIC_LINKS_ROUTE = '/api/magic-links';
 export const API_KYC_ROUTE = '/api/kyc';
