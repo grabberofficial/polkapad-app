@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react';
+import { FC, useCallback, useEffect } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { Button } from '@/components/Button';
@@ -57,6 +57,12 @@ export const ConnectWalletButton: FC = () => {
       onChangeNetworkOpen();
     }
   }, [isMetamask, onChangeNetworkOpen, switchToBSC]);
+
+  useEffect(() => {
+    if (!isWrongNetwork && isChangeNetworkOpen) {
+      onChangeNetworkClose();
+    }
+  }, [isChangeNetworkOpen, isWrongNetwork, onChangeNetworkClose]);
 
   return (
     <>

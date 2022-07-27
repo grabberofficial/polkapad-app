@@ -9,7 +9,6 @@ import {
 } from '@chakra-ui/modal';
 import { Flex, Image, Text } from '@chakra-ui/react';
 import React from 'react';
-import { Button } from '@/components/Button';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import styled from '@emotion/styled';
 import walletNetworkIcon from '@/assets/wallet_network.svg';
@@ -26,7 +25,7 @@ export const ChangeWalletConnectNetwork = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent minWidth={['100%', '600px']}>
+      <ModalContent minWidth={['100%', '500px']}>
         <ModalHeader fontSize="24px" paddingLeft="60px" marginTop="32px">
           <Flex alignItems="center">
             <Flex
@@ -49,13 +48,16 @@ export const ChangeWalletConnectNetwork = ({
             Please open the wallet app you have connected and switch network to
             Binance Smart Chain.
             <br />
-            Once the network is switched, go ahead and refresh this page.
+            <br />
+            Once the network is switched, the wallet would be reconnected
+            automatically.
           </Text>
         </ModalBody>
         <ModalFooter
           padding="20px 60px"
           marginTop="32px"
           borderTop="1px solid var(--chakra-colors-primary-border)"
+          justifyContent="flex-start"
         >
           <Text
             fontFamily="Poppins"
@@ -71,14 +73,6 @@ export const ChangeWalletConnectNetwork = ({
             />
             .
           </Text>
-          <Button
-            marginLeft="auto"
-            width="auto"
-            variant="primary"
-            onClick={() => location.reload()}
-          >
-            Refresh page
-          </Button>{' '}
         </ModalFooter>
       </ModalContent>
     </Modal>
