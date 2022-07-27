@@ -29,9 +29,7 @@ const magicLinksRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       // eslint-disable-next-line no-empty
     } catch (e) {}
   } else {
-    res.json({
-      kycStatus: null,
-    });
+    res.json('');
   }
 };
 
