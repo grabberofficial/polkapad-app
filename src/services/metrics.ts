@@ -1,43 +1,43 @@
 import {
-  gtagSendCreateAccount,
-  gtagSendCreateAccountWaitList,
-  gtagSendStartKyc,
-  gtagSendSuccessKyc,
-  gtagSendWalletAdded,
+  analyticsSendRegistration,
+  analyticsSendCreateAccountWaitList,
+  analyticsSendStartKyc,
+  analyticsSendSuccessKyc,
+  analyticsSendWalletAdded,
 } from '@/services/analytics';
 import { isProduction } from '@/shared/utils/general';
 
 export const sendMetricsCreateAccount = () => {
   if (isProduction) {
-    gtagSendCreateAccount();
+    analyticsSendRegistration();
     // fbSendCreateAccount();
   }
 };
 
 export const sendMetricsCreateAccountWaitList = () => {
   if (isProduction) {
-    gtagSendCreateAccountWaitList();
+    analyticsSendCreateAccountWaitList();
     // fbSendCreateAccountWaitList();
   }
 };
 
 export const sendMetricsWalletAdded = () => {
   if (isProduction) {
-    gtagSendWalletAdded();
+    analyticsSendWalletAdded();
     // fbSendWalletAdded();
   }
 };
 
 export const sendMetricsStartKYC = () => {
   if (isProduction) {
-    gtagSendStartKyc();
+    analyticsSendStartKyc();
     // fbSendStartKyc();
   }
 };
 
 export const sendMetricsSuccessKYC = () => {
   if (isProduction) {
-    gtagSendSuccessKyc();
+    analyticsSendSuccessKyc();
     // fbSendSuccessKYC();
   }
 };
