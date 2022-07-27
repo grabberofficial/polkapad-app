@@ -39,7 +39,7 @@ export const ChangeWalletConnectNetwork = ({
             >
               <Image src={walletNetworkIcon} width="30px" height="32px" />
             </Flex>
-            Change Netowork
+            Change Network
           </Flex>
         </ModalHeader>
         <ModalCloseButton onClick={onClose} />
