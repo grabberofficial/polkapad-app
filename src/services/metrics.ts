@@ -1,6 +1,8 @@
 import {
   analyticsSendRegistration,
-  analyticsSendCreateAccountWaitList,
+  analyticsSendRegistrationWait,
+  analyticsSendStartedConnectionBinance,
+  analyticsSendStartedConnectionPolkadot,
   analyticsSendStartKyc,
   analyticsSendSuccessKyc,
   analyticsSendWalletAdded,
@@ -16,7 +18,7 @@ export const sendMetricsCreateAccount = () => {
 
 export const sendMetricsCreateAccountWaitList = () => {
   if (isProduction) {
-    analyticsSendCreateAccountWaitList();
+    analyticsSendRegistrationWait();
     // fbSendCreateAccountWaitList();
   }
 };
@@ -39,5 +41,17 @@ export const sendMetricsSuccessKYC = () => {
   if (isProduction) {
     analyticsSendSuccessKyc();
     // fbSendSuccessKYC();
+  }
+};
+
+export const sendMetricsStartedConnectionBinance = () => {
+  if (isProduction) {
+    analyticsSendStartedConnectionBinance();
+  }
+};
+
+export const sendMetricsStartedConnectionPolkadot = () => {
+  if (isProduction) {
+    analyticsSendStartedConnectionPolkadot();
   }
 };

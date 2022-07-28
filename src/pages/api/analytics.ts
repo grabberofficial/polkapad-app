@@ -12,7 +12,7 @@ const analyticsRoute = async (req: NextApiRequest, res: NextApiResponse) => {
           'Content-Type': 'application/json',
         },
         method: 'POST',
-        body: req.body,
+        body: JSON.stringify(req.body),
       });
 
       if (response.status !== 201) {
@@ -20,11 +20,13 @@ const analyticsRoute = async (req: NextApiRequest, res: NextApiResponse) => {
         throw error;
       }
 
-      res.status(200);
+      res.status(200).json('');
       // eslint-disable-next-line no-empty
     } catch (e) {
-      res.status(500);
+      res.status(500).json(e);
     }
+  } else {
+    res.status(200).json('');
   }
 };
 

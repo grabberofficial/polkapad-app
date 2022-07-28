@@ -44,10 +44,6 @@ export const analyticsSendRegistrationWait = async (): Promise<void> => {
   await analyticsSend(AnalyticsEventType.RegistrationWait);
 };
 
-export const analyticsSendCreateAccountWaitList = async (): Promise<void> => {
-  gtagSendEvent('succes-waitlested', 'thx_page');
-};
-
 export const analyticsSendStartKyc = async (): Promise<void> => {
   gtagSendEvent('start_kyc', 'wl_page');
 

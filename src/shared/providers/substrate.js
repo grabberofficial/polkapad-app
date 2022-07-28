@@ -5,6 +5,7 @@ import keyring from '@polkadot/ui-keyring';
 import { formatEther } from 'ethers/lib/utils';
 
 import { UserContext } from '../providers/userContext';
+import { sendMetricsStartedConnectionPolkadot } from '@/services/metrics';
 
 const POLKA_CONNECT_KEY = 'shouldConnectPolka';
 const connectedSocket = 'wss://kusama-rpc.polkadot.io';
@@ -197,6 +198,8 @@ const SubstrateContextProvider = (props) => {
     } = await state.api.query.system.account(state.account);
     dispatch({ type: 'SET_BALANCE', payload: ksmBalance.toString() });
     localStorage.setItem(POLKA_CONNECT_KEY, 'true');
+
+    sendMetricsStartedConnectionPolkadot();
   }, [state]);
 
   const disconnect = useCallback(async () => {

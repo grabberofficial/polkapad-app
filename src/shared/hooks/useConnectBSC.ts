@@ -11,6 +11,7 @@ import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Balance, UserContext } from '../providers/userContext';
 import WalletConnectProvider from '@walletconnect/web3-provider';
+import { sendMetricsStartedConnectionBinance } from '@/services/metrics';
 
 const WALLET_CONNECT_KEY = 'walletconnect';
 const WALLET_CONNECT_DEEPLINK_KEY = 'WALLETCONNECT_DEEPLINK_CHOICE';
@@ -65,6 +66,8 @@ export const useConnectBSC = () => {
           await provider.enable();
           await activate(provider);
         }
+
+        sendMetricsStartedConnectionBinance();
       } catch (e) {
         console.error(e);
       }
