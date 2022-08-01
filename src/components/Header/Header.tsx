@@ -21,7 +21,7 @@ import fetchJson from '@/lib/fetchJson';
 import { FaUserAlt } from 'react-icons/fa';
 
 import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
-import { PolkaConnentBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
+import { PolkaConnectBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
 import {
   HOME_ROUTE,
   KYC_ROUTE,
@@ -179,7 +179,7 @@ export const Header: React.FC<{
             </Tabs>
             <RightContainer>
               <ConnectWalletButton />
-              <PolkaConnentBtn />
+              <PolkaConnectBtn />
               {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
             </RightContainer>
           </DesktopMenuWrapper>

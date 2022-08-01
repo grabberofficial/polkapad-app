@@ -266,6 +266,6 @@ const SubstrateContextProvider = (props) => {
   );
 };
 
-const useSubstrate = () => ({ ...useContext(SubstrateContext) });
+const useSubstrate = () => useContext(SubstrateContext);
 
 export { SubstrateContextProvider as default, useSubstrate };
