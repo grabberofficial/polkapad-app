@@ -9,8 +9,8 @@ import { isProduction } from '@/shared/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Flex, Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
-import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { ChangeWalletConnectNetwork } from '@/components/ConnectWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
+import { BSCWalletsPopup } from '@/components/ConnectWalletButton/components/BSCWalletsPopup/BSCWalletsPopup';
 
 export const ConnectWalletButton: FC = () => {
   const {
@@ -117,7 +117,7 @@ export const ConnectWalletButton: FC = () => {
           Connect
         </Button>
       )}
-      <WalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
+      <BSCWalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
       {account && formattedBalance && (
         <WalletsInfo
           isOpen={isInfoOpen}

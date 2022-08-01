@@ -2,9 +2,9 @@ import { ReactNode, useEffect, useState } from 'react';
 
 import ThemeProvider from './theme';
 import DAppProvider from './dApp';
-import SubstrateContextProvider from './substrate';
 import { UserContext, UserContextType } from './userContext';
 import useUser from '@/lib/hooks/useUser';
+import { PolkadotExtensionProvider } from '@/shared/hooks/usePolkadotExtension';
 
 interface ProviderProps {
   children: ReactNode;
@@ -40,11 +40,11 @@ export const Providers = ({ children }: ProviderProps) => {
         {isSSR ? (
           children
         ) : (
-          <SubstrateContextProvider>
+          <PolkadotExtensionProvider>
             <UserContext.Provider value={{ ...context, setContext }}>
               {children}
             </UserContext.Provider>
-          </SubstrateContextProvider>
+          </PolkadotExtensionProvider>
         )}
       </DAppProvider>
     </ThemeProvider>

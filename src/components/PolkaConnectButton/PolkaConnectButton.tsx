@@ -1,21 +1,20 @@
-import React, { useCallback, useContext } from 'react';
-import { UserContext } from '@/shared/providers/userContext';
+import React, { memo, useCallback } from 'react';
 import { Button } from '@/components/Button';
 import { Image } from '@chakra-ui/react';
-import { formatUnits } from '@ethersproject/units';
-import { useSubstrate } from '@/shared/providers/substrate';
 import { useDisclosure } from '@chakra-ui/hooks';
-import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
 import {
   convertSS58Address,
   POLKA_ADDRESS_PREFIX,
 } from '@/shared/utils/convertSS58Address';
 import { Loader } from '@/components/Loader/Loader';
+import { usePolkadotExtension } from '@/shared/hooks/usePolkadotExtension';
+import { PolkaWalletsPopup } from '@/components/PolkaConnectButton/components/PolkaWalletsPopup';
 
-export const PolkaConnentBtn = () => {
-  const { polka } = useContext(UserContext);
-  const { account, balance, keyringState, disconnect } = useSubstrate();
+export const PolkaConnectBtn = memo(() => {
+  const { disconnect, dotBalance, address, isConnected } =
+    usePolkadotExtension();
+
   const {
     isOpen: isPopupOpen,
     onOpen: onPopupOpen,
@@ -27,9 +26,6 @@ export const PolkaConnentBtn = () => {
     onClose: onInfoClose,
   } = useDisclosure();
 
-  const hasData = balance || (polka?.address && polka?.balance);
-  const formattedBalance = balance && formatUnits(balance, 12);
-
   const onDisconnect = useCallback(async () => {
     await disconnect();
     onInfoClose();
@@ -37,7 +33,7 @@ export const PolkaConnentBtn = () => {
 
   return (
     <>
-      {hasData && (
+      {isConnected && dotBalance ? (
         <Button
           onClick={onInfoOpen}
           variant="secondary"
@@ -58,17 +54,15 @@ export const PolkaConnentBtn = () => {
             />
           }
         >
-          {formattedBalance ? (
-            `${formattedBalance} DOT`
+          {dotBalance ? (
+            `${dotBalance} DOT`
           ) : (
             <Loader width="32px" height="32px" />
           )}
         </Button>
-      )}
-      {!hasData && (
+      ) : (
         <Button
           onClick={onPopupOpen}
-          disabled={keyringState !== 'READY'}
           variant="secondary"
           width="auto"
           minWidth="150px"
@@ -90,12 +84,12 @@ export const PolkaConnentBtn = () => {
           Connect
         </Button>
       )}
-      <WalletsPopup isPolka isOpen={isPopupOpen} onClose={onPopupClose} />
-      {account && (
+      <PolkaWalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
+      {address && dotBalance && (
         <WalletsInfo
           isPolka
-          account={convertSS58Address(account, POLKA_ADDRESS_PREFIX.POLKA)}
-          balance={formattedBalance}
+          account={convertSS58Address(address, POLKA_ADDRESS_PREFIX.POLKA)}
+          balance={dotBalance}
           walletName="Polkadot.js"
           onDisconnect={onDisconnect}
           isOpen={isInfoOpen}
@@ -104,4 +98,4 @@ export const PolkaConnentBtn = () => {
       )}
     </>
   );
-};
+});
