@@ -1,4 +1,3 @@
-import { getWallets, Wallet } from '@talisman-connect/wallets';
 import React, {
   createContext,
   useCallback,
@@ -8,10 +7,12 @@ import React, {
   useState,
 } from 'react';
 import { useBalances } from '@talismn/api-react-hooks';
-import { InjectedWindow } from '@polkadot/extension-inject/types';
-import { POLKADOT_WALLET } from '@/constants/wallets';
-
-const injectedWindow = window as Window & InjectedWindow;
+import {
+  Injected,
+  InjectedWindow,
+  InjectedWindowProvider,
+} from '@polkadot/extension-inject/types';
+import { POLKADOT_WALLET, TALISMAN_WALLET } from '@/constants/wallets';
 
 export type Account = {
   name?: string;
@@ -28,7 +29,7 @@ type PolkadotExtensionContextType = {
   disconnect: () => void;
   address: string;
   accounts: Account[];
-  wallets: Wallet[];
+  extension?: Injected;
   dotBalance?: string;
   isPolkadotInstalled: boolean;
   isTalismanInstalled: boolean;
@@ -40,7 +41,6 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
   disconnect: () => null,
   address: '',
   accounts: [],
-  wallets: [],
   dotBalance: '',
   isPolkadotInstalled: false,
   isTalismanInstalled: false,
@@ -48,9 +48,10 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
 });
 
 export const PolkadotExtensionProvider = (props: any) => {
-  const wallets = getWallets();
-  const unsubscribe = useRef(() => null);
+  const injectedWindow = window as Window & InjectedWindow;
+  const unsubscribe = useRef<() => void>(() => null);
   const [accounts, setAccounts] = useState<Account[]>([]);
+  const [extension, setExtension] = useState<Injected>();
   const isConnected = !!accounts.length;
 
   const address = useMemo(() => accounts[POLKA_CHAIN_ID]?.address, [accounts]);
@@ -60,7 +61,7 @@ export const PolkadotExtensionProvider = (props: any) => {
   }, [injectedWindow?.injectedWeb3]);
 
   const isTalismanInstalled = useMemo(() => {
-    return !!injectedWindow?.injectedWeb3?.[POLKADOT_WALLET.extensionName];
+    return !!injectedWindow?.injectedWeb3?.[TALISMAN_WALLET.extensionName];
   }, [injectedWindow?.injectedWeb3]);
 
   const addresses = useMemo(() => {
@@ -74,26 +75,23 @@ export const PolkadotExtensionProvider = (props: any) => {
 
   const connectPolkadot = useCallback(
     async (walletName: string) => {
-      const wallet = wallets.find(
-        (wallet) => wallet.extensionName === walletName,
-      );
-      const injectedWindow = window as Window & InjectedWindow;
-      const injectedExtension = injectedWindow?.injectedWeb3?.[walletName];
+      const injectedExtension: InjectedWindowProvider =
+        injectedWindow?.injectedWeb3?.[walletName];
 
       try {
-        await injectedExtension?.enable(DAPP_NAME);
+        const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
+        setExtension(enabledExtension);
+
+        unsubscribe.current = enabledExtension?.accounts.subscribe(
+          (result: Account[]) => {
+            setAccounts(result);
+          },
+        );
       } catch (err) {
         console.error(err);
-        return;
       }
-
-      unsubscribe.current = wallet?.extension?.accounts.subscribe(
-        (result: Account[]) => {
-          setAccounts(result);
-        },
-      );
     },
-    [wallets],
+    [injectedWindow?.injectedWeb3],
   );
 
   const disconnect = useCallback(async () => {
@@ -107,18 +105,18 @@ export const PolkadotExtensionProvider = (props: any) => {
       disconnect,
       accounts,
       address,
-      wallets,
       dotBalance,
       isPolkadotInstalled,
       isTalismanInstalled,
       isConnected,
+      extension,
     }),
     [
       connectPolkadot,
       disconnect,
       address,
       accounts,
-      wallets,
+      extension,
       dotBalance,
       isPolkadotInstalled,
       isTalismanInstalled,
