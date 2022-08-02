@@ -2,6 +2,7 @@ import React, {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -12,7 +13,14 @@ import {
   InjectedWindow,
   InjectedWindowProvider,
 } from '@polkadot/extension-inject/types';
-import { POLKADOT_WALLET, TALISMAN_WALLET } from '@/constants/wallets';
+import {
+  CLOVER_WALLET,
+  POLKADOT_WALLET,
+  SUB_WALLET,
+  TALISMAN_WALLET,
+  WalletMeta,
+} from '@/constants/wallets';
+import { CONNECTED_POLKA_WALLET_KEY } from '@/constants/localStorage';
 
 export type Account = {
   name?: string;
@@ -25,15 +33,24 @@ const POLKA_CHAIN_ID = '0';
 const CHAIN_IDS = [POLKA_CHAIN_ID];
 
 type PolkadotExtensionContextType = {
-  connectPolkadot: (walletName: string) => void;
+  connectPolkadot: (wallet: WalletMeta) => void;
   disconnect: () => void;
   address: string;
   accounts: Account[];
   extension?: Injected;
+  connectedWallet?: WalletMeta;
   dotBalance?: string;
   isPolkadotInstalled: boolean;
   isTalismanInstalled: boolean;
+  isSubwalletInstalled: boolean;
+  isCloverInstalled: boolean;
   isConnected: boolean;
+  isLoading: boolean;
+};
+
+const getConnectedWallet = () => {
+  const connectedWallet = localStorage.getItem(CONNECTED_POLKA_WALLET_KEY);
+  return connectedWallet ? JSON.parse(connectedWallet) : null;
 };
 
 const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
@@ -44,7 +61,10 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
   dotBalance: '',
   isPolkadotInstalled: false,
   isTalismanInstalled: false,
+  isSubwalletInstalled: false,
+  isCloverInstalled: false,
   isConnected: false,
+  isLoading: false,
 });
 
 export const PolkadotExtensionProvider = (props: any) => {
@@ -52,9 +72,15 @@ export const PolkadotExtensionProvider = (props: any) => {
   const unsubscribe = useRef<() => void>(() => null);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [extension, setExtension] = useState<Injected>();
+  const [isLoading, setIsLoading] = useState(false);
   const isConnected = !!accounts.length;
+  const connectedWallet = getConnectedWallet();
 
   const address = useMemo(() => accounts[POLKA_CHAIN_ID]?.address, [accounts]);
+  const { balances } = useBalances([address], CHAIN_IDS);
+  const dotBalance = useMemo(() => {
+    return balances[0]?.free;
+  }, [balances]);
 
   const isPolkadotInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[POLKADOT_WALLET.extensionName];
@@ -64,31 +90,42 @@ export const PolkadotExtensionProvider = (props: any) => {
     return !!injectedWindow?.injectedWeb3?.[TALISMAN_WALLET.extensionName];
   }, [injectedWindow?.injectedWeb3]);
 
-  const addresses = useMemo(() => {
-    return accounts?.map((account) => account.address);
-  }, [accounts]);
+  const isSubwalletInstalled = useMemo(() => {
+    return !!injectedWindow?.injectedWeb3?.[SUB_WALLET.extensionName];
+  }, [injectedWindow?.injectedWeb3]);
 
-  const { balances } = useBalances(addresses, CHAIN_IDS);
-  const dotBalance = useMemo(() => {
-    return balances[0]?.free;
-  }, [balances]);
+  const isCloverInstalled = useMemo(() => {
+    return !!injectedWindow?.injectedWeb3?.[CLOVER_WALLET.extensionName];
+  }, [injectedWindow?.injectedWeb3]);
 
   const connectPolkadot = useCallback(
-    async (walletName: string) => {
+    async (wallet: WalletMeta) => {
       const injectedExtension: InjectedWindowProvider =
-        injectedWindow?.injectedWeb3?.[walletName];
+        injectedWindow?.injectedWeb3?.[wallet.extensionName];
 
       try {
+        setIsLoading(true);
         const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
         setExtension(enabledExtension);
 
-        unsubscribe.current = enabledExtension?.accounts.subscribe(
-          (result: Account[]) => {
-            setAccounts(result);
-          },
+        const accounts = await enabledExtension.accounts.get();
+        setAccounts(accounts);
+        setIsLoading(false);
+        localStorage.setItem(
+          CONNECTED_POLKA_WALLET_KEY,
+          JSON.stringify(wallet),
         );
+
+        if (enabledExtension?.accounts.subscribe) {
+          unsubscribe.current = enabledExtension?.accounts.subscribe(
+            (result: Account[]) => {
+              setAccounts(result);
+            },
+          );
+        }
       } catch (err) {
         console.error(err);
+        setIsLoading(false);
       }
     },
     [injectedWindow?.injectedWeb3],
@@ -97,19 +134,32 @@ export const PolkadotExtensionProvider = (props: any) => {
   const disconnect = useCallback(async () => {
     setAccounts([]);
     unsubscribe.current();
+    localStorage.removeItem(CONNECTED_POLKA_WALLET_KEY);
   }, [setAccounts, unsubscribe]);
+
+  useEffect(() => {
+    const storageWallet = localStorage.getItem(CONNECTED_POLKA_WALLET_KEY);
+    if (!isConnected && !isLoading && storageWallet) {
+      const wallet = JSON.parse(storageWallet) as WalletMeta;
+      connectPolkadot(wallet);
+    }
+  }, []);
 
   const value = useMemo(
     () => ({
       connectPolkadot,
       disconnect,
-      accounts,
       address,
+      accounts,
+      extension,
+      connectedWallet,
       dotBalance,
+      isLoading,
+      isConnected,
       isPolkadotInstalled,
       isTalismanInstalled,
-      isConnected,
-      extension,
+      isSubwalletInstalled,
+      isCloverInstalled,
     }),
     [
       connectPolkadot,
@@ -117,10 +167,14 @@ export const PolkadotExtensionProvider = (props: any) => {
       address,
       accounts,
       extension,
+      connectedWallet,
       dotBalance,
+      isLoading,
+      isConnected,
       isPolkadotInstalled,
       isTalismanInstalled,
-      isConnected,
+      isSubwalletInstalled,
+      isCloverInstalled,
     ],
   );
 

@@ -9,11 +9,17 @@ import {
 } from '@/shared/utils/convertSS58Address';
 import { Loader } from '@/components/Loader/Loader';
 import { usePolkadotExtension } from '@/shared/hooks/usePolkadotExtension';
-import { PolkaWalletsPopup } from '@/components/PolkaConnectButton/components/PolkaWalletsPopup';
+import { PolkaWalletsPopup } from '@/components/PolkadotWalletButton/components/PolkaWalletsPopup';
 
-export const PolkaConnectBtn = memo(() => {
-  const { disconnect, dotBalance, address, isConnected } =
-    usePolkadotExtension();
+export const PolkadotWalletButton = memo(() => {
+  const {
+    disconnect,
+    dotBalance,
+    address,
+    connectedWallet,
+    isConnected,
+    isLoading,
+  } = usePolkadotExtension();
 
   const {
     isOpen: isPopupOpen,
@@ -54,11 +60,7 @@ export const PolkaConnectBtn = memo(() => {
             />
           }
         >
-          {dotBalance ? (
-            `${dotBalance} DOT`
-          ) : (
-            <Loader width="32px" height="32px" />
-          )}
+          {dotBalance} DOT
         </Button>
       ) : (
         <Button
@@ -69,6 +71,7 @@ export const PolkaConnectBtn = memo(() => {
           flexShrink={0}
           flexGrow={0}
           iconGap="10px"
+          disabled={isLoading}
           iconPlacement="left"
           padding="0 16px"
           icon={
@@ -81,16 +84,20 @@ export const PolkaConnectBtn = memo(() => {
             />
           }
         >
-          Connect
+          {isLoading || (isConnected && !dotBalance) ? (
+            <Loader width="29px" height="29px" />
+          ) : (
+            'Connect'
+          )}
         </Button>
       )}
       <PolkaWalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
-      {address && dotBalance && (
+      {address && dotBalance && connectedWallet?.title && (
         <WalletsInfo
           isPolka
           account={convertSS58Address(address, POLKA_ADDRESS_PREFIX.POLKA)}
           balance={dotBalance}
-          walletName="Polkadot.js"
+          walletName={connectedWallet?.title}
           onDisconnect={onDisconnect}
           isOpen={isInfoOpen}
           onClose={onInfoClose}

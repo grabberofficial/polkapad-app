@@ -20,8 +20,8 @@ import fetchJson from '@/lib/fetchJson';
 
 import { FaUserAlt } from 'react-icons/fa';
 
-import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
-import { PolkaConnectBtn } from '@/components/PolkaConnectButton/PolkaConnectButton';
+import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
+import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaConnectButton';
 import {
   HOME_ROUTE,
   KYC_ROUTE,
@@ -178,8 +178,8 @@ export const Header: React.FC<{
               </TabList>
             </Tabs>
             <RightContainer>
-              <ConnectWalletButton />
-              <PolkaConnectBtn />
+              <BSCWalletButton />
+              <PolkadotWalletButton />
               {props.isLoggedIn ? <AccountButton /> : <SignUpButton />}
             </RightContainer>
           </DesktopMenuWrapper>

@@ -12,9 +12,10 @@ import { useCallback, useContext, useEffect, useMemo } from 'react';
 import { Balance, UserContext } from '../providers/userContext';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { sendMetricsStartedConnectionBinance } from '@/services/metrics';
-
-const WALLET_CONNECT_KEY = 'walletconnect';
-const WALLET_CONNECT_DEEPLINK_KEY = 'WALLETCONNECT_DEEPLINK_CHOICE';
+import {
+  WALLET_CONNECT_DEEPLINK_KEY,
+  WALLET_CONNECT_KEY,
+} from '@/constants/localStorage';
 
 export enum BSCProvider {
   METAMASK = 'METAMASK',
