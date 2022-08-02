@@ -138,10 +138,8 @@ export const PolkadotExtensionProvider = (props: any) => {
   }, [setAccounts, unsubscribe]);
 
   useEffect(() => {
-    const storageWallet = localStorage.getItem(CONNECTED_POLKA_WALLET_KEY);
-    if (!isConnected && !isLoading && storageWallet) {
-      const wallet = JSON.parse(storageWallet) as WalletMeta;
-      connectPolkadot(wallet);
+    if (!isConnected && !isLoading && connectedWallet) {
+      connectPolkadot(connectedWallet);
     }
   }, []);
 
