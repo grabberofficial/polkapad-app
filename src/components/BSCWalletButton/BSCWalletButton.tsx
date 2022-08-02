@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { Button } from '@/components/Button';
@@ -9,10 +9,10 @@ import { isProduction } from '@/shared/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Flex, Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
-import { ChangeWalletConnectNetwork } from '@/components/ConnectWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
-import { BSCWalletsPopup } from '@/components/ConnectWalletButton/components/BSCWalletsPopup/BSCWalletsPopup';
+import { ChangeWalletConnectNetwork } from '@/components/BSCWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
+import { BSCWalletsPopup } from '@/components/BSCWalletButton/components/BSCWalletsPopup/BSCWalletsPopup';
 
-export const ConnectWalletButton: FC = () => {
+export const BSCWalletButton = () => {
   const {
     isOpen: isPopupOpen,
     onOpen: onPopupOpen,

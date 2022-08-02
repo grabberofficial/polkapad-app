@@ -3,7 +3,12 @@ import { useCallback } from 'react';
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { WalletPopupItem } from '@/components/WalletsPopup/components/WalletPopupItem';
 import { usePolkadotExtension } from '@/shared/hooks/usePolkadotExtension';
-import { POLKADOT_WALLET, TALISMAN_WALLET } from '@/constants/wallets';
+import {
+  CLOVER_WALLET,
+  POLKADOT_WALLET,
+  SUB_WALLET,
+  TALISMAN_WALLET,
+} from '@/constants/wallets';
 
 interface PolkaWalletsPopupProps {
   isOpen: boolean;
@@ -14,12 +19,17 @@ export const PolkaWalletsPopup = ({
   isOpen,
   onClose,
 }: PolkaWalletsPopupProps) => {
-  const { connectPolkadot, isTalismanInstalled, isPolkadotInstalled } =
-    usePolkadotExtension();
+  const {
+    connectPolkadot,
+    isTalismanInstalled,
+    isPolkadotInstalled,
+    isSubwalletInstalled,
+    isCloverInstalled,
+  } = usePolkadotExtension();
 
   const onPolkaConnect = useCallback(() => {
     if (isPolkadotInstalled) {
-      connectPolkadot(POLKADOT_WALLET.extensionName);
+      connectPolkadot(POLKADOT_WALLET);
     } else {
       window.open(POLKADOT_WALLET.installUrl);
     }
@@ -28,12 +38,30 @@ export const PolkaWalletsPopup = ({
 
   const onTalismanConnect = useCallback(() => {
     if (isTalismanInstalled) {
-      connectPolkadot(TALISMAN_WALLET.extensionName);
+      connectPolkadot(TALISMAN_WALLET);
     } else {
       window.open(TALISMAN_WALLET.installUrl);
     }
     onClose();
   }, [connectPolkadot, isTalismanInstalled, onClose]);
+
+  const onSubwalletConnect = useCallback(() => {
+    if (isSubwalletInstalled) {
+      connectPolkadot(SUB_WALLET);
+    } else {
+      window.open(SUB_WALLET.installUrl);
+    }
+    onClose();
+  }, [connectPolkadot, isSubwalletInstalled, onClose]);
+
+  const onCloverConnect = useCallback(() => {
+    if (isCloverInstalled) {
+      connectPolkadot(CLOVER_WALLET);
+    } else {
+      window.open(CLOVER_WALLET.installUrl);
+    }
+    onClose();
+  }, [connectPolkadot, isCloverInstalled, onClose]);
 
   return (
     <WalletsPopup
@@ -52,14 +80,14 @@ export const PolkaWalletsPopup = ({
         onClick={onTalismanConnect}
       />
       <WalletPopupItem
-        isComingSoon
-        text="Subwallet"
-        icon="/images/subwallet_icon.png"
+        text={isSubwalletInstalled ? 'Subwallet' : 'Install Subwallet'}
+        icon="/images/subwallet_icon.svg"
+        onClick={onSubwalletConnect}
       />
       <WalletPopupItem
-        isComingSoon
-        text="Clover"
+        text={isCloverInstalled ? 'Clover' : 'Install Clover'}
         icon="/images/clover_icon.svg"
+        onClick={onCloverConnect}
       />
     </WalletsPopup>
   );

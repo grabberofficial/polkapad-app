@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Button } from '@/components/Button';
-import { ConnectWalletButton } from '@/components/ConnectWalletButton/ConnectWalletButton';
+import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
 import { PROFILE_ROUTE, REGISTER_ROUTE } from '@/constants/routes';
 
 export const getBnbSteps = (isLoggedIn: boolean) => [
@@ -25,7 +25,7 @@ export const getBnbSteps = (isLoggedIn: boolean) => [
   {
     title: 'Withdraw funds to BNB Smart Chain or verified ETH/BNB address',
     text: `Don’t forget to set a reminder to come to the sale.`,
-    button: <ConnectWalletButton />,
+    button: <BSCWalletButton />,
   },
   {
     title: 'Register on the Polkapad sale',
