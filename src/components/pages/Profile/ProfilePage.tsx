@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import {
   Accordion,
   AccordionButton,
@@ -18,7 +18,7 @@ import {
 import { useRouter } from 'next/router';
 import { Footer, FooterWrapper } from '@/components/footer';
 
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { SupportButton } from '@/components/pages/Profile/components/KYCTab/components/SupportButton/SupportButton';
 import { IoIosArrowForward } from 'react-icons/io';
 import { sendMetricsSuccessKYC } from '@/services/metrics';

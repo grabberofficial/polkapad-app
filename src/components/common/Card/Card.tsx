@@ -14,9 +14,9 @@ import {
 import { BsTwitter } from 'react-icons/bs';
 import { FaDiscord, FaTelegramPlane } from 'react-icons/fa';
 
-import web from '../../assets/web.svg';
-import some_other_social from '../../assets/some_other_social.svg';
-import github from '../../assets/github.svg';
+import web from '../../../assets/web.svg';
+import some_other_social from '../../../assets/some_other_social.svg';
+import github from '../../../assets/github.svg';
 import { Button } from '../Button';
 
 // size

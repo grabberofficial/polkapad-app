@@ -1,5 +1,5 @@
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { sessionOptions } from '@/lib/session';
+import { sessionOptions } from '@/constants/session';
 import { NextApiRequest, NextApiResponse } from 'next';
 // import { withSentry } from '@sentry/nextjs';
 // import type { User } from 'pages/api/user';

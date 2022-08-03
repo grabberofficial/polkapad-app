@@ -4,7 +4,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import keyring from '@polkadot/ui-keyring';
 import { formatEther } from 'ethers/lib/utils';
 
-import { UserContext } from '../providers/userContext';
+import { UserContext } from './userContext';
 import { sendMetricsStartedConnectionPolkadot } from '@/services/metrics';
 
 const POLKA_CONNECT_KEY = 'shouldConnectPolka';

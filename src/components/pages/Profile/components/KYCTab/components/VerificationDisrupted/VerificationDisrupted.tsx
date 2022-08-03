@@ -1,6 +1,6 @@
 import { Text } from '@chakra-ui/react';
 import React, { useCallback, useState } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 
 interface VerificationDisruptedProps {
   onButtonClick: () => void;

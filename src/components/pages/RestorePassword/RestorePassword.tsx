@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import {
   FormControl,
   FormLabel,
@@ -17,13 +17,13 @@ import { MdEmail } from 'react-icons/md';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/services/fetchJson';
 import { useCallback, useState } from 'react';
-import { FormInput } from '@/components/FormInput/FormInput';
-import { ExceptionTypeEnum } from '@/lib/constants';
+import { FormInput } from '@/components/common/FormInput/FormInput';
 import { serviceUrl } from '@/config/env';
 import { RestorePasswordPageSchema } from '@/components/pages/RestorePassword/RestorePasswordPage.schema';
 import { LOGIN_ROUTE } from '@/constants/routes';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 interface IFormInput {
   email: string;

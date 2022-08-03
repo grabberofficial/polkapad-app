@@ -5,7 +5,7 @@ export interface WalletMeta {
 }
 
 export const POLKADOT_WALLET: WalletMeta = {
-  title: 'Polkadot.js',
+  title: 'Polkadot{.js}',
   extensionName: 'polkadot-js',
   installUrl: 'https://polkadot.js.org/extension/',
 };

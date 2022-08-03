@@ -1,8 +1,8 @@
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { Box, Flex, Icon, Text } from '@chakra-ui/react';
 import { FaInfoCircle } from 'react-icons/fa';
-import { Button } from '@/components/Button';
-import useUser from '@/lib/hooks/useUser';
+import { Button } from '@/components/common/Button';
+import useUser from '@/hooks/useUser';
 import { useMemo } from 'react';
 import { LOCKED_AMOUNTS } from '@/components/pages/Locker/components/LockedAmounts/LockedAmounts.constants';
 

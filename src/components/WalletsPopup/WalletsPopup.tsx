@@ -7,10 +7,10 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import styled from '@emotion/styled';
-import { isProduction } from '@/shared/utils/general';
+import { isProduction } from '@/utils/general';
 
 interface WalletsPopupProps {
   title: string;

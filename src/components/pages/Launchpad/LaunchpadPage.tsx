@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { prop } from 'styled-tools';
 import styled from '@emotion/styled';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { Flex, Text, Image } from '@chakra-ui/react';
 import { Footer, FooterWrapper } from '@/components/footer';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import Link from 'next/link';
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import { EmailSubscribeModal } from '@/components/EmailSubscribeModal/EmailSubscribeModal';
 import {
   LOCKER_ROUTE,

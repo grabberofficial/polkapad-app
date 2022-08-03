@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import {
   FormControl,
   FormLabel,
@@ -16,15 +16,15 @@ import Link from 'next/link';
 import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/services/fetchJson';
 import { useCallback, useState } from 'react';
-import { FormInput } from '@/components/FormInput/FormInput';
+import { FormInput } from '@/components/common/FormInput/FormInput';
 import { RiLock2Fill } from 'react-icons/ri';
 import { useRouter } from 'next/router';
-import { ExceptionTypeEnum } from '@/lib/constants';
 import { serviceUrl } from '@/config/env';
 import { PasswordResetPageSchema } from '@/components/pages/PasswordReset/PasswordResetPage.schema';
 import { LOGIN_ROUTE } from '@/constants/routes';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 interface IFormInput {
   newPassword: string;

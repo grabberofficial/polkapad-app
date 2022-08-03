@@ -11,9 +11,9 @@ import {
   googleAnalyticsId,
 } from '@/config/env';
 import { MainLayout } from '@/layouts';
-import fetchJson from '@/lib/fetchJson';
-import Providers from '@/shared/providers';
-import { checkIsIOS } from '@/shared/utils/checkIsIOS';
+import fetchJson from '@/services/fetchJson';
+import Providers from '@/providers';
+import { checkIsIOS } from '@/utils/checkIsIOS';
 
 const meta = {
   title: 'Polkapad - HMC Launchpad',

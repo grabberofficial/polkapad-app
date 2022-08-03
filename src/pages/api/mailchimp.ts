@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson from '@/services/fetchJson';
 import MD5 from 'crypto-js/md5';
 import { mailchimpId } from '@/config/env';
 

@@ -1,7 +1,7 @@
 import { Flex, Text } from '@chakra-ui/react';
 import { InfoIcon } from '@/components/icons/Info';
-import { Spacer } from '@/modules/index/Spacer';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
+import styled from '@emotion/styled';
 
 export const YourStats = () => (
   <Flex flexDirection="column">
@@ -122,3 +122,9 @@ export const YourStats = () => (
     </Flex>
   </Flex>
 );
+
+export const Spacer = styled.div`
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px dashed #e0e0e0;
+`;

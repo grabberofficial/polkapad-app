@@ -7,7 +7,6 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { useBalances } from '@talismn/api-react-hooks';
 import {
   Injected,
   InjectedWindow,
@@ -21,6 +20,7 @@ import {
   WalletMeta,
 } from '@/constants/wallets';
 import { CONNECTED_POLKA_WALLET_KEY } from '@/constants/localStorage';
+import { useBalances } from '@talismn/api-react-hooks';
 
 export type Account = {
   name?: string;
@@ -30,6 +30,7 @@ export type Account = {
 
 const DAPP_NAME = 'Polkapad';
 const POLKA_CHAIN_ID = '0';
+// const KUSAMA_CHAIN_ID = '2';
 const CHAIN_IDS = [POLKA_CHAIN_ID];
 
 type PolkadotExtensionContextType = {
@@ -76,11 +77,11 @@ export const PolkadotExtensionProvider = (props: any) => {
   const isConnected = !!accounts.length;
   const connectedWallet = getConnectedWallet();
 
-  const address = useMemo(() => accounts[POLKA_CHAIN_ID]?.address, [accounts]);
+  const address = useMemo(() => accounts[0]?.address, [accounts]);
   const { balances } = useBalances([address], CHAIN_IDS);
   const dotBalance = useMemo(() => {
-    return balances[0]?.free;
-  }, [balances]);
+    return balances.find((balance) => balance?.address === address)?.free;
+  }, [address, balances]);
 
   const isPolkadotInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[POLKADOT_WALLET.extensionName];

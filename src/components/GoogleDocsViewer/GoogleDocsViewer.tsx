@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/modal';
 import { Flex, Modal, Spinner } from '@chakra-ui/react';
 
-import { Button } from '../Button';
+import { Button } from '../common/Button';
 
 interface GoogleDocsViewerProps {
   title: string;

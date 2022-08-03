@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/modal';
 import { Flex, Image, Text } from '@chakra-ui/react';
 import React from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import styled from '@emotion/styled';
 import walletNetworkIcon from '@/assets/wallet_network.svg';

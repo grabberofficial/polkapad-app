@@ -6,22 +6,21 @@ import { BiHide, BiShow } from 'react-icons/bi';
 import { FaUser } from 'react-icons/fa';
 import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
-import { Button } from '@/components/Button';
-import { FormInput } from '@/components/FormInput/FormInput';
+import { Button } from '@/components/common/Button';
+import { FormInput } from '@/components/common/FormInput/FormInput';
 import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
 import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
-import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
+import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
 import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
-import { ExceptionTypeEnum } from '@/lib/constants';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
-import useUser from '@/lib/hooks/useUser';
+import fetchJson, { FetchError } from '@/services/fetchJson';
+import useUser from '@/hooks/useUser';
 import { User } from '@/pages/api/user';
 import {
   sendMetricsCreateAccount,
   sendMetricsCreateAccountWaitList,
 } from '@/services/metrics';
-import { isProduction } from '@/shared/utils/general';
+import { isProduction } from '@/utils/general';
 import {
   Flex,
   FormControl,
@@ -36,6 +35,7 @@ import {
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 export interface SignupFormInput {
   name: string;

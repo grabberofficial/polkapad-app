@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { css, Global } from '@emotion/react';
 import { Footer } from '@/components/footer';
 import { FAQStaking } from '@/components/pages/Staking/components/FAQ/FAQStaking';

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Flex, Image, Link, Modal, Text } from '@chakra-ui/react';
 import toast from 'react-hot-toast';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import {
   ModalBody,
   ModalCloseButton,
@@ -14,11 +14,11 @@ import nationalIdIcon from '@/assets/national_id.svg';
 import copyIcon from '@/assets/copy_icon.svg';
 import externalLinkIcon from '@/assets/external_link.svg';
 import historyIcon from '@/assets/history.svg';
-import { shortenPolkaAddress } from '@/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { BigNumber } from 'ethers';
-import { isProduction } from '@/shared/utils/general';
+import { isProduction } from '@/utils/general';
 import { BSC, BSCTestnet } from '@usedapp/core';
+import { shortenPolkaAddress } from '@/utils/wallets';
 
 interface WalletsInfoProps {
   isOpen: boolean;

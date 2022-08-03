@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react';
-import { Button } from '@/components/Button';
-import useUser from '@/lib/hooks/useUser';
+import { Button } from '@/components/common/Button';
+import useUser from '@/hooks/useUser';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';

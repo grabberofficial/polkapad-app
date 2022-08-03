@@ -1,6 +1,6 @@
 import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
 import { Input } from '@/components/Input/Input';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 
 export const StakePLPD = () => (
   <Grid

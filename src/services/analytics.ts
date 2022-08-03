@@ -1,5 +1,5 @@
 import ReactGA from 'react-ga4';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson from '@/services/fetchJson';
 import { API_ANALYTICS_ROUTE } from '@/constants/routes';
 
 export enum AnalyticsEventType {

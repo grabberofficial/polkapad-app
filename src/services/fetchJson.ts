@@ -1,4 +1,4 @@
-import { ExceptionTypeEnum } from './constants';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 export default async function fetchJson<JSON = unknown>(
   input: RequestInfo,

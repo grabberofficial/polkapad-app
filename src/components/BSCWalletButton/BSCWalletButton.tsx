@@ -1,18 +1,22 @@
 import { useCallback, useEffect } from 'react';
-import { formatEther } from 'ethers/lib/utils';
 import bscIcon from '@/assets/bsc_icon.svg';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
-import { Loader } from '@/components/Loader/Loader';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { isProduction } from '@/shared/utils/general';
+import { Loader } from '@/components/common/Loader/Loader';
+import { useConnectBSC } from '@/hooks/useConnectBSC';
+import { isProduction } from '@/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { Flex, Image } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
 import { ChangeWalletConnectNetwork } from '@/components/BSCWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
 import { BSCWalletsPopup } from '@/components/BSCWalletButton/components/BSCWalletsPopup/BSCWalletsPopup';
+import { formatEtherBalance } from '@/utils/wallets';
 
-export const BSCWalletButton = () => {
+interface BSCWalletButtonProps {
+  isVerify?: boolean;
+}
+
+export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
   const {
     isOpen: isPopupOpen,
     onOpen: onPopupOpen,
@@ -38,12 +42,12 @@ export const BSCWalletButton = () => {
     disconnectFromBSC,
     switchToBSC,
     walletName,
+    isLoading,
   } = useConnectBSC();
 
   const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
   const isWrongNetwork = chainId !== network;
-  const formattedBalance =
-    dotBalance && parseFloat(formatEther(dotBalance)).toFixed(3);
+  const formattedBalance = formatEtherBalance(dotBalance);
 
   const onDisconnect = useCallback(() => {
     disconnectFromBSC();
@@ -102,7 +106,7 @@ export const BSCWalletButton = () => {
           Wrong network
         </Button>
       )}
-      {!account && (
+      {!account && !isVerify && (
         <Button
           onClick={onPopupOpen}
           variant="secondary"
@@ -113,6 +117,16 @@ export const BSCWalletButton = () => {
           iconPlacement="left"
           padding="0 16px"
           icon={<Image src={bscIcon} alt="BSC" width="29px" height="29px" />}
+        >
+          Connect
+        </Button>
+      )}
+      {!account && isVerify && (
+        <Button
+          height="36px"
+          variant="primary"
+          onClick={onPopupOpen}
+          isLoading={isLoading}
         >
           Connect
         </Button>

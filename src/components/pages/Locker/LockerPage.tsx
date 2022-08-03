@@ -8,11 +8,11 @@ import {
   Tabs,
   Text,
 } from '@chakra-ui/react';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { css, Global } from '@emotion/react';
-import { TabList } from '@/components/Header/components/HeaderItems/HeaderItems.style';
+import { TabList } from '@/components/common/Header/components/HeaderItems/HeaderItems.style';
 import { Footer } from '@/components/footer';
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import {
   getBnbSteps,
   getKSMSteps,

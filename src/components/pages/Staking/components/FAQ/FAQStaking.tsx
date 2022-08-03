@@ -6,7 +6,7 @@ import {
   Box,
   Flex,
 } from '@chakra-ui/react';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { faq } from '@/components/pages/Staking/StakingPage.constants';
 import { AddIcon, MinusIcon } from '@chakra-ui/icons';
 

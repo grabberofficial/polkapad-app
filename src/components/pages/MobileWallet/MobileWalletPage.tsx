@@ -1,4 +1,4 @@
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Text } from '@chakra-ui/react';

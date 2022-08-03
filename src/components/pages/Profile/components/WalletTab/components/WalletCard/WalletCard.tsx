@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback, useState } from 'react';
+import React, { useContext, useEffect, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 import {
@@ -8,31 +8,23 @@ import {
   Link,
   Image,
   usePrevious,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalHeader,
-  ModalOverlay,
-  Button as ChakraButton,
 } from '@chakra-ui/react';
-import { Button } from '@/components/Button';
-import { UserContext } from '@/shared/providers/userContext';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
-import { useConnectBSC } from '@/shared/hooks/useConnectBSC';
-import { shortenPolkaAddress } from '@/lib/utils';
-import { useSubstrate } from '@/shared/providers/substrate';
+import { Button } from '@/components/common/Button';
+import { UserContext } from '@/providers/userContext';
+import fetchJson, { FetchError } from '@/services/fetchJson';
+import { useConnectBSC } from '@/hooks/useConnectBSC';
 import { serviceUrl } from '@/config/env';
-import { ChainId } from '@usedapp/core';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { sendMetricsWalletAdded } from '@/services/metrics';
 import { MOBILE_WALLET_ROUTE } from '@/constants/routes';
 import bscIcon from '@/assets/bsc_icon.svg';
-
-const StyledButton = styled(ChakraButton)`
-  color: #49c7da;
-`;
+import { shortenPolkaAddress } from '@/utils/wallets';
+import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
+import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaWalletButton';
+import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
+import { isProduction } from '@/utils/general';
+import { ChainId } from '@usedapp/core';
 
 const WalletCard: React.FC<{
   type?: string;
@@ -41,27 +33,25 @@ const WalletCard: React.FC<{
 }> = ({ type = 'eth', wallets, verifyCallback }) => {
   const userContext = useContext(UserContext);
 
+  const [isLoading, setIsLoading] = React.useState(false);
   const [verified, setVerified] = React.useState(false);
   const [walletConnected, setWalletConnected] = React.useState(false);
   const [walletAddress, setWalletAddress] = React.useState('');
   const previousAddress = usePrevious(walletAddress);
   const [error, setError] = React.useState('');
-  const [modalOpen, setModalOpen] = useState(false);
   const isMobile = useIsMobile();
   const router = useRouter();
-
-  const toggleModal = useCallback(() => {
-    setModalOpen((isOpen) => !isOpen);
-  }, []);
-
-  const { connectToBSC, chainId, switchToBSC } = useConnectBSC();
   const {
-    canUseWallet,
-    account: polkaAccount,
-    connectToPolka,
-  } = useSubstrate();
+    account: bscAddress,
+    chainId,
+    isLoading: isBSCLoading,
+    switchToBSC,
+  } = useConnectBSC();
+  const { address: polkaAddress, isLoading: isPolkaLoading } =
+    usePolkadotExtension();
 
-  const isWrongNetwork = type === 'eth' && chainId !== ChainId.BSC;
+  const network = isProduction ? ChainId.BSC : ChainId.BSCTestnet;
+  const isWrongNetwork = type === 'eth' && chainId !== network;
 
   useEffect(() => {
     if (wallets.length !== 0) {
@@ -73,62 +63,31 @@ const WalletCard: React.FC<{
 
   useEffect(() => {
     if (type === 'eth') {
-      setWalletConnected(!!userContext.bsc?.address);
-      if (userContext.bsc?.address) {
-        setWalletAddress(userContext.bsc?.address);
+      setWalletConnected(!!bscAddress);
+      if (bscAddress) {
+        setWalletAddress(bscAddress);
       }
     }
-    if (type === 'polka' && canUseWallet) {
-      setWalletConnected(!!polkaAccount);
-      if (polkaAccount) {
-        setWalletAddress(polkaAccount);
+    if (type === 'polka') {
+      setWalletConnected(!!polkaAddress);
+      if (polkaAddress) {
+        setWalletAddress(polkaAddress);
       }
     }
-  }, [type, polkaAccount, userContext.bsc?.address, canUseWallet]);
-
-  const connectWallet = useCallback(async () => {
-    if (isMobile) {
-      router.push(MOBILE_WALLET_ROUTE);
-      return;
-    }
-
-    if (type === 'eth') {
-      await connectToBSC();
-    }
-    if (
-      type === 'polka' &&
-      connectToPolka &&
-      typeof connectToPolka === 'function'
-    ) {
-      if (!canUseWallet) {
-        toggleModal();
-        return;
-      } else {
-        await connectToPolka();
-      }
-    }
-    setWalletConnected(true);
-  }, [
-    isMobile,
-    type,
-    connectToPolka,
-    router,
-    connectToBSC,
-    canUseWallet,
-    toggleModal,
-  ]);
+  }, [type, bscAddress, polkaAddress]);
 
   const verifyWallet = useCallback(async () => {
     let address;
     if (type === 'eth') {
-      address = userContext.bsc?.address;
+      address = bscAddress;
     }
     if (type === 'polka') {
-      address = userContext.polka?.address ?? polkaAccount;
+      address = polkaAddress;
     }
     if (walletAddress) address = walletAddress;
 
     try {
+      setIsLoading(true);
       await fetchJson(
         `https://${serviceUrl}/wallets`,
         {
@@ -141,14 +100,29 @@ const WalletCard: React.FC<{
         userContext.user?.token,
       );
       setVerified(true);
+      setIsLoading(false);
       setWalletAddress(walletAddress);
       sendMetricsWalletAdded();
       verifyCallback();
     } catch (e) {
       const typedError = e as FetchError;
       setError(typedError.data.message);
+      setIsLoading(false);
     }
-  }, [type, userContext, walletAddress, verifyCallback, polkaAccount]);
+  }, [
+    type,
+    walletAddress,
+    bscAddress,
+    polkaAddress,
+    userContext.user?.token,
+    verifyCallback,
+  ]);
+
+  const connectMobileWallet = useCallback(() => {
+    if (isMobile) {
+      router.push(MOBILE_WALLET_ROUTE);
+    }
+  }, [isMobile, router]);
 
   useEffect(() => {
     if (walletAddress !== previousAddress) {
@@ -218,23 +192,42 @@ const WalletCard: React.FC<{
             {((verified && walletAddress) || (!verified && walletConnected)) &&
               shortenPolkaAddress(walletAddress)}
             {!verified && !walletConnected && networkText}
-            {!verified && walletConnected && isWrongNetwork && 'Wrong network'}
           </WalletText>
         </Flex>
         <Flex>
-          {!walletConnected && !verified && (
-            <Button height="36px" variant="primary" onClick={connectWallet}>
+          {!walletConnected && !verified && !isMobile && type === 'eth' && (
+            <BSCWalletButton isVerify />
+          )}
+          {!walletConnected && !verified && !isMobile && type === 'polka' && (
+            <PolkadotWalletButton isVerify />
+          )}
+          {!walletConnected && !verified && isMobile && (
+            <Button
+              height="36px"
+              variant="primary"
+              onClick={connectMobileWallet}
+            >
               Connect
             </Button>
           )}
           {!verified && walletConnected && !isWrongNetwork && (
-            <Button height="36px" variant="primary" onClick={verifyWallet}>
+            <Button
+              height="36px"
+              variant="primary"
+              onClick={verifyWallet}
+              isLoading={isLoading || isPolkaLoading || isBSCLoading}
+            >
               Verify
             </Button>
           )}
           {!verified && walletConnected && isWrongNetwork && (
-            <Button height="36px" variant="primary" onClick={switchToBSC}>
-              Switch
+            <Button
+              height="36px"
+              variant="primary"
+              onClick={switchToBSC}
+              isLoading={isLoading || isPolkaLoading || isBSCLoading}
+            >
+              Switch network
             </Button>
           )}
           {verified && (
@@ -280,57 +273,6 @@ const WalletCard: React.FC<{
       >
         Get wallet
       </Link>
-      <Modal isOpen={modalOpen} onClose={toggleModal}>
-        <ModalOverlay />
-        <ModalContent width="80%">
-          <ModalHeader>Haven’t got a Polkadot.js yet?</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            You&apos;ll need to{' '}
-            <StyledButton
-              variant="link"
-              as="a"
-              target="_blank"
-              href="https://polkadot.js.org/extension/"
-            >
-              install Polkadot.js
-            </StyledButton>{' '}
-            to continue. Once you have it installed, go ahead and refresh this
-            page
-            <br />
-            <br />
-            Polkadot extension was not found or is disabled. If you have
-            polkadot.js but it doesn&apos;t work try this:
-            <br />
-            <br />
-            <ol style={{ padding: '0 24px 24px' }}>
-              <li>Reload this page. </li>
-              <li>
-                Check that you use the latest version of Chrome or Firefox.{' '}
-              </li>
-              <li>
-                If you reject polkadot.js connection go polkadot.js extension in
-                your browser, press gear button and check Manage Website Access.
-                App.Polkapad.network should be allowed to use Polkapad
-                launchpad.{' '}
-              </li>
-              <li>
-                How to troubleshoot other connection issues on polkadot.js{' '}
-                {'->'}{' '}
-                <StyledButton
-                  variant="link"
-                  as="a"
-                  target="_blank"
-                  href="https://support.polkadot.network/support/solutions/articles/65000176918-how-to-troubleshoot-connection-issues-on-polkadot-js"
-                >
-                  Polkadot support webpage
-                </StyledButton>
-                .
-              </li>
-            </ol>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </Flex>
   );
 };

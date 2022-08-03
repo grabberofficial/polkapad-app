@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { WalletPopupItem } from '@/components/WalletsPopup/components/WalletPopupItem';
-import { usePolkadotExtension } from '@/shared/hooks/usePolkadotExtension';
+import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
 import {
   CLOVER_WALLET,
   POLKADOT_WALLET,
@@ -70,7 +70,7 @@ export const PolkaWalletsPopup = ({
       onClose={onClose}
     >
       <WalletPopupItem
-        text={isPolkadotInstalled ? 'Polkadot.js' : 'Install Polkadot.js'}
+        text={isPolkadotInstalled ? 'Polkadot{.js}' : 'Install Polkadot{.js}'}
         icon="/images/polka_icon.svg"
         onClick={onPolkaConnect}
       />
@@ -86,7 +86,7 @@ export const PolkaWalletsPopup = ({
       />
       <WalletPopupItem
         text={isCloverInstalled ? 'Clover' : 'Install Clover'}
-        icon="/images/clover_icon.svg"
+        icon="/images/clv_icon.svg"
         onClick={onCloverConnect}
       />
     </WalletsPopup>

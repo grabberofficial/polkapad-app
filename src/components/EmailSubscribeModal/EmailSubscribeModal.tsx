@@ -17,14 +17,14 @@ import {
   ModalHeader,
   ModalOverlay,
 } from '@chakra-ui/modal';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { useCallback, useState } from 'react';
 import { object, string } from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { mailchimpSendEmailSubscription } from '@/services/mailchimp';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MdEmail } from 'react-icons/md';
-import { FormInput } from '../FormInput/FormInput';
+import { FormInput } from '../common/FormInput/FormInput';
 
 interface EmailSubscribeModalProps {
   control: React.FC<{ onClick: () => void }>;

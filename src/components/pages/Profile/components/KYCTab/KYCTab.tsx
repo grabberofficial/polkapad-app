@@ -1,14 +1,14 @@
 import { Flex, Image, Text } from '@chakra-ui/react';
 import successful_kyc from '@/assets/successful_kyc.svg';
-import { Button } from '@/components/Button';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Button } from '@/components/common/Button';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { VerificationInProgress } from '@/components/pages/Profile/components/KYCTab/components/VerificationInProgress/VerificationInProgress';
 import { KycIcons } from '@/components/pages/Profile/components/KYCTab/components/KycIcons/KycIcons';
 import { VerificationDisrupted } from '@/components/pages/Profile/components/KYCTab/components/VerificationDisrupted/VerificationDisrupted';
 import React, { useCallback, useContext } from 'react';
 import { KycStatusTypes } from '@/pages/api/kycStatus';
 import { sendMetricsStartKYC } from '@/services/metrics';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
 import { useRouter } from 'next/router';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
