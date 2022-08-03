@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import {
   useWallets,
   WalletsType,

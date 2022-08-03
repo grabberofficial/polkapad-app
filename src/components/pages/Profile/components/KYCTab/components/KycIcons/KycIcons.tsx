@@ -2,7 +2,7 @@ import { Flex, Image, Text } from '@chakra-ui/react';
 import nationalIdIcon from '@/assets/national_id.svg';
 import passportIcon from '@/assets/passport.svg';
 import drivingLicenseIcon from '@/assets/driving_license.svg';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface KycIconsProps {
   direction?: 'column' | 'row';

@@ -1,4 +1,4 @@
-import fetchJson from '@/lib/fetchJson';
+import fetchJson from '@/services/fetchJson';
 import { API_MAILCHIMP_ROUTE } from '@/constants/routes';
 
 export enum MAILCHIMP_INTERESTS {

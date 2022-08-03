@@ -3,7 +3,7 @@ import supportIcon from '@/assets/support.svg';
 import React from 'react';
 import styled from '@emotion/styled';
 import { Button as ChakraButton } from '@chakra-ui/button';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 export const SupportButton = () => {
   const isMobile = useIsMobile();

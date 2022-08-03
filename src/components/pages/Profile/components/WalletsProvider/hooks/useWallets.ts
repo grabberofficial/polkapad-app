@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson from '@/services/fetchJson';
 import { serviceUrl } from '@/config/env';
 import { User } from '@/pages/api/user';
 

@@ -1,4 +1,4 @@
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import { useMemo } from 'react';
 
 import { Header as HeaderComponent } from './Header';

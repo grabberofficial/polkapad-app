@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { WalletPopupItem } from '@/components/WalletsPopup/components/WalletPopupItem';
-import { BSCProvider, useConnectBSC } from '@/shared/hooks/useConnectBSC';
+import { BSCProvider, useConnectBSC } from '@/hooks/useConnectBSC';
 
 interface BSCWalletsPopupProps {
   isOpen: boolean;

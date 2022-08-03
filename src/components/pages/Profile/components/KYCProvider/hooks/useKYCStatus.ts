@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { KYCStatus, KycStatusTypes } from '@/pages/api/kycStatus';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson from '@/services/fetchJson';
 import { User } from '@/pages/api/user';
 import { API_KYC_STATUS_ROUTE } from '@/constants/routes';
 

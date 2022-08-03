@@ -7,9 +7,8 @@ import { BiHide, BiShow } from 'react-icons/bi';
 
 import { Button } from '@/components/Button';
 import { FormInput } from '@/components/FormInput/FormInput';
-import { ExceptionTypeEnum } from '@/lib/constants';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
-import useUser from '@/lib/hooks/useUser';
+import fetchJson, { FetchError } from '@/services/fetchJson';
+import useUser from '@/hooks/useUser';
 import {
   FormControl,
   FormErrorMessage,
@@ -24,7 +23,7 @@ import {
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { LoginPageSchema } from '@/components/pages/Login/LoginPage.schema';
 import { EMAIL_ERROR_TYPES } from '@/components/pages/Login/LoginPage.constants';
@@ -35,6 +34,7 @@ import {
   RESTORE_PASSWORD_ROUTE,
   SEND_CODE_ROUTE,
 } from '@/constants/routes';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 // TODO: server-side redirect from login page if user is already logged in
 

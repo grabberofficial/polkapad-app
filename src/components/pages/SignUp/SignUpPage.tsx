@@ -13,15 +13,14 @@ import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbo
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
 import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
 import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
-import { ExceptionTypeEnum } from '@/lib/constants';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
-import useUser from '@/lib/hooks/useUser';
+import fetchJson, { FetchError } from '@/services/fetchJson';
+import useUser from '@/hooks/useUser';
 import { User } from '@/pages/api/user';
 import {
   sendMetricsCreateAccount,
   sendMetricsCreateAccountWaitList,
 } from '@/services/metrics';
-import { isProduction } from '@/shared/utils/general';
+import { isProduction } from '@/utils/general';
 import {
   Flex,
   FormControl,
@@ -36,6 +35,7 @@ import {
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 export interface SignupFormInput {
   name: string;

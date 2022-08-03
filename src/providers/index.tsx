@@ -3,8 +3,8 @@ import { ReactNode, useEffect, useState } from 'react';
 import ThemeProvider from './theme';
 import DAppProvider from './dApp';
 import { UserContext, UserContextType } from './userContext';
-import useUser from '@/lib/hooks/useUser';
-import { PolkadotExtensionProvider } from '@/shared/hooks/usePolkadotExtension';
+import useUser from '@/hooks/useUser';
+import { PolkadotExtensionProvider } from '@/hooks/usePolkadotExtension';
 
 interface ProviderProps {
   children: ReactNode;

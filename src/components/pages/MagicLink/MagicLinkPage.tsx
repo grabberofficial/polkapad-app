@@ -1,5 +1,4 @@
-import { ExceptionTypeEnum } from '@/lib/constants';
-import fetchJson, { FetchError } from '@/lib/fetchJson';
+import fetchJson, { FetchError } from '@/services/fetchJson';
 import { Grid, Text, Icon, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
@@ -12,6 +11,7 @@ import {
   API_USER_ROUTE,
   PROFILE_ROUTE,
 } from '@/constants/routes';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 export const MagicLinkPage = () => {
   const router = useRouter();

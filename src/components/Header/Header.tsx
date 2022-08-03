@@ -9,19 +9,19 @@ import { RightContainer } from './Header.style';
 import Link from 'next/link';
 import { HeaderItem } from './components/HeaderItems/HeaderItem';
 
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 
 import { Icon, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 
 import { Button } from '../Button';
-import fetchJson from '@/lib/fetchJson';
+import fetchJson from '@/services/fetchJson';
 
 import { FaUserAlt } from 'react-icons/fa';
 
 import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
-import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaConnectButton';
+import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaWalletButton';
 import {
   HOME_ROUTE,
   KYC_ROUTE,

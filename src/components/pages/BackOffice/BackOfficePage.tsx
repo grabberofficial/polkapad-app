@@ -13,7 +13,7 @@ import {
   remove,
   setPlpdPrice,
 } from '@/services/contracts';
-import { isProduction } from '@/shared/utils/general';
+import { isProduction } from '@/utils/general';
 import {
   Divider,
   Flex,

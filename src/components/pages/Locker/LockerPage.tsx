@@ -12,7 +12,7 @@ import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline'
 import { css, Global } from '@emotion/react';
 import { TabList } from '@/components/Header/components/HeaderItems/HeaderItems.style';
 import { Footer } from '@/components/footer';
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import {
   getBnbSteps,
   getKSMSteps,

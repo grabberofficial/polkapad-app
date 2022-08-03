@@ -8,7 +8,7 @@ import { VerificationDisrupted } from '@/components/pages/Profile/components/KYC
 import React, { useCallback, useContext } from 'react';
 import { KycStatusTypes } from '@/pages/api/kycStatus';
 import { sendMetricsStartKYC } from '@/services/metrics';
-import { useIsMobile } from '@/shared/hooks/useIsMobile';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
 import { useRouter } from 'next/router';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';

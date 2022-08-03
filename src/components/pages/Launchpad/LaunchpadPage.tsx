@@ -6,7 +6,7 @@ import { Flex, Text, Image } from '@chakra-ui/react';
 import { Footer, FooterWrapper } from '@/components/footer';
 import { Button } from '@/components/Button';
 import Link from 'next/link';
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import { EmailSubscribeModal } from '@/components/EmailSubscribeModal/EmailSubscribeModal';
 import {
   LOCKER_ROUTE,

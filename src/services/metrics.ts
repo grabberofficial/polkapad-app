@@ -7,7 +7,7 @@ import {
   analyticsSendSuccessKyc,
   analyticsSendWalletAdded,
 } from '@/services/analytics';
-import { isProduction } from '@/shared/utils/general';
+import { isProduction } from '@/utils/general';
 
 export const sendMetricsCreateAccount = () => {
   if (isProduction) {

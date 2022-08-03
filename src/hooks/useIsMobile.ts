@@ -1,4 +1,4 @@
-import { useWithWidth } from '@/shared/hooks/useWithWidth';
+import { useWithWidth } from '@/hooks/useWithWidth';
 
 export const useIsMobile = () => {
   const [width] = useWithWidth();

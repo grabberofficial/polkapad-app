@@ -1,6 +1,6 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { useKYCStatus } from '@/components/pages/Profile/components/KYCProvider/hooks/useKYCStatus';
-import useUser from '@/lib/hooks/useUser';
+import useUser from '@/hooks/useUser';
 import { KycStatusTypes } from '@/pages/api/kycStatus';
 import { LOGIN_ROUTE } from '@/constants/routes';
 

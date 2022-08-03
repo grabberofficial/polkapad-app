@@ -9,7 +9,7 @@ import {
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { Balance, UserContext } from '../providers/userContext';
+import { Balance, UserContext } from '@/providers/userContext';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { sendMetricsStartedConnectionBinance } from '@/services/metrics';
 import {
@@ -30,6 +30,7 @@ export const useConnectBSC = () => {
     chainId,
     deactivate: disconnectBSC,
     library,
+    isLoading,
   } = useEthers();
 
   const connected = !!chainId;
@@ -153,5 +154,6 @@ export const useConnectBSC = () => {
     switchToBSC,
     walletName,
     isMetamask,
+    isLoading,
   };
 };
