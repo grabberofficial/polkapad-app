@@ -1,8 +1,8 @@
 import { useCallback, useEffect } from 'react';
 import bscIcon from '@/assets/bsc_icon.svg';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
-import { Loader } from '@/components/Loader/Loader';
+import { Loader } from '@/components/common/Loader/Loader';
 import { useConnectBSC } from '@/hooks/useConnectBSC';
 import { isProduction } from '@/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';

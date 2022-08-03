@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { formatEther } from 'ethers/lib/utils';
 import { useRouter } from 'next/router';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { HOME_ROUTE } from '@/constants/routes';
 import {
   add,

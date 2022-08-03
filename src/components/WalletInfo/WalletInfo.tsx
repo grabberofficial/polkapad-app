@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import { Flex, Image, Link, Modal, Text } from '@chakra-ui/react';
 import toast from 'react-hot-toast';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import {
   ModalBody,
   ModalCloseButton,

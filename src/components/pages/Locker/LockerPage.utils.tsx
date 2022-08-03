@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
 import { PROFILE_ROUTE, REGISTER_ROUTE } from '@/constants/routes';
 

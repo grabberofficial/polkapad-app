@@ -1,4 +1,4 @@
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import {
   FormControl,
   FormLabel,
@@ -19,7 +19,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fetchJson, { FetchError } from '@/services/fetchJson';
 import { useCallback, useState } from 'react';
-import { FormInput } from '@/components/FormInput/FormInput';
+import { FormInput } from '@/components/common/FormInput/FormInput';
 import { serviceUrl } from '@/config/env';
 import { RestorePasswordPageSchema } from '@/components/pages/RestorePassword/RestorePasswordPage.schema';
 import { LOGIN_ROUTE } from '@/constants/routes';

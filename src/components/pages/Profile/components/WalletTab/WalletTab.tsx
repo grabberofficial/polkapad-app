@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import useUser from '@/hooks/useUser';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';

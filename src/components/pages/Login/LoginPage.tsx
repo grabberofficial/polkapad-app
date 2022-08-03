@@ -5,8 +5,8 @@ import { MdEmail } from 'react-icons/md';
 import { RiLock2Fill } from 'react-icons/ri';
 import { BiHide, BiShow } from 'react-icons/bi';
 
-import { Button } from '@/components/Button';
-import { FormInput } from '@/components/FormInput/FormInput';
+import { Button } from '@/components/common/Button';
+import { FormInput } from '@/components/common/FormInput/FormInput';
 import fetchJson, { FetchError } from '@/services/fetchJson';
 import useUser from '@/hooks/useUser';
 import {
@@ -22,7 +22,7 @@ import {
   Spinner,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { PasswordButton } from '@/components/PasswordButton/PasswordButton';
+import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { LoginPageSchema } from '@/components/pages/Login/LoginPage.schema';

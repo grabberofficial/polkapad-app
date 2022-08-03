@@ -1,4 +1,4 @@
-import { Checkbox } from '@/components/Checkbox/Checkbox';
+import { Checkbox } from '@/components/common/Checkbox/Checkbox';
 import { Flex, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
 import { Control, FieldErrors } from 'react-hook-form';
 import { SignupFormInput } from '@/components/pages/SignUp/SignUpPage';

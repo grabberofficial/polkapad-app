@@ -1,7 +1,7 @@
 import { Flex, Image, Text } from '@chakra-ui/react';
 import successful_kyc from '@/assets/successful_kyc.svg';
-import { Button } from '@/components/Button';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Button } from '@/components/common/Button';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { VerificationInProgress } from '@/components/pages/Profile/components/KYCTab/components/VerificationInProgress/VerificationInProgress';
 import { KycIcons } from '@/components/pages/Profile/components/KYCTab/components/KycIcons/KycIcons';
 import { VerificationDisrupted } from '@/components/pages/Profile/components/KYCTab/components/VerificationDisrupted/VerificationDisrupted';

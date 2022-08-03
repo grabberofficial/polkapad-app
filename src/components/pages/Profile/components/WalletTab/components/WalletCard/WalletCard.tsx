@@ -9,7 +9,7 @@ import {
   Image,
   usePrevious,
 } from '@chakra-ui/react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { UserContext } from '@/providers/userContext';
 import fetchJson, { FetchError } from '@/services/fetchJson';
 import { useConnectBSC } from '@/hooks/useConnectBSC';

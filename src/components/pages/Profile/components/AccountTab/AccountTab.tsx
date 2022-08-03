@@ -7,14 +7,14 @@ import {
   InputLeftElement,
 } from '@chakra-ui/react';
 import { FaUser } from 'react-icons/fa';
-import { FormInput } from '@/components/FormInput/FormInput';
+import { FormInput } from '@/components/common/FormInput/FormInput';
 import { MdEmail } from 'react-icons/md';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { ProfilePageSchema } from '@/components/pages/Profile/ProfilePage.schema';
 import useUser from '@/hooks/useUser';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { LOGIN_ROUTE } from '@/constants/routes';
 
 interface IFormInput {

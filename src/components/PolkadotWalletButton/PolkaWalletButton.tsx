@@ -1,9 +1,9 @@
 import React, { memo, useCallback } from 'react';
-import { Button } from '@/components/Button';
+import { Button } from '@/components/common/Button';
 import { Image } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
-import { Loader } from '@/components/Loader/Loader';
+import { Loader } from '@/components/common/Loader/Loader';
 import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
 import { PolkaWalletsPopup } from '@/components/PolkadotWalletButton/components/PolkaWalletsPopup';
 import {

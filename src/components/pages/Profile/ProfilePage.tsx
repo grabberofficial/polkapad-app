@@ -1,5 +1,5 @@
 import React, { Fragment, useContext, useEffect, useState } from 'react';
-import { Heading } from '@/components/HeadingWithUnderline/HeadingWithUnderline';
+import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import {
   Accordion,
   AccordionButton,

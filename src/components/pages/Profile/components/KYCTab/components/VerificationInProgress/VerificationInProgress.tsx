@@ -1,5 +1,5 @@
 import { Flex, Text } from '@chakra-ui/react';
-import { Loader } from '@/components/Loader/Loader';
+import { Loader } from '@/components/common/Loader/Loader';
 
 export const VerificationInProgress = () => {
   return (
