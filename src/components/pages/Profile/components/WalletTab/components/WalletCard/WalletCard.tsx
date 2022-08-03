@@ -45,6 +45,7 @@ const WalletCard: React.FC<{
     account: bscAddress,
     chainId,
     isLoading: isBSCLoading,
+    switchToBSC,
   } = useConnectBSC();
   const { address: polkaAddress, isLoading: isPolkaLoading } =
     usePolkadotExtension();
@@ -217,6 +218,16 @@ const WalletCard: React.FC<{
               isLoading={isLoading || isPolkaLoading || isBSCLoading}
             >
               Verify
+            </Button>
+          )}
+          {!verified && walletConnected && isWrongNetwork && (
+            <Button
+              height="36px"
+              variant="primary"
+              onClick={switchToBSC}
+              isLoading={isLoading || isPolkaLoading || isBSCLoading}
+            >
+              Switch network
             </Button>
           )}
           {verified && (
