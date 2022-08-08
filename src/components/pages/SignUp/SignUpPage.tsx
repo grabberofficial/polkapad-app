@@ -20,7 +20,6 @@ import {
   sendMetricsCreateAccount,
   sendMetricsCreateAccountWaitList,
 } from '@/services/metrics';
-import { isProduction } from '@/utils/general';
 import {
   Flex,
   FormControl,
@@ -70,47 +69,26 @@ export const SignUpPage = () => {
     async (data) => {
       try {
         setLoading(true);
-        if (isProduction) {
-          await fetchJson(`/api/register`, {
-            method: 'POST',
-            body: JSON.stringify({
-              name: data.name,
-              password: data.password,
-              email: data.email,
-              promocode: data.promocode,
-            }),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+        await mutateUser(
+          (async () => {
+            await fetchJson(`/api/register`, {
+              method: 'POST',
+              body: JSON.stringify({
+                name: data.name,
+                password: data.password,
+                email: data.email,
+                promocode: data.promocode,
+              }),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
 
-          isWaitRoute
-            ? setTimeout(sendMetricsCreateAccountWaitList, 10000)
-            : setTimeout(sendMetricsCreateAccount, 10000);
-
-          router.push(LOGIN_ROUTE);
-        } else {
-          await mutateUser(
-            (async () => {
-              await fetchJson(`/api/register`, {
-                method: 'POST',
-                body: JSON.stringify({
-                  name: data.name,
-                  password: data.password,
-                  email: data.email,
-                  promocode: data.promocode,
-                }),
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-              });
-
-              isWaitRoute
-                ? setTimeout(sendMetricsCreateAccountWaitList, 10000)
-                : setTimeout(sendMetricsCreateAccount, 10000);
-            })() as unknown as Promise<User>,
-          );
-        }
+            isWaitRoute
+              ? sendMetricsCreateAccountWaitList()
+              : sendMetricsCreateAccount();
+          })() as unknown as Promise<User>,
+        );
         setLoading(false);
       } catch (err) {
         setLoading(false);
@@ -128,7 +106,7 @@ export const SignUpPage = () => {
         }
       }
     },
-    [isWaitRoute, mutateUser, router, setError],
+    [isWaitRoute, mutateUser, setError],
   );
 
   return (
