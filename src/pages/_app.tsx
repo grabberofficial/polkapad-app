@@ -5,11 +5,7 @@ import Head from 'next/head';
 import { SWRConfig } from 'swr';
 import { GoogleAnalytics, Header } from '@/components';
 import { FacebookPixel } from '@/components/FacebookPixel';
-import {
-  facebookPixel,
-  facebookVerifyId,
-  googleAnalyticsId,
-} from '@/config/env';
+import { facebookPixel, googleAnalyticsId } from '@/config/env';
 import { MainLayout } from '@/layouts';
 import fetchJson from '@/services/fetchJson';
 import Providers from '@/providers';
@@ -36,12 +32,6 @@ const App = (props: AppProps): JSX.Element => {
         <meta property="og:title" content={meta.title} />
         <meta name="description" content={meta.description} />
         <meta property="og:description" content={meta.description} />
-        {facebookVerifyId && (
-          <meta
-            name="facebook-domain-verification"
-            content={facebookVerifyId}
-          />
-        )}
       </Head>
       <SWRConfig
         value={{
