@@ -90,16 +90,16 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
         onClick={onCloverConnect}
       />
       <WalletPopupItem
-        text="Wallet connect"
-        icon="/images/wallet_connect.svg"
-        onClick={onWalletConnect}
-      />
-      <WalletPopupItem
         text={
           isBinanceWalletInstalled ? 'Binance Wallet' : 'Install Binance Wallet'
         }
         icon="/images/icon_bsc.png"
         onClick={onBinanceWalletConnect}
+      />
+      <WalletPopupItem
+        text="Wallet connect"
+        icon="/images/wallet_connect.svg"
+        onClick={onWalletConnect}
       />
       <WalletPopupItem
         isComingSoon
