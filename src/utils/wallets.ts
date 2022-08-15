@@ -1,6 +1,24 @@
 import { decodeAddress, encodeAddress } from '@polkadot/util-crypto';
 import { formatEther, formatUnits } from 'ethers/lib/utils';
-import { BigNumber } from 'ethers';
+import { BigNumber, providers } from 'ethers';
+import { resolvePath } from '@/utils/common';
+import {
+  BINANCE_WALLET,
+  CLOVER_WALLET,
+  SUB_WALLET,
+  TALISMAN_WALLET,
+} from '@/constants/wallets';
+
+interface EthereumProvider extends providers.JsonRpcProvider {
+  provider?: {
+    isMetaMask?: boolean;
+    isTalisman?: boolean;
+    isSubWallet?: boolean;
+    isClover?: boolean;
+    isWalletConnect?: boolean;
+    bnbSign: (data: string) => Promise<string>;
+  };
+}
 
 enum POLKA_CHAIN_DECIMALS {
   POLKA = 10,
@@ -34,3 +52,49 @@ export const formatPolkaBalance = (balance?: BigNumber | string) =>
   balance
     ? parseFloat(formatUnits(balance, POLKA_CHAIN_DECIMALS.POLKA)).toFixed(3)
     : '';
+
+export const getTalismanProvider = () => {
+  return resolvePath(window, TALISMAN_WALLET.ethereumProvider);
+};
+
+export const getSubWalletProvider = () => {
+  return resolvePath(window, SUB_WALLET.ethereumProvider);
+};
+
+export const getCloverProvider = () => {
+  return resolvePath(window, CLOVER_WALLET.ethereumProvider);
+};
+
+export const getBinanceWalletProvider = () => {
+  return resolvePath(window, BINANCE_WALLET.ethereumProvider);
+};
+
+export const getConnectedWalletName = (library?: EthereumProvider) => {
+  const provider = library?.provider;
+
+  if (provider?.isMetaMask) {
+    return 'Metamask';
+  }
+
+  if (provider?.isTalisman) {
+    return 'Talisman';
+  }
+
+  if (provider?.isClover) {
+    return 'Clover';
+  }
+
+  if (provider?.isSubWallet) {
+    return 'Subwallet';
+  }
+
+  if (provider?.bnbSign) {
+    return 'Binance Wallet';
+  }
+
+  if (provider?.isWalletConnect) {
+    return 'WalletConnect';
+  }
+
+  return 'Ethereum Wallet';
+};

@@ -104,6 +104,11 @@ export const PolkadotExtensionProvider = (props: any) => {
       const injectedExtension: InjectedWindowProvider =
         injectedWindow?.injectedWeb3?.[wallet.extensionName];
 
+      if (!injectedExtension) {
+        window.open(wallet.installUrl);
+        return;
+      }
+
       try {
         setIsLoading(true);
         const enabledExtension = await injectedExtension?.enable(DAPP_NAME);

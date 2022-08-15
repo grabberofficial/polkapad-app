@@ -13,14 +13,49 @@ import { Balance, UserContext } from '@/providers/userContext';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { sendMetricsStartedConnectionBinance } from '@/services/metrics';
 import {
+  CONNECTED_EVM_WALLET_KEY,
   WALLET_CONNECT_DEEPLINK_KEY,
   WALLET_CONNECT_KEY,
 } from '@/constants/localStorage';
+import { providers } from 'ethers';
+import { WalletMeta } from '@/constants/wallets';
+import {
+  getBinanceWalletProvider,
+  getCloverProvider,
+  getConnectedWalletName,
+  getSubWalletProvider,
+  getTalismanProvider,
+} from '@/utils/wallets';
+import { resolvePath } from '@/utils/common';
 
-export enum BSCProvider {
-  METAMASK = 'METAMASK',
-  WALLETCONNECT = 'WALLETCONNECT',
-}
+const getConnectedWallet = () => {
+  const connectedWallet = localStorage.getItem(CONNECTED_EVM_WALLET_KEY);
+  return connectedWallet ? JSON.parse(connectedWallet) : null;
+};
+
+const getNetworkArguments = (
+  chainId: number,
+  chainName: string,
+  rpcUrls: string[],
+  blockExplorerUrls: string[],
+) => {
+  return {
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: `0x${Number(chainId).toString(16)}`,
+        chainName,
+        nativeCurrency: {
+          name: 'Binance Chain Native Token',
+          symbol: 'BNB',
+          decimals: 18,
+        },
+        rpcUrls,
+        blockExplorerUrls,
+      },
+    ],
+  };
+};
 
 export const useConnectBSC = () => {
   const {
@@ -31,50 +66,98 @@ export const useConnectBSC = () => {
     deactivate: disconnectBSC,
     library,
     isLoading,
+    switchNetwork,
   } = useEthers();
 
   const connected = !!chainId;
   const userContext = useContext(UserContext);
   const dotBalance = useTokenBalance(DOT_BSC, account);
   const ksmBalance = useTokenBalance(KSM_BSC, account);
+  const walletName = useMemo(() => getConnectedWalletName(library), [library]);
 
-  const isMetamask = useMemo(() => {
-    return library?.connection.url === 'metamask';
-  }, [library?.connection.url]);
+  const isMetamaskInstalled = useMemo(() => {
+    return window.ethereum?.isMetaMask;
+  }, []);
 
-  const walletName = useMemo(() => {
-    return isMetamask ? 'Metamask' : 'WalletConnect';
-  }, [isMetamask]);
+  const isTalismanInstalled = useMemo(() => {
+    return !!getTalismanProvider();
+  }, []);
 
-  const connectToBSC = useCallback(
-    async (provider: BSCProvider = BSCProvider.METAMASK) => {
+  const isSubwalletInstalled = useMemo(() => {
+    return !!getSubWalletProvider();
+  }, []);
+
+  const isCloverInstalled = useMemo(() => {
+    return !!getCloverProvider();
+  }, []);
+
+  const isBinanceWalletInstalled = useMemo(() => {
+    return !!getBinanceWalletProvider();
+  }, []);
+
+  const isOtherEvmWalletInstalled = useMemo(() => {
+    const { ethereum } = window as any;
+    return (
+      !!ethereum &&
+      !ethereum.isMetaMask &&
+      !ethereum.isTalisman &&
+      !ethereum.isSubWallet &&
+      !ethereum.isClover
+    );
+  }, []);
+
+  const connectInjected = useCallback(async () => {
+    try {
+      await activateBrowserWallet();
+
+      if (chainId !== network) {
+        const requestArguments = getNetworkArguments(
+          network,
+          networkName,
+          rpcUrls,
+          blockExplorerUrls,
+        );
+
+        await window.ethereum.request(requestArguments);
+      }
+
+      sendMetricsStartedConnectionBinance();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [activateBrowserWallet, chainId]);
+
+  const connectWC = useCallback(async () => {
+    try {
+      const provider = new WalletConnectProvider(WCProviderConfig);
+      await provider.enable();
+      await activate(provider);
+      sendMetricsStartedConnectionBinance();
+    } catch (error) {
+      console.error(error);
+    }
+  }, [activate]);
+
+  const connectExtension = useCallback(
+    async (wallet: WalletMeta) => {
       try {
-        if (provider === BSCProvider.METAMASK) {
-          await activateBrowserWallet();
+        const extension = resolvePath(window, wallet.ethereumProvider);
 
-          if (chainId !== network) {
-            const requestArguments = getNetworkArguments(
-              network,
-              networkName,
-              rpcUrls,
-              blockExplorerUrls,
-            );
-
-            await window.ethereum.request(requestArguments);
-          }
-        }
-        if (provider === BSCProvider.WALLETCONNECT) {
-          const provider = new WalletConnectProvider(WCProviderConfig);
-          await provider.enable();
-          await activate(provider);
+        if (!extension) {
+          window.open(wallet.installUrl);
+          return;
         }
 
-        sendMetricsStartedConnectionBinance();
-      } catch (e) {
-        console.error(e);
+        const provider = new providers.Web3Provider(extension, 'any');
+        await provider.send('eth_requestAccounts', []);
+
+        await activate(provider);
+        localStorage.setItem(CONNECTED_EVM_WALLET_KEY, JSON.stringify(wallet));
+      } catch (error) {
+        console.error(error);
       }
     },
-    [activate, activateBrowserWallet, chainId],
+    [activate],
   );
 
   const switchToBSC = useCallback(async () => {
@@ -86,11 +169,24 @@ export const useConnectBSC = () => {
     );
 
     await window.ethereum.request(requestArguments);
-  }, []);
+
+    await switchNetwork(network);
+  }, [switchNetwork]);
 
   useEffect(() => {
+    // Small hack to fix Binance Wallet unsubscription
+    if (window.BinanceChain) {
+      window.BinanceChain = {
+        ...window.BinanceChain,
+        removeListener: () => null,
+      } as any;
+    }
+
     if (localStorage.getItem(WALLET_CONNECT_KEY)) {
-      connectToBSC(BSCProvider.WALLETCONNECT);
+      connectWC();
+    }
+    if (localStorage.getItem(CONNECTED_EVM_WALLET_KEY)) {
+      connectExtension(getConnectedWallet());
     }
   }, []);
 
@@ -117,35 +213,14 @@ export const useConnectBSC = () => {
     disconnectBSC();
     localStorage.removeItem(WALLET_CONNECT_KEY);
     localStorage.removeItem(WALLET_CONNECT_DEEPLINK_KEY);
+    localStorage.removeItem(CONNECTED_EVM_WALLET_KEY);
   }, [disconnectBSC, userContext]);
-
-  const getNetworkArguments = (
-    chainId: number,
-    chainName: string,
-    rpcUrls: string[],
-    blockExplorerUrls: string[],
-  ) => {
-    return {
-      method: 'wallet_addEthereumChain',
-      params: [
-        {
-          chainId: `0x${Number(chainId).toString(16)}`,
-          chainName,
-          nativeCurrency: {
-            name: 'Binance Chain Native Token',
-            symbol: 'BNB',
-            decimals: 18,
-          },
-          rpcUrls,
-          blockExplorerUrls,
-        },
-      ],
-    };
-  };
 
   return {
     disconnectFromBSC: deactivate,
-    connectToBSC,
+    connectInjected,
+    connectWC,
+    connectExtension,
     dotBalance,
     ksmBalance,
     connected,
@@ -153,7 +228,12 @@ export const useConnectBSC = () => {
     chainId,
     switchToBSC,
     walletName,
-    isMetamask,
     isLoading,
+    isMetamaskInstalled,
+    isTalismanInstalled,
+    isSubwalletInstalled,
+    isCloverInstalled,
+    isBinanceWalletInstalled,
+    isOtherEvmWalletInstalled,
   };
 };
