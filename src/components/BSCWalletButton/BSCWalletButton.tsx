@@ -38,7 +38,6 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
     connected,
     account,
     chainId,
-    isMetamask,
     disconnectFromBSC,
     switchToBSC,
     walletName,
@@ -55,12 +54,12 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
   }, [disconnectFromBSC, onInfoClose]);
 
   const onChangeNetwork = useCallback(() => {
-    if (isMetamask) {
-      switchToBSC();
-    } else {
+    if (walletName === 'WalletConnect') {
       onChangeNetworkOpen();
+    } else {
+      switchToBSC();
     }
-  }, [isMetamask, onChangeNetworkOpen, switchToBSC]);
+  }, [onChangeNetworkOpen, switchToBSC, walletName]);
 
   useEffect(() => {
     if (!isWrongNetwork && isChangeNetworkOpen) {

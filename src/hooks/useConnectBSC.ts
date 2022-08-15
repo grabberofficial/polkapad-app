@@ -2,10 +2,8 @@ import {
   DOT_BSC,
   KSM_BSC,
   network,
-  networkName,
-  rpcUrls,
-  blockExplorerUrls,
   WCProviderConfig,
+  binanceWalletNetwork,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useContext, useEffect, useMemo } from 'react';
@@ -31,30 +29,6 @@ import { resolvePath } from '@/utils/common';
 const getConnectedWallet = () => {
   const connectedWallet = localStorage.getItem(CONNECTED_EVM_WALLET_KEY);
   return connectedWallet ? JSON.parse(connectedWallet) : null;
-};
-
-const getNetworkArguments = (
-  chainId: number,
-  chainName: string,
-  rpcUrls: string[],
-  blockExplorerUrls: string[],
-) => {
-  return {
-    method: 'wallet_addEthereumChain',
-    params: [
-      {
-        chainId: `0x${Number(chainId).toString(16)}`,
-        chainName,
-        nativeCurrency: {
-          name: 'Binance Chain Native Token',
-          symbol: 'BNB',
-          decimals: 18,
-        },
-        rpcUrls,
-        blockExplorerUrls,
-      },
-    ],
-  };
 };
 
 export const useConnectBSC = () => {
@@ -106,26 +80,28 @@ export const useConnectBSC = () => {
     );
   }, []);
 
+  const switchToBSC = useCallback(async () => {
+    const providerSwitch = (library as any)?.provider?.switchNetwork;
+    if (providerSwitch) {
+      await providerSwitch(binanceWalletNetwork);
+    } else {
+      await switchNetwork(network);
+    }
+  }, [library, switchNetwork]);
+
   const connectInjected = useCallback(async () => {
     try {
       await activateBrowserWallet();
 
       if (chainId !== network) {
-        const requestArguments = getNetworkArguments(
-          network,
-          networkName,
-          rpcUrls,
-          blockExplorerUrls,
-        );
-
-        await window.ethereum.request(requestArguments);
+        switchToBSC();
       }
 
       sendMetricsStartedConnectionBinance();
     } catch (error) {
       console.error(error);
     }
-  }, [activateBrowserWallet, chainId]);
+  }, [activateBrowserWallet, chainId, switchToBSC]);
 
   const connectWC = useCallback(async () => {
     try {
@@ -153,25 +129,17 @@ export const useConnectBSC = () => {
 
         await activate(provider);
         localStorage.setItem(CONNECTED_EVM_WALLET_KEY, JSON.stringify(wallet));
+        sendMetricsStartedConnectionBinance();
+
+        if (chainId !== network) {
+          switchToBSC();
+        }
       } catch (error) {
         console.error(error);
       }
     },
-    [activate],
+    [activate, chainId, switchToBSC],
   );
-
-  const switchToBSC = useCallback(async () => {
-    const requestArguments = getNetworkArguments(
-      network,
-      networkName,
-      rpcUrls,
-      blockExplorerUrls,
-    );
-
-    await window.ethereum.request(requestArguments);
-
-    await switchNetwork(network);
-  }, [switchNetwork]);
 
   useEffect(() => {
     // Small hack to fix Binance Wallet unsubscription
