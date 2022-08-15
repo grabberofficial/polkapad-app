@@ -1,8 +1,14 @@
 import { ReactNode } from 'react';
 import { extendTheme, ChakraProvider } from '@chakra-ui/react';
 
-// TODO: pass theme vars here
 const theme = extendTheme({
+  styles: {
+    global: {
+      '*': {
+        fontFamily: 'Poppins',
+      },
+    },
+  },
   colors: {
     primary: {
       basic: '#0096EF',

@@ -14,7 +14,7 @@ export const getBnbSteps = (isLoggedIn: boolean) => [
     ),
   },
   {
-    title: 'Get KSM ot DOT on Binance',
+    title: 'Get KSM or DOT on Binance',
     text: `Funds can be accepted ONLY from verified wallet, not from Binance directly`,
     button: (
       <Link href="https://www.binance.com/">

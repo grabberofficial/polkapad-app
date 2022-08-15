@@ -6,8 +6,7 @@ import {
   binanceWalletNetwork,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
-import { useCallback, useContext, useEffect, useMemo } from 'react';
-import { Balance, UserContext } from '@/providers/userContext';
+import { useCallback, useEffect, useMemo } from 'react';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import { sendMetricsStartedConnectionBinance } from '@/services/metrics';
 import {
@@ -20,16 +19,12 @@ import { WalletMeta } from '@/constants/wallets';
 import {
   getBinanceWalletProvider,
   getCloverProvider,
-  getConnectedWalletName,
+  getConnectedEVMWallet,
+  getStoredEVMWallet,
   getSubWalletProvider,
   getTalismanProvider,
 } from '@/utils/wallets';
 import { resolvePath } from '@/utils/common';
-
-const getConnectedWallet = () => {
-  const connectedWallet = localStorage.getItem(CONNECTED_EVM_WALLET_KEY);
-  return connectedWallet ? JSON.parse(connectedWallet) : null;
-};
 
 export const useConnectBSC = () => {
   const {
@@ -44,10 +39,12 @@ export const useConnectBSC = () => {
   } = useEthers();
 
   const connected = !!chainId;
-  const userContext = useContext(UserContext);
   const dotBalance = useTokenBalance(DOT_BSC, account);
   const ksmBalance = useTokenBalance(KSM_BSC, account);
-  const walletName = useMemo(() => getConnectedWalletName(library), [library]);
+  const connectedWallet = useMemo(
+    () => getConnectedEVMWallet(library),
+    [library],
+  );
 
   const isMetamaskInstalled = useMemo(() => {
     return window.ethereum?.isMetaMask;
@@ -154,35 +151,16 @@ export const useConnectBSC = () => {
       connectWC();
     }
     if (localStorage.getItem(CONNECTED_EVM_WALLET_KEY)) {
-      connectExtension(getConnectedWallet());
+      connectExtension(getStoredEVMWallet());
     }
   }, []);
 
-  useEffect(() => {
-    if (account && dotBalance && ksmBalance && !userContext?.bsc?.address) {
-      userContext.setContext({
-        ...userContext,
-        bsc: {
-          address: account as string,
-          balance: {
-            bsc: new Balance(dotBalance),
-            polka: new Balance(ksmBalance),
-          },
-        },
-      });
-    }
-  }, [account, dotBalance, ksmBalance, userContext]);
-
   const deactivate = useCallback(() => {
-    userContext.setContext({
-      ...userContext,
-      bsc: {},
-    });
     disconnectBSC();
     localStorage.removeItem(WALLET_CONNECT_KEY);
     localStorage.removeItem(WALLET_CONNECT_DEEPLINK_KEY);
     localStorage.removeItem(CONNECTED_EVM_WALLET_KEY);
-  }, [disconnectBSC, userContext]);
+  }, [disconnectBSC]);
 
   return {
     disconnectFromBSC: deactivate,
@@ -195,7 +173,7 @@ export const useConnectBSC = () => {
     account,
     chainId,
     switchToBSC,
-    walletName,
+    connectedWallet,
     isLoading,
     isMetamaskInstalled,
     isTalismanInstalled,

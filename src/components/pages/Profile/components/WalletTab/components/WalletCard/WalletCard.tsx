@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import styled from '@emotion/styled';
 
 import {
@@ -10,7 +10,6 @@ import {
   usePrevious,
 } from '@chakra-ui/react';
 import { Button } from '@/components/common/Button';
-import { UserContext } from '@/providers/userContext';
 import fetchJson, { FetchError } from '@/services/fetchJson';
 import { useConnectBSC } from '@/hooks/useConnectBSC';
 import { serviceUrl } from '@/config/env';
@@ -25,14 +24,14 @@ import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaWal
 import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
 import { isProduction } from '@/utils/general';
 import { ChainId } from '@usedapp/core';
+import useUser from '@/hooks/useUser';
 
 const WalletCard: React.FC<{
   type?: string;
   wallets: any[];
   verifyCallback: () => void;
 }> = ({ type = 'eth', wallets, verifyCallback }) => {
-  const userContext = useContext(UserContext);
-
+  const { user } = useUser();
   const [isLoading, setIsLoading] = React.useState(false);
   const [verified, setVerified] = React.useState(false);
   const [walletConnected, setWalletConnected] = React.useState(false);
@@ -97,7 +96,7 @@ const WalletCard: React.FC<{
             value: address,
           }),
         },
-        userContext.user?.token,
+        user?.token,
       );
       setVerified(true);
       setIsLoading(false);
@@ -112,9 +111,9 @@ const WalletCard: React.FC<{
   }, [
     type,
     walletAddress,
+    user?.token,
     bscAddress,
     polkaAddress,
-    userContext.user?.token,
     verifyCallback,
   ]);
 

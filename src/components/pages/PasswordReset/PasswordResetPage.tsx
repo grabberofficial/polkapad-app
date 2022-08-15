@@ -1,4 +1,10 @@
-import { Button } from '@/components/common/Button';
+import { useCallback, useState } from 'react';
+import { RiLock2Fill } from 'react-icons/ri';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { BsFillCheckCircleFill } from 'react-icons/bs';
+import { BiHide, BiShow } from 'react-icons/bi';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import {
   FormControl,
   FormLabel,
@@ -11,20 +17,16 @@ import {
   FormErrorMessage,
   Spinner,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 
-import { BsFillCheckCircleFill } from 'react-icons/bs';
-import { SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import fetchJson, { FetchError } from '@/services/fetchJson';
-import { useCallback, useState } from 'react';
+import { Button } from '@/components/common/Button';
 import { FormInput } from '@/components/common/FormInput/FormInput';
-import { RiLock2Fill } from 'react-icons/ri';
-import { useRouter } from 'next/router';
 import { serviceUrl } from '@/config/env';
 import { PasswordResetPageSchema } from '@/components/pages/PasswordReset/PasswordResetPage.schema';
 import { LOGIN_ROUTE } from '@/constants/routes';
 import { ExceptionTypeEnum } from '@/constants/error';
+import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
 
 interface IFormInput {
   newPassword: string;
@@ -35,6 +37,9 @@ export const PasswordResetPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [passwordType, setPasswordType] = useState<'password' | 'text'>(
+    'password',
+  );
   const {
     control,
     handleSubmit,
@@ -177,9 +182,14 @@ export const PasswordResetPage = () => {
                 </InputLeftElement>
                 <FormInput
                   fieldName="newPassword"
-                  fieldType="password"
+                  fieldType={passwordType}
                   control={control}
                   hasError={!!errors.newPassword}
+                />
+                <PasswordButton
+                  as={passwordType === 'password' ? BiShow : BiHide}
+                  passwordType={passwordType}
+                  setPasswordType={setPasswordType}
                 />
               </InputGroup>
               {errors.newPassword && (
@@ -220,9 +230,14 @@ export const PasswordResetPage = () => {
                 </InputLeftElement>
                 <FormInput
                   fieldName="confirmNewPassword"
-                  fieldType="password"
+                  fieldType={passwordType}
                   control={control}
                   hasError={!!errors.confirmNewPassword}
+                />
+                <PasswordButton
+                  as={passwordType === 'password' ? BiShow : BiHide}
+                  passwordType={passwordType}
+                  setPasswordType={setPasswordType}
                 />
               </InputGroup>
               {errors.confirmNewPassword && (

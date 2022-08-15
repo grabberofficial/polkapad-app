@@ -55,22 +55,22 @@ export const PolkaWalletsPopup = ({
     >
       <WalletPopupItem
         text={isPolkadotInstalled ? 'Polkadot{.js}' : 'Install Polkadot{.js}'}
-        icon="/images/polka_icon.svg"
+        icon={POLKADOT_WALLET.icon}
         onClick={onPolkaConnect}
       />
       <WalletPopupItem
         text={isTalismanInstalled ? 'Talisman' : 'Install Talisman'}
-        icon="/images/talisman_icon.svg"
+        icon={TALISMAN_WALLET.icon}
         onClick={onTalismanConnect}
       />
       <WalletPopupItem
         text={isSubwalletInstalled ? 'Subwallet' : 'Install Subwallet'}
-        icon="/images/subwallet_icon.svg"
+        icon={SUB_WALLET.icon}
         onClick={onSubwalletConnect}
       />
       <WalletPopupItem
         text={isCloverInstalled ? 'Clover' : 'Install Clover'}
-        icon="/images/clv_icon.svg"
+        icon={CLOVER_WALLET.icon}
         onClick={onCloverConnect}
       />
     </WalletsPopup>

@@ -117,6 +117,7 @@ export const PolkadotWalletButton = memo(
             account={convertSS58Address(address, POLKA_ADDRESS_PREFIX.POLKA)}
             balance={formattedBalance}
             walletName={connectedWallet?.title}
+            walletIcon={connectedWallet?.icon}
             onDisconnect={onDisconnect}
             isOpen={isInfoOpen}
             onClose={onInfoClose}
