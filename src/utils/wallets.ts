@@ -5,9 +5,13 @@ import { resolvePath } from '@/utils/common';
 import {
   BINANCE_WALLET,
   CLOVER_WALLET,
+  METAMASK,
   SUB_WALLET,
   TALISMAN_WALLET,
+  UNKNOWN_INJECTED_WALLET,
+  WALLET_CONNECT,
 } from '@/constants/wallets';
+import { CONNECTED_EVM_WALLET_KEY } from '@/constants/localStorage';
 
 interface EthereumProvider extends providers.JsonRpcProvider {
   provider?: {
@@ -69,32 +73,37 @@ export const getBinanceWalletProvider = () => {
   return resolvePath(window, BINANCE_WALLET.ethereumProvider);
 };
 
-export const getConnectedWalletName = (library?: EthereumProvider) => {
+export const getConnectedEVMWallet = (library?: EthereumProvider) => {
   const provider = library?.provider;
 
   if (provider?.isMetaMask) {
-    return 'Metamask';
+    return METAMASK;
   }
 
   if (provider?.isTalisman) {
-    return 'Talisman';
+    return TALISMAN_WALLET;
   }
 
   if (provider?.isClover) {
-    return 'Clover';
+    return CLOVER_WALLET;
   }
 
   if (provider?.isSubWallet) {
-    return 'Subwallet';
+    return SUB_WALLET;
   }
 
   if (provider?.bnbSign) {
-    return 'Binance Wallet';
+    return BINANCE_WALLET;
   }
 
   if (provider?.isWalletConnect) {
-    return 'WalletConnect';
+    return WALLET_CONNECT;
   }
 
-  return 'Ethereum Wallet';
+  return UNKNOWN_INJECTED_WALLET;
+};
+
+export const getStoredEVMWallet = () => {
+  const connectedWallet = localStorage.getItem(CONNECTED_EVM_WALLET_KEY);
+  return connectedWallet ? JSON.parse(connectedWallet) : null;
 };

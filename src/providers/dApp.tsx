@@ -7,7 +7,6 @@ import {
   BSC,
   BSCTestnet,
 } from '@usedapp/core';
-// import { ChainId, DAppProvider, BSC, Mainnet } from '@usedapp/core';
 
 interface DAppProps {
   children: ReactNode;

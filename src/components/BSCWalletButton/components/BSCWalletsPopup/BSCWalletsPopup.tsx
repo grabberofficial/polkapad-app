@@ -6,8 +6,10 @@ import { useConnectBSC } from '@/hooks/useConnectBSC';
 import {
   BINANCE_WALLET,
   CLOVER_WALLET,
-  METAMASK_INSTALL_URL,
+  METAMASK,
   TALISMAN_WALLET,
+  UNKNOWN_INJECTED_WALLET,
+  WALLET_CONNECT,
 } from '@/constants/wallets';
 
 interface BSCWalletsPopupProps {
@@ -31,7 +33,7 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
     if (isMetamaskInstalled) {
       connectInjected();
     } else {
-      window.open(METAMASK_INSTALL_URL);
+      window.open(METAMASK.installUrl);
     }
     onClose();
   }, [connectInjected, isMetamaskInstalled, onClose]);
@@ -63,30 +65,30 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
 
   return (
     <WalletsPopup
-      title="Connect an EVM Wallet"
+      title="Connect an Ethereum Wallet"
       isOpen={isOpen}
       onClose={onClose}
     >
       {isOtherEvmWalletInstalled && (
         <WalletPopupItem
           text="Your Ethereum Wallet"
-          icon="/images/smart_chain.svg"
+          icon={UNKNOWN_INJECTED_WALLET.icon}
           onClick={onInjectedConnect}
         />
       )}
       <WalletPopupItem
         text={isMetamaskInstalled ? 'Metamask' : 'Install Metamask'}
-        icon="/images/metamask.svg"
+        icon={METAMASK.icon}
         onClick={onMetamaskConnect}
       />
       <WalletPopupItem
         text={isTalismanInstalled ? 'Talisman' : 'Install Talisman'}
-        icon="/images/talisman_icon.svg"
+        icon={TALISMAN_WALLET.icon}
         onClick={onTalismanConnect}
       />
       <WalletPopupItem
         text={isCloverInstalled ? 'Clover' : 'Install Clover'}
-        icon="/images/clv_icon.svg"
+        icon={CLOVER_WALLET.icon}
         onClick={onCloverConnect}
       />
       <WalletPopupItem
@@ -98,7 +100,7 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
       />
       <WalletPopupItem
         text="Wallet connect"
-        icon="/images/wallet_connect.svg"
+        icon={WALLET_CONNECT.icon}
         onClick={onWalletConnect}
       />
       <WalletPopupItem

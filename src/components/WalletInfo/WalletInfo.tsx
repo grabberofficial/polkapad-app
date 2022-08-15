@@ -14,7 +14,6 @@ import nationalIdIcon from '@/assets/national_id.svg';
 import copyIcon from '@/assets/copy_icon.svg';
 import externalLinkIcon from '@/assets/external_link.svg';
 import historyIcon from '@/assets/history.svg';
-import bscIcon from '@/assets/bsc_icon.svg';
 import { BigNumber } from 'ethers';
 import { isProduction } from '@/utils/general';
 import { BSC, BSCTestnet } from '@usedapp/core';
@@ -26,6 +25,7 @@ interface WalletsInfoProps {
   account: string;
   balance: BigNumber | string;
   walletName: string;
+  walletIcon: string;
   onDisconnect: () => void;
   onClose: () => void;
 }
@@ -44,6 +44,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
     account,
     balance,
     walletName,
+    walletIcon,
     isPolka,
     isOpen,
     onDisconnect,
@@ -154,7 +155,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
             >
               <Image
                 margin="0px 14px 0px 11px"
-                src={isPolka ? '/images/polka_icon.svg' : bscIcon}
+                src={walletIcon}
                 alt="bsc"
                 width="24px"
                 height="24px"

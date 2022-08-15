@@ -1,9 +1,7 @@
-import { ReactNode, useEffect, useState } from 'react';
+import { ReactNode } from 'react';
 
 import ThemeProvider from './theme';
 import DAppProvider from './dApp';
-import { UserContext, UserContextType } from './userContext';
-import useUser from '@/hooks/useUser';
 import { PolkadotExtensionProvider } from '@/hooks/usePolkadotExtension';
 
 interface ProviderProps {
@@ -13,38 +11,13 @@ interface ProviderProps {
 export const Providers = ({ children }: ProviderProps) => {
   const isSSR = typeof window === 'undefined';
 
-  const initialUserContext = {
-    user: null,
-    polka: {},
-    bsc: {},
-    setContext: () => {
-      return null;
-    },
-  };
-
-  const [context, setContext] = useState<UserContextType>(initialUserContext);
-  const { user } = useUser();
-
-  useEffect(() => {
-    if (!context.user && user) {
-      setContext({
-        ...context,
-        user: user ?? null,
-      });
-    }
-  }, [user, context]);
-
   return (
     <ThemeProvider>
       <DAppProvider>
         {isSSR ? (
           children
         ) : (
-          <PolkadotExtensionProvider>
-            <UserContext.Provider value={{ ...context, setContext }}>
-              {children}
-            </UserContext.Provider>
-          </PolkadotExtensionProvider>
+          <PolkadotExtensionProvider>{children}</PolkadotExtensionProvider>
         )}
       </DAppProvider>
     </ThemeProvider>

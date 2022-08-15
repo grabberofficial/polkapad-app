@@ -11,6 +11,7 @@ import { ChainId } from '@usedapp/core';
 import { ChangeWalletConnectNetwork } from '@/components/BSCWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
 import { BSCWalletsPopup } from '@/components/BSCWalletButton/components/BSCWalletsPopup/BSCWalletsPopup';
 import { formatEtherBalance } from '@/utils/wallets';
+import { WALLET_CONNECT } from '@/constants/wallets';
 
 interface BSCWalletButtonProps {
   isVerify?: boolean;
@@ -40,7 +41,7 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
     chainId,
     disconnectFromBSC,
     switchToBSC,
-    walletName,
+    connectedWallet,
     isLoading,
   } = useConnectBSC();
 
@@ -54,12 +55,12 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
   }, [disconnectFromBSC, onInfoClose]);
 
   const onChangeNetwork = useCallback(() => {
-    if (walletName === 'WalletConnect') {
+    if (connectedWallet === WALLET_CONNECT) {
       onChangeNetworkOpen();
     } else {
       switchToBSC();
     }
-  }, [onChangeNetworkOpen, switchToBSC, walletName]);
+  }, [onChangeNetworkOpen, switchToBSC, connectedWallet]);
 
   useEffect(() => {
     if (!isWrongNetwork && isChangeNetworkOpen) {
@@ -135,7 +136,8 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
         <WalletsInfo
           isOpen={isInfoOpen}
           account={account}
-          walletName={walletName}
+          walletName={connectedWallet.title}
+          walletIcon={connectedWallet.icon}
           balance={formattedBalance}
           onClose={onInfoClose}
           onDisconnect={onDisconnect}
