@@ -7,6 +7,9 @@ export const DOT_BSC = isProduction
   : '0x28F57189eaa7A56aE9B8591F5B325fD3b0617c26';
 
 export const network = isProduction ? BSC.chainId : BSCTestnet.chainId;
+export const binanceWalletNetwork = isProduction
+  ? 'bsc-mainnet'
+  : 'bsc-testnet';
 
 export const networkName = isProduction
   ? 'Binance Smart Chain Mainnet'

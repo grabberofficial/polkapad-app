@@ -28,40 +28,24 @@ export const PolkaWalletsPopup = ({
   } = usePolkadotExtension();
 
   const onPolkaConnect = useCallback(() => {
-    if (isPolkadotInstalled) {
-      connectPolkadot(POLKADOT_WALLET);
-    } else {
-      window.open(POLKADOT_WALLET.installUrl);
-    }
+    connectPolkadot(POLKADOT_WALLET);
     onClose();
-  }, [connectPolkadot, isPolkadotInstalled, onClose]);
+  }, [connectPolkadot, onClose]);
 
   const onTalismanConnect = useCallback(() => {
-    if (isTalismanInstalled) {
-      connectPolkadot(TALISMAN_WALLET);
-    } else {
-      window.open(TALISMAN_WALLET.installUrl);
-    }
+    connectPolkadot(TALISMAN_WALLET);
     onClose();
-  }, [connectPolkadot, isTalismanInstalled, onClose]);
+  }, [connectPolkadot, onClose]);
 
   const onSubwalletConnect = useCallback(() => {
-    if (isSubwalletInstalled) {
-      connectPolkadot(SUB_WALLET);
-    } else {
-      window.open(SUB_WALLET.installUrl);
-    }
+    connectPolkadot(SUB_WALLET);
     onClose();
-  }, [connectPolkadot, isSubwalletInstalled, onClose]);
+  }, [connectPolkadot, onClose]);
 
   const onCloverConnect = useCallback(() => {
-    if (isCloverInstalled) {
-      connectPolkadot(CLOVER_WALLET);
-    } else {
-      window.open(CLOVER_WALLET.installUrl);
-    }
+    connectPolkadot(CLOVER_WALLET);
     onClose();
-  }, [connectPolkadot, isCloverInstalled, onClose]);
+  }, [connectPolkadot, onClose]);
 
   return (
     <WalletsPopup

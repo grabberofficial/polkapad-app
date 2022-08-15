@@ -2,7 +2,13 @@ import { useCallback } from 'react';
 
 import { WalletsPopup } from '@/components/WalletsPopup/WalletsPopup';
 import { WalletPopupItem } from '@/components/WalletsPopup/components/WalletPopupItem';
-import { BSCProvider, useConnectBSC } from '@/hooks/useConnectBSC';
+import { useConnectBSC } from '@/hooks/useConnectBSC';
+import {
+  BINANCE_WALLET,
+  CLOVER_WALLET,
+  METAMASK_INSTALL_URL,
+  TALISMAN_WALLET,
+} from '@/constants/wallets';
 
 interface BSCWalletsPopupProps {
   isOpen: boolean;
@@ -10,18 +16,50 @@ interface BSCWalletsPopupProps {
 }
 
 export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
-  const isMetamaskAvailable = !!window.ethereum;
-  const { connectToBSC } = useConnectBSC();
+  const {
+    connectInjected,
+    connectWC,
+    connectExtension,
+    isMetamaskInstalled,
+    isTalismanInstalled,
+    isCloverInstalled,
+    isBinanceWalletInstalled,
+    isOtherEvmWalletInstalled,
+  } = useConnectBSC();
 
   const onMetamaskConnect = useCallback(() => {
-    connectToBSC(BSCProvider.METAMASK);
+    if (isMetamaskInstalled) {
+      connectInjected();
+    } else {
+      window.open(METAMASK_INSTALL_URL);
+    }
     onClose();
-  }, [connectToBSC, onClose]);
+  }, [connectInjected, isMetamaskInstalled, onClose]);
+
+  const onInjectedConnect = useCallback(() => {
+    connectInjected();
+    onClose();
+  }, [connectInjected, onClose]);
+
+  const onTalismanConnect = useCallback(() => {
+    connectExtension(TALISMAN_WALLET);
+    onClose();
+  }, [connectExtension, onClose]);
+
+  const onCloverConnect = useCallback(() => {
+    connectExtension(CLOVER_WALLET);
+    onClose();
+  }, [connectExtension, onClose]);
+
+  const onBinanceWalletConnect = useCallback(() => {
+    connectExtension(BINANCE_WALLET);
+    onClose();
+  }, [connectExtension, onClose]);
 
   const onWalletConnect = useCallback(() => {
-    connectToBSC(BSCProvider.WALLETCONNECT);
+    connectWC();
     onClose();
-  }, [connectToBSC, onClose]);
+  }, [connectWC, onClose]);
 
   return (
     <WalletsPopup
@@ -30,19 +68,38 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
       onClose={onClose}
     >
       <WalletPopupItem
-        text={isMetamaskAvailable ? 'Metamask' : 'Install Metamask'}
+        text={isMetamaskInstalled ? 'Metamask' : 'Install Metamask'}
         icon="/images/metamask.svg"
         onClick={onMetamaskConnect}
       />
+      {isOtherEvmWalletInstalled && (
+        <WalletPopupItem
+          text="Your Ethereum Wallet"
+          icon="/images/smart_chain.svg"
+          onClick={onInjectedConnect}
+        />
+      )}
       <WalletPopupItem
-        onClick={onWalletConnect}
-        text="Wallet connect"
-        icon="/images/wallet_connect.svg"
+        text={isTalismanInstalled ? 'Talisman' : 'Install Talisman'}
+        icon="/images/talisman_icon.svg"
+        onClick={onTalismanConnect}
       />
       <WalletPopupItem
-        isComingSoon
-        text="Binance Wallet"
+        text={isCloverInstalled ? 'Clover' : 'Install Clover'}
+        icon="/images/clv_icon.svg"
+        onClick={onCloverConnect}
+      />
+      <WalletPopupItem
+        text="Wallet connect"
+        icon="/images/wallet_connect.svg"
+        onClick={onWalletConnect}
+      />
+      <WalletPopupItem
+        text={
+          isBinanceWalletInstalled ? 'Binance Wallet' : 'Install Binance Wallet'
+        }
         icon="/images/icon_bsc.png"
+        onClick={onBinanceWalletConnect}
       />
       <WalletPopupItem
         isComingSoon
