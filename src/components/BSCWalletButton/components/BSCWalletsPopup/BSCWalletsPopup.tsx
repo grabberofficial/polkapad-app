@@ -67,11 +67,6 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
       isOpen={isOpen}
       onClose={onClose}
     >
-      <WalletPopupItem
-        text={isMetamaskInstalled ? 'Metamask' : 'Install Metamask'}
-        icon="/images/metamask.svg"
-        onClick={onMetamaskConnect}
-      />
       {isOtherEvmWalletInstalled && (
         <WalletPopupItem
           text="Your Ethereum Wallet"
@@ -79,6 +74,11 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
           onClick={onInjectedConnect}
         />
       )}
+      <WalletPopupItem
+        text={isMetamaskInstalled ? 'Metamask' : 'Install Metamask'}
+        icon="/images/metamask.svg"
+        onClick={onMetamaskConnect}
+      />
       <WalletPopupItem
         text={isTalismanInstalled ? 'Talisman' : 'Install Talisman'}
         icon="/images/talisman_icon.svg"
