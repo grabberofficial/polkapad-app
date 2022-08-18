@@ -85,19 +85,19 @@ export const PolkadotExtensionProvider = (props: any) => {
 
   const isPolkadotInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[POLKADOT_WALLET.extensionName];
-  }, [injectedWindow?.injectedWeb3]);
+  }, [injectedWindow]);
 
   const isTalismanInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[TALISMAN_WALLET.extensionName];
-  }, [injectedWindow?.injectedWeb3]);
+  }, [injectedWindow]);
 
   const isSubwalletInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[SUB_WALLET.extensionName];
-  }, [injectedWindow?.injectedWeb3]);
+  }, [injectedWindow]);
 
   const isCloverInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[CLOVER_WALLET.extensionName];
-  }, [injectedWindow?.injectedWeb3]);
+  }, [injectedWindow]);
 
   const connectPolkadot = useCallback(
     async (wallet: WalletMeta) => {

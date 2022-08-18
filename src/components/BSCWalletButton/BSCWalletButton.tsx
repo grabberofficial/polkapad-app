@@ -2,11 +2,10 @@ import { useCallback, useEffect } from 'react';
 import bscIcon from '@/assets/bsc_icon.svg';
 import { Button } from '@/components/common/Button';
 import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
-import { Loader } from '@/components/common/Loader/Loader';
 import { useConnectBSC } from '@/hooks/useConnectBSC';
 import { isProduction } from '@/utils/general';
 import { useDisclosure } from '@chakra-ui/hooks';
-import { Flex, Image } from '@chakra-ui/react';
+import { Flex, Image, Spinner } from '@chakra-ui/react';
 import { ChainId } from '@usedapp/core';
 import { ChangeWalletConnectNetwork } from '@/components/BSCWalletButton/components/ChangeWalletConnectNetwork/ChangeWalletConnectNetwork';
 import { BSCWalletsPopup } from '@/components/BSCWalletButton/components/BSCWalletsPopup/BSCWalletsPopup';
@@ -73,19 +72,21 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
       {connected && account && !isWrongNetwork && (
         <Button
           onClick={onInfoOpen}
-          variant="secondary"
+          variant="transparent"
           width="auto"
-          minWidth="150px"
-          padding="0px 16px"
+          minWidth="120px"
+          padding="0"
           iconGap="10px"
           iconPlacement="left"
+          fontSize="16px"
+          flexShrink={0}
           icon={<Image src={bscIcon} alt="BSC" width="29px" height="29px" />}
         >
           {formattedBalance ? (
             `${formattedBalance} DOT`
           ) : (
             <Flex width="80px" justifyContent="center">
-              <Loader width="28px" height="28px" />
+              <Spinner width="24px" height="24px" />
             </Flex>
           )}
         </Button>
@@ -93,13 +94,14 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
       {connected && account && isWrongNetwork && (
         <Button
           onClick={onChangeNetwork}
-          variant="secondary"
+          variant="transparent"
           width="auto"
-          minWidth="150px"
+          minWidth="175px"
           flexShrink={0}
           iconGap="10px"
           color="error"
-          padding="0 16px"
+          padding="0"
+          fontSize="16px"
           iconPlacement="left"
           icon={<Image src={bscIcon} alt="BSC" width="29px" height="29px" />}
         >
@@ -109,13 +111,14 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
       {!account && !isVerify && (
         <Button
           onClick={onPopupOpen}
-          variant="secondary"
+          variant="transparent"
           width="auto"
-          minWidth="150px"
+          minWidth="120px"
           flexShrink={0}
           iconGap="10px"
+          fontSize="16px"
           iconPlacement="left"
-          padding="0 16px"
+          padding="0"
           icon={<Image src={bscIcon} alt="BSC" width="29px" height="29px" />}
         >
           Connect

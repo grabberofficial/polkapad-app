@@ -50,11 +50,11 @@ export const shortenPolkaAddress = (address: string, rate = 6) => {
 };
 
 export const formatEtherBalance = (balance?: BigNumber | string) =>
-  balance ? parseFloat(formatEther(balance)).toFixed(3) : '';
+  balance ? parseFloat(formatEther(balance)).toFixed(2) : '';
 
 export const formatPolkaBalance = (balance?: BigNumber | string) =>
   balance
-    ? parseFloat(formatUnits(balance, POLKA_CHAIN_DECIMALS.POLKA)).toFixed(3)
+    ? parseFloat(formatUnits(balance, POLKA_CHAIN_DECIMALS.POLKA)).toFixed(2)
     : '';
 
 export const getTalismanProvider = () => {

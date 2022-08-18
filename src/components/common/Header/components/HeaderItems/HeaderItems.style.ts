@@ -20,6 +20,8 @@ export const HeaderItemStyled = styled<
   line-height: 21px;
   color: #303030;
   height: 80px;
+  border-bottom: none;
+  opacity: 0.64;
 
   div {
     transition: color 0.2s, transform 0.2s;
@@ -27,7 +29,7 @@ export const HeaderItemStyled = styled<
 
   &[aria-selected='true'] {
     color: var(--chakra-colors-secondary-text);
-    border-bottom: 3px solid var(--chakra-colors-secondary-textHover);
+    opacity: 1;
   }
 
   &:focus {
@@ -36,8 +38,12 @@ export const HeaderItemStyled = styled<
 
   &:hover {
     div {
-      color: var(--chakra-colors-secondary-textHover);
+      color: var(--chakra-colors-primary-hover);
       transform: scale(1.03);
     }
+  }
+
+  &:active {
+    background-color: transparent;
   }
 `;
