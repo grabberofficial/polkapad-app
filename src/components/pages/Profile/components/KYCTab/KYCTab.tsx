@@ -50,6 +50,7 @@ export const KYCTab = () => {
       flexDirection="column"
       gap={isKYCAccepted ? '28px' : '9px'}
       key="kyc"
+      marginBottom="60px"
     >
       {isKYCAccepted && (
         <>
