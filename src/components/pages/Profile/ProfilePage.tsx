@@ -25,18 +25,12 @@ import { sendMetricsSuccessKYC } from '@/services/metrics';
 import { AccountTab } from '@/components/pages/Profile/components/AccountTab/AccountTab';
 import { WalletTab } from './components/WalletTab/WalletTab';
 import { KYCTab } from '@/components/pages/Profile/components/KYCTab/KYCTab';
-import {
-  KYCContext,
-  KYCProvider,
-} from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
-import {
-  WalletsContext,
-  WalletsProvider,
-} from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
+import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
+import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
 
 const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
 
-const ProfilePageContent = () => {
+export const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
   const isMobile = useIsMobile();
@@ -224,11 +218,3 @@ const ProfilePageContent = () => {
     </Fragment>
   );
 };
-
-export const ProfilePage = (props: any) => (
-  <KYCProvider>
-    <WalletsProvider>
-      <ProfilePageContent {...props} />
-    </WalletsProvider>
-  </KYCProvider>
-);
