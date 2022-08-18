@@ -42,7 +42,7 @@ export const Footer = () => (
       >
         <Stack direction="row" spacing="8">
           <Stack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
+            <Text fontSize="sm" fontWeight="semibold" color="secondary.basic">
               Resources
             </Text>
             <Stack spacing="3" shouldWrapChildren>
@@ -81,7 +81,7 @@ export const Footer = () => (
             </Stack>
           </Stack>
           <GeneralStack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
+            <Text fontSize="sm" fontWeight="semibold" color="secondary.basic">
               General
             </Text>
             <Stack spacing="3" shouldWrapChildren>
@@ -110,7 +110,7 @@ export const Footer = () => (
             </Stack>
           </GeneralStack>
           <CommunityStack spacing="4" minW="36" flex="1">
-            <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
+            <Text fontSize="sm" fontWeight="semibold" color="secondary.basic">
               Community
             </Text>
             <Stack spacing="3" shouldWrapChildren>
@@ -142,7 +142,7 @@ export const Footer = () => (
           </CommunityStack>
         </Stack>
         <LastStack spacing="4">
-          <Text fontSize="sm" fontWeight="semibold" color="primary.basic">
+          <Text fontSize="sm" fontWeight="semibold" color="secondary.basic">
             Join <StyledText>PolkaPad&apos;s</StyledText> mailing list
           </Text>
           <Stack
@@ -260,8 +260,8 @@ const StyledButton = styled(Button)`
 `;
 
 const SubscribeButton = styled(Button)`
-  background: var(--chakra-colors-primary-basic);
-  color: white;
+  background: var(--chakra-colors-accent-green);
+  color: var(--chakra-colors-secondary-text);
   font-weight: 600;
   font-size: 14px;
   line-height: 21px;
@@ -269,6 +269,7 @@ const SubscribeButton = styled(Button)`
 
   &:hover {
     background: var(--chakra-colors-primary-hover);
+    color: var(--chakra-colors-primary-textHover);
   }
 `;
 
@@ -315,7 +316,7 @@ export const FooterWrapper = styled.div`
     margin-top: 90px;
   }
   @media screen and (min-width: 48em) {
-    margin-top: 120px;
+    margin-top: 0;
   }
 `;
 

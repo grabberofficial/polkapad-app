@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react';
 import { Button } from '@/components/common/Button';
-import { Image } from '@chakra-ui/react';
+import { Image, Spinner } from '@chakra-ui/react';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
 import { Loader } from '@/components/common/Loader/Loader';
@@ -50,14 +50,15 @@ export const PolkadotWalletButton = memo(
         {isConnected && (
           <Button
             onClick={onInfoOpen}
-            variant="secondary"
+            variant="transparent"
             width="auto"
-            minWidth="150px"
+            minWidth="120px"
             flexShrink={0}
             flexGrow={0}
             iconPlacement="left"
             iconGap="10px"
-            padding="0 16px"
+            fontSize="16px"
+            padding="0"
             icon={
               <Image
                 src="/images/polkadot-logo.svg"
@@ -71,22 +72,23 @@ export const PolkadotWalletButton = memo(
             {formattedBalance ? (
               `${formattedBalance} DOT`
             ) : (
-              <Loader width="29px" height="29px" />
+              <Spinner width="24px" height="24px" />
             )}
           </Button>
         )}
         {!isConnected && !isVerify && (
           <Button
             onClick={onPopupOpen}
-            variant="secondary"
+            variant="transparent"
             width="auto"
-            minWidth="150px"
+            minWidth="120px"
             flexShrink={0}
             flexGrow={0}
             iconGap="10px"
+            fontSize="16px"
             disabled={isLoading}
             iconPlacement="left"
-            padding="0 16px"
+            padding="0"
             icon={
               <Image
                 src="/images/polkadot-logo.svg"

@@ -8,7 +8,7 @@ import React from 'react';
 import { Arrow, ButtonDivider } from './Button.style';
 
 interface ButtonProps extends ChakraButtonProps {
-  variant: 'primary' | 'secondary';
+  variant: 'primary' | 'secondary' | 'transparent';
   fixedWidth?: number;
   icon?: React.ReactNode;
   iconGap?: number;
@@ -36,40 +36,37 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
     ref,
   ) => {
     const { disabled } = rest;
-    const hoverStyle =
-      variant === 'primary'
-        ? {
-            backgroundColor: 'var(--chakra-colors-primary-hover)',
-            '& .button-arrow': {
-              transform: 'translateX(3px)',
-              color: 'green',
-            },
-            '& .arrow-container': {
-              borderColor: 'yellow',
-            },
-          }
-        : {
-            color: 'var(--chakra-colors-secondary-textHover)',
-            '& .button-arrow': {
-              transform: 'translateX(3px)',
-            },
-          };
+    const isPrimary = variant === 'primary';
+    const isSecondary = variant === 'secondary';
+    const isTransparent = variant === 'transparent';
 
-    const dividerColor = variant === 'primary' ? '#16B9D1' : '#E0E0E0';
+    const hoverStyle = isPrimary
+      ? {
+          color: 'var(--chakra-colors-primary-textHover)',
+          backgroundColor: 'var(--chakra-colors-primary-hover)',
+          '& .button-arrow': {
+            transform: 'translateX(3px)',
+            color: 'green',
+          },
+          '& .arrow-container': {
+            borderColor: 'yellow',
+          },
+        }
+      : {
+          color: 'var(--chakra-colors-secondary-textHover)',
+          borderColor: 'var(--chakra-colors-secondary-hover)',
+          '& .button-arrow': {
+            transform: 'translateX(3px)',
+          },
+        };
+
+    const dividerColor = isPrimary ? '#16B9D1' : '#E0E0E0';
     const border = `1px solid ${dividerColor}`;
 
     return (
       <ChakraButton
-        backgroundColor={
-          variant === 'primary'
-            ? 'var(--chakra-colors-primary-basic)'
-            : 'var(--chakra-colors-secondary-basic)'
-        }
-        color={
-          variant === 'primary'
-            ? 'var(--chakra-colors-primary-text)'
-            : 'var(--chakra-colors-secondary-text)'
-        }
+        backgroundColor={isPrimary ? 'primary.basic' : 'transparent'}
+        color={isPrimary ? 'primary.text' : 'secondary.text'}
         fontSize={14}
         fontWeight={600}
         fontFamily="Poppins"
@@ -78,7 +75,16 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
         height="48px"
         display="flex"
         align-items="center"
-        border={variant === 'primary' ? undefined : '1px solid #E5E4E4'}
+        _active={
+          isTransparent
+            ? { backgroundColor: 'transparent', opacity: 0.6 }
+            : undefined
+        }
+        border={
+          isSecondary
+            ? '1px solid var(--chakra-colors-primary-border)'
+            : undefined
+        }
         maxWidth={fixedWidth ? `${fixedWidth}px` : '100%'}
         ref={ref}
         {...rest}
@@ -118,7 +124,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
             className="arrow-container"
           >
             <Arrow
-              primary={variant === 'primary' || undefined}
+              primary={isPrimary || undefined}
               style={{
                 marginLeft: '16px',
               }}

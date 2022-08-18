@@ -125,7 +125,7 @@ export const LoginPage = () => {
         width={['350px', '350px', 'auto']}
       >
         Welcome to&nbsp;
-        <Text as="span" color="primary.basic">
+        <Text as="span" color="accent.green">
           Polkapad
         </Text>
       </Text>

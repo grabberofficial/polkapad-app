@@ -60,7 +60,7 @@ export const BINANCE_WALLET: WalletMeta = {
   title: 'Binance Wallet',
   extensionName: 'Binance Wallet',
   ethereumProvider: 'BinanceChain',
-  icon: '/images/icon_bsc.svg',
+  icon: '/images/bsc_icon.svg',
   installUrl: 'https://www.bnbchain.org/en/binance-wallet',
 };
 
