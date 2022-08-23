@@ -2,7 +2,6 @@ import { createContext, Dispatch, SetStateAction } from 'react';
 import { useKYCStatus } from '@/components/pages/Profile/components/KYCProvider/hooks/useKYCStatus';
 import useUser from '@/hooks/useUser';
 import { KycStatusTypes } from '@/pages/api/kycStatus';
-import { LOGIN_ROUTE } from '@/constants/routes';
 
 export type KYCContextType = {
   isKYCAccepted: boolean;
@@ -27,9 +26,7 @@ interface KYCProviderProps {
 }
 
 export const KYCProvider = ({ children }: KYCProviderProps) => {
-  const { user } = useUser({
-    redirectTo: LOGIN_ROUTE,
-  });
+  const { user } = useUser();
   const kycStatus = useKYCStatus(user);
 
   return (
