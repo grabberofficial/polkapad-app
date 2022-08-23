@@ -4,7 +4,6 @@ import {
   useWallets,
   WalletsType,
 } from '@/components/pages/Profile/components/WalletsProvider/hooks/useWallets';
-import { LOGIN_ROUTE } from '@/constants/routes';
 
 export type WalletsContextType = {
   wallets: WalletsType;
@@ -23,9 +22,7 @@ interface WalletsProviderProps {
 }
 
 export const WalletsProvider = ({ children }: WalletsProviderProps) => {
-  const { user } = useUser({
-    redirectTo: LOGIN_ROUTE,
-  });
+  const { user } = useUser();
   const walletsState = useWallets(user);
 
   return (
