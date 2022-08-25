@@ -25,10 +25,16 @@ import { sendMetricsSuccessKYC } from '@/services/metrics';
 import { AccountTab } from '@/components/pages/Profile/components/AccountTab/AccountTab';
 import { WalletTab } from './components/WalletTab/WalletTab';
 import { KYCTab } from '@/components/pages/Profile/components/KYCTab/KYCTab';
+import { RewardsTab } from '@/components/pages/Profile/components/RewardsTab/RewardsTab';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
 
-const tabs = ['Profile details', 'Verify wallet', 'KYC Verification'];
+const tabs = [
+  'Profile details',
+  'Verify wallet',
+  'KYC Verification',
+  'Rewards',
+];
 
 export const ProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -55,6 +61,7 @@ export const ProfilePage = () => {
     <AccountTab key="account" setSelectedTab={setSelectedTab} />,
     <WalletTab key="wallet" setSelectedTab={setSelectedTab} />,
     <KYCTab key="kyc" />,
+    <RewardsTab key="rewards" />,
   ];
 
   return (
