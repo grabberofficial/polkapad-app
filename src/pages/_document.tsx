@@ -5,6 +5,10 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          <meta
+            name="facebook-domain-verification"
+            content="kpa4q0e24rfflzhpsv3b4n80ured84"
+          />
           <link
             href="https://fonts.googleapis.com/css2?family=Poppins"
             rel="stylesheet"

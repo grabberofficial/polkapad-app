@@ -55,6 +55,7 @@ jobs:
           --build-arg MAILCHIMP_ID="${{ secrets.DEV_MAILCHIMP_ID }}"
           --build-arg ENVIRONMENT="DEVELOPMENT"
           --build-arg GLEAM_REWARD_URL="${{ secrets.GLEAM_REWARD_URL }}"
+          --build-arg FACEBOOK_PIXEL="${{ secrets.FACEBOOK_PIXEL }}"
           -f .github/workflows/Dockerfile .
 
       - name: Push to ECR and Argo

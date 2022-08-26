@@ -1,8 +1,8 @@
-import { sessionOptions } from '@/lib/session';
+import { sessionOptions } from '@/constants/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { serviceUrl } from '@/config/env';
-import { withSentry } from '@sentry/nextjs';
+// import { withSentry } from '@sentry/nextjs';
 
 export type KYC = {
   iframeUrl: string | null;
@@ -39,4 +39,5 @@ const kycRoute = async (req: NextApiRequest, res: NextApiResponse<KYC>) => {
   }
 };
 
-export default withSentry(withIronSessionApiRoute(kycRoute, sessionOptions));
+// export default withSentry(withIronSessionApiRoute(kycRoute, sessionOptions));
+export default withIronSessionApiRoute(kycRoute, sessionOptions);

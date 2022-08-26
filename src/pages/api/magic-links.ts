@@ -1,4 +1,4 @@
-import { sessionOptions } from '@/lib/session';
+import { sessionOptions } from '@/constants/session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { serviceUrl } from '@/config/env';
@@ -29,9 +29,7 @@ const magicLinksRoute = async (req: NextApiRequest, res: NextApiResponse) => {
       // eslint-disable-next-line no-empty
     } catch (e) {}
   } else {
-    res.json({
-      kycStatus: null,
-    });
+    res.json('');
   }
 };
 

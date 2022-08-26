@@ -1,14 +1,15 @@
 import { memo } from 'react';
 import { AppProps } from 'next/app';
-import Head from 'next/head';
-import Providers from '@/shared/providers';
-import { MainLayout } from '@/layouts';
-import { Header, GoogleAnalytics } from '@/components';
-import { SWRConfig } from 'swr';
-import fetchJson from '@/lib/fetchJson';
 import dynamic from 'next/dynamic';
-import { googleAnalyticsId } from '@/config/env';
-import { checkIsIOS } from '@/shared/utils/checkIsIOS';
+import Head from 'next/head';
+import { SWRConfig } from 'swr';
+import { GoogleAnalytics, Header } from '@/components';
+import { FacebookPixel } from '@/components/FacebookPixel';
+import { facebookPixel, googleAnalyticsId } from '@/config/env';
+import { MainLayout } from '@/layouts';
+import fetchJson from '@/services/fetchJson';
+import Providers from '@/providers';
+import { checkIsIOS } from '@/utils/checkIsIOS';
 
 const meta = {
   title: 'Polkapad - HMC Launchpad',
@@ -42,6 +43,7 @@ const App = (props: AppProps): JSX.Element => {
           <Component {...pageProps} />
         </MainLayout>
         {googleAnalyticsId && <GoogleAnalytics id={googleAnalyticsId} />}
+        {facebookPixel && <FacebookPixel id={facebookPixel} />}
       </SWRConfig>
     </>
   );

@@ -1,0 +1,60 @@
+import { ReactNode } from 'react';
+import { extendTheme, ChakraProvider } from '@chakra-ui/react';
+
+const theme = extendTheme({
+  styles: {
+    global: {
+      '*': {
+        fontFamily: 'Poppins',
+      },
+    },
+  },
+  colors: {
+    primary: {
+      basic: '#303030',
+      hover: '#FFF',
+      text: '#FFF',
+      textHover: '#303030',
+      border: '#303030',
+      grey: '#F6F5F5',
+    },
+    secondary: {
+      basic: '#fff',
+      text: '#303030',
+      textLight: '#A5A5A5',
+      textHover: '#FFF',
+      backgroundHover: 'rgba(0, 150, 239, 0.08)',
+    },
+    accent: { green: '#D6FB5E', blue: '#0096EF' },
+    footer: {
+      dark: '#8E8E8E',
+      light: '#E9E9E9',
+      background: '#303030',
+    },
+    menu: {
+      text: '#5B5B5B',
+    },
+    warning: '#FFCC15',
+    background: {
+      dark: '#303030',
+      gray: '#EBEBEB',
+    },
+    error: '#E868AF',
+    kycIcons: '#3E9685',
+    border: '#E9E9E9',
+    borderDark: '#303030',
+    red: {
+      500: '#E868AF',
+    },
+  },
+});
+
+interface ThemeProps {
+  children: ReactNode;
+}
+
+const ThemeProvider = ({ children }: ThemeProps) => {
+  return <ChakraProvider theme={theme}>{children}</ChakraProvider>;
+};
+
+export default ThemeProvider;
