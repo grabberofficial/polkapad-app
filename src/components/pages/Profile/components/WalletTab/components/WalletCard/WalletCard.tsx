@@ -174,8 +174,8 @@ const WalletCard: React.FC<{
         alignItems="center"
         justifyContent="space-between"
         flexDirection={'row'}
-        border="1px solid var(--chakra-colors-primary-border)"
-        borderColor={verified ? 'primary.basic' : 'primary.border'}
+        border="1px solid var(--chakra-colors-borderDark)"
+        borderColor={verified ? 'primary.basic' : 'borderDark'}
         borderRadius={'4px'}
       >
         <Flex alignItems={'center'}>

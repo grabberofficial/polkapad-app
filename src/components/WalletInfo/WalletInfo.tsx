@@ -99,7 +99,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
                 fontWeight={600}
                 color="secondary.text"
               >
-                {`${balance}`} DOT
+                {`${balance}`}
               </Text>
             </Flex>
             <Flex flexDirection="column">
@@ -116,7 +116,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
                 fontWeight={600}
                 color="secondary.text"
               >
-                {isPolka ? 'Polkadot' : 'BSC'}
+                {isPolka ? 'Gear Testnet' : 'BSC'}
               </Text>
             </Flex>
             <Flex flexDirection="column">
@@ -140,7 +140,7 @@ export const WalletsInfo = (props: WalletsInfoProps) => {
           <Flex
             margin="10px -56px 0"
             padding="32px 48px"
-            border="1px solid var(--chakra-colors-primary-border)"
+            border="1px solid var(--chakra-colors-border)"
           >
             <Flex
               fontFamily="Poppins"

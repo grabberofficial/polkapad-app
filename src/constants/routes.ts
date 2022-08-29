@@ -7,6 +7,7 @@ export const SEND_CODE_ROUTE = '/auth/send-code';
 export const RESTORE_PASSWORD_ROUTE = '/auth/restore-password';
 export const LOCKER_ROUTE = '/locker';
 export const STAKING_ROUTE = '/staking';
+export const TEST_SALE_ROUTE = '/test-sale';
 export const MOBILE_KYC_ROUTE = '/mobile-kyc';
 export const MOBILE_WALLET_ROUTE = '/mobile-wallet';
 export const PROFILE_ROUTE = '/profile';

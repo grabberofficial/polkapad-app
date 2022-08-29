@@ -16,6 +16,7 @@ import {
   HOME_ROUTE,
   LOCKER_ROUTE,
   STAKING_ROUTE,
+  TEST_SALE_ROUTE,
   WAIT_ROUTE,
 } from '@/constants/routes';
 import { AccountButton } from './components/AccountButton/AccountButton';
@@ -30,6 +31,10 @@ const tabs = [
   {
     url: LOCKER_ROUTE,
     title: 'Locker',
+  },
+  {
+    url: TEST_SALE_ROUTE,
+    title: 'Test sale',
   },
   {
     url: STAKING_ROUTE,

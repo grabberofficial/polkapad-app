@@ -56,7 +56,7 @@ export const ChangeWalletConnectNetwork = ({
         <ModalFooter
           padding="20px 60px"
           marginTop="32px"
-          borderTop="1px solid var(--chakra-colors-primary-border)"
+          borderTop="1px solid var(--chakra-colors-borderDark)"
           justifyContent="flex-start"
         >
           <Text

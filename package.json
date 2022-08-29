@@ -25,6 +25,8 @@
     "@chakra-ui/react": "2.2.1",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@gear-js/api": "0.25.2",
+    "@gear-js/react-hooks": "0.2.19",
     "@hookform/resolvers": "2.8.8",
     "@metamask/providers": "8.1.1",
     "@polkadot/api": "8.4.2",
