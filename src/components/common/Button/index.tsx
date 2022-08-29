@@ -81,9 +81,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
             : undefined
         }
         border={
-          isSecondary
-            ? '1px solid var(--chakra-colors-primary-border)'
-            : undefined
+          isSecondary ? '1px solid var(--chakra-colors-borderDark)' : undefined
         }
         maxWidth={fixedWidth ? `${fixedWidth}px` : '100%'}
         ref={ref}

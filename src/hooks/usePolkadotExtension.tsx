@@ -20,7 +20,8 @@ import {
   WalletMeta,
 } from '@/constants/wallets';
 import { CONNECTED_POLKA_WALLET_KEY } from '@/constants/localStorage';
-import { useBalances } from '@talismn/api-react-hooks';
+import { gearService } from '@/hooks/gearService';
+import { Balance } from '@polkadot/types/interfaces';
 
 export type Account = {
   name?: string;
@@ -29,9 +30,9 @@ export type Account = {
 };
 
 const DAPP_NAME = 'Polkapad';
-const POLKA_CHAIN_ID = '0';
+// const POLKA_CHAIN_ID = '0';
 // const KUSAMA_CHAIN_ID = '2';
-const CHAIN_IDS = [POLKA_CHAIN_ID];
+// const CHAIN_IDS = [POLKA_CHAIN_ID];
 
 type PolkadotExtensionContextType = {
   connectPolkadot: (wallet: WalletMeta) => void;
@@ -41,6 +42,8 @@ type PolkadotExtensionContextType = {
   extension?: Injected;
   connectedWallet?: WalletMeta;
   dotBalance?: string;
+  balance?: Balance;
+  updateBalance: (address: string) => Promise<void>;
   isPolkadotInstalled: boolean;
   isTalismanInstalled: boolean;
   isSubwalletInstalled: boolean;
@@ -59,7 +62,8 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
   disconnect: () => null,
   address: '',
   accounts: [],
-  dotBalance: '',
+  balance: undefined,
+  updateBalance: () => new Promise(() => null),
   isPolkadotInstalled: false,
   isTalismanInstalled: false,
   isSubwalletInstalled: false,
@@ -74,14 +78,15 @@ export const PolkadotExtensionProvider = (props: any) => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [extension, setExtension] = useState<Injected>();
   const [isLoading, setIsLoading] = useState(false);
+  const [balance, setBalance] = useState<Balance>();
   const isConnected = !!accounts.length;
   const connectedWallet = getConnectedWallet();
 
   const address = useMemo(() => accounts[0]?.address, [accounts]);
-  const { balances } = useBalances([address], CHAIN_IDS);
-  const dotBalance = useMemo(() => {
-    return balances.find((balance) => balance?.address === address)?.free;
-  }, [address, balances]);
+  // const { balances } = useBalances([address], CHAIN_IDS);
+  // const dotBalance = useMemo(() => {
+  //   return balances.find((balance) => balance?.address === address)?.free;
+  // }, [address, balances]);
 
   const isPolkadotInstalled = useMemo(() => {
     return !!injectedWindow?.injectedWeb3?.[POLKADOT_WALLET.extensionName];
@@ -129,6 +134,9 @@ export const PolkadotExtensionProvider = (props: any) => {
             },
           );
         }
+
+        await gearService.connect();
+        setBalance(await gearService.getBalance(accounts[0]?.address));
       } catch (err) {
         console.error(err);
         setIsLoading(false);
@@ -136,6 +144,10 @@ export const PolkadotExtensionProvider = (props: any) => {
     },
     [injectedWindow?.injectedWeb3],
   );
+
+  const updateBalance = useCallback(async (address: string) => {
+    setBalance(await gearService.getBalance(address));
+  }, []);
 
   const disconnect = useCallback(async () => {
     setAccounts([]);
@@ -157,7 +169,9 @@ export const PolkadotExtensionProvider = (props: any) => {
       accounts,
       extension,
       connectedWallet,
-      dotBalance,
+      // dotBalance,
+      balance,
+      updateBalance,
       isLoading,
       isConnected,
       isPolkadotInstalled,
@@ -172,7 +186,9 @@ export const PolkadotExtensionProvider = (props: any) => {
       accounts,
       extension,
       connectedWallet,
-      dotBalance,
+      // dotBalance,
+      balance,
+      updateBalance,
       isLoading,
       isConnected,
       isPolkadotInstalled,

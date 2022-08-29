@@ -76,7 +76,7 @@ export const LaunchpadPage = () => {
           </HeaderFlex>
         </Flex>
       </Flex>
-      <Flex flexDirection="column" width="100%" backgroundColor="red">
+      <Flex flexDirection="column" width="100%">
         <Flex
           position="relative"
           padding={['40px 16px 40px', '40px 16px 40px', '56px 140px 56px']}

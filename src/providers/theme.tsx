@@ -15,7 +15,6 @@ const theme = extendTheme({
       hover: '#FFF',
       text: '#FFF',
       textHover: '#303030',
-      border: '#303030',
       grey: '#F6F5F5',
     },
     secondary: {

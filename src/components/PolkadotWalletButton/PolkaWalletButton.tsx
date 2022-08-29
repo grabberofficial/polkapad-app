@@ -6,11 +6,6 @@ import { WalletsInfo } from '@/components/WalletInfo/WalletInfo';
 import { Loader } from '@/components/common/Loader/Loader';
 import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
 import { PolkaWalletsPopup } from '@/components/PolkadotWalletButton/components/PolkaWalletsPopup';
-import {
-  convertSS58Address,
-  formatPolkaBalance,
-  POLKA_ADDRESS_PREFIX,
-} from '@/utils/wallets';
 
 interface PolkadotWalletButtonProps {
   isVerify?: boolean;
@@ -20,7 +15,7 @@ export const PolkadotWalletButton = memo(
   ({ isVerify }: PolkadotWalletButtonProps) => {
     const {
       disconnect,
-      dotBalance,
+      balance,
       address,
       connectedWallet,
       isConnected,
@@ -42,8 +37,6 @@ export const PolkadotWalletButton = memo(
       await disconnect();
       onInfoClose();
     }, [disconnect, onInfoClose]);
-
-    const formattedBalance = formatPolkaBalance(dotBalance);
 
     return (
       <>
@@ -69,8 +62,8 @@ export const PolkadotWalletButton = memo(
               />
             }
           >
-            {formattedBalance ? (
-              `${formattedBalance} DOT`
+            {balance ? (
+              `${balance.toHuman()}`
             ) : (
               <Spinner width="24px" height="24px" />
             )}
@@ -113,11 +106,11 @@ export const PolkadotWalletButton = memo(
           </Button>
         )}
         <PolkaWalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
-        {address && dotBalance && connectedWallet?.title && (
+        {address && balance && connectedWallet?.title && (
           <WalletsInfo
             isPolka
-            account={convertSS58Address(address, POLKA_ADDRESS_PREFIX.POLKA)}
-            balance={formattedBalance}
+            account={address}
+            balance={balance.toHuman()}
             walletName={connectedWallet?.title}
             walletIcon={connectedWallet?.icon}
             onDisconnect={onDisconnect}

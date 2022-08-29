@@ -58,7 +58,7 @@ export const WalletsPopup = ({
       {!isProduction && (
         <ModalFooter
           padding="20px 70px"
-          borderTop="1px solid var(--chakra-colors-primary-border)"
+          borderTop="1px solid var(--chakra-colors-border)"
         >
           <Button variant="primary">Learn how to connect</Button>
         </ModalFooter>
