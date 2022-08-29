@@ -71,7 +71,7 @@ export const TestSalePage = () => {
   const claimTestGear = useCallback(async () => {
     setIsLoading(true);
     await gearService.transferBalance(address);
-    updateBalance(address);
+    await updateBalance(address);
     setIsLoading(false);
   }, [address, updateBalance]);
 
