@@ -26,7 +26,7 @@ export const PolkaWalletsPopup = ({
   onClose,
 }: PolkaWalletsPopupProps) => {
   const { connectPolkadot } = usePolkadotExtension();
-  console.info(checkIsPolkadotInstalled(), '[checkIsPolkadotInstalled()]');
+  console.log(checkIsPolkadotInstalled(), '[checkIsPolkadotInstalled()]');
 
   const onPolkaConnect = useCallback(() => {
     connectPolkadot(POLKADOT_WALLET);
