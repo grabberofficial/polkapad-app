@@ -63,8 +63,15 @@ export const checkIsPolkaWalletInstalled = (wallet: WalletMeta) => {
   return !!window?.injectedWeb3?.[wallet.extensionName];
 };
 
-export const checkIsPolkadotInstalled = () =>
-  checkIsPolkaWalletInstalled(POLKADOT_WALLET);
+export const checkIsPolkadotInstalled = () => {
+  console.info(window, '[window in polka check]');
+  console.info(window?.injectedWeb3, '[inj window in polka check]');
+  console.info(
+    window?.injectedWeb3?.['polkadot-js'],
+    '[polkadot-js in polka check]',
+  );
+  return checkIsPolkaWalletInstalled(POLKADOT_WALLET);
+};
 
 export const checkIsTalismanInstalled = () =>
   checkIsPolkaWalletInstalled(TALISMAN_WALLET);
