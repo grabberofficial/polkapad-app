@@ -6,12 +6,19 @@ import {
   BINANCE_WALLET,
   CLOVER_WALLET,
   METAMASK,
+  POLKADOT_WALLET,
   SUB_WALLET,
   TALISMAN_WALLET,
   UNKNOWN_INJECTED_WALLET,
   WALLET_CONNECT,
+  WalletMeta,
 } from '@/constants/wallets';
-import { CONNECTED_EVM_WALLET_KEY } from '@/constants/localStorage';
+import {
+  CONNECTED_EVM_WALLET_KEY,
+  CONNECTED_POLKA_WALLET_KEY,
+  WALLET_CONNECT_DEEPLINK_KEY,
+  WALLET_CONNECT_KEY,
+} from '@/constants/localStorage';
 
 interface EthereumProvider extends providers.JsonRpcProvider {
   provider?: {
@@ -51,6 +58,22 @@ export const shortenPolkaAddress = (address: string, rate = 6) => {
 
 export const formatEtherBalance = (balance?: BigNumber | string) =>
   balance ? parseFloat(formatEther(balance)).toFixed(2) : '';
+
+export const checkIsPolkaWalletInstalled = (wallet: WalletMeta) => {
+  return !!window?.injectedWeb3?.[wallet.extensionName];
+};
+
+export const checkIsPolkadotInstalled = () =>
+  checkIsPolkaWalletInstalled(POLKADOT_WALLET);
+
+export const checkIsTalismanInstalled = () =>
+  checkIsPolkaWalletInstalled(TALISMAN_WALLET);
+
+export const checkIsSubwalletInstalled = () =>
+  checkIsPolkaWalletInstalled(SUB_WALLET);
+
+export const checkIsCloverInstalled = () =>
+  checkIsPolkaWalletInstalled(CLOVER_WALLET);
 
 export const formatPolkaBalance = (balance?: BigNumber | string) =>
   balance
@@ -106,4 +129,19 @@ export const getConnectedEVMWallet = (library?: EthereumProvider) => {
 export const getStoredEVMWallet = () => {
   const connectedWallet = localStorage.getItem(CONNECTED_EVM_WALLET_KEY);
   return connectedWallet ? JSON.parse(connectedWallet) : null;
+};
+
+export const cleanEVMStorage = () => {
+  localStorage.removeItem(WALLET_CONNECT_KEY);
+  localStorage.removeItem(WALLET_CONNECT_DEEPLINK_KEY);
+  localStorage.removeItem(CONNECTED_EVM_WALLET_KEY);
+};
+
+export const cleanPolkaStorage = () => {
+  localStorage.removeItem(CONNECTED_POLKA_WALLET_KEY);
+};
+
+export const cleanWalletsStorage = () => {
+  cleanEVMStorage();
+  cleanPolkaStorage();
 };

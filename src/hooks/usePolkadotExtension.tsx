@@ -9,19 +9,16 @@ import React, {
 } from 'react';
 import {
   Injected,
-  InjectedWindow,
   InjectedWindowProvider,
 } from '@polkadot/extension-inject/types';
-import {
-  CLOVER_WALLET,
-  POLKADOT_WALLET,
-  SUB_WALLET,
-  TALISMAN_WALLET,
-  WalletMeta,
-} from '@/constants/wallets';
+import { WalletMeta } from '@/constants/wallets';
 import { CONNECTED_POLKA_WALLET_KEY } from '@/constants/localStorage';
 import { gearService } from '@/hooks/gearService';
 import { Balance } from '@polkadot/types/interfaces';
+import {
+  checkIsPolkaWalletInstalled,
+  cleanPolkaStorage,
+} from '@/utils/wallets';
 
 export type Account = {
   name?: string;
@@ -44,10 +41,6 @@ type PolkadotExtensionContextType = {
   dotBalance?: string;
   balance?: Balance;
   updateBalance: (address: string) => Promise<void>;
-  isPolkadotInstalled: boolean;
-  isTalismanInstalled: boolean;
-  isSubwalletInstalled: boolean;
-  isCloverInstalled: boolean;
   isConnected: boolean;
   isLoading: boolean;
 };
@@ -64,16 +57,11 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
   accounts: [],
   balance: undefined,
   updateBalance: () => new Promise(() => null),
-  isPolkadotInstalled: false,
-  isTalismanInstalled: false,
-  isSubwalletInstalled: false,
-  isCloverInstalled: false,
   isConnected: false,
   isLoading: false,
 });
 
 export const PolkadotExtensionProvider = (props: any) => {
-  const injectedWindow = window as Window & InjectedWindow;
   const unsubscribe = useRef<() => void>(() => null);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [extension, setExtension] = useState<Injected>();
@@ -88,58 +76,40 @@ export const PolkadotExtensionProvider = (props: any) => {
   //   return balances.find((balance) => balance?.address === address)?.free;
   // }, [address, balances]);
 
-  const isPolkadotInstalled =
-    !!injectedWindow?.injectedWeb3?.[POLKADOT_WALLET.extensionName];
+  const connectPolkadot = useCallback(async (wallet: WalletMeta) => {
+    const injectedExtension: InjectedWindowProvider =
+      window?.injectedWeb3?.[wallet.extensionName];
 
-  const isTalismanInstalled =
-    !!injectedWindow?.injectedWeb3?.[TALISMAN_WALLET.extensionName];
+    if (!injectedExtension) {
+      window.open(wallet.installUrl);
+      return;
+    }
 
-  const isSubwalletInstalled =
-    !!injectedWindow?.injectedWeb3?.[SUB_WALLET.extensionName];
+    try {
+      setIsLoading(true);
+      const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
+      setExtension(enabledExtension);
 
-  const isCloverInstalled =
-    !!injectedWindow?.injectedWeb3?.[CLOVER_WALLET.extensionName];
+      const accounts = await enabledExtension.accounts.get();
+      setAccounts(accounts);
+      setIsLoading(false);
+      localStorage.setItem(CONNECTED_POLKA_WALLET_KEY, JSON.stringify(wallet));
 
-  const connectPolkadot = useCallback(
-    async (wallet: WalletMeta) => {
-      const injectedExtension: InjectedWindowProvider =
-        injectedWindow?.injectedWeb3?.[wallet.extensionName];
-
-      if (!injectedExtension) {
-        window.open(wallet.installUrl);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
-        setExtension(enabledExtension);
-
-        const accounts = await enabledExtension.accounts.get();
-        setAccounts(accounts);
-        setIsLoading(false);
-        localStorage.setItem(
-          CONNECTED_POLKA_WALLET_KEY,
-          JSON.stringify(wallet),
+      if (enabledExtension?.accounts.subscribe) {
+        unsubscribe.current = enabledExtension?.accounts.subscribe(
+          (result: Account[]) => {
+            setAccounts(result);
+          },
         );
-
-        if (enabledExtension?.accounts.subscribe) {
-          unsubscribe.current = enabledExtension?.accounts.subscribe(
-            (result: Account[]) => {
-              setAccounts(result);
-            },
-          );
-        }
-
-        await gearService.connect();
-        setBalance(await gearService.getBalance(accounts[0]?.address));
-      } catch (err) {
-        console.error(err);
-        setIsLoading(false);
       }
-    },
-    [injectedWindow?.injectedWeb3],
-  );
+
+      await gearService.connect();
+      setBalance(await gearService.getBalance(accounts[0]?.address));
+    } catch (err) {
+      console.error(err);
+      setIsLoading(false);
+    }
+  }, []);
 
   const updateBalance = useCallback(async (address: string) => {
     setBalance(await gearService.getBalance(address));
@@ -148,11 +118,16 @@ export const PolkadotExtensionProvider = (props: any) => {
   const disconnect = useCallback(async () => {
     setAccounts([]);
     unsubscribe.current();
-    localStorage.removeItem(CONNECTED_POLKA_WALLET_KEY);
+    cleanPolkaStorage();
   }, [setAccounts, unsubscribe]);
 
   useEffect(() => {
-    if (!isConnected && !isLoading && connectedWallet) {
+    if (
+      !isConnected &&
+      !isLoading &&
+      connectedWallet &&
+      checkIsPolkaWalletInstalled(connectedWallet)
+    ) {
       connectPolkadot(connectedWallet);
     }
   }, []);
@@ -170,10 +145,6 @@ export const PolkadotExtensionProvider = (props: any) => {
       updateBalance,
       isLoading,
       isConnected,
-      isPolkadotInstalled,
-      isTalismanInstalled,
-      isSubwalletInstalled,
-      isCloverInstalled,
     }),
     [
       connectPolkadot,
@@ -187,10 +158,6 @@ export const PolkadotExtensionProvider = (props: any) => {
       updateBalance,
       isLoading,
       isConnected,
-      isPolkadotInstalled,
-      isTalismanInstalled,
-      isSubwalletInstalled,
-      isCloverInstalled,
     ],
   );
 
