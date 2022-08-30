@@ -1,7 +1,8 @@
 import { providers } from 'ethers';
+import { InjectedWindow } from '@polkadot/extension-inject/types';
 
 declare global {
-  interface Window {
+  interface Window extends InjectedWindow {
     talismanEth: providers.Web3Provider;
     SubWallet: providers.Web3Provider;
     BinanceChain: providers.Web3Provider;

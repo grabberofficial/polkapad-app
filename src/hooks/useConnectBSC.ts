@@ -11,12 +11,12 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 import { sendMetricsStartedConnectionBinance } from '@/services/metrics';
 import {
   CONNECTED_EVM_WALLET_KEY,
-  WALLET_CONNECT_DEEPLINK_KEY,
   WALLET_CONNECT_KEY,
 } from '@/constants/localStorage';
 import { providers } from 'ethers';
 import { WalletMeta } from '@/constants/wallets';
 import {
+  cleanEVMStorage,
   getBinanceWalletProvider,
   getCloverProvider,
   getConnectedEVMWallet,
@@ -157,9 +157,7 @@ export const useConnectBSC = () => {
 
   const deactivate = useCallback(() => {
     disconnectBSC();
-    localStorage.removeItem(WALLET_CONNECT_KEY);
-    localStorage.removeItem(WALLET_CONNECT_DEEPLINK_KEY);
-    localStorage.removeItem(CONNECTED_EVM_WALLET_KEY);
+    cleanEVMStorage();
   }, [disconnectBSC]);
 
   return {

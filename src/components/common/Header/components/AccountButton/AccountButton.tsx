@@ -19,6 +19,7 @@ import {
 import { Button } from '@/components/common/Button';
 import { BiUser } from 'react-icons/bi';
 import { HamburgerIcon } from '@chakra-ui/icons';
+import { cleanWalletsStorage } from '@/utils/wallets';
 
 export const AccountButton = () => {
   const { mutateUser } = useUser();
@@ -29,6 +30,7 @@ export const AccountButton = () => {
       await fetchJson(API_LOGOUT_ROUTE, { method: 'POST' }),
       false,
     );
+    cleanWalletsStorage();
     router.push(HOME_ROUTE);
   }, [mutateUser, router]);
 

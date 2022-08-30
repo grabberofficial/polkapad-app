@@ -9,6 +9,12 @@ import {
   SUB_WALLET,
   TALISMAN_WALLET,
 } from '@/constants/wallets';
+import {
+  checkIsPolkadotInstalled,
+  checkIsTalismanInstalled,
+  checkIsSubwalletInstalled,
+  checkIsCloverInstalled,
+} from '@/utils/wallets';
 
 interface PolkaWalletsPopupProps {
   isOpen: boolean;
@@ -19,13 +25,7 @@ export const PolkaWalletsPopup = ({
   isOpen,
   onClose,
 }: PolkaWalletsPopupProps) => {
-  const {
-    connectPolkadot,
-    isTalismanInstalled,
-    isPolkadotInstalled,
-    isSubwalletInstalled,
-    isCloverInstalled,
-  } = usePolkadotExtension();
+  const { connectPolkadot } = usePolkadotExtension();
 
   const onPolkaConnect = useCallback(() => {
     connectPolkadot(POLKADOT_WALLET);
@@ -54,22 +54,24 @@ export const PolkaWalletsPopup = ({
       onClose={onClose}
     >
       <WalletPopupItem
-        text={isPolkadotInstalled ? 'Polkadot{.js}' : 'Install Polkadot{.js}'}
+        text={
+          checkIsPolkadotInstalled() ? 'Polkadot{.js}' : 'Install Polkadot{.js}'
+        }
         icon={POLKADOT_WALLET.icon}
         onClick={onPolkaConnect}
       />
       <WalletPopupItem
-        text={isTalismanInstalled ? 'Talisman' : 'Install Talisman'}
+        text={checkIsTalismanInstalled() ? 'Talisman' : 'Install Talisman'}
         icon={TALISMAN_WALLET.icon}
         onClick={onTalismanConnect}
       />
       <WalletPopupItem
-        text={isSubwalletInstalled ? 'Subwallet' : 'Install Subwallet'}
+        text={checkIsSubwalletInstalled() ? 'Subwallet' : 'Install Subwallet'}
         icon={SUB_WALLET.icon}
         onClick={onSubwalletConnect}
       />
       <WalletPopupItem
-        text={isCloverInstalled ? 'Clover' : 'Install Clover'}
+        text={checkIsCloverInstalled() ? 'Clover' : 'Install Clover'}
         icon={CLOVER_WALLET.icon}
         onClick={onCloverConnect}
       />
