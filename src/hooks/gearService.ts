@@ -8,8 +8,10 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { BN, u8aToHex } from '@polkadot/util';
 import toast from 'react-hot-toast';
 import { decodeAddress } from '@polkadot/util-crypto';
-import fungibleTokenMetaWasm from 'src/contracts/meta/fungible_token.meta.wasm';
 import { plpdContractPublicKey, rootSeed } from '@/config/env';
+
+// @ts-ignore
+import fungibleTokenMetaWasm from '@/contracts/meta/fungible_token.meta.wasm';
 
 const providerAddress = 'wss://rpc-node.gear-tech.io:443';
 const balanceToTransfer = new BN('1000000000');
