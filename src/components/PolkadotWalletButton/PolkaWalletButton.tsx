@@ -16,6 +16,7 @@ export const PolkadotWalletButton = memo(
     const {
       disconnect,
       balance,
+      plpdBalance,
       address,
       connectedWallet,
       isConnected,
@@ -37,6 +38,9 @@ export const PolkadotWalletButton = memo(
       await disconnect();
       onInfoClose();
     }, [disconnect, onInfoClose]);
+
+    const joinedBalance =
+      balance && plpdBalance && `${balance?.toHuman()} | ${plpdBalance} PLPD`;
 
     return (
       <>
@@ -62,8 +66,8 @@ export const PolkadotWalletButton = memo(
               />
             }
           >
-            {balance ? (
-              `${balance.toHuman()}`
+            {joinedBalance ? (
+              joinedBalance
             ) : (
               <Spinner width="24px" height="24px" />
             )}
@@ -106,11 +110,11 @@ export const PolkadotWalletButton = memo(
           </Button>
         )}
         <PolkaWalletsPopup isOpen={isPopupOpen} onClose={onPopupClose} />
-        {address && balance && connectedWallet?.title && (
+        {address && joinedBalance && connectedWallet?.title && (
           <WalletsInfo
             isPolka
             account={address}
-            balance={balance.toHuman()}
+            balance={joinedBalance}
             walletName={connectedWallet?.title}
             walletIcon={connectedWallet?.icon}
             onDisconnect={onDisconnect}
