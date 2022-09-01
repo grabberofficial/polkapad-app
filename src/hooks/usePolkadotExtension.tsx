@@ -40,6 +40,7 @@ type PolkadotExtensionContextType = {
   connectedWallet?: WalletMeta;
   dotBalance?: string;
   balance?: Balance;
+  plpdBalance?: string;
   updateBalance: (address: string) => Promise<void>;
   isConnected: boolean;
   isLoading: boolean;
@@ -56,6 +57,7 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
   address: '',
   accounts: [],
   balance: undefined,
+  plpdBalance: '',
   updateBalance: () => new Promise(() => null),
   isConnected: false,
   isLoading: false,
@@ -67,6 +69,7 @@ export const PolkadotExtensionProvider = (props: any) => {
   const [extension, setExtension] = useState<Injected>();
   const [isLoading, setIsLoading] = useState(false);
   const [balance, setBalance] = useState<Balance>();
+  const [plpdBalance, setPlpdBalance] = useState<string>();
   const isConnected = !!accounts.length;
   const connectedWallet = getConnectedWallet();
 
@@ -105,6 +108,9 @@ export const PolkadotExtensionProvider = (props: any) => {
 
       await gearService.connect();
       setBalance(await gearService.getBalance(accounts[0]?.address));
+      setPlpdBalance(
+        (await gearService.getPLPDBalance(accounts[0]?.address))?.Balance,
+      );
     } catch (err) {
       console.error(err);
       setIsLoading(false);
@@ -113,6 +119,7 @@ export const PolkadotExtensionProvider = (props: any) => {
 
   const updateBalance = useCallback(async (address: string) => {
     setBalance(await gearService.getBalance(address));
+    setPlpdBalance((await gearService.getPLPDBalance(address))?.Balance);
   }, []);
 
   const disconnect = useCallback(async () => {
@@ -142,6 +149,7 @@ export const PolkadotExtensionProvider = (props: any) => {
       connectedWallet,
       // dotBalance,
       balance,
+      plpdBalance,
       updateBalance,
       isLoading,
       isConnected,
@@ -155,6 +163,7 @@ export const PolkadotExtensionProvider = (props: any) => {
       connectedWallet,
       // dotBalance,
       balance,
+      plpdBalance,
       updateBalance,
       isLoading,
       isConnected,
