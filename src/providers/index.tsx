@@ -10,17 +10,25 @@ interface ProviderProps {
   children: ReactNode;
 }
 
-export const Providers = ({ children }: ProviderProps) => (
-  <ThemeProvider>
-    <DAppProvider>
-      <KYCProvider>
-        <WalletsProvider>
-          <PolkadotExtensionProvider>{children}</PolkadotExtensionProvider>
-        </WalletsProvider>
-      </KYCProvider>
-    </DAppProvider>
-  </ThemeProvider>
-);
+export const Providers = ({ children }: ProviderProps) => {
+  const isSSR = typeof window === 'undefined';
+
+  return (
+    <ThemeProvider>
+      <DAppProvider>
+        <KYCProvider>
+          <WalletsProvider>
+            {isSSR ? (
+              children
+            ) : (
+              <PolkadotExtensionProvider>{children}</PolkadotExtensionProvider>
+            )}
+          </WalletsProvider>
+        </KYCProvider>
+      </DAppProvider>
+    </ThemeProvider>
+  );
+};
 
 export default Providers;
 
