@@ -64,12 +64,7 @@ export const checkIsPolkaWalletInstalled = (wallet: WalletMeta) => {
 };
 
 export const checkIsPolkadotInstalled = () => {
-  console.log(window, '[window in polka check]');
-  console.log(window?.injectedWeb3, '[inj window in polka check]');
-  console.log(
-    window?.injectedWeb3?.['polkadot-js'],
-    '[polkadot-js in polka check]',
-  );
+  console.log(window);
   return checkIsPolkaWalletInstalled(POLKADOT_WALLET);
 };
 
