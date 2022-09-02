@@ -4,6 +4,9 @@ import {
   network,
   WCProviderConfig,
   binanceWalletNetwork,
+  networkName,
+  rpcUrls,
+  blockExplorerUrls,
 } from '@/config/network';
 import { useEthers, useTokenBalance } from '@usedapp/core';
 import { useCallback, useEffect, useMemo } from 'react';
@@ -25,6 +28,30 @@ import {
   getTalismanProvider,
 } from '@/utils/wallets';
 import { resolvePath } from '@/utils/common';
+
+const getNetworkArguments = (
+  chainId: number,
+  chainName: string,
+  rpcUrls: string[],
+  blockExplorerUrls: string[],
+) => {
+  return {
+    method: 'wallet_addEthereumChain',
+    params: [
+      {
+        chainId: `0x${Number(chainId).toString(16)}`,
+        chainName,
+        nativeCurrency: {
+          name: 'Binance Chain Native Token',
+          symbol: 'BNB',
+          decimals: 18,
+        },
+        rpcUrls,
+        blockExplorerUrls,
+      },
+    ],
+  };
+};
 
 export const useConnectBSC = () => {
   const {
@@ -82,6 +109,14 @@ export const useConnectBSC = () => {
     if (providerSwitch) {
       await providerSwitch(binanceWalletNetwork);
     } else {
+      const requestArguments = getNetworkArguments(
+        network,
+        networkName,
+        rpcUrls,
+        blockExplorerUrls,
+      );
+
+      await window.ethereum.request(requestArguments);
       await switchNetwork(network);
     }
   }, [library, switchNetwork]);
