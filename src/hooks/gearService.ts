@@ -8,13 +8,19 @@ import { KeyringPair } from '@polkadot/keyring/types';
 import { BN, u8aToHex } from '@polkadot/util';
 import toast from 'react-hot-toast';
 import { decodeAddress } from '@polkadot/util-crypto';
-import { plpdContractPublicKey, rootSeed } from '@/config/env';
+import {
+  plpdContractPublicKey,
+  rootSeed,
+  // stakingContractPublicKey,
+} from '@/config/env';
 
 // @ts-ignore
-import fungibleTokenMetaWasm from '@/contracts/meta/fungible_token.meta.wasm';
+import fungibleTokenMeta from '@/contracts/meta/fungible_token.meta.wasm';
+// @ts-ignore
+// import stakingContractMeta from '@/contracts/meta/polkapad_staking.meta.wasm';
 
 const providerAddress = 'wss://rpc-node.gear-tech.io:443';
-const balanceToTransfer = new BN('1000000000');
+const balanceToTransfer = new BN('10000000000');
 
 interface PLPDBalance {
   Balance: string;
@@ -92,7 +98,7 @@ async function getPLPDBalance(address: string) {
   if (gearApi) {
     const balance = await gearApi.programState.read(
       plpdContractPublicKey,
-      fungibleTokenMetaWasm,
+      fungibleTokenMeta,
       payload,
     );
 
@@ -103,17 +109,19 @@ async function getPLPDBalance(address: string) {
 async function sendMessage(
   sourcePublicKey: `0x${string}`,
   address: string,
+  contractAddress: `0x${string}`,
+  contractMeta: Buffer,
   payload: string,
 ) {
   const value = 0;
   const isOtherPanicsAllowed = false;
-  const metadata = await getWasmMetadata(fungibleTokenMetaWasm);
+  const metadata = await getWasmMetadata(contractMeta);
 
   if (gearApi) {
     try {
       const gas = await gearApi.program.calculateGas.handle(
         sourcePublicKey,
-        plpdContractPublicKey,
+        contractAddress,
         payload,
         value,
         isOtherPanicsAllowed,
@@ -121,7 +129,7 @@ async function sendMessage(
       );
 
       const message = {
-        destination: plpdContractPublicKey,
+        destination: contractAddress,
         payload,
         gasLimit: gas.min_limit.toNumber(),
         value,
@@ -145,7 +153,13 @@ async function approvePLPD(address: string) {
     },
   });
 
-  await sendMessage(sourcePublicKey, address, payload);
+  await sendMessage(
+    sourcePublicKey,
+    address,
+    plpdContractPublicKey,
+    fungibleTokenMeta,
+    payload,
+  );
 }
 
 async function transferPLPD(address: string) {
@@ -158,13 +172,66 @@ async function transferPLPD(address: string) {
     },
   });
 
-  await sendMessage(sourcePublicKey, address, payload);
+  await sendMessage(
+    sourcePublicKey,
+    address,
+    plpdContractPublicKey,
+    fungibleTokenMeta,
+    payload,
+  );
+  toast.success('Claim successful');
 }
 
 async function claimPLPD(address: string) {
   await approvePLPD(address);
   await transferPLPD(address);
 }
+
+// async function getStakedPLPDBalance(address: string) {
+//   const payload = {
+//     StakeOf: u8aToHex(decodeAddress(address)),
+//   };
+//
+//   if (gearApi) {
+//     const balance = await gearApi.programState.read(
+//       stakingContractPublicKey,
+//       stakingContractMeta,
+//       payload,
+//     );
+//
+//     return balance.toHuman() as unknown as PLPDBalance;
+//   }
+// }
+//
+// async function stakePLPD(address: string, amount: number) {
+//   const sourcePublicKey = u8aToHex(rootKeyRing.publicKey);
+//   const payload = JSON.stringify({
+//     Stake: amount,
+//   });
+//
+//   await sendMessage(
+//     sourcePublicKey,
+//     address,
+//     stakingContractPublicKey,
+//     stakingContractMeta,
+//     payload,
+//   );
+// }
+//
+// async function withdrawPLPD(address: string, amount: number) {
+//   const sourcePublicKey = u8aToHex(rootKeyRing.publicKey);
+//   const payload = JSON.stringify({
+//     Withdraw: amount,
+//   });
+//
+//   await sendMessage(
+//     sourcePublicKey,
+//     address,
+//     stakingContractPublicKey,
+//     stakingContractMeta,
+//     payload,
+//   );
+// }
 
 export const gearService = {
   connect,

@@ -129,6 +129,10 @@ export const PolkadotExtensionProvider = (props: any) => {
   }, [setAccounts, unsubscribe]);
 
   useEffect(() => {
+    console.log(window, '[window]');
+    console.log(isLoading, '[isLoading]');
+    console.log(isConnected, '[isConnected]');
+    console.log(connectedWallet, '[connectedWallet]');
     if (
       window &&
       !isConnected &&
