@@ -61,7 +61,7 @@ export const formatEtherBalance = (balance?: BigNumber | string) =>
 
 export const checkIsPolkaWalletInstalled = (wallet: WalletMeta) => {
   console.log(window, '[window 2]');
-  if (window) {
+  if (typeof window !== 'undefined') {
     return !!window?.injectedWeb3?.[wallet.extensionName];
   }
 };

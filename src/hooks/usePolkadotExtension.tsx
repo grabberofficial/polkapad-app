@@ -143,7 +143,7 @@ export const PolkadotExtensionProvider = (props: any) => {
       '[checkIsPolkaWalletInstalled]',
     );
     if (
-      window &&
+      typeof window !== 'undefined' &&
       !isConnected &&
       !isLoading &&
       connectedWallet &&
