@@ -61,11 +61,11 @@ export const WithdrawPLPD = () => {
         alignItems="center"
         width="100%"
       >
-        <Input text="PLPD" value={0} />
+        <Input text="PLPD" />
       </GridItem>
       <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
         <Flex justifyContent="flex-end" alignItems="center" height="100%">
-          <Button disabled withArrow variant="primary">
+          <Button withArrow variant="primary">
             Withdraw PLPD
           </Button>
         </Flex>
