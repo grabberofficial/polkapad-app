@@ -1,10 +1,13 @@
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Image, Text } from '@chakra-ui/react';
 import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
 import { css, Global } from '@emotion/react';
 import { Footer } from '@/components/footer';
 import { FAQStaking } from '@/components/pages/Staking/components/FAQ/FAQStaking';
-import { PLPDStaked } from '@/components/pages/Staking/components/PLPDStaked/PLPDStaked';
 import { StakeWithdraw } from '@/components/pages/Staking/components/StakeWithdraw/StakeWithdraw';
+import starIcon from '@/assets/star.svg';
+import React from 'react';
+import styled from '@emotion/styled';
+import { Button } from '@/components/common/Button';
 
 export const StakingPage = () => {
   return (
@@ -25,30 +28,66 @@ export const StakingPage = () => {
           }
         `}
       />
-      <Flex height="869px" alignItems={'flex-start'} className="main-block">
+      <Flex
+        backgroundColor="background.dark"
+        backgroundSize="cover"
+        backgroundPosition="center"
+        backgroundRepeat="no-repeat"
+        alignItems="center"
+        justifyContent="center"
+        height="480px"
+      >
         <Flex
-          basis={'46%'}
-          bg="#E5E5E5"
-          flexDirection={'column'}
-          padding={['40px 16px 40px', '40px 16px 40px', '76px 130px 0 115px']}
-          height="100%"
-          backgroundImage={['none', 'none', 'url(/images/staking_bg.png)']}
+          padding={['76px 16px 119px', '76px 16px 119px', '76px 115px 119px']}
+          backgroundImage="images/staking_banner.svg"
+          backgroundSize="35%"
+          backgroundPosition={['100%', '100%', '70% 100%']}
           backgroundRepeat="no-repeat"
-          backgroundPosition="bottom"
-          backgroundSize="contain"
+          flexDirection="column"
+          maxWidth="1440px"
+          height="100%"
+          width="100%"
         >
-          <Heading marginBottom={75} withUnderline>
+          <Flex alignItems="center" marginBottom="16px">
+            <Image
+              src={starIcon}
+              width="18px"
+              height="18px"
+              marginRight="8px"
+            />
+            <Text color="primary.text" fontWeight={600}>
+              Discover new, high-quality projects
+            </Text>
+          </Flex>
+          <Heading marginBottom="16px" color="#fff" withUnderline>
             Staking
           </Heading>
-          <Text maxWidth={383}>
-            To participate in sales, you must have some locked assets
-          </Text>
+
+          <HeaderFlex flexDirection="column">
+            <BannerText>
+              To take a part in the first sales you must have locked assets
+            </BannerText>
+          </HeaderFlex>
+
+          <Button width="130px" backgroundColor="accent.green" marginTop="32px">
+            Locked assets
+          </Button>
         </Flex>
-        <StakeWithdraw />
       </Flex>
-      <PLPDStaked />
+      <StakeWithdraw />
       <FAQStaking />
       <Footer />
     </>
   );
 };
+
+const HeaderFlex = styled(Flex)`
+  width: 100%;
+  max-width: 500px;
+`;
+
+const BannerText = styled(Text)`
+  font-size: 14px;
+  color: var(--chakra-colors-primary-text);
+  opacity: 0.64;
+`;
