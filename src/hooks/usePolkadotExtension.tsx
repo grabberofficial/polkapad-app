@@ -80,8 +80,11 @@ export const PolkadotExtensionProvider = (props: any) => {
   // }, [address, balances]);
 
   const connectPolkadot = useCallback(async (wallet: WalletMeta) => {
+    console.log(wallet, '[wallet]');
     const injectedExtension: InjectedWindowProvider =
       window?.injectedWeb3?.[wallet.extensionName];
+
+    console.log(injectedExtension, '[injectedExtension]');
 
     if (!injectedExtension) {
       window.open(wallet.installUrl);
@@ -90,7 +93,9 @@ export const PolkadotExtensionProvider = (props: any) => {
 
     try {
       setIsLoading(true);
+      console.log('[lo]');
       const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
+      console.log(enabledExtension, '[enabledExtension]');
       setExtension(enabledExtension);
 
       const accounts = await enabledExtension.accounts.get();
@@ -129,6 +134,14 @@ export const PolkadotExtensionProvider = (props: any) => {
   }, [setAccounts, unsubscribe]);
 
   useEffect(() => {
+    console.log(window?.injectedWeb3, '[window]');
+    console.log(isLoading, '[isLoading]');
+    console.log(isConnected, '[isConnected]');
+    console.log(connectedWallet, '[connectedWallet]');
+    console.log(
+      checkIsPolkaWalletInstalled(connectedWallet),
+      '[checkIsPolkaWalletInstalled]',
+    );
     if (
       window &&
       !isConnected &&
@@ -138,7 +151,7 @@ export const PolkadotExtensionProvider = (props: any) => {
     ) {
       connectPolkadot(connectedWallet);
     }
-  }, []);
+  }, [window]);
 
   const value = useMemo(
     () => ({

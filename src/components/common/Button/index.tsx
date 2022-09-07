@@ -60,7 +60,7 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
           },
         };
 
-    const dividerColor = isPrimary ? '#16B9D1' : '#E0E0E0';
+    const dividerColor = isPrimary ? 'var(--chakra-colors-border)' : '#E0E0E0';
     const border = `1px solid ${dividerColor}`;
 
     return (

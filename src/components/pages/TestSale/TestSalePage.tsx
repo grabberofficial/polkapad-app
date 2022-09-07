@@ -5,29 +5,73 @@ import { Button } from '@/components/common/Button';
 import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
 import { gearService } from '@/hooks/gearService';
 import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaWalletButton';
-import { useCallback, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { FiCheck } from 'react-icons/fi';
+import useUser from '@/hooks/useUser';
+import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
+import { BN } from '@polkadot/util';
+import {
+  REGISTER_ROUTE,
+  STAKING_ROUTE,
+  WALLET_ROUTE,
+} from '@/constants/routes';
+import Link from 'next/link';
 
+const GEAR_MINIMAL_BALANCE = new BN('0');
+
+const getFirstStepButton = (
+  isLoggedIn: boolean,
+  walletsAreVerified: boolean,
+) => {
+  if (!isLoggedIn) {
+    return (
+      <Link href={REGISTER_ROUTE}>
+        <Button variant="primary" width="97px">
+          Sign up
+        </Button>
+      </Link>
+    );
+  }
+
+  if (!walletsAreVerified) {
+    return (
+      <Link href={WALLET_ROUTE}>
+        <Button variant="primary" width="97px">
+          Verify Wallets
+        </Button>
+      </Link>
+    );
+  }
+
+  return null;
+};
 const getSteps = (
   address: string,
   isLoading: boolean,
+  isLoggedIn: boolean,
+  walletsAreVerified: boolean,
+  claimPLPDAvailable: boolean,
+  stakingAvailable: boolean,
   claimTestGear: () => void,
   claimTestPLPD: () => void,
 ) => [
   {
     title: 'Registration',
     text: 'Complete Registration in the Polkapad ecosystem',
-    button: null,
+    button: getFirstStepButton(isLoggedIn, walletsAreVerified),
+    isCompleted: isLoggedIn && walletsAreVerified,
   },
   {
     title: 'Claim $GEAR',
     text: 'Claim your $GEAR native coins',
+    isCompleted: claimPLPDAvailable,
     button: address ? (
       <Button
         variant="primary"
         width="97px"
-        onClick={claimTestGear}
         isLoading={isLoading}
+        onClick={claimTestGear}
+        disabled={!isLoggedIn || !walletsAreVerified}
       >
         Claim
       </Button>
@@ -38,12 +82,14 @@ const getSteps = (
   {
     title: 'Claim $PLPD on our page',
     text: 'You will need $PLPD tokens in order to participate in the sale',
+    isCompleted: stakingAvailable,
     button: address ? (
       <Button
         variant="primary"
         width="97px"
-        onClick={claimTestPLPD}
         isLoading={isLoading}
+        onClick={claimTestPLPD}
+        disabled={!claimPLPDAvailable}
       >
         Claim
       </Button>
@@ -55,9 +101,11 @@ const getSteps = (
     title: 'Stake $PLPD on the Staking page',
     text: 'Min stake = 1 $PLPD',
     button: (
-      <Button variant="primary" width="97px">
-        Stake
-      </Button>
+      <Link href={STAKING_ROUTE}>
+        <Button variant="primary" width="97px" disabled={!stakingAvailable}>
+          Stake
+        </Button>
+      </Link>
     ),
   },
   {
@@ -73,7 +121,15 @@ const getSteps = (
 
 export const TestSalePage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { address, updateBalance } = usePolkadotExtension();
+  const { address, updateBalance, balance, plpdBalance } =
+    usePolkadotExtension();
+  const { user } = useUser();
+  const { walletsAreVerified } = useContext(WalletsContext);
+  const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
+  const claimPLPDAvailable =
+    isLoggedIn && walletsAreVerified && !!balance?.gt(GEAR_MINIMAL_BALANCE);
+  const stakingAvailable =
+    claimPLPDAvailable && parseFloat(plpdBalance || '') > 0;
 
   const claimTestGear = useCallback(async () => {
     setIsLoading(true);
@@ -141,44 +197,51 @@ export const TestSalePage = () => {
           </Text>
           <Text>Real people over whales!</Text>
           <Flex flexDirection="column" gap="16px" marginTop="32px">
-            {getSteps(address, isLoading, claimTestGear, claimTestPLPD).map(
-              (step, index) => (
+            {getSteps(
+              address,
+              isLoading,
+              isLoggedIn,
+              walletsAreVerified,
+              claimPLPDAvailable,
+              stakingAvailable,
+              claimTestGear,
+              claimTestPLPD,
+            ).map((step, index) => (
+              <Flex
+                key={index}
+                backgroundColor="background.gray"
+                borderRadius="8px"
+                padding="24px 32px"
+              >
                 <Flex
-                  key={index}
-                  backgroundColor="background.gray"
-                  borderRadius="8px"
-                  padding="24px 32px"
+                  justifyContent="center"
+                  alignItems="center"
+                  backgroundColor={
+                    step.isCompleted ? 'accent.green' : 'background.dark'
+                  }
+                  borderRadius="100%"
+                  color="primary.text"
+                  width="56px"
+                  height="56px"
+                  marginRight="18px"
+                  fontSize="16px"
+                  fontWeight={600}
                 >
-                  <Flex
-                    justifyContent="center"
-                    alignItems="center"
-                    backgroundColor={
-                      index === 0 ? 'accent.green' : 'background.dark'
-                    }
-                    borderRadius="100%"
-                    color="primary.text"
-                    width="56px"
-                    height="56px"
-                    marginRight="18px"
-                    fontSize="16px"
-                    fontWeight={600}
-                  >
-                    {index === 0 ? (
-                      <FiCheck color="#303030" />
-                    ) : (
-                      `0${index + 1}`
-                    )}
-                  </Flex>
-                  <Flex flexDirection="column" marginRight="auto">
-                    <Text fontSize="20px" fontWeight={600}>
-                      {step.title}
-                    </Text>
-                    <Text>{step.text}</Text>
-                  </Flex>
-                  {step.button}
+                  {step.isCompleted ? (
+                    <FiCheck color="#303030" />
+                  ) : (
+                    `0${index + 1}`
+                  )}
                 </Flex>
-              ),
-            )}
+                <Flex flexDirection="column" marginRight="auto">
+                  <Text fontSize="20px" fontWeight={600}>
+                    {step.title}
+                  </Text>
+                  <Text>{step.text}</Text>
+                </Flex>
+                {!step.isCompleted && step.button}
+              </Flex>
+            ))}
           </Flex>
         </Flex>
       </Flex>
