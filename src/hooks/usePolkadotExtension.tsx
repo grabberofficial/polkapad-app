@@ -130,6 +130,7 @@ export const PolkadotExtensionProvider = (props: any) => {
 
   useEffect(() => {
     if (
+      window &&
       !isConnected &&
       !isLoading &&
       connectedWallet &&
