@@ -134,10 +134,7 @@ export const PolkadotExtensionProvider = (props: any) => {
   }, [setAccounts, unsubscribe]);
 
   useEffect(() => {
-    console.log(window?.injectedWeb3, '[window]');
-    console.log(isLoading, '[isLoading]');
-    console.log(isConnected, '[isConnected]');
-    console.log(connectedWallet, '[connectedWallet]');
+    console.log(JSON.stringify(window?.injectedWeb3), '[window]');
     console.log(
       checkIsPolkaWalletInstalled(connectedWallet),
       '[checkIsPolkaWalletInstalled]',
