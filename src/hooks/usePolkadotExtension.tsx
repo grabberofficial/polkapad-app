@@ -19,6 +19,7 @@ import {
   checkIsPolkaWalletInstalled,
   cleanPolkaStorage,
 } from '@/utils/wallets';
+import { callOnDocumentReady } from '@/utils/common';
 
 export type Account = {
   name?: string;
@@ -134,21 +135,17 @@ export const PolkadotExtensionProvider = (props: any) => {
   }, [setAccounts, unsubscribe]);
 
   useEffect(() => {
-    console.log(JSON.stringify(window?.injectedWeb3), '[window]');
-    console.log(
-      checkIsPolkaWalletInstalled(connectedWallet),
-      '[checkIsPolkaWalletInstalled]',
-    );
-    if (
-      typeof window !== 'undefined' &&
-      !isConnected &&
-      !isLoading &&
-      connectedWallet &&
-      checkIsPolkaWalletInstalled(connectedWallet)
-    ) {
-      connectPolkadot(connectedWallet);
-    }
-  }, [window]);
+    callOnDocumentReady(() => {
+      if (
+        !isConnected &&
+        !isLoading &&
+        connectedWallet &&
+        checkIsPolkaWalletInstalled(connectedWallet)
+      ) {
+        connectPolkadot(connectedWallet);
+      }
+    });
+  }, []);
 
   const value = useMemo(
     () => ({
