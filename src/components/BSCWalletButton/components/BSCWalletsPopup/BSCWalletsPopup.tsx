@@ -95,7 +95,7 @@ export const BSCWalletsPopup = ({ isOpen, onClose }: BSCWalletsPopupProps) => {
         text={
           isBinanceWalletInstalled ? 'Binance Wallet' : 'Install Binance Wallet'
         }
-        icon="/images/icon_bsc.png"
+        icon={BINANCE_WALLET.icon}
         onClick={onBinanceWalletConnect}
       />
       <WalletPopupItem
