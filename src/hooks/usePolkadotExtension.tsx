@@ -20,6 +20,7 @@ import {
   cleanPolkaStorage,
 } from '@/utils/wallets';
 import { callOnDocumentReady } from '@/utils/common';
+import useUser from '@/hooks/useUser';
 
 export type Account = {
   name?: string;
@@ -71,6 +72,7 @@ export const PolkadotExtensionProvider = (props: any) => {
   const [isLoading, setIsLoading] = useState(false);
   const [balance, setBalance] = useState<Balance>();
   const [plpdBalance, setPlpdBalance] = useState<string>();
+  const { user } = useUser();
   const isConnected = !!accounts.length;
   const connectedWallet = getConnectedWallet();
 
@@ -137,6 +139,7 @@ export const PolkadotExtensionProvider = (props: any) => {
   useEffect(() => {
     callOnDocumentReady(() => {
       if (
+        user?.isLoggedIn &&
         !isConnected &&
         !isLoading &&
         connectedWallet &&
@@ -145,7 +148,7 @@ export const PolkadotExtensionProvider = (props: any) => {
         connectPolkadot(connectedWallet);
       }
     });
-  }, []);
+  }, [user?.isLoggedIn]);
 
   const value = useMemo(
     () => ({
