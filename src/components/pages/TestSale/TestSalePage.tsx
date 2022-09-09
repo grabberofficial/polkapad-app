@@ -9,16 +9,47 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { FiCheck } from 'react-icons/fi';
 import useUser from '@/hooks/useUser';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
-import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
 import { BN } from '@polkadot/util';
-import { STAKING_ROUTE } from '@/constants/routes';
+import {
+  REGISTER_ROUTE,
+  STAKING_ROUTE,
+  WALLET_ROUTE,
+} from '@/constants/routes';
 import Link from 'next/link';
 
 const GEAR_MINIMAL_BALANCE = new BN('0');
+
+const getFirstStepButton = (
+  isLoggedIn: boolean,
+  walletsAreVerified: boolean,
+) => {
+  if (!isLoggedIn) {
+    return (
+      <Link href={REGISTER_ROUTE}>
+        <Button variant="primary" width="97px">
+          Sign up
+        </Button>
+      </Link>
+    );
+  }
+
+  if (!walletsAreVerified) {
+    return (
+      <Link href={WALLET_ROUTE}>
+        <Button variant="primary" width="97px">
+          Verify Wallets
+        </Button>
+      </Link>
+    );
+  }
+
+  return null;
+};
 const getSteps = (
   address: string,
   isLoading: boolean,
-  claimGearAvailable: boolean,
+  isLoggedIn: boolean,
+  walletsAreVerified: boolean,
   claimPLPDAvailable: boolean,
   stakingAvailable: boolean,
   claimTestGear: () => void,
@@ -27,8 +58,8 @@ const getSteps = (
   {
     title: 'Registration',
     text: 'Complete Registration in the Polkapad ecosystem',
-    button: null,
-    isCompleted: claimGearAvailable,
+    button: getFirstStepButton(isLoggedIn, walletsAreVerified),
+    isCompleted: isLoggedIn && walletsAreVerified,
   },
   {
     title: 'Claim $GEAR',
@@ -40,7 +71,7 @@ const getSteps = (
         width="97px"
         isLoading={isLoading}
         onClick={claimTestGear}
-        disabled={!claimGearAvailable}
+        disabled={!isLoggedIn || !walletsAreVerified}
       >
         Claim
       </Button>
@@ -94,11 +125,9 @@ export const TestSalePage = () => {
     usePolkadotExtension();
   const { user } = useUser();
   const { walletsAreVerified } = useContext(WalletsContext);
-  const { isKYCAccepted } = useContext(KYCContext);
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
-  const claimGearAvailable = isLoggedIn && walletsAreVerified && isKYCAccepted;
   const claimPLPDAvailable =
-    claimGearAvailable && !!balance?.gt(GEAR_MINIMAL_BALANCE);
+    isLoggedIn && walletsAreVerified && !!balance?.gt(GEAR_MINIMAL_BALANCE);
   const stakingAvailable =
     claimPLPDAvailable && parseFloat(plpdBalance || '') > 0;
 
@@ -171,7 +200,8 @@ export const TestSalePage = () => {
             {getSteps(
               address,
               isLoading,
-              claimGearAvailable,
+              isLoggedIn,
+              walletsAreVerified,
               claimPLPDAvailable,
               stakingAvailable,
               claimTestGear,
