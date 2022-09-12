@@ -16,6 +16,7 @@ import {
   WALLET_ROUTE,
 } from '@/constants/routes';
 import Link from 'next/link';
+import { CompletedTag } from '@/components/common/CompletedTag/CompletedTag';
 
 const GEAR_MINIMAL_BALANCE = new BN('0');
 
@@ -71,7 +72,7 @@ const getSteps = (
         width="97px"
         isLoading={isLoading}
         onClick={claimTestGear}
-        disabled={!isLoggedIn || !walletsAreVerified}
+        disabled={!isLoggedIn || !walletsAreVerified || isLoading}
       >
         Claim
       </Button>
@@ -89,7 +90,7 @@ const getSteps = (
         width="97px"
         isLoading={isLoading}
         onClick={claimTestPLPD}
-        disabled={!claimPLPDAvailable}
+        disabled={!claimPLPDAvailable || isLoading}
       >
         Claim
       </Button>
@@ -120,29 +121,35 @@ const getSteps = (
 ];
 
 export const TestSalePage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const { address, updateBalance, balance, plpdBalance } =
-    usePolkadotExtension();
+  const [isClaiming, setIsClaiming] = useState(false);
+  const {
+    address,
+    updateBalance,
+    balance,
+    plpdBalance,
+    isLoading: isBalanceLoading,
+  } = usePolkadotExtension();
   const { user } = useUser();
   const { walletsAreVerified } = useContext(WalletsContext);
   const isLoggedIn = useMemo(() => !!user && user.isLoggedIn, [user]);
+  const isLoading = isBalanceLoading || isClaiming;
   const claimPLPDAvailable =
     isLoggedIn && walletsAreVerified && !!balance?.gt(GEAR_MINIMAL_BALANCE);
   const stakingAvailable =
     claimPLPDAvailable && parseFloat(plpdBalance || '') > 0;
 
   const claimTestGear = useCallback(async () => {
-    setIsLoading(true);
+    setIsClaiming(true);
     await gearService.transferBalance(address);
     await updateBalance(address);
-    setIsLoading(false);
+    setIsClaiming(false);
   }, [address, updateBalance]);
 
   const claimTestPLPD = useCallback(async () => {
-    setIsLoading(true);
+    setIsClaiming(true);
     await gearService.claimPLPD(address);
     await updateBalance(address);
-    setIsLoading(false);
+    setIsClaiming(false);
   }, [address, updateBalance]);
   return (
     <Flex flexDirection="column">
@@ -179,7 +186,12 @@ export const TestSalePage = () => {
             <BannerText>Take part in the first Polkapad test sale!</BannerText>
           </HeaderFlex>
 
-          <Button width="130px" backgroundColor="accent.green" marginTop="32px">
+          <Button
+            width="130px"
+            backgroundColor="accent.green"
+            marginTop="32px"
+            _hover={{ backgroundColor: 'background.gray' }}
+          >
             Start now!
           </Button>
         </Flex>
@@ -239,7 +251,7 @@ export const TestSalePage = () => {
                   </Text>
                   <Text>{step.text}</Text>
                 </Flex>
-                {!step.isCompleted && step.button}
+                {step.isCompleted ? <CompletedTag /> : step.button}
               </Flex>
             ))}
           </Flex>

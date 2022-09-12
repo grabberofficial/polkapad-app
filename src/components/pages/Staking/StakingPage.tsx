@@ -69,7 +69,12 @@ export const StakingPage = () => {
             </BannerText>
           </HeaderFlex>
 
-          <Button width="130px" backgroundColor="accent.green" marginTop="32px">
+          <Button
+            width="130px"
+            backgroundColor="accent.green"
+            marginTop="32px"
+            _hover={{ backgroundColor: 'background.gray' }}
+          >
             Locked assets
           </Button>
         </Flex>

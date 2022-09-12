@@ -60,7 +60,6 @@ export const formatEtherBalance = (balance?: BigNumber | string) =>
   balance ? parseFloat(formatEther(balance)).toFixed(2) : '';
 
 export const checkIsPolkaWalletInstalled = (wallet: WalletMeta) => {
-  console.log(window, '[window 2]');
   if (typeof window !== 'undefined') {
     return !!window?.injectedWeb3?.[wallet.extensionName];
   }
