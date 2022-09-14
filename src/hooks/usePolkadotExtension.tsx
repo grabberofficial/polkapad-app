@@ -109,11 +109,14 @@ export const PolkadotExtensionProvider = (props: any) => {
       }
 
       await gearService.connect();
-      setBalance(await gearService.getBalance(accounts[0]?.address));
-      setPlpdBalance(
-        (await gearService.getPLPDBalance(accounts[0]?.address))?.Balance,
-      );
-      setIsLoading(false);
+      Promise.all([
+        gearService.getBalance(accounts[0]?.address),
+        gearService.getPLPDBalance(accounts[0]?.address),
+      ]).then(([gearBalance, plpdContractBalance]) => {
+        setBalance(gearBalance);
+        setPlpdBalance(plpdContractBalance?.Balance);
+        setIsLoading(false);
+      });
     } catch (err) {
       console.error(err);
       setIsLoading(false);
