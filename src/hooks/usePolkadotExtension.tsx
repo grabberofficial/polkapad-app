@@ -21,6 +21,7 @@ import {
 } from '@/utils/wallets';
 import { callOnDocumentReady } from '@/utils/common';
 import useUser from '@/hooks/useUser';
+import { Signer } from '@polkadot/api/types';
 
 export type Account = {
   name?: string;
@@ -43,7 +44,11 @@ type PolkadotExtensionContextType = {
   dotBalance?: string;
   balance?: Balance | null;
   plpdBalance?: string | null;
-  updateBalance: (address: string) => Promise<void>;
+  stakedBalance?: string | null;
+  stakePlpd: (amount: string) => Promise<void>;
+  withdrawPlpd: (amount: string) => Promise<void>;
+  updateBalance: () => Promise<void>;
+  updateStakedBalance: () => Promise<void>;
   isConnected: boolean;
   isLoading: boolean;
 };
@@ -60,7 +65,10 @@ const PolkadotExtensionContext = createContext<PolkadotExtensionContextType>({
   accounts: [],
   balance: null,
   plpdBalance: null,
+  stakePlpd: () => new Promise(() => null),
+  withdrawPlpd: () => new Promise(() => null),
   updateBalance: () => new Promise(() => null),
+  updateStakedBalance: () => new Promise(() => null),
   isConnected: false,
   isLoading: false,
 });
@@ -69,9 +77,11 @@ export const PolkadotExtensionProvider = (props: any) => {
   const unsubscribe = useRef<() => void>(() => null);
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [extension, setExtension] = useState<Injected>();
+  const [signer, setSigner] = useState<Signer>();
   const [isLoading, setIsLoading] = useState(false);
   const [balance, setBalance] = useState<Balance | null>();
   const [plpdBalance, setPlpdBalance] = useState<string | null>();
+  const [stakedBalance, setStakedBalance] = useState<string>();
   const { user } = useUser();
   const isConnected = !!accounts.length;
   const connectedWallet = getConnectedWallet();
@@ -97,6 +107,7 @@ export const PolkadotExtensionProvider = (props: any) => {
       setExtension(enabledExtension);
 
       const accounts = await enabledExtension.accounts.get();
+      const accountAddress = accounts[0]?.address;
       setAccounts(accounts);
       localStorage.setItem(CONNECTED_POLKA_WALLET_KEY, JSON.stringify(wallet));
 
@@ -108,14 +119,18 @@ export const PolkadotExtensionProvider = (props: any) => {
         );
       }
 
+      setSigner(enabledExtension?.signer);
+
       await gearService.connect();
       Promise.all([
-        gearService.getBalance(accounts[0]?.address),
-        gearService.getPLPDBalance(accounts[0]?.address),
-      ]).then(([gearBalance, plpdContractBalance]) => {
+        gearService.getBalance(accountAddress),
+        gearService.getPLPDBalance(accountAddress),
+        gearService.getStakedPLPDBalance(accountAddress),
+      ]).then(([gearBalance, plpdContractBalance, stakedPlpdBalance]) => {
         setBalance(gearBalance);
         setPlpdBalance(plpdContractBalance?.Balance);
         setIsLoading(false);
+        setStakedBalance(stakedPlpdBalance?.Staked);
       });
     } catch (err) {
       console.error(err);
@@ -123,10 +138,36 @@ export const PolkadotExtensionProvider = (props: any) => {
     }
   }, []);
 
-  const updateBalance = useCallback(async (address: string) => {
+  const updateBalance = useCallback(async () => {
     setBalance(await gearService.getBalance(address));
     setPlpdBalance((await gearService.getPLPDBalance(address))?.Balance);
-  }, []);
+  }, [address]);
+
+  const updateStakedBalance = useCallback(async () => {
+    setStakedBalance((await gearService.getStakedPLPDBalance(address))?.Staked);
+  }, [address]);
+
+  const stakePlpd = useCallback(
+    async (amount: string) => {
+      if (signer) {
+        await gearService.stakePLPD(address, signer, amount);
+        await updateBalance();
+        await updateStakedBalance();
+      }
+    },
+    [address, signer, updateBalance, updateStakedBalance],
+  );
+
+  const withdrawPlpd = useCallback(
+    async (amount: string) => {
+      if (signer) {
+        await gearService.withdrawPLPD(address, signer, amount);
+        await updateBalance();
+        await updateStakedBalance();
+      }
+    },
+    [address, signer, updateBalance, updateStakedBalance],
+  );
 
   const disconnect = useCallback(async () => {
     setAccounts([]);
@@ -161,7 +202,11 @@ export const PolkadotExtensionProvider = (props: any) => {
       // dotBalance,
       balance,
       plpdBalance,
+      stakedBalance,
+      stakePlpd,
+      withdrawPlpd,
       updateBalance,
+      updateStakedBalance,
       isLoading,
       isConnected,
     }),
@@ -175,7 +220,11 @@ export const PolkadotExtensionProvider = (props: any) => {
       // dotBalance,
       balance,
       plpdBalance,
+      stakePlpd,
+      withdrawPlpd,
+      stakedBalance,
       updateBalance,
+      updateStakedBalance,
       isLoading,
       isConnected,
     ],

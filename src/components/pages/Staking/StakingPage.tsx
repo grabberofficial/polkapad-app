@@ -5,7 +5,6 @@ import { Footer } from '@/components/footer';
 import { FAQStaking } from '@/components/pages/Staking/components/FAQ/FAQStaking';
 import { StakeWithdraw } from '@/components/pages/Staking/components/StakeWithdraw/StakeWithdraw';
 import starIcon from '@/assets/star.svg';
-import React from 'react';
 import styled from '@emotion/styled';
 import { Button } from '@/components/common/Button';
 

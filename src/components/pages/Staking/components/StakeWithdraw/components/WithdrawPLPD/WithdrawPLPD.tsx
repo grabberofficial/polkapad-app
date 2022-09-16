@@ -1,8 +1,27 @@
-import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Spinner, Text } from '@chakra-ui/react';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/common/Button';
+import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
+import { useCallback, useState } from 'react';
 
 export const WithdrawPLPD = () => {
+  const { stakedBalance, withdrawPlpd } = usePolkadotExtension();
+  const [withdrawAmount, setWithdrawAmount] = useState('0');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleWithdrawClick = useCallback(async () => {
+    setIsLoading(true);
+    await withdrawPlpd(withdrawAmount);
+    setIsLoading(false);
+  }, [withdrawAmount, withdrawPlpd]);
+
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setWithdrawAmount(event.target.value);
+    },
+    [],
+  );
+
   return (
     <Grid
       height={['100%', '100%', '87px']}
@@ -50,7 +69,7 @@ export const WithdrawPLPD = () => {
             Balance:
           </Text>
           <Text as="span" fontWeight="700" display="flex" alignItems="center">
-            0
+            {!stakedBalance || isLoading ? <Spinner /> : stakedBalance}
           </Text>
         </Flex>
       </GridItem>
@@ -61,11 +80,16 @@ export const WithdrawPLPD = () => {
         alignItems="center"
         width="100%"
       >
-        <Input text="PLPD" />
+        <Input text="PLPD" onChange={handleInputChange} />
       </GridItem>
       <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
         <Flex justifyContent="flex-end" alignItems="center" height="100%">
-          <Button withArrow variant="primary">
+          <Button
+            withArrow
+            variant="primary"
+            onClick={handleWithdrawClick}
+            isLoading={!stakedBalance || isLoading}
+          >
             Withdraw PLPD
           </Button>
         </Flex>
