@@ -1,10 +1,27 @@
-import { Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Spinner, Text } from '@chakra-ui/react';
 import { Input } from '@/components/Input/Input';
 import { Button } from '@/components/common/Button';
 import { usePolkadotExtension } from '@/hooks/usePolkadotExtension';
+import { useCallback, useState } from 'react';
 
 export const StakePLPD = () => {
-  const { plpdBalance } = usePolkadotExtension();
+  const { plpdBalance, stakePlpd } = usePolkadotExtension();
+  const [stakeAmount, setStakedAmount] = useState('0');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleStakeClick = useCallback(async () => {
+    setIsLoading(true);
+    await stakePlpd(stakeAmount);
+    setIsLoading(false);
+  }, [stakeAmount, stakePlpd]);
+
+  const handleInputChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setStakedAmount(event.target.value);
+    },
+    [],
+  );
+
   return (
     <Grid
       height={['100%', '100%', '87px']}
@@ -52,7 +69,7 @@ export const StakePLPD = () => {
             Balance:
           </Text>
           <Text as="span" fontWeight="700" display="flex" alignItems="center">
-            {plpdBalance}
+            {!plpdBalance || isLoading ? <Spinner /> : plpdBalance}
           </Text>
         </Flex>
       </GridItem>
@@ -63,11 +80,17 @@ export const StakePLPD = () => {
         alignItems="center"
         width="100%"
       >
-        <Input text="PLPD" />
+        <Input text="PLPD" onChange={handleInputChange} />
       </GridItem>
       <GridItem rowSpan={1} colSpan={[2, 2, 1]}>
         <Flex justifyContent="flex-end" alignItems="center" height="100%">
-          <Button withArrow variant="primary" iconPlacement="right">
+          <Button
+            withArrow
+            variant="primary"
+            iconPlacement="right"
+            isLoading={!plpdBalance || isLoading}
+            onClick={handleStakeClick}
+          >
             Deposit PLPD
           </Button>
         </Flex>

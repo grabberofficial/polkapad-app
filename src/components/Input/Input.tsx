@@ -1,4 +1,4 @@
-import { Input as ChakraInput } from '@chakra-ui/react';
+import { Input as ChakraInput, InputProps } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 
 const Container = styled.div`
@@ -17,10 +17,12 @@ const InputText = styled.span`
   color: #e0e0e0;
 `;
 
-export const Input: React.FC<{
-  text?: string;
-  value?: any;
-}> = ({ text, ...props }) => {
+export const Input: React.FC<
+  {
+    text?: string;
+    value?: any;
+  } & InputProps
+> = ({ text, ...props }) => {
   return (
     <Container>
       <ChakraInput

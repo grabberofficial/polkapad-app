@@ -17,6 +17,7 @@ import {
 } from '@/constants/routes';
 import Link from 'next/link';
 import { CompletedTag } from '@/components/common/CompletedTag/CompletedTag';
+import { Footer, FooterWrapper } from '@/components/footer';
 
 const GEAR_MINIMAL_BALANCE = new BN('0');
 
@@ -141,14 +142,14 @@ export const TestSalePage = () => {
   const claimTestGear = useCallback(async () => {
     setIsClaiming(true);
     await gearService.transferBalance(address);
-    await updateBalance(address);
+    await updateBalance();
     setIsClaiming(false);
   }, [address, updateBalance]);
 
   const claimTestPLPD = useCallback(async () => {
     setIsClaiming(true);
     await gearService.claimPLPD(address);
-    await updateBalance(address);
+    await updateBalance();
     setIsClaiming(false);
   }, [address, updateBalance]);
   return (
@@ -257,6 +258,9 @@ export const TestSalePage = () => {
           </Flex>
         </Flex>
       </Flex>
+      <FooterWrapper>
+        <Footer />
+      </FooterWrapper>
     </Flex>
   );
 };
