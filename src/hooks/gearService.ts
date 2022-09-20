@@ -22,7 +22,7 @@ import { Signer } from '@polkadot/api/types';
 
 const providerAddress = 'wss://rpc-node.gear-tech.io:443';
 const balanceToTransfer = new BN('500000000000');
-const CLAIM_PLPD_AMOUNT = '50';
+const CLAIM_PLPD_AMOUNT = '10';
 
 interface PLPDBalance {
   Balance: string;
