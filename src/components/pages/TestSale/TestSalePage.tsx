@@ -20,6 +20,7 @@ import { CompletedTag } from '@/components/common/CompletedTag/CompletedTag';
 import { Footer, FooterWrapper } from '@/components/footer';
 
 const GEAR_MINIMAL_BALANCE = new BN('0');
+const STAKING_MINIMAL_BALANCE = 0;
 
 const getFirstStepButton = (
   isLoggedIn: boolean,
@@ -54,6 +55,7 @@ const getSteps = (
   walletsAreVerified: boolean,
   claimPLPDAvailable: boolean,
   stakingAvailable: boolean,
+  stakingCompleted: boolean,
   claimTestGear: () => void,
   claimTestPLPD: () => void,
 ) => [
@@ -84,7 +86,7 @@ const getSteps = (
   {
     title: 'Claim $PLPD on our page',
     text: 'You will need $PLPD tokens in order to participate in the sale',
-    isCompleted: stakingAvailable,
+    isCompleted: stakingAvailable || stakingCompleted,
     button: address ? (
       <Button
         variant="primary"
@@ -102,9 +104,15 @@ const getSteps = (
   {
     title: 'Stake $PLPD on the Staking page',
     text: 'Min stake = 1 $PLPD',
+    isCompleted: stakingCompleted,
     button: (
       <Link href={STAKING_ROUTE}>
-        <Button variant="primary" width="97px" disabled={!stakingAvailable}>
+        <Button
+          variant="primary"
+          width="97px"
+          isLoading={isLoading}
+          disabled={!stakingAvailable}
+        >
           Stake
         </Button>
       </Link>
@@ -128,6 +136,7 @@ export const TestSalePage = () => {
     updateBalance,
     balance,
     plpdBalance,
+    stakedBalance,
     isLoading: isBalanceLoading,
   } = usePolkadotExtension();
   const { user } = useUser();
@@ -138,6 +147,7 @@ export const TestSalePage = () => {
     isLoggedIn && walletsAreVerified && !!balance?.gt(GEAR_MINIMAL_BALANCE);
   const stakingAvailable =
     claimPLPDAvailable && parseFloat(plpdBalance || '') > 0;
+  const stakingCompleted = Number(stakedBalance) > STAKING_MINIMAL_BALANCE;
 
   const claimTestGear = useCallback(async () => {
     setIsClaiming(true);
@@ -217,6 +227,7 @@ export const TestSalePage = () => {
               walletsAreVerified,
               claimPLPDAvailable,
               stakingAvailable,
+              stakingCompleted,
               claimTestGear,
               claimTestPLPD,
             ).map((step, index) => (

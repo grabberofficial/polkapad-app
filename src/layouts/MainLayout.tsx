@@ -8,7 +8,7 @@ interface MainLayoutProps {
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
   return (
-    <Box h="100vh">
+    <Box>
       <Toaster position="top-center" reverseOrder={false} />
       {children}
     </Box>
