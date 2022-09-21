@@ -49,6 +49,17 @@ export const convertSS58Address = (
   return encodeAddress(decodeAddress(address), prefix);
 };
 
+export async function getEthereumAccount(provider?: providers.Web3Provider) {
+  try {
+    return await provider?.getSigner().getAddress();
+  } catch (err: any) {
+    if (err.code === 'UNSUPPORTED_OPERATION') {
+      return undefined;
+    }
+    throw err;
+  }
+}
+
 export const shortenPolkaAddress = (address: string, rate = 6) => {
   if (!address || address.length === 0) return '';
   const start = address.slice(0, rate);

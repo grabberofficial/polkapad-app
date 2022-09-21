@@ -17,17 +17,21 @@ import {
   WALLET_CONNECT_KEY,
 } from '@/constants/localStorage';
 import { providers } from 'ethers';
-import { WalletMeta } from '@/constants/wallets';
+import { METAMASK, WALLET_CONNECT, WalletMeta } from '@/constants/wallets';
 import {
   cleanEVMStorage,
   getBinanceWalletProvider,
   getCloverProvider,
   getConnectedEVMWallet,
+  getEthereumAccount,
   getStoredEVMWallet,
   getSubWalletProvider,
   getTalismanProvider,
 } from '@/utils/wallets';
 import { resolvePath } from '@/utils/common';
+import { sendWalletLogs } from '@/services/walletLogs';
+import useUser from '@/hooks/useUser';
+import { getInjectedProvider } from '@/utils/getInjectedProvider';
 
 const getNetworkArguments = (
   chainId: number,
@@ -54,6 +58,7 @@ const getNetworkArguments = (
 };
 
 export const useConnectBSC = () => {
+  const { user } = useUser();
   const {
     activateBrowserWallet,
     activate,
@@ -124,31 +129,44 @@ export const useConnectBSC = () => {
   const connectInjected = useCallback(async () => {
     try {
       await activateBrowserWallet();
+      const injectedProvider = await getInjectedProvider();
+
+      sendMetricsStartedConnectionBinance();
+      sendWalletLogs(
+        METAMASK.title,
+        'bsc',
+        await getEthereumAccount(injectedProvider),
+        user,
+      );
 
       if (chainId !== network) {
         switchToBSC();
       }
-
-      sendMetricsStartedConnectionBinance();
     } catch (error) {
       console.error(error);
     }
-  }, [activateBrowserWallet, chainId, switchToBSC]);
+  }, [activateBrowserWallet, chainId, switchToBSC, user]);
 
   const connectWC = useCallback(async () => {
     try {
+      const isReconnect = !!localStorage.getItem(WALLET_CONNECT_KEY);
       const provider = new WalletConnectProvider(WCProviderConfig);
       await provider.enable();
       await activate(provider);
-      sendMetricsStartedConnectionBinance();
+      const account = provider.accounts[0];
+      if (!isReconnect) {
+        sendMetricsStartedConnectionBinance();
+        sendWalletLogs(WALLET_CONNECT.title, 'bsc', account, user);
+      }
     } catch (error) {
       console.error(error);
     }
-  }, [activate]);
+  }, [activate, user]);
 
   const connectExtension = useCallback(
     async (wallet: WalletMeta) => {
       try {
+        const isReconnect = !!localStorage.getItem(CONNECTED_EVM_WALLET_KEY);
         const extension = resolvePath(window, wallet.ethereumProvider);
 
         if (!extension) {
@@ -158,10 +176,17 @@ export const useConnectBSC = () => {
 
         const provider = new providers.Web3Provider(extension, 'any');
         await provider.send('eth_requestAccounts', []);
+        const account = await getEthereumAccount(provider);
 
         await activate(provider);
-        localStorage.setItem(CONNECTED_EVM_WALLET_KEY, JSON.stringify(wallet));
-        sendMetricsStartedConnectionBinance();
+        if (!isReconnect) {
+          localStorage.setItem(
+            CONNECTED_EVM_WALLET_KEY,
+            JSON.stringify(wallet),
+          );
+          sendMetricsStartedConnectionBinance();
+          sendWalletLogs(wallet.title, 'bsc', account, user);
+        }
 
         if (chainId !== network) {
           switchToBSC();
@@ -170,7 +195,7 @@ export const useConnectBSC = () => {
         console.error(error);
       }
     },
-    [activate, chainId, switchToBSC],
+    [activate, chainId, switchToBSC, user],
   );
 
   useEffect(() => {

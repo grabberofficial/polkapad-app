@@ -10,6 +10,7 @@ import { WalletsContext } from '@/components/pages/Profile/components/WalletsPro
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
 import { getSteps } from './LaunchpadPage.utils';
 import { CompletedTag } from '@/components/common/CompletedTag/CompletedTag';
+import { SalesList } from '@/components/pages/Launchpad/components/SalesList/SalesList';
 
 export const LaunchpadPage = () => {
   const { user } = useUser();
@@ -111,6 +112,7 @@ export const LaunchpadPage = () => {
           )}
         </Flex>
       </Flex>
+      <SalesList />
       <FooterWrapper>
         <Footer />
       </FooterWrapper>

@@ -22,6 +22,8 @@ import {
 import { callOnDocumentReady } from '@/utils/common';
 import useUser from '@/hooks/useUser';
 import { Signer } from '@polkadot/api/types';
+import { sendWalletLogs } from '@/services/walletLogs';
+import { sendMetricsStartedConnectionPolkadot } from '@/services/metrics';
 
 export type Account = {
   name?: string;
@@ -92,51 +94,61 @@ export const PolkadotExtensionProvider = (props: any) => {
   //   return balances.find((balance) => balance?.address === address)?.free;
   // }, [address, balances]);
 
-  const connectPolkadot = useCallback(async (wallet: WalletMeta) => {
-    const injectedExtension: InjectedWindowProvider =
-      window?.injectedWeb3?.[wallet.extensionName];
+  const connectPolkadot = useCallback(
+    async (wallet: WalletMeta) => {
+      const injectedExtension: InjectedWindowProvider =
+        window?.injectedWeb3?.[wallet.extensionName];
 
-    if (!injectedExtension) {
-      window.open(wallet.installUrl);
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
-      setExtension(enabledExtension);
-
-      const accounts = await enabledExtension.accounts.get();
-      const accountAddress = accounts[0]?.address;
-      setAccounts(accounts);
-      localStorage.setItem(CONNECTED_POLKA_WALLET_KEY, JSON.stringify(wallet));
-
-      if (enabledExtension?.accounts.subscribe) {
-        unsubscribe.current = enabledExtension?.accounts.subscribe(
-          (result: Account[]) => {
-            setAccounts(result);
-          },
-        );
+      if (!injectedExtension) {
+        window.open(wallet.installUrl);
+        return;
       }
 
-      setSigner(enabledExtension?.signer);
+      try {
+        setIsLoading(true);
+        const enabledExtension = await injectedExtension?.enable(DAPP_NAME);
+        setExtension(enabledExtension);
 
-      await gearService.connect();
-      Promise.all([
-        gearService.getBalance(accountAddress),
-        gearService.getPLPDBalance(accountAddress),
-        gearService.getStakedPLPDBalance(accountAddress),
-      ]).then(([gearBalance, plpdContractBalance, stakedPlpdBalance]) => {
-        setBalance(gearBalance);
-        setPlpdBalance(plpdContractBalance?.Balance);
+        const accounts = await enabledExtension.accounts.get();
+        const accountAddress = accounts[0]?.address;
+        setAccounts(accounts);
+        setSigner(enabledExtension?.signer);
+
+        if (!localStorage.getItem(CONNECTED_POLKA_WALLET_KEY)) {
+          localStorage.setItem(
+            CONNECTED_POLKA_WALLET_KEY,
+            JSON.stringify(wallet),
+          );
+          sendMetricsStartedConnectionPolkadot();
+          sendWalletLogs(wallet.title, 'polka', accountAddress, user);
+        }
+
+        if (enabledExtension?.accounts.subscribe) {
+          unsubscribe.current = enabledExtension?.accounts.subscribe(
+            (result: Account[]) => {
+              setAccounts(result);
+            },
+          );
+        }
+
+        await gearService.connect();
+        Promise.all([
+          gearService.getBalance(accountAddress),
+          gearService.getPLPDBalance(accountAddress),
+          gearService.getStakedPLPDBalance(accountAddress),
+        ]).then(([gearBalance, plpdContractBalance, stakedPlpdBalance]) => {
+          setBalance(gearBalance);
+          setPlpdBalance(plpdContractBalance?.Balance);
+          setIsLoading(false);
+          setStakedBalance(stakedPlpdBalance?.Staked);
+        });
+      } catch (err) {
+        console.error(err);
         setIsLoading(false);
-        setStakedBalance(stakedPlpdBalance?.Staked);
-      });
-    } catch (err) {
-      console.error(err);
-      setIsLoading(false);
-    }
-  }, []);
+      }
+    },
+    [user],
+  );
 
   const updateBalance = useCallback(async () => {
     setBalance(await gearService.getBalance(address));
