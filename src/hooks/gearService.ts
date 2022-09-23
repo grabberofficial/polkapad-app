@@ -137,7 +137,7 @@ async function sendMessage(
       const message = {
         destination: contractAddress,
         payload,
-        gasLimit: gas.min_limit.toNumber(),
+        gasLimit: Math.ceil(gas.min_limit.toNumber() * 1.2),
         value,
       };
 
