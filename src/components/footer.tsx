@@ -268,8 +268,7 @@ const SubscribeButton = styled(Button)`
   padding: 13px 69px;
 
   &:hover {
-    background: var(--chakra-colors-primary-hover);
-    color: var(--chakra-colors-primary-textHover);
+    background: var(--chakra-colors-background-gray);
   }
 `;
 

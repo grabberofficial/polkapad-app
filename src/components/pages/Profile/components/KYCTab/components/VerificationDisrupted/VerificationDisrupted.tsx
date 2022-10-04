@@ -30,7 +30,7 @@ export const VerificationDisrupted = ({
     <Text
       cursor="pointer"
       color="primary.basic"
-      _hover={{ color: 'primary.hover' }}
+      _hover={{ color: 'accent.green' }}
       textDecoration="underline"
       marginTop="48px"
       onClick={() => setIsButtonVisible(true)}

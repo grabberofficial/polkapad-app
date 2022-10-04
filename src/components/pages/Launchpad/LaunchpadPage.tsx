@@ -8,8 +8,9 @@ import useUser from '@/hooks/useUser';
 import starIcon from '@/assets/star.svg';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
-import { CompletedTag } from '@/components/pages/Launchpad/components/CompletedTag';
 import { getSteps } from './LaunchpadPage.utils';
+import { CompletedTag } from '@/components/common/CompletedTag/CompletedTag';
+import { SalesList } from '@/components/pages/Launchpad/components/SalesList/SalesList';
 
 export const LaunchpadPage = () => {
   const { user } = useUser();
@@ -111,6 +112,7 @@ export const LaunchpadPage = () => {
           )}
         </Flex>
       </Flex>
+      <SalesList />
       <FooterWrapper>
         <Footer />
       </FooterWrapper>

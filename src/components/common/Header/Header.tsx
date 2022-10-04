@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Flex, Tabs } from '@chakra-ui/react';
+import { Flex, Spinner, Tabs } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { Image } from '@chakra-ui/react';
 import { TabList } from './components/HeaderItems/HeaderItems.style';
@@ -23,6 +23,11 @@ import { AccountButton } from './components/AccountButton/AccountButton';
 import { GetStartedButton } from './components/GetStartedButton/GetStartedButton';
 import { MobileMenu } from './components/MobileMenu/MobileMenu';
 
+interface HeaderProps {
+  isLoggedIn: boolean;
+  isLoading: boolean;
+}
+
 const tabs = [
   {
     url: HOME_ROUTE,
@@ -42,9 +47,7 @@ const tabs = [
   },
 ];
 
-export const Header: React.FC<{
-  isLoggedIn: boolean;
-}> = (props) => {
+export const Header = (props: HeaderProps) => {
   const [selectedTab, setSelectedTab] = useState(0);
   const router = useRouter();
   const isWaitRoute = router.pathname === WAIT_ROUTE;
@@ -87,15 +90,15 @@ export const Header: React.FC<{
                 ))}
               </TabList>
             </Tabs>
-            {props.isLoggedIn ? (
+            {props.isLoading && <Spinner />}
+            {!props.isLoading && props.isLoggedIn && (
               <RightContainer>
                 <BSCWalletButton />
                 <PolkadotWalletButton />
                 <AccountButton />
               </RightContainer>
-            ) : (
-              <GetStartedButton />
             )}
+            {!props.isLoading && !props.isLoggedIn && <GetStartedButton />}
           </MenuWrapper>
           <MobileMenu />
         </>

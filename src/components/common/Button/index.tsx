@@ -43,7 +43,6 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
     const hoverStyle = isPrimary
       ? {
           color: 'var(--chakra-colors-primary-textHover)',
-          backgroundColor: 'var(--chakra-colors-primary-hover)',
           '& .button-arrow': {
             transform: 'translateX(3px)',
             color: 'green',
@@ -53,14 +52,17 @@ export const Button: React.FC<ButtonProps & any> = forwardRef<
           },
         }
       : {
-          color: 'var(--chakra-colors-secondary-textHover)',
-          borderColor: 'var(--chakra-colors-secondary-hover)',
+          color: 'var(--chakra-colors-primary-text)',
+          backgroundColor: isSecondary
+            ? 'var(--chakra-colors-primary-basic)'
+            : undefined,
+          borderColor: 'var(--chakra-colors-primary-text)',
           '& .button-arrow': {
             transform: 'translateX(3px)',
           },
         };
 
-    const dividerColor = isPrimary ? '#16B9D1' : '#E0E0E0';
+    const dividerColor = isPrimary ? 'var(--chakra-colors-border)' : '#E0E0E0';
     const border = `1px solid ${dividerColor}`;
 
     return (

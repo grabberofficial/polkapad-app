@@ -49,6 +49,17 @@ export const convertSS58Address = (
   return encodeAddress(decodeAddress(address), prefix);
 };
 
+export async function getEthereumAccount(provider?: providers.Web3Provider) {
+  try {
+    return await provider?.getSigner().getAddress();
+  } catch (err: any) {
+    if (err.code === 'UNSUPPORTED_OPERATION') {
+      return undefined;
+    }
+    throw err;
+  }
+}
+
 export const shortenPolkaAddress = (address: string, rate = 6) => {
   if (!address || address.length === 0) return '';
   const start = address.slice(0, rate);
@@ -60,11 +71,12 @@ export const formatEtherBalance = (balance?: BigNumber | string) =>
   balance ? parseFloat(formatEther(balance)).toFixed(2) : '';
 
 export const checkIsPolkaWalletInstalled = (wallet: WalletMeta) => {
-  return window?.injectedWeb3?.[wallet.extensionName];
+  if (typeof window !== 'undefined') {
+    return !!window?.injectedWeb3?.[wallet.extensionName];
+  }
 };
 
 export const checkIsPolkadotInstalled = () => {
-  console.log(window);
   return checkIsPolkaWalletInstalled(POLKADOT_WALLET);
 };
 

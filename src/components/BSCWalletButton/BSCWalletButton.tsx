@@ -73,8 +73,8 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
         <Button
           onClick={onInfoOpen}
           variant="transparent"
-          width="auto"
-          minWidth="120px"
+          width={formattedBalance ? 'auto' : '90px'}
+          minWidth={formattedBalance ? '108px' : '90px'}
           padding="0"
           iconGap="10px"
           iconPlacement="left"
@@ -96,7 +96,7 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
           onClick={onChangeNetwork}
           variant="transparent"
           width="auto"
-          minWidth="175px"
+          minWidth="160px"
           flexShrink={0}
           iconGap="10px"
           color="error"
@@ -113,7 +113,7 @@ export const BSCWalletButton = ({ isVerify }: BSCWalletButtonProps) => {
           onClick={onPopupOpen}
           variant="transparent"
           width="auto"
-          minWidth="120px"
+          minWidth="108px"
           flexShrink={0}
           iconGap="10px"
           fontSize="16px"
