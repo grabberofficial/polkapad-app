@@ -57,6 +57,7 @@ jobs:
           --build-arg GLEAM_REWARD_URL="${{ secrets.GLEAM_REWARD_URL }}"
           --build-arg FACEBOOK_PIXEL="${{ secrets.FACEBOOK_PIXEL }}"
           --build-arg ROOT_SEED="${{ secrets.ROOT_SEED }}"
+          --build-arg NODE_PROVIDER="${{ secrets.DEV_NODE_PROVIDER }}"
           -f .github/workflows/Dockerfile .
 
       - name: Push to ECR and Argo
