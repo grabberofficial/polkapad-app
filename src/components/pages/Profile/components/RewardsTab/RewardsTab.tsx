@@ -2,12 +2,12 @@ import React from 'react';
 import queryString from 'query-string';
 import { Flex } from '@chakra-ui/react';
 import useUser from '@/hooks/useUser';
-import { LOGIN_ROUTE } from '@/constants/routes';
+import { AUTH_EMAIL_ROUTE } from '@/constants/routes';
 import { gleamRewardUrl } from '@/config/env';
 
 export const RewardsTab = () => {
   const { user } = useUser({
-    redirectTo: LOGIN_ROUTE,
+    redirectTo: AUTH_EMAIL_ROUTE,
   });
 
   const gleamFullUrl = `${gleamRewardUrl}?${queryString.stringify({

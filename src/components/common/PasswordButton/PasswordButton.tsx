@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import { Image, ImageProps } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useCallback } from 'react';
+import { AiTwotoneEye } from 'react-icons/ai';
+import { TbEye } from 'react-icons/tb';
 
 interface PasswordButtonProps extends ImageProps {
   passwordType: string;
@@ -10,7 +12,6 @@ interface PasswordButtonProps extends ImageProps {
 export const PasswordButton = ({
   passwordType,
   setPasswordType,
-  ...props
 }: PasswordButtonProps) => {
   const togglePasswordVisibility = useCallback(() => {
     passwordType === 'password'
@@ -18,7 +19,12 @@ export const PasswordButton = ({
       : setPasswordType('password');
   }, [passwordType, setPasswordType]);
 
-  return <StyledImage {...props} onClick={togglePasswordVisibility} />;
+  return (
+    <StyledImage
+      as={passwordType === 'password' ? TbEye : AiTwotoneEye}
+      onClick={togglePasswordVisibility}
+    />
+  );
 };
 
 const StyledImage = styled(Image)`
@@ -31,12 +37,9 @@ const StyledImage = styled(Image)`
   cursor: pointer;
   transition: transform 0.25s, opacity 0.25s;
   z-index: 1;
-  opacity: 0.5;
 
   &:hover {
     transform: scale(1.03);
-    color: var(--chakra-colors-primary-hover);
-    opacity: 1;
   }
 
   &:active {

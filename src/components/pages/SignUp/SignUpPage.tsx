@@ -1,25 +1,18 @@
-import { useCallback, useState } from 'react';
-import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { BiHide, BiShow } from 'react-icons/bi';
-import { FaUser } from 'react-icons/fa';
-import { MdEmail } from 'react-icons/md';
-import { RiLock2Fill } from 'react-icons/ri';
 import { Button } from '@/components/common/Button';
 import { FormInput } from '@/components/common/FormInput/FormInput';
-import { PromoCodeIcon } from '@/components/icons/PromoCodeIcon';
-import { TermsCheckbox } from '@/components/pages/SignUp/components/TermsCheckbox/TermsCheckbox';
 import { SignUpPageSchema } from '@/components/pages/SignUp/SignUpPage.schema';
 import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
-import { LOGIN_ROUTE, PROFILE_ROUTE, WAIT_ROUTE } from '@/constants/routes';
-import fetchJson, { FetchError } from '@/services/fetchJson';
-import useUser from '@/hooks/useUser';
-import { User } from '@/pages/api/user';
 import {
-  sendMetricsCreateAccount,
-  sendMetricsCreateAccountWaitList,
-} from '@/services/metrics';
+  API_REGISTER_ROUTE,
+  AUTH_EMAIL_ROUTE,
+  PROFILE_ROUTE,
+} from '@/constants/routes';
+import fetchJson from '@/services/fetchJson';
+import useUser, { User } from '@/hooks/useUser';
+import { sendMetricsCreateAccount } from '@/services/metrics';
 import {
   Flex,
   FormControl,
@@ -28,13 +21,14 @@ import {
   Grid,
   Icon,
   InputGroup,
-  InputLeftElement,
+  InputRightElement,
   Spinner,
   Text,
 } from '@chakra-ui/react';
 import styled from '@emotion/styled';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ExceptionTypeEnum } from '@/constants/error';
+import { HiOutlineMail } from 'react-icons/hi';
+import { setToken } from '@/utils/auth';
 
 export interface SignupFormInput {
   name: string;
@@ -54,7 +48,6 @@ export const SignUpPage = () => {
     control,
     handleSubmit,
     formState: { errors },
-    setError,
   } = useForm<SignupFormInput>({
     resolver: yupResolver(SignUpPageSchema),
   });
@@ -63,7 +56,7 @@ export const SignUpPage = () => {
     'password',
   );
   const router = useRouter();
-  const isWaitRoute = router.pathname === WAIT_ROUTE;
+  const { email, code } = router.query;
 
   const onSubmit: SubmitHandler<SignupFormInput> = useCallback(
     async (data) => {
@@ -71,142 +64,96 @@ export const SignUpPage = () => {
         setLoading(true);
         await mutateUser(
           (async () => {
-            await fetchJson(`/api/register`, {
+            const token = await fetchJson<string>(API_REGISTER_ROUTE, {
               method: 'POST',
               body: JSON.stringify({
-                name: data.name,
                 password: data.password,
-                email: data.email,
-                promocode: data.promocode,
+                email,
+                code,
               }),
               headers: {
                 'Content-Type': 'application/json',
               },
             });
 
-            isWaitRoute
-              ? sendMetricsCreateAccountWaitList()
-              : sendMetricsCreateAccount();
+            setToken(token);
+
+            sendMetricsCreateAccount();
           })() as unknown as Promise<User>,
         );
         setLoading(false);
       } catch (err) {
         setLoading(false);
-        if (err instanceof FetchError) {
-          switch (err.data.type) {
-            case ExceptionTypeEnum.EmailAlreadyUsed:
-              setError('email', {
-                type: 'validate',
-                message: 'Email is already used',
-              });
-              break;
-            // TODO: other errors handling
-            // case '':
-          }
-        }
       }
     },
-    [isWaitRoute, mutateUser, setError],
+    [code, email, mutateUser],
   );
+
+  useEffect(() => {
+    if (!email || !code) {
+      router.push(AUTH_EMAIL_ROUTE);
+    }
+  }, [email, code]);
 
   return (
     <Grid
-      maxWidth="700px"
+      maxWidth="560px"
       margin="73px auto 0"
       flexDirection="column"
       justifyContent="center"
-      borderBottom="1px solid #ECEBEB"
-      borderLeft="1px solid #ECEBEB"
-      borderRight="1px solid #ECEBEB"
-      borderRadius="4px"
       paddingBottom="25px"
+      backgroundColor="background.light"
     >
       <Text
         fontWeight="600"
-        fontSize="50px"
-        lineHeight="62px"
+        fontSize="32px"
+        lineHeight="44px"
         color="#303030"
         textAlign="center"
-        maxWidth="420px"
+        width={['350px', '350px', 'auto']}
       >
-        {isWaitRoute ? 'Waiting List Registration' : 'Create an account'}
+        Create&nbsp;password
       </Text>
       <Text
         fontWeight="400"
-        fontSize="18px"
-        lineHeight="29px"
+        fontSize="16px"
+        lineHeight="24px"
         color="#303030"
+        opacity={0.64}
         textAlign="center"
         marginTop="11px"
-        maxWidth="400px"
-        justifySelf="center"
       >
-        {isWaitRoute
-          ? 'Sign up and receive a guaranteed allocation in the Polkapad token sale'
-          : 'Sign up to find a dApp you love'}
+        Please, create password for your account
       </Text>
       <StyledForm onSubmit={handleSubmit(onSubmit)}>
         {/* TODO: extract FormControl to component if there is any other usage */}
-        <FormControl isInvalid={!!errors.name}>
-          <FormLabel htmlFor="name">Your Name</FormLabel>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
-              <Flex
-                height="21px"
-                width="100%"
-                justifyContent="center"
-                alignItems="center"
-                borderRight="1px solid #E0E0E0"
-              >
-                <Icon
-                  as={FaUser}
-                  height="21px"
-                  width="21px"
-                  color={errors.name ? 'error' : 'primary.basic'}
-                />
-              </Flex>
-            </InputLeftElement>
-            <FormInput
-              fieldName="name"
-              control={control}
-              hasError={!!errors.name}
-            />
-          </InputGroup>
-          {errors.name && (
-            <FormErrorMessage
-              fontWeight="400"
-              fontSize="12px"
-              lineHeight="18px"
-              color="error"
-            >
-              {errors.name.message}
-            </FormErrorMessage>
-          )}
-        </FormControl>
         <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
+            <FormInput
+              isDisabled
+              hasRightElement
+              defaultValue={email as string}
+              fieldName="email"
+              placeholder="mail@mail.com"
+              control={control}
+              hasError={!!errors.email}
+            />
+            <InputRightElement pointerEvents="none" width="55px" height="100%">
               <Flex
                 height="21px"
                 width="100%"
                 justifyContent="center"
                 alignItems="center"
-                borderRight="1px solid #E0E0E0"
               >
                 <Icon
-                  as={MdEmail}
+                  as={HiOutlineMail}
                   height="21px"
                   width="21px"
                   color={errors.email ? 'error' : 'primary.basic'}
                 />
               </Flex>
-            </InputLeftElement>
-            <FormInput
-              fieldName="email"
-              control={control}
-              hasError={!!errors.email}
-            />
+            </InputRightElement>
           </InputGroup>
           {errors.email && (
             <FormErrorMessage
@@ -222,30 +169,14 @@ export const SignUpPage = () => {
         <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
-              <Flex
-                height="21px"
-                width="100%"
-                justifyContent="center"
-                alignItems="center"
-                borderRight="1px solid #E0E0E0"
-              >
-                <Icon
-                  as={RiLock2Fill}
-                  height="21px"
-                  width="21px"
-                  color={errors.password ? 'error' : 'primary.basic'}
-                />
-              </Flex>
-            </InputLeftElement>
             <FormInput
+              hasRightElement
               fieldName="password"
-              fieldType={passwordType}
               control={control}
               hasError={!!errors.password}
+              fieldType={passwordType}
             />
             <PasswordButton
-              as={passwordType === 'password' ? BiShow : BiHide}
               passwordType={passwordType}
               setPasswordType={setPasswordType}
             />
@@ -260,49 +191,18 @@ export const SignUpPage = () => {
               {errors.password.message}
             </FormErrorMessage>
           )}
-          <Flex
-            fontWeight="400"
-            fontSize="10px"
-            lineHeight="18px"
-            color="#A5A5A5"
-            maxWidth="410px"
-            padding="5px 5px 0 5px"
-          >
-            &#8211; 8 or more characters
-            <br />
-            &#8211; Only latin symbols A-z, at least one uppercase and one
-            lowercase
-            <br />
-            &#8211; At least one digit
-          </Flex>
         </FormControl>
         <FormControl isInvalid={!!errors.confirmPassword}>
-          <FormLabel htmlFor="password-confirm">Confirm Password</FormLabel>
+          <FormLabel htmlFor="confirmPassword">Confirm password</FormLabel>
           <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
-              <Flex
-                height="21px"
-                width="100%"
-                justifyContent="center"
-                alignItems="center"
-                borderRight="1px solid #E0E0E0"
-              >
-                <Icon
-                  as={RiLock2Fill}
-                  height="21px"
-                  width="21px"
-                  color={errors.confirmPassword ? 'error' : 'primary.basic'}
-                />
-              </Flex>
-            </InputLeftElement>
             <FormInput
+              hasRightElement
               fieldName="confirmPassword"
-              fieldType={passwordType}
               control={control}
               hasError={!!errors.confirmPassword}
+              fieldType={passwordType}
             />
             <PasswordButton
-              as={passwordType === 'password' ? BiShow : BiHide}
               passwordType={passwordType}
               setPasswordType={setPasswordType}
             />
@@ -318,59 +218,16 @@ export const SignUpPage = () => {
             </FormErrorMessage>
           )}
         </FormControl>
-        <FormControl>
-          <FormLabel>Secret code</FormLabel>
-          <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
-              <Flex
-                height="21px"
-                width="100%"
-                justifyContent="center"
-                alignItems="center"
-                borderRight="1px solid #E0E0E0"
-              >
-                <PromoCodeIcon />
-              </Flex>
-            </InputLeftElement>
-            <FormInput
-              fieldName="promocode"
-              fieldType="text"
-              control={control}
-            />
-          </InputGroup>
-        </FormControl>
-        <TermsCheckbox control={control} errors={errors.terms} />
         <Button
           variant="primary"
           type="submit"
+          width="138px"
+          alignSelf="flex-end"
           disabled={Object.keys(errors).length > 0}
         >
-          {loading ? <Spinner /> : 'Create account'}
+          {loading ? <Spinner /> : 'Save and start'}
         </Button>
       </StyledForm>
-      <Text
-        fontWeight="700"
-        fontSize="14px"
-        lineHeight="21px"
-        color="#303030"
-        marginTop="69px"
-        textAlign="left"
-      >
-        Already have an account?{' '}
-        <Link href={LOGIN_ROUTE}>
-          <Button
-            variant="secondary"
-            marginTop="10px"
-            color="primary.basic"
-            _hover={{
-              backgroundColor: 'secondary.backgroundHover',
-              borderColor: 'primary.basic',
-            }}
-          >
-            Log in
-          </Button>
-        </Link>
-      </Text>
     </Grid>
   );
 };
@@ -381,6 +238,7 @@ const StyledForm = styled.form`
   flex-direction: column;
   justify-content: center;
   gap: 22px;
+  width: 560px;
 
   @media (max-width: 450px) {
     padding: 0 20px;

@@ -1,40 +1,39 @@
 import { useCallback, useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import Link from 'next/link';
-import { MdEmail } from 'react-icons/md';
-import { RiLock2Fill } from 'react-icons/ri';
-import { BiHide, BiShow } from 'react-icons/bi';
 
 import { Button } from '@/components/common/Button';
 import { FormInput } from '@/components/common/FormInput/FormInput';
 import fetchJson, { FetchError } from '@/services/fetchJson';
-import useUser from '@/hooks/useUser';
+import useUser, { User } from '@/hooks/useUser';
 import {
   FormControl,
   FormErrorMessage,
   FormLabel,
   Grid,
   InputGroup,
-  InputLeftElement,
   Text,
   Icon,
   Flex,
   Spinner,
+  InputRightElement,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
-import { useIsMobile } from '@/hooks/useIsMobile';
 import { useRouter } from 'next/router';
 import { LoginPageSchema } from '@/components/pages/Login/LoginPage.schema';
 import { EMAIL_ERROR_TYPES } from '@/components/pages/Login/LoginPage.constants';
 import {
   API_LOGIN_ROUTE,
+  API_SEND_CODE_ROUTE,
+  AUTH_VERIFY_CODE_ROUTE,
   PROFILE_ROUTE,
-  REGISTER_ROUTE,
-  RESTORE_PASSWORD_ROUTE,
-  SEND_CODE_ROUTE,
 } from '@/constants/routes';
 import { ExceptionTypeEnum } from '@/constants/error';
+import { HiOutlineMail } from 'react-icons/hi';
+import styled from '@emotion/styled';
+import { ApiSendCodeResponse } from '@/components/pages/AuthEmail/AuthEmailPage';
+import { AUTH_EMAIL_TYPES } from '@/components/pages/AuthEmail/AuthEmailPage.constants';
+import { setToken } from '@/utils/auth';
 
 // TODO: server-side redirect from login page if user is already logged in
 
@@ -54,11 +53,11 @@ export const LoginPage = () => {
     resolver: yupResolver(LoginPageSchema),
   });
   const router = useRouter();
-  const isMobile = useIsMobile();
   const [loading, setLoading] = useState(false);
   const [passwordType, setPasswordType] = useState<'password' | 'text'>(
     'password',
   );
+  const { email } = router.query;
   const { mutateUser } = useUser({
     redirectTo: PROFILE_ROUTE,
     redirectIfFound: true,
@@ -75,11 +74,15 @@ export const LoginPage = () => {
       try {
         setLoading(true);
         await mutateUser(
-          await fetchJson(API_LOGIN_ROUTE, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ...data, authType: 'password' }),
-          }),
+          (async () => {
+            const token = await fetchJson<string>(API_LOGIN_ROUTE, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...data }),
+            });
+
+            setToken(token);
+          })() as unknown as Promise<User>,
         );
         setLoading(false);
       } catch (error) {
@@ -104,40 +107,50 @@ export const LoginPage = () => {
     [mutateUser, setError],
   );
 
+  const handleCodeLogin = useCallback(async () => {
+    const { type } = await fetchJson<ApiSendCodeResponse>(API_SEND_CODE_ROUTE, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, isAuthorize: true }),
+    });
+
+    if (type === AUTH_EMAIL_TYPES.SIGN_IN) {
+      router.push(
+        { pathname: AUTH_VERIFY_CODE_ROUTE, query: { email } },
+        AUTH_VERIFY_CODE_ROUTE,
+      );
+    }
+  }, [email, router]);
+
   return (
     <Grid
-      maxWidth="700px"
+      width="560px"
       margin="73px auto 0"
       flexDirection="column"
       justifyContent="center"
-      borderBottom="1px solid #ECEBEB"
-      borderLeft="1px solid #ECEBEB"
-      borderRight="1px solid #ECEBEB"
-      borderRadius="4px"
       paddingBottom="25px"
+      backgroundColor="background.light"
     >
       <Text
         fontWeight="600"
-        fontSize="50px"
-        lineHeight="62px"
+        fontSize="32px"
+        lineHeight="44px"
         color="#303030"
         textAlign="center"
         width={['350px', '350px', 'auto']}
       >
-        Welcome to&nbsp;
-        <Text as="span" color="accent.green">
-          Polkapad
-        </Text>
+        Log in
       </Text>
       <Text
         fontWeight="400"
-        fontSize="18px"
-        lineHeight="29px"
+        fontSize="16px"
+        lineHeight="24px"
         color="#303030"
+        opacity={0.64}
         textAlign="center"
         marginTop="11px"
       >
-        Log in with your email address
+        Please, enter your password to log in
       </Text>
       <form
         style={{
@@ -145,35 +158,38 @@ export const LoginPage = () => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: '22px',
-          minWidth: '350px',
+          gap: '32px',
+          minWidth: '560px',
         }}
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormControl isInvalid={!!errors.email}>
           <FormLabel htmlFor="email">Email</FormLabel>
           <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
+            <FormInput
+              isDisabled={!!email}
+              hasRightElement
+              defaultValue={email as string}
+              fieldName="email"
+              placeholder="mail@mail.com"
+              control={control}
+              hasError={!!errors.email}
+            />
+            <InputRightElement pointerEvents="none" width="55px" height="100%">
               <Flex
                 height="21px"
                 width="100%"
                 justifyContent="center"
                 alignItems="center"
-                borderRight="1px solid #E0E0E0"
               >
                 <Icon
-                  as={MdEmail}
+                  as={HiOutlineMail}
                   height="21px"
                   width="21px"
                   color={errors.email ? 'error' : 'primary.basic'}
                 />
               </Flex>
-            </InputLeftElement>
-            <FormInput
-              fieldName="email"
-              control={control}
-              hasError={!!errors.email}
-            />
+            </InputRightElement>
           </InputGroup>
           {errors.email && (
             <FormErrorMessage
@@ -189,30 +205,14 @@ export const LoginPage = () => {
         <FormControl isInvalid={!!errors.password}>
           <FormLabel htmlFor="password">Password</FormLabel>
           <InputGroup>
-            <InputLeftElement pointerEvents="none" width="55px" height="100%">
-              <Flex
-                height="21px"
-                width="100%"
-                justifyContent="center"
-                alignItems="center"
-                borderRight="1px solid #E0E0E0"
-              >
-                <Icon
-                  as={RiLock2Fill}
-                  height="21px"
-                  width="21px"
-                  color={errors.password ? 'error' : 'primary.basic'}
-                />
-              </Flex>
-            </InputLeftElement>
             <FormInput
+              hasRightElement
               fieldName="password"
               control={control}
               hasError={!!errors.password}
               fieldType={passwordType}
             />
             <PasswordButton
-              as={passwordType === 'password' ? BiShow : BiHide}
               passwordType={passwordType}
               setPasswordType={setPasswordType}
             />
@@ -228,61 +228,39 @@ export const LoginPage = () => {
             </FormErrorMessage>
           )}
         </FormControl>
-
-        <Button
-          variant="primary"
-          type="submit"
-          disabled={Object.keys(errors).length > 0}
+        <Flex
+          justifyContent="space-between"
+          fontSize="14px"
+          alignItems="center"
         >
-          {loading ? <Spinner /> : 'Log in'}
-        </Button>
-        {isMobile && (
+          <Flex width="50%">
+            <Text whiteSpace="nowrap">Forgot password?</Text>{' '}
+            <Url onClick={handleCodeLogin}>Login with code</Url>
+          </Flex>
           <Button
-            variant="secondary"
-            color="primary.basic"
-            onClick={() => router.push(REGISTER_ROUTE)}
+            variant="primary"
+            type="submit"
+            width="138px"
+            disabled={Object.keys(errors).length > 0}
           >
-            Sign up
+            {loading ? <Spinner /> : 'Start'}
           </Button>
-        )}
+        </Flex>
       </form>
-      <Text
-        fontWeight="600"
-        fontSize="14px"
-        lineHeight="21px"
-        color="secondary.text"
-        marginTop="69px"
-        textAlign="center"
-        justifyContent="space-between"
-        display="flex"
-      >
-        <Flex>
-          Send
-          <Link href={SEND_CODE_ROUTE}>
-            <Text
-              cursor="pointer"
-              color="primary.basic"
-              _hover={{ color: 'primary.hover' }}
-              marginLeft="6px"
-            >
-              magic link
-            </Text>
-          </Link>
-        </Flex>
-        <Flex>
-          <Link href={RESTORE_PASSWORD_ROUTE}>
-            <Text
-              cursor="pointer"
-              color="primary.basic"
-              _hover={{ color: 'primary.hover' }}
-              marginRight="6px"
-            >
-              Forgot
-            </Text>
-          </Link>
-          password?
-        </Flex>
-      </Text>
     </Grid>
   );
 };
+
+const Url = styled.span`
+  text-decoration: underline;
+  color: var(--chakra-colors-accent-blue);
+  cursor: pointer;
+  white-space: nowrap;
+  margin-left: 5px;
+  transition: transform 300ms;
+
+  &:hover {
+    text-decoration: none;
+    color: #5cbaec;
+  }
+`;

@@ -21,7 +21,6 @@ import { Button } from '@/components/common/Button';
 import { useCallback, useState } from 'react';
 import { object, string } from 'yup';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { mailchimpSendEmailSubscription } from '@/services/mailchimp';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { MdEmail } from 'react-icons/md';
 import { FormInput } from '../common/FormInput/FormInput';
@@ -42,7 +41,7 @@ const schema = object()
 
 export const EmailSubscribeModal = (props: EmailSubscribeModalProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const {
     control: formControl,
     handleSubmit,
@@ -51,15 +50,9 @@ export const EmailSubscribeModal = (props: EmailSubscribeModalProps) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<FormInput> = useCallback(
-    async ({ email }) => {
-      setLoading(true);
-      await mailchimpSendEmailSubscription(email);
-      setLoading(false);
-      onClose();
-    },
-    [onClose],
-  );
+  const onSubmit: SubmitHandler<FormInput> = useCallback(async () => {
+    onClose();
+  }, [onClose]);
 
   return (
     <>

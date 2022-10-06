@@ -15,7 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { ProfilePageSchema } from '@/components/pages/Profile/ProfilePage.schema';
 import useUser from '@/hooks/useUser';
 import { Button } from '@/components/common/Button';
-import { LOGIN_ROUTE } from '@/constants/routes';
+import { AUTH_EMAIL_ROUTE } from '@/constants/routes';
 
 interface IFormInput {
   email: string;
@@ -28,7 +28,7 @@ interface AccountTabProps {
 
 export const AccountTab = ({ setSelectedTab }: AccountTabProps) => {
   const { user } = useUser({
-    redirectTo: LOGIN_ROUTE,
+    redirectTo: AUTH_EMAIL_ROUTE,
   });
 
   const { control, reset } = useForm<IFormInput>({

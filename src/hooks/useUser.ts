@@ -1,15 +1,40 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { User } from '@/pages/api/user';
 import { API_USER_ROUTE } from '@/constants/routes';
+import fetchJson from '@/services/fetchJson';
+import { KycStatusTypes } from '@/components/pages/Profile/components/KYCProvider/hooks/useKYCStatus';
+
+export type User = {
+  isLoggedIn: boolean;
+  email: string;
+  id: string;
+  name: string;
+  token: string;
+  kycStatus: KycStatusTypes | null;
+};
 
 export default function useUser({
   redirectTo = '',
   redirectIfFound = false,
 } = {}) {
-  const { data: user, mutate: mutateUser } = useSWR<User>(API_USER_ROUTE);
+  const {
+    data,
+    error,
+    mutate: mutateUser,
+  } = useSWR<User>(API_USER_ROUTE, fetchJson, { refreshInterval: 0 });
   const router = useRouter();
+
+  const isLoading = !data && !error;
+
+  const user = useMemo(() => {
+    return (
+      data && {
+        ...data,
+        isLoggedIn: true,
+      }
+    );
+  }, [data]);
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
@@ -28,5 +53,5 @@ export default function useUser({
     }
   }, [user, redirectIfFound, redirectTo, router]);
 
-  return { user, mutateUser };
+  return { user, mutateUser, isLoading };
 }

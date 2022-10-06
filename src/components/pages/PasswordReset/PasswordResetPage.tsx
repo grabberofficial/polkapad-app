@@ -187,7 +187,6 @@ export const PasswordResetPage = () => {
                   hasError={!!errors.newPassword}
                 />
                 <PasswordButton
-                  as={passwordType === 'password' ? BiShow : BiHide}
                   passwordType={passwordType}
                   setPasswordType={setPasswordType}
                 />

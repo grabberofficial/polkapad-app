@@ -4,7 +4,7 @@ import useUser from '@/hooks/useUser';
 import { Dispatch, SetStateAction, useContext } from 'react';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
-import { LOGIN_ROUTE } from '@/constants/routes';
+import { AUTH_EMAIL_ROUTE } from '@/constants/routes';
 
 import WalletCard from './components/WalletCard/WalletCard';
 
@@ -14,7 +14,7 @@ interface WalletTabProps {
 
 export const WalletTab = ({ setSelectedTab }: WalletTabProps) => {
   const { user } = useUser({
-    redirectTo: LOGIN_ROUTE,
+    redirectTo: AUTH_EMAIL_ROUTE,
   });
   const { wallets, walletsAreVerified, fetchWallets } =
     useContext(WalletsContext);

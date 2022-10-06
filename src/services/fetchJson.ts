@@ -1,10 +1,11 @@
 import { ExceptionTypeEnum } from '@/constants/error';
+import { getToken } from '@/utils/auth';
 
 export default async function fetchJson<JSON = unknown>(
   input: RequestInfo,
   init?: RequestInit,
-  token?: string,
 ): Promise<JSON> {
+  const token = getToken();
   const headers = token
     ? new Headers({
         Authorization: token,
@@ -24,7 +25,12 @@ export default async function fetchJson<JSON = unknown>(
 
   let data;
   try {
-    data = await response.json();
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.indexOf('application/json') !== -1) {
+      data = await response.json();
+    } else {
+      data = await response.text();
+    }
     // eslint-disable-next-line no-empty
   } catch {}
   // response.ok is true when res.status is 2xx

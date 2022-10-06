@@ -1,9 +1,8 @@
 import React, { useCallback } from 'react';
-import useUser from '@/hooks/useUser';
+import useUser, { User } from '@/hooks/useUser';
 import { useRouter } from 'next/router';
-import fetchJson from '@/services/fetchJson';
 import {
-  API_LOGOUT_ROUTE,
+  AUTH_EMAIL_ROUTE,
   HOME_ROUTE,
   KYC_ROUTE,
   LOCKER_ROUTE,
@@ -20,17 +19,17 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import styled from '@emotion/styled';
+import { cleanWalletsStorage } from '@/utils/wallets';
 
 export const MobileMenu = () => {
   const { mutateUser, user } = useUser();
   const router = useRouter();
 
   const logout = useCallback(async () => {
-    await mutateUser(
-      await fetchJson(API_LOGOUT_ROUTE, { method: 'POST' }),
-      false,
-    );
-    router.push(HOME_ROUTE);
+    logout();
+    router.push(AUTH_EMAIL_ROUTE);
+    await mutateUser(null as unknown as User);
+    cleanWalletsStorage();
   }, [mutateUser, router]);
 
   return (

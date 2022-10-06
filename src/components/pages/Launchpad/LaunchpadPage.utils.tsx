@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { KYC_ROUTE, REGISTER_ROUTE, WALLET_ROUTE } from '@/constants/routes';
+import { AUTH_EMAIL_ROUTE, KYC_ROUTE, WALLET_ROUTE } from '@/constants/routes';
 import styled from '@emotion/styled';
 import { Button } from '@/components/common/Button';
 
@@ -14,7 +14,7 @@ export const getSteps = (
     isCurrent: !isLoggedIn,
     isComplete: isLoggedIn,
     button: (
-      <Link href={REGISTER_ROUTE}>
+      <Link href={AUTH_EMAIL_ROUTE}>
         <StepButton variant={!isLoggedIn ? 'primary' : 'secondary'}>
           Sign Up
         </StepButton>

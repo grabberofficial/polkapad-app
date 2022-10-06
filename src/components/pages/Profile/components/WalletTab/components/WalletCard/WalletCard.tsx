@@ -24,14 +24,12 @@ import { PolkadotWalletButton } from '@/components/PolkadotWalletButton/PolkaWal
 import { BSCWalletButton } from '@/components/BSCWalletButton/BSCWalletButton';
 import { isProduction } from '@/utils/general';
 import { ChainId } from '@usedapp/core';
-import useUser from '@/hooks/useUser';
 
 const WalletCard: React.FC<{
   type?: string;
   wallets: any[];
   verifyCallback: () => void;
 }> = ({ type = 'eth', wallets, verifyCallback }) => {
-  const { user } = useUser();
   const [isLoading, setIsLoading] = React.useState(false);
   const [verified, setVerified] = React.useState(false);
   const [walletConnected, setWalletConnected] = React.useState(false);
@@ -87,17 +85,13 @@ const WalletCard: React.FC<{
 
     try {
       setIsLoading(true);
-      await fetchJson(
-        `https://${serviceUrl}/wallets`,
-        {
-          method: 'POST',
-          body: JSON.stringify({
-            name: type,
-            value: address,
-          }),
-        },
-        user?.token,
-      );
+      await fetchJson(`https://${serviceUrl}/wallets`, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: type,
+          value: address,
+        }),
+      });
       setVerified(true);
       setIsLoading(false);
       setWalletAddress(walletAddress);
@@ -108,14 +102,7 @@ const WalletCard: React.FC<{
       setError(typedError.data.message);
       setIsLoading(false);
     }
-  }, [
-    type,
-    walletAddress,
-    user?.token,
-    bscAddress,
-    polkaAddress,
-    verifyCallback,
-  ]);
+  }, [type, walletAddress, bscAddress, polkaAddress, verifyCallback]);
 
   const connectMobileWallet = useCallback(() => {
     if (isMobile) {
