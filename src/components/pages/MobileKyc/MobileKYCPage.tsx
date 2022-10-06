@@ -1,18 +1,8 @@
 import { Heading } from '@/components/common/HeadingWithUnderline/HeadingWithUnderline';
-import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Text } from '@chakra-ui/react';
-import { MagicLinkTypes } from '@/pages/api/magic-links';
-import { API_MAGIC_LINKS_ROUTE } from '@/constants/routes';
 
 export const MobileKycPage = () => {
-  useEffect(() => {
-    fetch(API_MAGIC_LINKS_ROUTE, {
-      method: 'POST',
-      body: JSON.stringify({ type: MagicLinkTypes.KYC }),
-    });
-  }, []);
-
   return (
     <>
       <Heading
