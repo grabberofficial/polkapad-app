@@ -29,7 +29,7 @@ const getFirstStepButton = (
   if (!isLoggedIn) {
     return (
       <Link href={AUTH_EMAIL_ROUTE}>
-        <Button variant="primary" width="97px">
+        <Button variant="primary" width="120px">
           Sign up
         </Button>
       </Link>
@@ -39,7 +39,7 @@ const getFirstStepButton = (
   if (!walletsAreVerified) {
     return (
       <Link href={WALLET_ROUTE}>
-        <Button variant="primary" width="97px">
+        <Button variant="primary" width="120px">
           Verify Wallets
         </Button>
       </Link>
@@ -72,7 +72,7 @@ const getSteps = (
     button: address ? (
       <Button
         variant="primary"
-        width="97px"
+        width="120px"
         isLoading={isLoading}
         onClick={claimTestGear}
         disabled={!isLoggedIn || !walletsAreVerified || isLoading}
@@ -90,7 +90,7 @@ const getSteps = (
     button: address ? (
       <Button
         variant="primary"
-        width="97px"
+        width="120px"
         isLoading={isLoading}
         onClick={claimTestPLPD}
         disabled={!claimPLPDAvailable || isLoading}
@@ -109,7 +109,7 @@ const getSteps = (
       <Link href={STAKING_ROUTE}>
         <Button
           variant="primary"
-          width="97px"
+          width="120px"
           isLoading={isLoading}
           disabled={!stakingAvailable}
         >
