@@ -1,7 +1,9 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
-import { useKYCStatus } from '@/components/pages/Profile/components/KYCProvider/hooks/useKYCStatus';
+import {
+  KycStatusTypes,
+  useKYCStatus,
+} from '@/components/pages/Profile/components/KYCProvider/hooks/useKYCStatus';
 import useUser from '@/hooks/useUser';
-import { KycStatusTypes } from '@/pages/api/kycStatus';
 
 export type KYCContextType = {
   isKYCAccepted: boolean;
