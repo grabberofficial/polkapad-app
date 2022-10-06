@@ -1,13 +1,7 @@
 import React, { useCallback } from 'react';
-import useUser from '@/hooks/useUser';
+import useUser, { User } from '@/hooks/useUser';
 import { useRouter } from 'next/router';
-import fetchJson from '@/services/fetchJson';
-import {
-  API_LOGOUT_ROUTE,
-  HOME_ROUTE,
-  KYC_ROUTE,
-  PROFILE_ROUTE,
-} from '@/constants/routes';
+import { AUTH_EMAIL_ROUTE, KYC_ROUTE, PROFILE_ROUTE } from '@/constants/routes';
 import {
   Flex,
   Icon,
@@ -20,18 +14,17 @@ import { Button } from '@/components/common/Button';
 import { BiUser } from 'react-icons/bi';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import { cleanWalletsStorage } from '@/utils/wallets';
+import { logout } from '@/utils/auth';
 
 export const AccountButton = () => {
-  const { mutateUser } = useUser();
+  const { mutateUser } = useUser({ redirectTo: AUTH_EMAIL_ROUTE });
   const router = useRouter();
 
-  const logout = useCallback(async () => {
-    await mutateUser(
-      await fetchJson(API_LOGOUT_ROUTE, { method: 'POST' }),
-      false,
-    );
+  const onLogout = useCallback(async () => {
+    logout();
+    router.push(AUTH_EMAIL_ROUTE);
+    await mutateUser(null as unknown as User);
     cleanWalletsStorage();
-    router.push(HOME_ROUTE);
   }, [mutateUser, router]);
 
   return (
@@ -97,7 +90,7 @@ export const AccountButton = () => {
           fontWeight={600}
           _hover={{ color: 'white', backgroundColor: 'primary.basic' }}
           paddingLeft="20px"
-          onClick={logout}
+          onClick={onLogout}
         >
           Logout
         </MenuItem>

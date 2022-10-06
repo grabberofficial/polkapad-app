@@ -11,7 +11,7 @@ import useUser from '@/hooks/useUser';
 import { WalletsContext } from '@/components/pages/Profile/components/WalletsProvider/WalletsProvider';
 import { BN } from '@polkadot/util';
 import {
-  REGISTER_ROUTE,
+  AUTH_EMAIL_ROUTE,
   STAKING_ROUTE,
   WALLET_ROUTE,
 } from '@/constants/routes';
@@ -28,7 +28,7 @@ const getFirstStepButton = (
 ) => {
   if (!isLoggedIn) {
     return (
-      <Link href={REGISTER_ROUTE}>
+      <Link href={AUTH_EMAIL_ROUTE}>
         <Button variant="primary" width="97px">
           Sign up
         </Button>

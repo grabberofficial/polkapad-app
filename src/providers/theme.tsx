@@ -7,6 +7,9 @@ const theme = extendTheme({
       '*': {
         fontFamily: 'Poppins',
       },
+      body: {
+        backgroundColor: 'var(--chakra-colors-background-light)',
+      },
     },
   },
   colors: {

@@ -37,6 +37,7 @@ export const Checkbox = ({
           icon={<Image src={checkboxChecked} />}
           colorScheme="transparent"
           _hover={{ borderColor: 'primary.basic' }}
+          backgroundColor={isChecked ? 'primary.basic' : undefined}
           borderColor={isChecked ? 'primary.basic' : undefined}
           onChange={({ target: { checked } }) => onCheck(checked, onChange)}
           {...props}
@@ -50,6 +51,9 @@ export const Checkbox = ({
 };
 
 const StyledCheckbox = styled(ChakraCheckbox)`
+  height: 15px;
+  border-radius: 4px;
+
   span {
     border-width: 1px;
     border-radius: 4px;

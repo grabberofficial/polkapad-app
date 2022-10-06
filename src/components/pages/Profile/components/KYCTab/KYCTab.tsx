@@ -6,7 +6,6 @@ import { VerificationInProgress } from '@/components/pages/Profile/components/KY
 import { KycIcons } from '@/components/pages/Profile/components/KYCTab/components/KycIcons/KycIcons';
 import { VerificationDisrupted } from '@/components/pages/Profile/components/KYCTab/components/VerificationDisrupted/VerificationDisrupted';
 import React, { useCallback, useContext } from 'react';
-import { KycStatusTypes } from '@/pages/api/kycStatus';
 import { sendMetricsStartKYC } from '@/services/metrics';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { KYCContext } from '@/components/pages/Profile/components/KYCProvider/KYCProvider';
@@ -17,6 +16,8 @@ import {
   LOCKER_ROUTE,
   MOBILE_KYC_ROUTE,
 } from '@/constants/routes';
+import fetchJson from '@/services/fetchJson';
+import { KycStatusTypes } from '../KYCProvider/hooks/useKYCStatus';
 
 export const KYCTab = () => {
   const isMobile = useIsMobile();
@@ -38,9 +39,9 @@ export const KYCTab = () => {
     }
     if (typeof window !== 'undefined') {
       setKYCStatus(KycStatusTypes.IN_PROGRESS);
-      const kyc = await fetch(API_KYC_ROUTE).then((data) => data.json());
+      const kycUrl = await fetchJson<URL>(API_KYC_ROUTE);
       sendMetricsStartKYC();
-      window.open(kyc.iframeUrl);
+      window.open(kycUrl);
     }
   }, [isMobile, router, setKYCStatus]);
 

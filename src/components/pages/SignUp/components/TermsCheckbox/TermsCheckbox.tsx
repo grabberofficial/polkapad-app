@@ -1,19 +1,17 @@
 import { Checkbox } from '@/components/common/Checkbox/Checkbox';
 import { Flex, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
-import { Control, FieldErrors } from 'react-hook-form';
-import { SignupFormInput } from '@/components/pages/SignUp/SignUpPage';
+import { Control, FieldError } from 'react-hook-form';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
-import * as React from 'react';
 import styled from '@emotion/styled';
 
 interface TermsCheckboxProps {
-  control: Control<SignupFormInput, any>;
-  errors: FieldErrors<SignupFormInput>['terms'];
+  control: Control<any, any>;
+  errors?: FieldError;
 }
 
 export const TermsCheckbox = ({ errors, control }: TermsCheckboxProps) => {
   return (
-    <FormControl isInvalid={!!errors}>
+    <FormControl isInvalid={!!errors} width="50%">
       <Flex>
         <Checkbox
           control={control}
@@ -24,23 +22,22 @@ export const TermsCheckbox = ({ errors, control }: TermsCheckboxProps) => {
         <Text
           marginLeft="11px"
           width="100%"
-          fontSize={11}
-          lineHeight="16px"
-          color="secondary.textLight"
+          fontSize={14}
+          lineHeight="24px"
+          color="primary.basic"
           fontFamily="Poppins"
         >
-          Yes, I understand and agree to the Polkapad&nbsp;
+          Yes, I understand and agree to the
           <GoogleDocsViewer
             title="Terms and Service"
             fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
-            control={(props) => <DocUrl {...props}>Terms of Service</DocUrl>}
-          />
-          <br />
-          and&nbsp;
+            control={(props) => <DocUrl {...props}> Terms of Service</DocUrl>}
+          />{' '}
+          and
           <GoogleDocsViewer
             title="Privacy Policy"
             fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
-            control={(props) => <DocUrl {...props}>Privacy Policy</DocUrl>}
+            control={(props) => <DocUrl {...props}> Privacy Policy</DocUrl>}
           />
         </Text>
       </Flex>
@@ -61,5 +58,12 @@ export const TermsCheckbox = ({ errors, control }: TermsCheckboxProps) => {
 
 const DocUrl = styled.span`
   text-decoration: underline;
+  color: var(--chakra-colors-accent-blue);
   cursor: pointer;
+  transition: transform 300ms;
+
+  &:hover {
+    text-decoration: none;
+    color: #5cbaec;
+  }
 `;

@@ -20,8 +20,8 @@ import {
   WAIT_ROUTE,
 } from '@/constants/routes';
 import { AccountButton } from './components/AccountButton/AccountButton';
-import { GetStartedButton } from './components/GetStartedButton/GetStartedButton';
 import { MobileMenu } from './components/MobileMenu/MobileMenu';
+import { GetStartedButton } from './components/GetStartedButton/GetStartedButton';
 
 interface HeaderProps {
   isLoggedIn: boolean;

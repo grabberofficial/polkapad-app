@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import fetchJson from '@/services/fetchJson';
 import { serviceUrl } from '@/config/env';
-import { User } from '@/pages/api/user';
+import { User } from '@/hooks/useUser';
 
 export type WalletsType = { name: string; value: string }[];
 
@@ -12,9 +12,9 @@ export const useWallets = (user?: User) => {
     const wallets: Array<{
       name: string;
       value: string;
-    }> = await fetchJson(`https://${serviceUrl}/wallets`, {}, user?.token);
+    }> = await fetchJson(`https://${serviceUrl}/wallets`, {});
     setWallets(wallets);
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     if (user?.token?.length && !wallets.length) fetchWallets();
