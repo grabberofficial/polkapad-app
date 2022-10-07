@@ -17,8 +17,8 @@ export const useWallets = (user?: User) => {
   }, []);
 
   useEffect(() => {
-    if (user?.token?.length && !wallets.length) fetchWallets();
-  }, [fetchWallets, user?.token?.length, wallets?.length]);
+    if (user?.isLoggedIn && !wallets.length) fetchWallets();
+  }, [user?.isLoggedIn, wallets?.length]);
 
   const walletsAreVerified = useMemo(() => wallets.length === 2, [wallets]);
 
