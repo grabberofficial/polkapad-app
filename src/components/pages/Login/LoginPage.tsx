@@ -21,8 +21,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
 import { useRouter } from 'next/router';
 import {
-  LoginPageSchema,
-  LoginPageSchema2,
+  PasswordLoginPageSchema,
+  CodeLoginPageSchema,
 } from '@/components/pages/Login/LoginPage.schema';
 import { EMAIL_ERROR_TYPES } from '@/components/pages/Login/LoginPage.constants';
 import {
@@ -58,7 +58,9 @@ export const LoginPage = () => {
     clearErrors,
   } = useForm<IFormInput>({
     resolver: yupResolver(
-      loginMode === LOGIN_TYPES.PASSWORD ? LoginPageSchema : LoginPageSchema2,
+      loginMode === LOGIN_TYPES.PASSWORD
+        ? PasswordLoginPageSchema
+        : CodeLoginPageSchema,
     ),
   });
   const router = useRouter();
