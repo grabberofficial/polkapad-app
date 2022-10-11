@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
 
 env:
-  ECR: 081239602556.dkr.ecr.eu-central-1.amazonaws.com/polkapad-polkapad-app
-  ROLE: "arn:aws:iam::081239602556:role/github-ecr-polkapad-polkapad-app"
+  ECR: 081239602556.dkr.ecr.eu-central-1.amazonaws.com/grabberofficial-polkapad-app
+  ROLE: "arn:aws:iam::081239602556:role/github-ecr-grabberofficial-polkapad-app"
 
 jobs:
   docker:

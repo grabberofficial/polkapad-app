@@ -61,7 +61,7 @@ runs:
     - name: Clone Argo repo
       uses: actions/checkout@v3
       with:
-        repository: 'polkapad/argocd'
+        repository: 'grabberofficial/argocd'
         ref: main
         ssh-key: ${{ inputs.ssh-key }}
         path: argo
