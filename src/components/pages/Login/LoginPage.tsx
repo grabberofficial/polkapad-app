@@ -6,21 +6,24 @@ import { FormInput } from '@/components/common/FormInput/FormInput';
 import fetchJson, { FetchError } from '@/services/fetchJson';
 import useUser, { User } from '@/hooks/useUser';
 import {
+  Flex,
   FormControl,
   FormErrorMessage,
   FormLabel,
   Grid,
-  InputGroup,
-  Text,
   Icon,
-  Flex,
-  Spinner,
+  InputGroup,
   InputRightElement,
+  Spinner,
+  Text,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
 import { useRouter } from 'next/router';
-import { LoginPageSchema } from '@/components/pages/Login/LoginPage.schema';
+import {
+  LoginPageSchema,
+  LoginPageSchema2,
+} from '@/components/pages/Login/LoginPage.schema';
 import { EMAIL_ERROR_TYPES } from '@/components/pages/Login/LoginPage.constants';
 import {
   API_LOGIN_ROUTE,
@@ -32,7 +35,10 @@ import { ExceptionTypeEnum } from '@/constants/error';
 import { HiOutlineMail } from 'react-icons/hi';
 import styled from '@emotion/styled';
 import { ApiSendCodeResponse } from '@/components/pages/AuthEmail/AuthEmailPage';
-import { AUTH_EMAIL_TYPES } from '@/components/pages/AuthEmail/AuthEmailPage.constants';
+import {
+  AUTH_EMAIL_TYPES,
+  LOGIN_TYPES,
+} from '@/components/pages/AuthEmail/AuthEmailPage.constants';
 import { setToken } from '@/utils/auth';
 
 // TODO: server-side redirect from login page if user is already logged in
@@ -43,6 +49,7 @@ interface IFormInput {
 }
 
 export const LoginPage = () => {
+  const [loginMode, setLoginMode] = useState<LOGIN_TYPES>(LOGIN_TYPES.PASSWORD);
   const {
     control,
     handleSubmit,
@@ -50,7 +57,9 @@ export const LoginPage = () => {
     setError,
     clearErrors,
   } = useForm<IFormInput>({
-    resolver: yupResolver(LoginPageSchema),
+    resolver: yupResolver(
+      loginMode === LOGIN_TYPES.PASSWORD ? LoginPageSchema : LoginPageSchema2,
+    ),
   });
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -69,21 +78,48 @@ export const LoginPage = () => {
     }
   }, [clearErrors, errors.email, errors.password]);
 
+  const sendLoginCode = useCallback(
+    async (email: string) => {
+      const { type } = await fetchJson<ApiSendCodeResponse>(
+        API_SEND_CODE_ROUTE,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, isAuthorize: true }),
+        },
+      );
+
+      if (type === AUTH_EMAIL_TYPES.SIGN_IN) {
+        router.push(
+          { pathname: AUTH_VERIFY_CODE_ROUTE, query: { email } },
+          AUTH_VERIFY_CODE_ROUTE,
+        );
+      }
+    },
+    [router],
+  );
+
   const onSubmit: SubmitHandler<IFormInput> = useCallback(
     async (data) => {
       try {
         setLoading(true);
-        await mutateUser(
-          (async () => {
-            const token = await fetchJson<string>(API_LOGIN_ROUTE, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ ...data }),
-            });
 
-            setToken(token);
-          })() as unknown as Promise<User>,
-        );
+        if (loginMode === LOGIN_TYPES.PASSWORD) {
+          await mutateUser(
+            (async () => {
+              const token = await fetchJson<string>(API_LOGIN_ROUTE, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ...data }),
+              });
+
+              setToken(token);
+            })() as unknown as Promise<User>,
+          );
+        } else {
+          sendLoginCode(data.email);
+        }
+
         setLoading(false);
       } catch (error) {
         setLoading(false);
@@ -104,23 +140,26 @@ export const LoginPage = () => {
         }
       }
     },
-    [mutateUser, setError],
+    [loginMode, mutateUser, sendLoginCode, setError],
   );
 
   const handleCodeLogin = useCallback(async () => {
-    const { type } = await fetchJson<ApiSendCodeResponse>(API_SEND_CODE_ROUTE, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, isAuthorize: true }),
-    });
-
-    if (type === AUTH_EMAIL_TYPES.SIGN_IN) {
-      router.push(
-        { pathname: AUTH_VERIFY_CODE_ROUTE, query: { email } },
-        AUTH_VERIFY_CODE_ROUTE,
-      );
+    try {
+      clearErrors();
+      if (email) {
+        sendLoginCode(email as string);
+      } else {
+        setLoginMode(LOGIN_TYPES.CODE);
+      }
+    } catch (e) {
+      console.error(e);
     }
-  }, [email, router]);
+  }, [clearErrors, email, sendLoginCode]);
+
+  const handlePasswordLogin = useCallback(
+    () => setLoginMode(LOGIN_TYPES.PASSWORD),
+    [],
+  );
 
   return (
     <Grid
@@ -202,32 +241,34 @@ export const LoginPage = () => {
             </FormErrorMessage>
           )}
         </FormControl>
-        <FormControl isInvalid={!!errors.password}>
-          <FormLabel htmlFor="password">Password</FormLabel>
-          <InputGroup>
-            <FormInput
-              hasRightElement
-              fieldName="password"
-              control={control}
-              hasError={!!errors.password}
-              fieldType={passwordType}
-            />
-            <PasswordButton
-              passwordType={passwordType}
-              setPasswordType={setPasswordType}
-            />
-          </InputGroup>
-          {errors.password && (
-            <FormErrorMessage
-              fontWeight="400"
-              fontSize="12px"
-              lineHeight="18px"
-              color="error"
-            >
-              {errors.password.message}
-            </FormErrorMessage>
-          )}
-        </FormControl>
+        {loginMode === LOGIN_TYPES.PASSWORD && (
+          <FormControl isInvalid={!!errors.password}>
+            <FormLabel htmlFor="password">Password</FormLabel>
+            <InputGroup>
+              <FormInput
+                hasRightElement
+                fieldName="password"
+                control={control}
+                hasError={!!errors.password}
+                fieldType={passwordType}
+              />
+              <PasswordButton
+                passwordType={passwordType}
+                setPasswordType={setPasswordType}
+              />
+            </InputGroup>
+            {errors.password && (
+              <FormErrorMessage
+                fontWeight="400"
+                fontSize="12px"
+                lineHeight="18px"
+                color="error"
+              >
+                {errors.password.message}
+              </FormErrorMessage>
+            )}
+          </FormControl>
+        )}
         <Flex
           justifyContent="space-between"
           fontSize="14px"
@@ -235,7 +276,17 @@ export const LoginPage = () => {
         >
           <Flex width="50%">
             <Text whiteSpace="nowrap">Forgot password?</Text>{' '}
-            <Url onClick={handleCodeLogin}>Login with code</Url>
+            <Url
+              onClick={
+                loginMode === LOGIN_TYPES.PASSWORD
+                  ? handleCodeLogin
+                  : handlePasswordLogin
+              }
+            >
+              {loginMode === LOGIN_TYPES.PASSWORD
+                ? 'Login with code'
+                : 'Login with password'}
+            </Url>
           </Flex>
           <Button
             variant="primary"

@@ -6,3 +6,9 @@ export const LoginPageSchema = object()
     password: string().required('Password is required'),
   })
   .required();
+
+export const LoginPageSchema2 = object()
+  .shape({
+    email: string().required('Email is required').email('Email is invalid'),
+  })
+  .required();
