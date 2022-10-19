@@ -6,16 +6,16 @@ import { BsFillCheckCircleFill } from 'react-icons/bs';
 import { BiHide, BiShow } from 'react-icons/bi';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import {
+  Flex,
   FormControl,
+  FormErrorMessage,
   FormLabel,
   Grid,
+  Icon,
   InputGroup,
   InputLeftElement,
-  Text,
-  Icon,
-  Flex,
-  FormErrorMessage,
   Spinner,
+  Text,
 } from '@chakra-ui/react';
 
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -26,7 +26,9 @@ import { serviceUrl } from '@/config/env';
 import { PasswordResetPageSchema } from '@/components/pages/PasswordReset/PasswordResetPage.schema';
 import { LOGIN_ROUTE } from '@/constants/routes';
 import { ExceptionTypeEnum } from '@/constants/error';
-import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
+import { PasswordButton } from '@/components/common/PasswordControl/components/PasswordButton/PasswordButton';
+import { PasswordControl } from '@/components/common/PasswordControl/PasswordControl';
+import { PasswordTypes } from '@/components/common/PasswordControl/PasswordControl.constants';
 
 interface IFormInput {
   newPassword: string;
@@ -37,8 +39,8 @@ export const PasswordResetPage = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
-  const [passwordType, setPasswordType] = useState<'password' | 'text'>(
-    'password',
+  const [passwordType, setPasswordType] = useState<PasswordTypes>(
+    PasswordTypes.PASSWORD,
   );
   const {
     control,
@@ -157,51 +159,14 @@ export const PasswordResetPage = () => {
             }}
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormControl isInvalid={!!errors.newPassword}>
-              <FormLabel htmlFor="newPassword">Password</FormLabel>
-              <InputGroup>
-                <InputLeftElement
-                  pointerEvents="none"
-                  width="55px"
-                  height="100%"
-                >
-                  <Flex
-                    height="21px"
-                    width="100%"
-                    justifyContent="center"
-                    alignItems="center"
-                    borderRight="1px solid #E0E0E0"
-                  >
-                    <Icon
-                      as={RiLock2Fill}
-                      height="21px"
-                      width="21px"
-                      color={errors.newPassword ? 'error' : 'primary.basic'}
-                    />
-                  </Flex>
-                </InputLeftElement>
-                <FormInput
-                  fieldName="newPassword"
-                  fieldType={passwordType}
-                  control={control}
-                  hasError={!!errors.newPassword}
-                />
-                <PasswordButton
-                  passwordType={passwordType}
-                  setPasswordType={setPasswordType}
-                />
-              </InputGroup>
-              {errors.newPassword && (
-                <FormErrorMessage
-                  fontWeight="400"
-                  fontSize="12px"
-                  lineHeight="18px"
-                  color="error"
-                >
-                  {errors.newPassword.message}
-                </FormErrorMessage>
-              )}
-            </FormControl>
+            <PasswordControl
+              control={control}
+              name="newPassword"
+              text="Password"
+              passwordType={passwordType}
+              setPasswordType={setPasswordType}
+              error={errors.newPassword}
+            />
             <FormControl isInvalid={!!errors.confirmNewPassword}>
               <FormLabel htmlFor="password-confirm">Confirm Password</FormLabel>
               <InputGroup>

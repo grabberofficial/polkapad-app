@@ -1,27 +1,33 @@
-import styled from '@emotion/styled';
-import { Image, ImageProps } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useCallback } from 'react';
 import { AiTwotoneEye } from 'react-icons/ai';
 import { TbEye } from 'react-icons/tb';
+import { FieldError } from 'react-hook-form';
+import styled from '@emotion/styled';
+import { Image, ImageProps } from '@chakra-ui/react';
+
+import { PasswordTypes } from '@/components/common/PasswordControl/PasswordControl.constants';
 
 interface PasswordButtonProps extends ImageProps {
   passwordType: string;
-  setPasswordType: Dispatch<SetStateAction<'text' | 'password'>>;
+  setPasswordType: Dispatch<SetStateAction<PasswordTypes>>;
+  error?: FieldError;
 }
 
 export const PasswordButton = ({
+  error,
   passwordType,
   setPasswordType,
 }: PasswordButtonProps) => {
   const togglePasswordVisibility = useCallback(() => {
-    passwordType === 'password'
-      ? setPasswordType('text')
-      : setPasswordType('password');
+    passwordType === PasswordTypes.PASSWORD
+      ? setPasswordType(PasswordTypes.TEXT)
+      : setPasswordType(PasswordTypes.PASSWORD);
   }, [passwordType, setPasswordType]);
 
   return (
     <StyledImage
-      as={passwordType === 'password' ? TbEye : AiTwotoneEye}
+      stroke={error ? 'error' : 'primary.basic'}
+      as={passwordType === PasswordTypes.PASSWORD ? TbEye : AiTwotoneEye}
       onClick={togglePasswordVisibility}
     />
   );

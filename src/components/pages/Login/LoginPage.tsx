@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/common/Button';
 import { FormInput } from '@/components/common/FormInput/FormInput';
@@ -18,11 +18,10 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { PasswordButton } from '@/components/common/PasswordButton/PasswordButton';
 import { useRouter } from 'next/router';
 import {
-  PasswordLoginPageSchema,
   CodeLoginPageSchema,
+  PasswordLoginPageSchema,
 } from '@/components/pages/Login/LoginPage.schema';
 import { EMAIL_ERROR_TYPES } from '@/components/pages/Login/LoginPage.constants';
 import {
@@ -40,6 +39,8 @@ import {
   LOGIN_TYPES,
 } from '@/components/pages/AuthEmail/AuthEmailPage.constants';
 import { setToken } from '@/utils/auth';
+import { PasswordControl } from '@/components/common/PasswordControl/PasswordControl';
+import { PasswordTypes } from '@/components/common/PasswordControl/PasswordControl.constants';
 
 // TODO: server-side redirect from login page if user is already logged in
 
@@ -50,23 +51,24 @@ interface IFormInput {
 
 export const LoginPage = () => {
   const [loginMode, setLoginMode] = useState<LOGIN_TYPES>(LOGIN_TYPES.PASSWORD);
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-    setError,
-    clearErrors,
-  } = useForm<IFormInput>({
+  const formMethods = useForm<IFormInput>({
     resolver: yupResolver(
       loginMode === LOGIN_TYPES.PASSWORD
         ? PasswordLoginPageSchema
         : CodeLoginPageSchema,
     ),
   });
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    setError,
+    clearErrors,
+  } = formMethods;
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [passwordType, setPasswordType] = useState<'password' | 'text'>(
-    'password',
+  const [passwordType, setPasswordType] = useState<PasswordTypes>(
+    PasswordTypes.PASSWORD,
   );
   const { email } = router.query;
   const { mutateUser } = useUser({
@@ -82,20 +84,26 @@ export const LoginPage = () => {
 
   const sendLoginCode = useCallback(
     async (email: string) => {
-      const { type } = await fetchJson<ApiSendCodeResponse>(
-        API_SEND_CODE_ROUTE,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, isAuthorize: true }),
-        },
-      );
-
-      if (type === AUTH_EMAIL_TYPES.SIGN_IN) {
-        router.push(
-          { pathname: AUTH_VERIFY_CODE_ROUTE, query: { email } },
-          AUTH_VERIFY_CODE_ROUTE,
+      try {
+        setLoading(true);
+        const { type } = await fetchJson<ApiSendCodeResponse>(
+          API_SEND_CODE_ROUTE,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, isAuthorize: true }),
+          },
         );
+
+        if (type === AUTH_EMAIL_TYPES.SIGN_IN) {
+          router.push(
+            { pathname: AUTH_VERIFY_CODE_ROUTE, query: { email } },
+            AUTH_VERIFY_CODE_ROUTE,
+          );
+        }
+      } catch (e) {
+        setLoading(false);
+        console.error(e);
       }
     },
     [router],
@@ -119,7 +127,7 @@ export const LoginPage = () => {
             })() as unknown as Promise<User>,
           );
         } else {
-          sendLoginCode(data.email);
+          await sendLoginCode(data.email);
         }
 
         setLoading(false);
@@ -149,7 +157,7 @@ export const LoginPage = () => {
     try {
       clearErrors();
       if (email) {
-        sendLoginCode(email as string);
+        await sendLoginCode(email as string);
       } else {
         setLoginMode(LOGIN_TYPES.CODE);
       }
@@ -193,113 +201,105 @@ export const LoginPage = () => {
       >
         Please, enter your password to log in
       </Text>
-      <form
-        style={{
-          margin: '65px 0 0',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          gap: '32px',
-          minWidth: '560px',
-        }}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <FormControl isInvalid={!!errors.email}>
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <InputGroup>
-            <FormInput
-              isDisabled={!!email}
-              hasRightElement
-              defaultValue={email as string}
-              fieldName="email"
-              placeholder="mail@mail.com"
-              control={control}
-              hasError={!!errors.email}
-            />
-            <InputRightElement pointerEvents="none" width="55px" height="100%">
-              <Flex
-                height="21px"
-                width="100%"
-                justifyContent="center"
-                alignItems="center"
-              >
-                <Icon
-                  as={HiOutlineMail}
-                  height="21px"
-                  width="21px"
-                  color={errors.email ? 'error' : 'primary.basic'}
-                />
-              </Flex>
-            </InputRightElement>
-          </InputGroup>
-          {errors.email && (
-            <FormErrorMessage
-              fontWeight="400"
-              fontSize="12px"
-              lineHeight="18px"
-              color="error"
-            >
-              {errors.email.message}
-            </FormErrorMessage>
-          )}
-        </FormControl>
-        {loginMode === LOGIN_TYPES.PASSWORD && (
-          <FormControl isInvalid={!!errors.password}>
-            <FormLabel htmlFor="password">Password</FormLabel>
+      <FormProvider {...formMethods}>
+        <form
+          style={{
+            margin: '65px 0 0',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            gap: '32px',
+            minWidth: '560px',
+          }}
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <FormControl isInvalid={!!errors.email}>
+            <FormLabel htmlFor="email">Email</FormLabel>
             <InputGroup>
               <FormInput
+                isDisabled={!!email}
                 hasRightElement
-                fieldName="password"
+                defaultValue={email as string}
+                fieldName="email"
+                placeholder="mail@mail.com"
                 control={control}
-                hasError={!!errors.password}
-                fieldType={passwordType}
+                hasError={!!errors.email}
               />
-              <PasswordButton
-                passwordType={passwordType}
-                setPasswordType={setPasswordType}
-              />
+              <InputRightElement
+                pointerEvents="none"
+                width="55px"
+                height="100%"
+              >
+                <Flex
+                  height="21px"
+                  width="100%"
+                  justifyContent="center"
+                  alignItems="center"
+                >
+                  <Icon
+                    as={HiOutlineMail}
+                    height="21px"
+                    width="21px"
+                    color={errors.email ? 'error' : 'primary.basic'}
+                  />
+                </Flex>
+              </InputRightElement>
             </InputGroup>
-            {errors.password && (
+            {errors.email && (
               <FormErrorMessage
                 fontWeight="400"
                 fontSize="12px"
                 lineHeight="18px"
                 color="error"
               >
-                {errors.password.message}
+                {errors.email.message}
               </FormErrorMessage>
             )}
           </FormControl>
-        )}
-        <Flex
-          justifyContent="space-between"
-          fontSize="14px"
-          alignItems="center"
-        >
-          <Flex width="50%">
-            <Text whiteSpace="nowrap">Forgot password?</Text>{' '}
-            <Url
-              onClick={
-                loginMode === LOGIN_TYPES.PASSWORD
-                  ? handleCodeLogin
-                  : handlePasswordLogin
-              }
+          {loginMode === LOGIN_TYPES.PASSWORD && (
+            <PasswordControl
+              control={control}
+              name="password"
+              text="Password"
+              passwordType={passwordType}
+              setPasswordType={setPasswordType}
+              error={errors.password}
+            />
+          )}
+          {loading ? (
+            <Spinner alignSelf="center" />
+          ) : (
+            <Flex
+              justifyContent="space-between"
+              fontSize="14px"
+              alignItems="center"
             >
-              {loginMode === LOGIN_TYPES.PASSWORD
-                ? 'Login with code'
-                : 'Login with password'}
-            </Url>
-          </Flex>
-          <Button
-            variant="primary"
-            type="submit"
-            width="138px"
-            disabled={Object.keys(errors).length > 0}
-          >
-            {loading ? <Spinner /> : 'Start'}
-          </Button>
-        </Flex>
-      </form>
+              <Flex width="50%">
+                <Text whiteSpace="nowrap">Forgot password?</Text>{' '}
+                <Url
+                  onClick={
+                    loginMode === LOGIN_TYPES.PASSWORD
+                      ? handleCodeLogin
+                      : handlePasswordLogin
+                  }
+                >
+                  {loginMode === LOGIN_TYPES.PASSWORD
+                    ? 'Login with code'
+                    : 'Login with password'}
+                </Url>
+              </Flex>
+              <Button
+                variant="primary"
+                type="submit"
+                width="138px"
+                disabled={Object.keys(errors).length > 0}
+              >
+                {loading ? <Spinner /> : 'Start'}
+              </Button>
+            </Flex>
+          )}
+        </form>
+      </FormProvider>
     </Grid>
   );
 };

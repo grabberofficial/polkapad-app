@@ -42,12 +42,12 @@ const theme = extendTheme({
       dark: '#303030',
       gray: '#EBEBEB',
     },
-    error: '#E868AF',
+    error: '#FF554A',
     kycIcons: '#3E9685',
     border: '#E9E9E9',
     borderDark: '#303030',
     red: {
-      500: '#E868AF',
+      500: '#FF554A',
     },
   },
 });
