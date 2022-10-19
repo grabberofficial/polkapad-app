@@ -33,13 +33,13 @@ export const PasswordControl = (props: PasswordControlProps) => {
     withRequirements = false,
   } = props;
 
-  const [lengthColor, setLengthColor] = useState('primary.basic');
-  const [caseColor, setCaseColor] = useState('primary.basic');
-  const [numbersColor, setNumbersColor] = useState('primary.basic');
+  const [lengthColor, setLengthColor] = useState('primary.basicTransparent');
+  const [caseColor, setCaseColor] = useState('primary.basicTransparent');
+  const [numbersColor, setNumbersColor] = useState('primary.basicTransparent');
 
   const updateRequirements = useCallback(({ target: { value } }) => {
     if (!value.length) {
-      setLengthColor('primary.basic');
+      setLengthColor('primary.basicTransparent');
     } else if (value.length < 8) {
       setLengthColor('error');
     } else {
@@ -47,7 +47,7 @@ export const PasswordControl = (props: PasswordControlProps) => {
     }
 
     if (!value.length) {
-      setCaseColor('primary.basic');
+      setCaseColor('primary.basicTransparent');
     } else if (!/(?=.*[a-z])(?=.*[A-Z])/.test(value)) {
       setCaseColor('error');
     } else {
@@ -55,7 +55,7 @@ export const PasswordControl = (props: PasswordControlProps) => {
     }
 
     if (!value.length) {
-      setNumbersColor('primary.basic');
+      setNumbersColor('primary.basicTransparent');
     } else if (!/^(?=.*[0-9])/.test(value)) {
       setNumbersColor('error');
     } else {
