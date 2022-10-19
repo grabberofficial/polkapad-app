@@ -6,7 +6,6 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react';
-import { FaUser } from 'react-icons/fa';
 import { FormInput } from '@/components/common/FormInput/FormInput';
 import { MdEmail } from 'react-icons/md';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
@@ -39,7 +38,6 @@ export const AccountTab = ({ setSelectedTab }: AccountTabProps) => {
     if (user) {
       reset({
         email: user.email,
-        name: user.name,
       });
     }
   }, [user, reset]);
@@ -53,28 +51,6 @@ export const AccountTab = ({ setSelectedTab }: AccountTabProps) => {
       key="details"
       minHeight="366px"
     >
-      <FormControl isInvalid={false} isDisabled>
-        <FormLabel htmlFor="name">Name</FormLabel>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none" width="55px" height="100%">
-            <Flex
-              height="21px"
-              width="100%"
-              justifyContent="center"
-              alignItems="center"
-              borderRight="1px solid #E0E0E0"
-            >
-              <Icon
-                as={FaUser}
-                height="21px"
-                width="21px"
-                color="primary.basic"
-              />
-            </Flex>
-          </InputLeftElement>
-          <FormInput fieldName="name" hasError={false} control={control} />
-        </InputGroup>
-      </FormControl>
       <FormControl isInvalid={false} isDisabled>
         <FormLabel htmlFor="email">Email</FormLabel>
         <InputGroup>

@@ -1,7 +1,7 @@
 import { Flex, Grid, Spinner, Text } from '@chakra-ui/react';
 import { SubmitHandler, useForm, useWatch } from 'react-hook-form';
 import { useCallback, useEffect, useState } from 'react';
-import fetchJson from '@/services/fetchJson';
+import fetchJson, { FetchError } from '@/services/fetchJson';
 import {
   API_VERIFY_CODE_ROUTE,
   AUTH_EMAIL_ROUTE,
@@ -16,6 +16,7 @@ import { AUTH_EMAIL_TYPES } from '@/components/pages/AuthEmail/AuthEmailPage.con
 import { useRouter } from 'next/router';
 import { setToken } from '@/utils/auth';
 import useUser, { User } from '@/hooks/useUser';
+import { ExceptionTypeEnum } from '@/constants/error';
 
 interface VerifyCodeFormInput {
   code: string;
@@ -33,13 +34,15 @@ export const VerifyCodePage = () => {
     redirectIfFound: true,
   });
 
-  const { control, handleSubmit, getValues } = useForm<VerifyCodeFormInput>({
-    resolver: yupResolver(AuthEmailPageSchema),
-  });
+  const { control, handleSubmit, getValues, reset } =
+    useForm<VerifyCodeFormInput>({
+      resolver: yupResolver(AuthEmailPageSchema),
+    });
   const router = useRouter();
   const { email } = router.query;
   const code = useWatch({ control, name: 'code' });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const onSubmit: SubmitHandler<VerifyCodeFormInput> = useCallback(
     async (data) => {
       try {
@@ -53,6 +56,7 @@ export const VerifyCodePage = () => {
           },
         );
         setLoading(false);
+        setError(null);
 
         if (type === AUTH_EMAIL_TYPES.SIGN_IN && token) {
           await mutateUser(setToken(token) as unknown as Promise<User>);
@@ -66,9 +70,19 @@ export const VerifyCodePage = () => {
         }
       } catch (error) {
         setLoading(false);
+        reset();
+        if (error instanceof FetchError) {
+          switch (error.data.type) {
+            case ExceptionTypeEnum.IncorrectEmailOrCode:
+              setError('Incorrect code, try again');
+              break;
+            default:
+              setError('Something went wrong');
+          }
+        }
       }
     },
-    [code, email, mutateUser, router],
+    [code, email, mutateUser, reset, router],
   );
 
   useEffect(() => {
@@ -112,7 +126,8 @@ export const VerifyCodePage = () => {
         textAlign="center"
         marginTop="11px"
       >
-        We just sent you a temporary login code.
+        We just sent you a temporary login code to
+        <Text fontWeight={600}>{email}</Text>
         <br />
         Please check your inbox.
       </Text>
@@ -125,6 +140,7 @@ export const VerifyCodePage = () => {
           gap: '22px',
           minWidth: '350px',
         }}
+        onChange={() => setError(null)}
         onSubmit={handleSubmit(onSubmit)}
       >
         {loading ? (
@@ -157,6 +173,9 @@ export const VerifyCodePage = () => {
             </Flex>
           </Flex>
         )}
+        <Flex justifyContent="center">
+          <Text color="error">{error}</Text>
+        </Flex>
       </form>
     </Grid>
   );
