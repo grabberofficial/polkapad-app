@@ -9,6 +9,8 @@ export const RequirementsItem = (props: { color: string; text: string }) => (
       backgroundColor={props.color}
       marginRight="4px"
     />
-    <Text color={props.color}>{props.text}</Text>
+    <Text color={props.color} fontSize="14px">
+      {props.text}
+    </Text>
   </Flex>
 );
