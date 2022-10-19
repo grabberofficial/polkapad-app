@@ -33,9 +33,9 @@ export const PasswordControl = (props: PasswordControlProps) => {
     withRequirements = false,
   } = props;
 
-  const [lengthColor, setLengthColor] = useState('grey');
-  const [caseColor, setCaseColor] = useState('grey');
-  const [numbersColor, setNumbersColor] = useState('grey');
+  const [lengthColor, setLengthColor] = useState('primary.basic');
+  const [caseColor, setCaseColor] = useState('primary.basic');
+  const [numbersColor, setNumbersColor] = useState('primary.basic');
 
   const updateRequirements = useCallback(({ target: { value } }) => {
     if (!value.length) {
