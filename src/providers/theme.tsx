@@ -15,6 +15,7 @@ const theme = extendTheme({
   colors: {
     primary: {
       basic: '#303030',
+      basicTransparent: '#303030a3',
       hover: '#FFF',
       text: '#FFF',
       textHover: '#D6FB5E',
