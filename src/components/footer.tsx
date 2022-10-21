@@ -12,6 +12,10 @@ import styled from '@emotion/styled';
 import { FaGithub, FaTwitter, FaTelegram } from 'react-icons/fa';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import { EmailSubscribeModal } from '@/components/EmailSubscribeModal/EmailSubscribeModal';
+import {
+  PRIVACY_LINK,
+  TERMS_LINK,
+} from '@/components/GoogleDocsViewer/GoogleDocsViewer.constants';
 
 export const Footer = () => (
   <StyledContainer as="footer" role="contentinfo">
@@ -182,7 +186,7 @@ export const Footer = () => (
           <Stack minW="130px" flex="1">
             <GoogleDocsViewer
               title="Terms and Service"
-              fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
+              fileUrl={TERMS_LINK}
               control={(props) => (
                 <Button
                   {...props}
@@ -200,7 +204,7 @@ export const Footer = () => (
           <Stack>
             <GoogleDocsViewer
               title="Privacy Policy"
-              fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
+              fileUrl={PRIVACY_LINK}
               control={(props) => (
                 <Button
                   {...props}

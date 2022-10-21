@@ -3,6 +3,10 @@ import { Flex, FormControl, FormErrorMessage, Text } from '@chakra-ui/react';
 import { Control, FieldError } from 'react-hook-form';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import styled from '@emotion/styled';
+import {
+  PRIVACY_LINK,
+  TERMS_LINK,
+} from '@/components/GoogleDocsViewer/GoogleDocsViewer.constants';
 
 interface TermsCheckboxProps {
   control: Control<any, any>;
@@ -30,13 +34,13 @@ export const TermsCheckbox = ({ errors, control }: TermsCheckboxProps) => {
           Yes, I understand and agree to the
           <GoogleDocsViewer
             title="Terms and Service"
-            fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
+            fileUrl={TERMS_LINK}
             control={(props) => <DocUrl {...props}> Terms of Service</DocUrl>}
           />{' '}
           and
           <GoogleDocsViewer
             title="Privacy Policy"
-            fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
+            fileUrl={PRIVACY_LINK}
             control={(props) => <DocUrl {...props}> Privacy Policy</DocUrl>}
           />
         </Text>
