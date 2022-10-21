@@ -11,6 +11,10 @@ import { Button } from '@/components/common/Button';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import styled from '@emotion/styled';
 import { isProduction } from '@/utils/general';
+import {
+  PRIVACY_LINK,
+  TERMS_LINK,
+} from '@/components/GoogleDocsViewer/GoogleDocsViewer.constants';
 
 interface WalletsPopupProps {
   title: string;
@@ -43,13 +47,13 @@ export const WalletsPopup = ({
           By connecting a wallet, you agree to the
           <GoogleDocsViewer
             title="Terms and Service"
-            fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
+            fileUrl={TERMS_LINK}
             control={(props) => <DocUrl {...props}> Terms & Conditions</DocUrl>}
           />{' '}
           and acknowledge that you have read and understand our
           <GoogleDocsViewer
             title="Privacy Policy"
-            fileUrl="https://drive.google.com/file/d/1kO34-LSkXup8c3vsspK0XILTKvKoxw8k/preview"
+            fileUrl={PRIVACY_LINK}
             control={(props) => <DocUrl {...props}> Privacy Policy</DocUrl>}
           />
           .

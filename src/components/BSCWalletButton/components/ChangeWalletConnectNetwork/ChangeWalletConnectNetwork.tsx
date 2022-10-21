@@ -12,6 +12,7 @@ import React from 'react';
 import { GoogleDocsViewer } from '@/components/GoogleDocsViewer/GoogleDocsViewer';
 import styled from '@emotion/styled';
 import walletNetworkIcon from '@/assets/wallet_network.svg';
+import { TERMS_LINK } from '@/components/GoogleDocsViewer/GoogleDocsViewer.constants';
 
 interface ChangeWalletConnectNetworkProps {
   isOpen: boolean;
@@ -68,7 +69,7 @@ export const ChangeWalletConnectNetwork = ({
             By connecting, I accept Polkapad&apos;s{' '}
             <GoogleDocsViewer
               title="Terms and Service"
-              fileUrl="https://drive.google.com/file/d/1QxeZEdb-QzQy5Ra6eD8kJcmPS1khLiAq/preview"
+              fileUrl={TERMS_LINK}
               control={(props) => <DocUrl {...props}>Terms of Service</DocUrl>}
             />
             .
